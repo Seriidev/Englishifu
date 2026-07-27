@@ -1,0 +1,94 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand: #4f7cff;
+  --color-brand-dark: #3d6aef;
+  --color-brand-light: #e8efff;
+  --color-ink: #0b1b3d;
+  --color-muted: #64748b;
+  --font-sans: "Plus Jakarta Sans", sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  color: var(--color-ink);
+  background: #ffffff;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  min-height: 100svh;
+}
+
+*,
+*::before,
+*::after {
+  font-family: inherit;
+}
+
+@keyframes cursor-blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@utility animate-cursor-blink {
+  animation: cursor-blink 1s step-end infinite;
+}
+
+@keyframes fog-in {
+  from {
+    opacity: 0;
+    filter: blur(10px);
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0);
+  }
+}
+
+@utility animate-fog-in {
+  animation: fog-in 0.55s ease-out both;
+}
+
+@keyframes float-y {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@utility animate-float {
+  animation: float-y 4.5s ease-in-out infinite;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@utility animate-fade-up {
+  animation: fade-up 0.7s ease-out both;
+}
