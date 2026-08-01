@@ -6,6 +6,9 @@
   --color-brand-light: #e8efff;
   --color-ink: #0b1b3d;
   --color-muted: #64748b;
+  --color-mist: #f4f7fc;
+  --color-mist-blue: #e8f1ff;
+  --color-mist-lavender: #eef0ff;
   --font-sans: "Plus Jakarta Sans", sans-serif;
 }
 
@@ -13,13 +16,40 @@ html {
   scroll-behavior: smooth;
 }
 
+section[id] {
+  scroll-margin-top: 6.5rem;
+}
+
 body {
   margin: 0;
   font-family: var(--font-sans);
   color: var(--color-ink);
-  background: #ffffff;
+  background: #f4f7fc;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Hide number input spinner arrows */
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type='number'] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+/* Soft cool mist — bluish / lavender tints like light SaaS heroes */
+.landing-shell {
+  background-color: #f4f7fc;
+  background-image:
+    radial-gradient(ellipse 90% 55% at 15% -5%, rgba(165, 200, 255, 0.45), transparent 58%),
+    radial-gradient(ellipse 80% 50% at 90% 0%, rgba(196, 181, 253, 0.28), transparent 55%),
+    radial-gradient(ellipse 70% 45% at 55% 18%, rgba(224, 242, 254, 0.7), transparent 60%),
+    radial-gradient(ellipse 55% 40% at 40% 55%, rgba(238, 242, 255, 0.55), transparent 65%),
+    linear-gradient(180deg, #f8faff 0%, #f4f7fc 40%, #f6f8fc 100%);
 }
 
 #root {
@@ -91,4 +121,21 @@ body {
 
 @utility animate-fade-up {
   animation: fade-up 0.7s ease-out both;
+}
+
+@keyframes reveal {
+  from {
+    opacity: 0;
+    filter: blur(8px);
+    transform: translateY(36px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0);
+  }
+}
+
+@utility animate-reveal {
+  animation: reveal 0.85s cubic-bezier(0.22, 1, 0.36, 1) both;
 }

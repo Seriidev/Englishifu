@@ -1,0 +1,107 @@
+import type { WritingSectionConfig } from '../components/writing/types'
+
+/** Original TOEFL-style Writing mocks (not ETS materials). */
+export const writingMockConfig: WritingSectionConfig = {
+  tasks: [
+    {
+      id: 'w-bs-1',
+      type: 'build-sentence',
+      prompt: 'I need to renew my passport.',
+      wordBank: ['Which', 'office', 'handles', 'passport', 'renewals?'],
+      correctSentence: 'Which office handles passport renewals?',
+      timeLimitSeconds: 60,
+    },
+    {
+      id: 'w-bs-2',
+      type: 'build-sentence',
+      prompt: "I'm considering a career change.",
+      wordBank: ['Have', 'you', 'thought', 'about', 'this?'],
+      correctSentence: 'Have you thought about this?',
+      timeLimitSeconds: 60,
+    },
+    {
+      id: 'w-bs-3',
+      type: 'build-sentence',
+      prompt: 'I have a dentist appointment tomorrow.',
+      wordBank: ['Do', 'you', 'need', 'a', 'ride?'],
+      correctSentence: 'Do you need a ride?',
+      timeLimitSeconds: 60,
+    },
+    {
+      id: 'w-bs-4',
+      type: 'build-sentence',
+      prompt: "We're planning a surprise party.",
+      wordBank: ['Who', 'should', 'we', 'invite?'],
+      correctSentence: 'Who should we invite?',
+      timeLimitSeconds: 60,
+    },
+    {
+      id: 'w-bs-5',
+      type: 'build-sentence',
+      prompt: 'I just adopted a puppy.',
+      wordBank: ['What', 'name', 'have', 'you', 'picked?'],
+      correctSentence: 'What name have you picked?',
+      timeLimitSeconds: 60,
+    },
+    {
+      id: 'w-bs-6',
+      type: 'build-sentence',
+      prompt: "I'm applying for a new job.",
+      wordBank: ['Is', 'your', 'resume', 'updated?'],
+      correctSentence: 'Is your resume updated?',
+      timeLimitSeconds: 60,
+    },
+    {
+      id: 'w-bs-7',
+      type: 'build-sentence',
+      prompt: 'I need to finish this presentation.',
+      wordBank: ['Are', 'your', 'slides', 'done?'],
+      correctSentence: 'Are your slides done?',
+      timeLimitSeconds: 60,
+    },
+    {
+      id: 'w-bs-8',
+      type: 'build-sentence',
+      prompt: "I'm planning to travel next month.",
+      wordBank: ['Have', 'you', 'booked', 'your', 'flights?'],
+      correctSentence: 'Have you booked your flights?',
+      timeLimitSeconds: 60,
+    },
+    {
+      id: 'w-bs-9',
+      type: 'build-sentence',
+      prompt: 'I just started a pottery class.',
+      wordBank: ['Where', 'are', 'classes', 'held?'],
+      correctSentence: 'Where are classes held?',
+      timeLimitSeconds: 60,
+    },
+    {
+      id: 'w-bs-10',
+      type: 'build-sentence',
+      prompt: 'Why do you ask about the schedule?',
+      wordBank: ["I'm", 'checking', 'if', "it's", 'confirmed'],
+      correctSentence: "I'm checking if it's confirmed",
+      timeLimitSeconds: 60,
+    },
+    {
+      id: 'w-email-1',
+      type: 'write-email',
+      prompt: 'Write an email to Sarah about the project management tool.',
+      contextInfo:
+        'Your coworker, Sarah, recommended a project management tool for your team to use. You tried it for two weeks, but the team found it confusing and slow. You need to inform Sarah about the situation and discuss alternative options.\n\nIn your email, do the following:\n• Explain what was wrong with the tool.\n• Describe the team\'s reaction.\n• Suggest next steps.',
+      minWords: 80,
+      maxWords: 150,
+      timeLimitSeconds: 7 * 60,
+    },
+    {
+      id: 'w-ad-1',
+      type: 'academic-discussion',
+      subtype: 'two-views',
+      prompt:
+        'Professor: Today we\'ll discuss whether students learn better through group projects or individual assignments. Some argue group work builds valuable collaboration skills, while others believe individual work allows for deeper focus and personal accountability. Which do you think is more effective for learning? Why?\n\nStudent 1: I think group projects are more effective because they mirror real-world work environments and teach communication skills.\n\nStudent 2: I believe individual assignments lead to better learning because students can\'t rely on others and must fully understand the material themselves.',
+      minWords: 100,
+      maxWords: 200,
+      timeLimitSeconds: 10 * 60,
+    },
+  ],
+}

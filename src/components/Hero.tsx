@@ -1,28 +1,13 @@
-import { useEffect, useState, type ReactNode } from 'react'
-import { ArrowRight, GraduationCap, Play } from 'lucide-react'
-
-const phrases = [
-  { text: 'Prepare TOEFL with us.', highlight: 'TOEFL' },
-  { text: 'Find your Personal tutor.', highlight: 'Personal' },
-  { text: 'Enjoy with Speaking Club.', highlight: 'Speaking Club' },
-] as const
+import { useEffect, useMemo, useState, type ReactNode } from 'react'
+import { ArrowRight, ArrowUpRight } from 'lucide-react'
+import { useLanguage } from '../i18n/LanguageContext'
 
 type Phase = 'typing' | 'pausing' | 'deleting'
-
-const HERO_IMAGE =
-  'https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&q=80'
 
 const AVATAR_IMAGES = [
   'https://i.pravatar.cc/80?img=5',
   'https://i.pravatar.cc/80?img=12',
   'https://i.pravatar.cc/80?img=32',
-  'https://i.pravatar.cc/80?img=47',
-] as const
-
-const stats = [
-  { value: '500+', label: 'Expert Tutors' },
-  { value: '10K+', label: 'Students' },
-  { value: '4.8', label: 'Rating' },
 ] as const
 
 function renderTypedText(fullText: string, displayed: string, highlight: string): ReactNode {
@@ -34,25 +19,44 @@ function renderTypedText(fullText: string, displayed: string, highlight: string)
   }
 
   const before = displayed.slice(0, highlightStart)
-  const highlighted = displayed.slice(highlightStart, Math.min(displayed.length, highlightEnd))
+  const highlighted = displayed.slice(
+    highlightStart,
+    Math.min(displayed.length, highlightEnd),
+  )
   const after =
     displayed.length > highlightEnd ? displayed.slice(highlightEnd) : ''
 
   return (
     <>
       {before}
-      <span className="font-extrabold text-white">{highlighted}</span>
+      <span className="font-extrabold text-brand">{highlighted}</span>
       {after}
     </>
   )
 }
 
 export default function Hero() {
+  const { t, lang } = useLanguage()
   const [phraseIndex, setPhraseIndex] = useState(0)
   const [displayed, setDisplayed] = useState('')
   const [phase, setPhase] = useState<Phase>('typing')
 
-  const current = phrases[phraseIndex]
+  const phrases = useMemo(
+    () => [
+      { text: t('hero.phrase1'), highlight: t('hero.phrase1Highlight') },
+      { text: t('hero.phrase2'), highlight: t('hero.phrase2Highlight') },
+      { text: t('hero.phrase3'), highlight: t('hero.phrase3Highlight') },
+    ],
+    [t, lang],
+  )
+
+  const current = phrases[phraseIndex] ?? phrases[0]
+
+  useEffect(() => {
+    setPhraseIndex(0)
+    setDisplayed('')
+    setPhase('typing')
+  }, [lang])
 
   useEffect(() => {
     let timeoutId: ReturnType<typeof setTimeout>
@@ -81,115 +85,72 @@ export default function Hero() {
     }
 
     return () => clearTimeout(timeoutId)
-  }, [displayed, phase, current.text])
+  }, [displayed, phase, current.text, phrases.length])
 
   return (
-    <section id="home" className="bg-brand text-white">
-      <div className="mx-auto max-w-7xl px-6 py-14 sm:py-16 lg:py-20">
-        <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-14 xl:gap-16">
-          {/* Left — text */}
-          <div className="flex flex-col items-center text-center lg:items-start lg:text-left">
-            <div className="mb-5 flex items-center gap-3">
-              <span className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-white text-brand shadow-lg shadow-black/10">
-                <GraduationCap className="h-5 w-5" aria-hidden />
-              </span>
-            </div>
+    <section
+      id="home"
+      className="relative flex min-h-[min(72svh,40rem)] items-center overflow-hidden pt-28 pb-8 text-ink sm:pt-32 sm:pb-10"
+    >
+      <div
+        className="pointer-events-none absolute -top-24 left-[-10%] h-[28rem] w-[28rem] rounded-full bg-[#b8d4ff]/45 blur-3xl"
+        aria-hidden
+      />
+      <div
+        className="pointer-events-none absolute top-10 right-[-8%] h-[24rem] w-[24rem] rounded-full bg-[#c4b5fd]/30 blur-3xl"
+        aria-hidden
+      />
+      <div
+        className="pointer-events-none absolute bottom-8 left-1/3 h-72 w-72 rounded-full bg-[#dbeafe]/60 blur-3xl"
+        aria-hidden
+      />
 
-            <h1 className="flex min-h-[3.5rem] items-center justify-center text-4xl font-bold leading-tight tracking-tight text-white sm:min-h-[4.5rem] sm:text-5xl lg:min-h-[5.5rem] lg:justify-start lg:text-[3.25rem]">
-              <span>
-                {renderTypedText(current.text, displayed, current.highlight)}
-                <span
-                  className="ml-0.5 inline-block h-[0.9em] w-[3px] translate-y-[0.1em] animate-cursor-blink bg-white align-baseline"
-                  aria-hidden
-                />
-              </span>
-            </h1>
-
-            <p className="mt-6 max-w-xl text-base leading-relaxed text-white/80 sm:text-lg">
-              Connect with expert personal tutors, prepare for TOEFL with
-              confidence, and join speaking clubs that build real fluency —
-              all in one platform designed for ambitious learners.
-            </p>
-
-            <div className="mt-8 flex flex-wrap items-center justify-center gap-3 lg:justify-start">
-              <a
-                href="#tutors"
-                className="group inline-flex items-center gap-2.5 rounded-full bg-white px-8 py-4 text-lg font-semibold text-brand shadow-md shadow-black/10 transition hover:bg-brand-light"
-              >
-                Let&apos;s go!
-                <ArrowRight
-                  className="h-5 w-5 transition-transform group-hover:translate-x-1"
-                  aria-hidden
-                />
-              </a>
-
-              <a
-                href="#toefl"
-                className="inline-flex items-center gap-3 rounded-full border border-white/40 px-6 py-3.5 text-base font-semibold text-white transition hover:border-white/70 hover:bg-white/10"
-              >
-                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white/20">
-                  <Play className="h-4 w-4 fill-current" aria-hidden />
-                </span>
-                Watch Demo
-              </a>
-            </div>
-
-            <div className="mt-10 grid w-full max-w-md grid-cols-3 gap-4 lg:max-w-none lg:gap-8">
-              {stats.map((stat) => (
-                <div key={stat.label} className="text-center lg:text-left">
-                  <p className="text-2xl font-bold text-white sm:text-3xl">
-                    {stat.value}
-                  </p>
-                  <p className="mt-1 text-xs text-blue-100 sm:text-sm">
-                    {stat.label}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Right — image */}
-          <div className="relative mx-auto w-full max-w-md lg:max-w-none lg:pb-4">
-            <img
-              src={HERO_IMAGE}
-              alt="Students learning together in a language course"
-              width={800}
-              height={1000}
-              className="aspect-[4/5] w-full rounded-3xl object-cover shadow-xl shadow-black/20"
-            />
-
-            {/* Reviews badge — desktop only */}
-            <div className="absolute -top-4 -left-4 z-10 hidden items-center gap-3 rounded-2xl bg-white px-3.5 py-2.5 shadow-xl lg:flex">
-              <div className="flex -space-x-2">
-                {AVATAR_IMAGES.map((src) => (
-                  <img
-                    key={src}
-                    src={src}
-                    alt=""
-                    className="h-8 w-8 rounded-full border-2 border-white object-cover"
-                  />
-                ))}
-              </div>
-              <p className="text-sm font-semibold whitespace-nowrap text-ink">
-                500+ reviews
-              </p>
-            </div>
-
-            {/* Student result card — desktop only */}
-            <div className="absolute -right-4 -bottom-2 z-10 hidden items-center gap-3 rounded-2xl bg-white px-4 py-3 shadow-xl lg:flex xl:-right-6">
+      <div className="relative mx-auto flex w-full max-w-3xl flex-col items-center px-6 text-center">
+        <div className="mb-8 flex flex-col items-center gap-3">
+          <div className="flex -space-x-3">
+            {AVATAR_IMAGES.map((src) => (
               <img
-                src="https://i.pravatar.cc/80?img=47"
+                key={src}
+                src={src}
                 alt=""
-                className="h-12 w-12 rounded-full object-cover"
+                className="h-11 w-11 rounded-full border-[3px] border-white object-cover shadow-md shadow-brand/10"
               />
-              <div>
-                <p className="text-sm font-bold text-ink">Sarah K.</p>
-                <p className="text-xs font-medium text-brand">
-                  TOEFL Score: 112
-                </p>
-              </div>
-            </div>
+            ))}
           </div>
+          <p className="text-sm font-medium text-muted">{t('hero.reviews')}</p>
+        </div>
+
+        <h1 className="min-h-[3.5rem] max-w-2xl text-4xl font-bold leading-[1.15] tracking-tight text-ink sm:min-h-[4.5rem] sm:text-5xl lg:text-[3.4rem]">
+          {renderTypedText(current.text, displayed, current.highlight)}
+          <span
+            className="ml-0.5 inline-block h-[0.9em] w-[3px] translate-y-[0.1em] animate-cursor-blink bg-brand align-baseline"
+            aria-hidden
+          />
+        </h1>
+
+        <p className="mt-5 max-w-xl text-base leading-relaxed text-muted sm:text-lg">
+          {t('hero.body')}
+        </p>
+
+        <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
+          <a
+            href="#tutors"
+            className="group inline-flex items-center gap-3 rounded-full bg-ink px-7 py-3.5 text-base font-semibold text-white shadow-lg shadow-ink/15 transition hover:bg-[#15284f]"
+          >
+            {t('hero.ctaPrimary')}
+            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white text-ink transition group-hover:rotate-12">
+              <ArrowUpRight className="h-4 w-4" aria-hidden />
+            </span>
+          </a>
+          <a
+            href="/toefl"
+            className="group inline-flex items-center gap-3 rounded-full bg-brand px-7 py-3.5 text-base font-semibold text-white shadow-lg shadow-brand/25 transition hover:bg-brand-dark"
+          >
+            {t('hero.ctaDemo')}
+            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white text-brand transition group-hover:translate-x-0.5">
+              <ArrowRight className="h-4 w-4" aria-hidden />
+            </span>
+          </a>
         </div>
       </div>
     </section>

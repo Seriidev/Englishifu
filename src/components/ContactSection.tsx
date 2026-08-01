@@ -12,6 +12,7 @@ import {
   Star,
   Zap,
 } from 'lucide-react'
+import { useLanguage } from '../i18n/LanguageContext'
 
 type Goal = '' | 'TOEFL' | 'Speaking' | 'IELTS' | 'General English'
 
@@ -74,6 +75,7 @@ const inputClass =
   'w-full rounded-2xl border border-gray-200/80 bg-gray-50/80 px-4 py-3.5 text-[15px] text-ink outline-none transition placeholder:text-gray-400 focus:border-brand focus:bg-white focus:ring-4 focus:ring-brand/15'
 
 export default function ContactSection() {
+  const { t } = useLanguage()
   const sectionRef = useRef<HTMLElement>(null)
   const [visible, setVisible] = useState(false)
   const [form, setForm] = useState<ConsultationForm>({
@@ -112,7 +114,7 @@ export default function ContactSection() {
     <section
       id="contact"
       ref={sectionRef}
-      className="relative overflow-hidden bg-gradient-to-b from-white via-[#f5f8ff] to-white"
+      className="relative overflow-hidden bg-gradient-to-b from-transparent via-[#eef3ff]/80 to-[#e8f1ff]/40"
     >
       {/* Soft blurred circles */}
       <div
@@ -137,12 +139,10 @@ export default function ContactSection() {
             Connect With Us
           </p>
           <h2 className="mt-4 text-3xl font-bold tracking-tight text-ink sm:text-4xl lg:text-5xl">
-            Need Expert Guidance?
+            {t('contact.title')}
           </h2>
           <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-gray-500 sm:text-lg">
-            Book a free consultation with one of our TOEFL advisors. We&apos;ll
-            help you choose the right teacher, learning plan and answer all your
-            questions.
+            {t('contact.body')}
           </p>
         </div>
 
@@ -157,7 +157,7 @@ export default function ContactSection() {
           >
             <span className="inline-flex items-center gap-2 rounded-full border border-white/80 bg-white px-4 py-2 text-sm font-semibold text-ink shadow-lg shadow-brand/10">
               <GraduationCap className="h-4 w-4 text-brand" aria-hidden />
-              TOEFL Experts
+              {t('contact.badgeExperts')}
             </span>
           </div>
           <div
@@ -168,7 +168,7 @@ export default function ContactSection() {
           >
             <span className="inline-flex items-center gap-2 rounded-full border border-white/80 bg-white px-4 py-2 text-sm font-semibold text-ink shadow-lg shadow-brand/10">
               <Zap className="h-4 w-4 text-brand" aria-hidden />
-              Response in 30 min
+              {t('contact.badgeResponse')}
             </span>
           </div>
           <div
@@ -179,7 +179,7 @@ export default function ContactSection() {
           >
             <span className="inline-flex items-center gap-2 rounded-full border border-white/80 bg-white px-4 py-2 text-sm font-semibold text-ink shadow-lg shadow-brand/10">
               <Star className="h-4 w-4 fill-brand text-brand" aria-hidden />
-              4.9 Rating
+              {t('contact.badgeRating')}
             </span>
           </div>
           <div
@@ -190,7 +190,7 @@ export default function ContactSection() {
           >
             <span className="inline-flex items-center gap-2 rounded-full border border-white/80 bg-white px-4 py-2 text-sm font-semibold text-ink shadow-lg shadow-brand/10">
               <Globe2 className="h-4 w-4 text-brand" aria-hidden />
-              Worldwide
+              {t('contact.labelWorldwide')}
             </span>
           </div>
           <div
@@ -201,7 +201,7 @@ export default function ContactSection() {
           >
             <span className="inline-flex items-center gap-2 rounded-full border border-white/80 bg-white px-4 py-2 text-sm font-semibold text-ink shadow-lg shadow-brand/10">
               <Sparkles className="h-4 w-4 text-brand" aria-hidden />
-              100+ Tutors
+              {t('contact.badgeTutors')}
             </span>
           </div>
 
@@ -226,7 +226,7 @@ export default function ContactSection() {
                       htmlFor="consult-name"
                       className="mb-2 block text-sm font-medium text-gray-700"
                     >
-                      Name
+                      {t('contact.name')}
                     </label>
                     <input
                       id="consult-name"
@@ -243,7 +243,7 @@ export default function ContactSection() {
                       htmlFor="consult-email"
                       className="mb-2 block text-sm font-medium text-gray-700"
                     >
-                      Email
+                      {t('contact.email')}
                     </label>
                     <input
                       id="consult-email"
@@ -263,7 +263,7 @@ export default function ContactSection() {
                       htmlFor="consult-phone"
                       className="mb-2 block text-sm font-medium text-gray-700"
                     >
-                      Phone
+                      {t('contact.phone')}
                     </label>
                     <input
                       id="consult-phone"
@@ -280,7 +280,7 @@ export default function ContactSection() {
                       htmlFor="consult-score"
                       className="mb-2 block text-sm font-medium text-gray-700"
                     >
-                      Target TOEFL Score
+                      {t('contact.score')}
                     </label>
                     <input
                       id="consult-score"
@@ -300,7 +300,7 @@ export default function ContactSection() {
                     htmlFor="consult-goal"
                     className="mb-2 block text-sm font-medium text-gray-700"
                   >
-                    Choose Goal
+                    {t('contact.goal')}
                   </label>
                   <select
                     id="consult-goal"
@@ -327,7 +327,7 @@ export default function ContactSection() {
                     htmlFor="consult-message"
                     className="mb-2 block text-sm font-medium text-gray-700"
                   >
-                    Message
+                    {t('contact.message')}
                   </label>
                   <textarea
                     id="consult-message"
@@ -345,7 +345,7 @@ export default function ContactSection() {
                   type="submit"
                   className="group mt-2 w-full rounded-2xl bg-brand px-6 py-4 text-base font-semibold text-white shadow-lg shadow-brand/30 transition hover:-translate-y-0.5 hover:bg-brand-dark hover:shadow-xl hover:shadow-brand/35"
                 >
-                  Book Free Consultation
+                  {t('contact.submit')}
                 </button>
 
                 <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 pt-1 text-sm text-gray-500">
@@ -382,15 +382,27 @@ export default function ContactSection() {
               </div>
 
               <h3 className="relative mt-6 text-2xl font-bold tracking-tight">
-                Contact Information
+                {t('contact.infoTitle')}
               </h3>
               <p className="relative mt-2 text-sm text-white/75">
-                Reach our advisors anytime — we reply fast.
+                {t('contact.infoBody')}
               </p>
 
               <ul className="relative mt-6 flex flex-1 flex-col gap-2.5">
                 {contactItems.map((item) => {
                   const Icon = item.icon
+                  const label =
+                    item.label === 'Worldwide'
+                      ? t('contact.labelWorldwide')
+                      : item.label === 'Response Time'
+                        ? t('contact.labelResponse')
+                        : item.label
+                  const value =
+                    item.label === 'Worldwide'
+                      ? t('contact.worldwide')
+                      : item.label === 'Response Time'
+                        ? t('contact.response')
+                        : item.value
                   const content = (
                     <>
                       <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/15">
@@ -398,10 +410,10 @@ export default function ContactSection() {
                       </span>
                       <span className="min-w-0 text-left">
                         <span className="block text-xs font-medium text-white/65">
-                          {item.label}
+                          {label}
                         </span>
                         <span className="block truncate text-sm font-semibold">
-                          {item.value}
+                          {value}
                         </span>
                       </span>
                     </>

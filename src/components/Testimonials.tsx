@@ -1,31 +1,65 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { resultMetrics } from '../data/results'
+import { useLanguage } from '../i18n/LanguageContext'
 
 const CYCLE_MS = 2200
 
+const TITLE_KEYS = [
+  'results.m1.title',
+  'results.m2.title',
+  'results.m3.title',
+  'results.m4.title',
+  'results.m5.title',
+] as const
+const DESC_KEYS = [
+  'results.m1.desc',
+  'results.m2.desc',
+  'results.m3.desc',
+  'results.m4.desc',
+  'results.m5.desc',
+] as const
+const LABEL_KEYS = [
+  'results.m1.label',
+  'results.m2.label',
+  'results.m3.label',
+  'results.m4.label',
+  'results.m5.label',
+] as const
+
 export default function Testimonials() {
+  const { t, lang } = useLanguage()
   const [activeIndex, setActiveIndex] = useState(0)
 
-  const active = resultMetrics[activeIndex]
+  const metrics = useMemo(
+    () =>
+      resultMetrics.map((metric, i) => ({
+        ...metric,
+        title: t(TITLE_KEYS[i]),
+        description: t(DESC_KEYS[i]),
+        label: t(LABEL_KEYS[i]),
+      })),
+    [t, lang],
+  )
+
+  const active = metrics[activeIndex]
 
   useEffect(() => {
     const intervalId = setInterval(() => {
-      setActiveIndex((i) => (i + 1) % resultMetrics.length)
+      setActiveIndex((i) => (i + 1) % metrics.length)
     }, CYCLE_MS)
 
     return () => clearInterval(intervalId)
-  }, [])
+  }, [metrics.length])
 
   return (
     <section className="bg-ink py-16 sm:py-20 lg:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
-          {/* Left text */}
           <div className="text-center lg:text-left">
             <p className="text-sm font-semibold tracking-wide text-white/40 uppercase">
-              Real Results
+              {t('results.eyebrow')}
             </p>
-            <div key={activeIndex} className="animate-fog-in">
+            <div key={`${lang}-${activeIndex}`} className="animate-fog-in">
               <h2 className="mt-3 text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-5xl">
                 {active.title}
               </h2>
@@ -35,9 +69,8 @@ export default function Testimonials() {
             </div>
           </div>
 
-          {/* Right — shorter pills, content centered inside */}
           <div className="mx-auto flex w-full max-w-[260px] flex-col gap-2.5 sm:max-w-[280px] lg:mx-0 lg:justify-self-center">
-            {resultMetrics.map((metric, index) => {
+            {metrics.map((metric, index) => {
               const isActive = index === activeIndex
               return (
                 <button
@@ -53,22 +86,24 @@ export default function Testimonials() {
                   <img
                     src={metric.photo}
                     alt=""
-                    className={`shrink-0 rounded-full border-2 object-cover transition-all duration-500 ${
-                      isActive
-                        ? 'h-11 w-11 border-white/60 ring-2 ring-white/40'
-                        : 'h-9 w-9 border-white/30'
+                    className={`rounded-full object-cover transition-all ${
+                      isActive ? 'h-9 w-9' : 'h-7 w-7'
                     }`}
                   />
-                  <div className="min-w-0 text-left leading-tight">
-                    <p
-                      className={`font-bold text-white transition-all duration-500 ${
-                        isActive ? 'text-xl' : 'text-lg'
-                      }`}
-                    >
-                      {metric.value}
-                    </p>
-                    <p className="text-xs text-white/80 sm:text-sm">{metric.label}</p>
-                  </div>
+                  <span
+                    className={`font-bold text-white ${
+                      isActive ? 'text-sm' : 'text-xs'
+                    }`}
+                  >
+                    {metric.value}
+                  </span>
+                  <span
+                    className={`font-medium text-white/90 ${
+                      isActive ? 'text-sm' : 'text-xs'
+                    }`}
+                  >
+                    {metric.label}
+                  </span>
                 </button>
               )
             })}

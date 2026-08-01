@@ -1,130 +1,179 @@
-import { useState } from 'react'
-import { GraduationCap, LogIn, Menu, X } from 'lucide-react'
+import { useState, type MouseEvent } from 'react'
+import { GraduationCap, Menu, X } from 'lucide-react'
+import { useNavigate, useLocation } from 'react-router-dom'
+import { smoothScrollTo } from '../utils/scroll'
+import { useLanguage } from '../i18n/LanguageContext'
+import { LANG_OPTIONS, type LangCode } from '../i18n/dictionaries'
 
-const navLinks = [
-  { label: 'Home', href: '#home' },
-  { label: 'Teachers', href: '#tutors' },
-  { label: 'Speaking Club', href: '#speaking-club' },
-  { label: 'Contacts', href: '#contact' },
+const navKeys = [
+  { key: 'nav.home', href: '#home', label: 'Home' },
+  { key: 'nav.teachers', href: '#tutors', label: 'Teachers' },
+  { key: 'nav.speakingClub', href: '#speaking-club', label: 'Speaking Club' },
+  { key: 'nav.toefl', href: '#toefl', label: 'TOEFL' },
+  { key: 'nav.contacts', href: '#contact', label: 'Contacts' },
 ] as const
 
-type NavLabel = (typeof navLinks)[number]['label']
-type LangCode = 'RU' | 'EN' | 'TM'
-
-const languages: LangCode[] = ['RU', 'EN', 'TM']
+type NavLabel = (typeof navKeys)[number]['label']
 
 export default function Navbar() {
+  const navigate = useNavigate()
+  const location = useLocation()
+  const { lang, setLang, t } = useLanguage()
   const [activeNav, setActiveNav] = useState<NavLabel>('Home')
-  const [lang, setLang] = useState<LangCode>('RU')
   const [mobileOpen, setMobileOpen] = useState(false)
 
+  const handleNavClick = (
+    e: MouseEvent<HTMLAnchorElement>,
+    label: NavLabel | null,
+    href: string,
+  ) => {
+    e.preventDefault()
+    if (label) setActiveNav(label)
+    setMobileOpen(false)
+
+    if (location.pathname !== '/') {
+      navigate('/' + href)
+      return
+    }
+    smoothScrollTo(href)
+  }
+
+  const LangSwitcher = ({ compact = false }: { compact?: boolean }) => (
+    <div
+      className={`flex items-center rounded-full bg-gray-50 p-1 ${compact ? 'flex-1' : ''}`}
+      role="group"
+      aria-label="Language"
+    >
+      {LANG_OPTIONS.map(({ code, label }) => {
+        const isActive = lang === code
+        return (
+          <button
+            key={code}
+            type="button"
+            onClick={() => setLang(code as LangCode)}
+            className={`${compact ? 'flex-1' : ''} rounded-full px-2.5 py-1.5 text-xs font-semibold transition-all duration-300 ${
+              isActive
+                ? 'bg-white text-ink shadow-sm'
+                : 'text-gray-400 hover:text-ink'
+            }`}
+          >
+            {label}
+          </button>
+        )
+      })}
+    </div>
+  )
+
   return (
-    <header className="sticky top-0 z-50 border-b border-gray-100 bg-white">
-      <div className="relative mx-auto flex h-[80px] max-w-7xl items-center justify-between px-6">
-        <a href="#home" className="relative z-10 flex shrink-0 items-center gap-2.5">
-          <GraduationCap className="h-8 w-8 text-ink" aria-hidden />
-          <span className="flex flex-col leading-tight">
-            <span className="text-lg font-bold text-ink">Englishifu</span>
-            <span className="text-[11px] text-gray-400">Learn. Practice. Achieve.</span>
-          </span>
-        </a>
-
-        <nav
-          className="absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 lg:flex"
-          aria-label="Main"
-        >
-          <div className="flex items-center gap-0.5 rounded-full bg-gray-100 p-1.5">
-            {navLinks.map((link) => {
-              const isActive = activeNav === link.label
-              return (
-                <a
-                  key={link.label}
-                  href={link.href}
-                  onClick={() => setActiveNav(link.label)}
-                  className={`rounded-full px-6 py-3 text-base font-medium whitespace-nowrap transition ${
-                    isActive
-                      ? 'bg-white text-ink shadow-sm'
-                      : 'bg-transparent text-gray-500 hover:text-gray-900'
-                  }`}
-                >
-                  {link.label}
-                </a>
-              )
-            })}
-          </div>
-        </nav>
-
-        <div className="relative z-10 flex shrink-0 items-center gap-2 sm:gap-3">
-          <div
-            className="flex items-center rounded-full bg-gray-100 p-1.5"
-            role="group"
-            aria-label="Language"
-          >
-            {languages.map((code) => {
-              const isActive = lang === code
-              return (
-                <button
-                  key={code}
-                  type="button"
-                  onClick={() => setLang(code)}
-                  className={`rounded-full px-3.5 py-2 text-sm font-semibold transition sm:px-4 sm:text-base ${
-                    isActive
-                      ? 'bg-white text-ink shadow-sm'
-                      : 'bg-transparent text-gray-500 hover:text-gray-900'
-                  }`}
-                >
-                  {code}
-                </button>
-              )
-            })}
-          </div>
-
+    <header className="fixed top-0 right-0 left-0 z-50 px-4 pt-4 sm:px-6 sm:pt-5">
+      <div className="relative mx-auto max-w-6xl">
+        <div className="flex items-center justify-between gap-3 rounded-full border border-[#d7e3f8]/80 bg-white/80 px-3 py-2.5 shadow-[0_8px_30px_rgba(79,124,255,0.1)] backdrop-blur-xl sm:px-4 sm:py-3 lg:px-5">
           <a
-            href="#login"
-            className="inline-flex items-center gap-2 rounded-full bg-brand px-6 py-3 text-base font-semibold text-white transition hover:bg-brand-dark"
+            href="#home"
+            onClick={(e) => handleNavClick(e, 'Home', '#home')}
+            className="flex shrink-0 items-center gap-2.5 pl-1"
           >
-            <LogIn className="h-5 w-5" aria-hidden />
-            <span className="hidden sm:inline">Log In</span>
+            <span className="flex h-9 w-9 items-center justify-center rounded-full bg-brand text-white sm:h-10 sm:w-10">
+              <GraduationCap className="h-5 w-5" aria-hidden />
+            </span>
+            <span className="text-base font-bold tracking-tight text-ink sm:text-lg">
+              Englishifu
+            </span>
           </a>
 
-          <button
-            type="button"
-            className="inline-flex rounded-lg p-2.5 text-ink lg:hidden"
-            aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
-            aria-expanded={mobileOpen}
-            onClick={() => setMobileOpen((v) => !v)}
+          <nav
+            className="absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 items-center gap-1 lg:flex"
+            aria-label="Main"
           >
-            {mobileOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-          </button>
-        </div>
-      </div>
-
-      {mobileOpen && (
-        <div className="border-t border-gray-100 bg-white px-6 py-4 lg:hidden">
-          <nav className="flex flex-col gap-1" aria-label="Mobile">
-            {navLinks.map((link) => {
+            {navKeys.map((link) => {
               const isActive = activeNav === link.label
               return (
                 <a
                   key={link.label}
                   href={link.href}
-                  onClick={() => {
-                    setActiveNav(link.label)
-                    setMobileOpen(false)
-                  }}
-                  className={`rounded-xl px-6 py-3 text-base font-medium transition ${
-                    isActive
-                      ? 'bg-gray-100 text-ink'
-                      : 'text-gray-500 hover:bg-gray-50 hover:text-gray-900'
+                  onClick={(e) => handleNavClick(e, link.label, link.href)}
+                  className={`rounded-full px-3.5 py-2 text-sm font-medium whitespace-nowrap transition-colors duration-300 xl:px-4 ${
+                    isActive ? 'text-brand' : 'text-gray-500 hover:text-ink'
                   }`}
                 >
-                  {link.label}
+                  {t(link.key)}
                 </a>
               )
             })}
           </nav>
+
+          <div className="relative z-10 flex shrink-0 items-center gap-2">
+            <div className="hidden sm:flex">
+              <LangSwitcher />
+            </div>
+
+            <button
+              type="button"
+              onClick={() => {
+                setMobileOpen(false)
+                navigate('/start')
+              }}
+              className="hidden rounded-full bg-brand px-5 py-2.5 text-sm font-semibold text-white transition duration-300 hover:bg-brand-dark sm:inline-flex"
+            >
+              {t('nav.startLearning')}
+            </button>
+
+            <button
+              type="button"
+              className="inline-flex h-10 w-10 items-center justify-center rounded-full text-ink transition hover:bg-gray-50 lg:hidden"
+              aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
+              aria-expanded={mobileOpen}
+              onClick={() => setMobileOpen((v) => !v)}
+            >
+              {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </button>
+          </div>
         </div>
-      )}
+
+        <div
+          className={`origin-top overflow-hidden transition-all duration-300 ease-out lg:hidden ${
+            mobileOpen
+              ? 'mt-2 max-h-[420px] scale-100 opacity-100'
+              : 'pointer-events-none max-h-0 scale-95 opacity-0'
+          }`}
+        >
+          <div className="rounded-3xl bg-white p-4 shadow-[0_8px_30px_rgba(11,27,61,0.1)] ring-1 ring-black/[0.04]">
+            <nav className="flex flex-col gap-1" aria-label="Mobile">
+              {navKeys.map((link) => {
+                const isActive = activeNav === link.label
+                return (
+                  <a
+                    key={link.label}
+                    href={link.href}
+                    onClick={(e) => handleNavClick(e, link.label, link.href)}
+                    className={`rounded-2xl px-4 py-3 text-sm font-medium transition-colors duration-300 ${
+                      isActive
+                        ? 'bg-brand-light text-brand'
+                        : 'text-gray-600 hover:bg-gray-50 hover:text-ink'
+                    }`}
+                  >
+                    {t(link.key)}
+                  </a>
+                )
+              })}
+            </nav>
+
+            <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-gray-100 pt-3 sm:hidden">
+              <LangSwitcher compact />
+              <button
+                type="button"
+                onClick={() => {
+                  setMobileOpen(false)
+                  navigate('/start')
+                }}
+                className="rounded-full bg-brand px-4 py-2.5 text-sm font-semibold whitespace-nowrap text-white"
+              >
+                {t('nav.startLearning')}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </header>
   )
 }

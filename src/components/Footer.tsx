@@ -1,20 +1,6 @@
 import type { ReactNode } from 'react'
 import { GraduationCap } from 'lucide-react'
-
-const columns = [
-  {
-    title: 'Support',
-    links: ['Help Center', 'Contact Support', 'Pricing Plans', 'Student Guide'],
-  },
-  {
-    title: 'About Us',
-    links: ['Our Story', 'Careers', 'Partners', 'Blog'],
-  },
-  {
-    title: 'FAQ',
-    links: ['Getting Started', 'TOEFL Prep', 'Tutor Matching', 'Payments'],
-  },
-] as const
+import { useLanguage } from '../i18n/LanguageContext'
 
 function SocialIcon({ label, children }: { label: string; children: ReactNode }) {
   return (
@@ -29,6 +15,23 @@ function SocialIcon({ label, children }: { label: string; children: ReactNode })
 }
 
 export default function Footer() {
+  const { t } = useLanguage()
+
+  const columns = [
+    {
+      title: t('footer.support'),
+      links: ['Help Center', 'Contact Support', 'Pricing Plans', 'Student Guide'],
+    },
+    {
+      title: t('footer.about'),
+      links: ['Our Story', 'Careers', 'Partners', 'Blog'],
+    },
+    {
+      title: t('footer.faq'),
+      links: ['Getting Started', 'TOEFL Prep', 'Tutor Matching', 'Payments'],
+    },
+  ]
+
   return (
     <footer className="bg-ink text-white">
       <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
@@ -41,8 +44,7 @@ export default function Footer() {
               <span className="text-xl font-bold">Englishifu</span>
             </div>
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-white/60">
-              Learn. Practice. Achieve. Your partner for English fluency and
-              TOEFL success.
+              {t('footer.tagline')}
             </p>
             <div className="mt-6 flex gap-3">
               <SocialIcon label="Telegram">

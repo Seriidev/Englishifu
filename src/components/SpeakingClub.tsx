@@ -1,23 +1,26 @@
 import { ArrowRight, BarChart2, Calendar, Clock, Users } from 'lucide-react'
 import { speakingClubMeetings } from '../data/speakingClub'
+import { useLanguage } from '../i18n/LanguageContext'
 
 export default function SpeakingClub() {
+  const { t } = useLanguage()
+
   const handleBook = (meetingTitle: string) => {
     console.log('Book meeting:', meetingTitle)
   }
 
   return (
-    <section id="speaking-club" className="bg-white py-16 sm:py-20">
+    <section id="speaking-club" className="bg-transparent py-16 sm:py-20">
       <div className="mx-auto max-w-7xl px-6">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <h2 className="text-3xl font-bold tracking-tight text-ink sm:text-4xl">
-            Upcoming Speaking Clubs
+            {t('club.title')}
           </h2>
           <a
             href="#speaking-club"
             className="inline-flex items-center gap-1.5 text-base font-semibold text-brand transition hover:underline"
           >
-            View all meetings
+            {t('club.viewAll')}
             <ArrowRight className="h-4 w-4" aria-hidden />
           </a>
         </div>
@@ -60,14 +63,14 @@ export default function SpeakingClub() {
                   <div className="flex items-center justify-between gap-3">
                     <span className="inline-flex items-center gap-1.5 text-sm text-muted">
                       <Users className="h-4 w-4" aria-hidden />
-                      {meeting.spotsLeft} spots left
+                      {t('club.spots', { count: meeting.spotsLeft })}
                     </span>
                     <button
                       type="button"
                       onClick={() => handleBook(meeting.title)}
                       className="rounded-lg bg-brand px-5 py-2 text-sm font-semibold text-white transition hover:bg-brand-dark"
                     >
-                      Book
+                      {t('club.book')}
                     </button>
                   </div>
                 </div>
@@ -82,10 +85,8 @@ export default function SpeakingClub() {
               <Users className="h-6 w-6" aria-hidden />
             </span>
             <div>
-              <p className="font-bold text-ink">Small groups</p>
-              <p className="mt-0.5 text-sm text-muted">
-                No more than 8 people — everyone gets attention
-              </p>
+              <p className="font-bold text-ink">{t('club.smallTitle')}</p>
+              <p className="mt-0.5 text-sm text-muted">{t('club.smallBody')}</p>
             </div>
           </div>
 
@@ -94,7 +95,7 @@ export default function SpeakingClub() {
             onClick={() => console.log('Book a meeting')}
             className="rounded-lg bg-brand px-6 py-3 text-sm font-semibold text-white transition hover:bg-brand-dark"
           >
-            Book a meeting
+            {t('club.bookMeeting')}
           </button>
         </div>
       </div>

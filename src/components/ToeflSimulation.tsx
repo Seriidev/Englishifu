@@ -1,12 +1,7 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Check, Clock } from 'lucide-react'
-
-const benefits = [
-  'Real TOEFL questions',
-  'Timed simulation',
-  'Instant scoring & feedback',
-  'Analyze your performance',
-] as const
+import ToeflTryBadge from './ToeflTryBadge'
+import { useLanguage } from '../i18n/LanguageContext'
 
 const options = [
   { key: 'A', text: 'The author argues that climate policy needs broader support.' },
@@ -16,11 +11,22 @@ const options = [
 ] as const
 
 export default function ToeflSimulation() {
+  const { t, lang } = useLanguage()
   const [selected, setSelected] = useState<string | null>('A')
 
+  const benefits = useMemo(
+    () => [
+      t('toeflSim.b1'),
+      t('toeflSim.b2'),
+      t('toeflSim.b3'),
+      t('toeflSim.b4'),
+    ],
+    [t, lang],
+  )
+
   return (
-    <section id="toefl" className="bg-brand-light/60 py-16 sm:py-20">
-      <div className="mx-auto grid max-w-7xl items-center gap-10 px-4 sm:px-6 lg:grid-cols-2 lg:gap-14 lg:px-8">
+    <section id="toefl" className="relative bg-gradient-to-br from-[#e8f1ff]/90 via-[#eef0ff]/70 to-[#f4f7fc] py-16 sm:py-20">
+      <div className="mx-auto grid max-w-7xl items-center gap-10 px-4 pb-10 sm:px-6 lg:grid-cols-2 lg:gap-14 lg:px-8">
         <div className="rounded-3xl border border-blue-100 bg-white p-5 shadow-lg shadow-brand/5 sm:p-6">
           <div className="flex items-center justify-between">
             <span className="rounded-full bg-brand-light px-3 py-1 text-xs font-semibold text-brand">
@@ -71,7 +77,7 @@ export default function ToeflSimulation() {
 
         <div>
           <h2 className="text-3xl font-bold tracking-tight text-ink sm:text-4xl">
-            Try a Free TOEFL Simulation
+            {t('toeflSim.title')}
           </h2>
 
           <ul className="mt-6 space-y-3">
@@ -87,15 +93,17 @@ export default function ToeflSimulation() {
 
           <div className="mt-8 flex flex-wrap items-center gap-4">
             <a
-              href="#toefl"
+              href="/toefl"
               className="rounded-full bg-brand px-8 py-4 text-base font-semibold text-white shadow-md shadow-brand/25 transition hover:bg-brand-dark"
             >
-              Start Free Simulation
+              {t('toeflSim.start')}
             </a>
-            <span className="text-base text-muted">No registration required</span>
+            <span className="text-base text-muted">{t('toeflSim.noReg')}</span>
           </div>
         </div>
       </div>
+
+      <ToeflTryBadge />
     </section>
   )
 }
