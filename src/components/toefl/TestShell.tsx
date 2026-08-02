@@ -61,7 +61,7 @@ export default function TestShell({
           </p>
         </div>
       </header>
-      <div className="mx-auto flex w-full max-w-6xl flex-1 flex-col px-4 py-4 sm:px-6 sm:py-6">
+      <div className="mx-auto flex w-full max-w-6xl flex-1 flex-col px-4 pt-4 pb-8 sm:px-6 sm:pt-6 sm:pb-10">
         {children}
       </div>
     </div>

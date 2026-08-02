@@ -1,3 +1,7 @@
+import type { TutorCertification, TutorPosition } from './user'
+
+export type { TutorCertification, TutorPosition }
+
 export type SkillTag =
   | 'speaking'
   | 'writing'
@@ -20,21 +24,46 @@ export interface TeachingActivityDay {
   lessonsCount: number
 }
 
+/** Display model for tutor public profile UI */
 export interface TutorPublicProfile {
   id: string
   handle: string
-  firstName: string
-  lastName: string
+  fullName: string
+  position: TutorPosition
   avatarUrl?: string
   aboutMe: string
   yearsOfExperience: number
-  certifications: string[]
+  certifications: TutorCertification[]
+  isPublicProfile: boolean
+  dailyStreak: number
   studentsCount: number
   reviewsCount: number
   averageRating: number
   specializations: TutorSpecialization[]
   teachingActivity: TeachingActivityDay[]
+  classesStats: TutorClassesStats
+  kpis: TutorKPI[]
 }
+
+export interface TutorClassesStats {
+  totalStudents: number
+  totalClasses: number
+  speakingClubSessions: number
+}
+
+export interface TutorKPI {
+  id: string
+  label: string
+  value: number | string
+  unit?: string
+  trend?: 'up' | 'down' | 'neutral'
+}
+
+export const TUTOR_POSITIONS: TutorPosition[] = [
+  'Teacher',
+  'Speaker',
+  'Specialist',
+]
 
 export const SKILL_COLORS: Record<SkillTag, string> = {
   speaking: '#f59e0b',

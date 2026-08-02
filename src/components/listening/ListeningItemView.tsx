@@ -4,6 +4,7 @@ import { playPromptAudio, cancelPromptAudio } from '../../speaking/hooks/playPro
 import ListeningIndicator from '../shared/ListeningIndicator'
 import PromptImage from '../shared/PromptImage'
 import { useLanguage } from '../../i18n/LanguageContext'
+import LetterSlotsInput from '../shared/LetterSlotsInput'
 
 interface Props {
   item: ListeningItem
@@ -90,38 +91,48 @@ function FillInBlank({
   const [blanks, setBlanks] = useState<string[]>(() => Array(blankCount).fill(''))
   const parts = (item.transcriptWithBlanks ?? '').split('___')
 
+  const complete = blanks.every((b, i) => {
+    const expected = item.blankAnswers?.[i]?.length ?? 0
+    return b.length === expected
+  })
+
   return (
-    <div className="flex h-full flex-col gap-6">
+    <div className="flex h-full flex-col gap-6 pb-2 sm:pb-3">
       <div className="flex-1">
         <p className="text-base font-semibold text-ink">{item.prompt}</p>
         <p className="mt-4 text-sm leading-relaxed text-ink">
-          {parts.map((part, i) => (
-            <span key={i}>
-              {part}
-              {i < blankCount && (
-                <input
-                  value={blanks[i] ?? ''}
-                  onChange={(e) => {
-                    const next = [...blanks]
-                    next[i] = e.target.value
-                    setBlanks(next)
-                  }}
-                  className="mx-1 inline-block w-28 border-b-2 border-brand bg-transparent px-1 text-center outline-none sm:w-36"
-                  aria-label={`Blank ${i + 1}`}
-                />
-              )}
-            </span>
-          ))}
+          {parts.map((part, i) => {
+            const answerLen = item.blankAnswers?.[i]?.length ?? 4
+            return (
+              <span key={i}>
+                {part}
+                {i < blankCount && (
+                  <LetterSlotsInput
+                    value={blanks[i] ?? ''}
+                    length={answerLen}
+                    ariaLabel={`Blank ${i + 1}`}
+                    onChange={(v) => {
+                      const next = [...blanks]
+                      next[i] = v
+                      setBlanks(next)
+                    }}
+                  />
+                )}
+              </span>
+            )
+          })}
         </p>
       </div>
-      <button
-        type="button"
-        disabled={blanks.some((b) => !b.trim())}
-        onClick={() => onSubmit({ type: 'fill-in-blank', blanks })}
-        className="rounded-full bg-brand py-3.5 text-sm font-semibold text-white transition hover:bg-brand-dark disabled:opacity-50"
-      >
-        <SubmitLabel />
-      </button>
+      <div className="mt-auto border-t border-gray-100 pt-5">
+        <button
+          type="button"
+          disabled={!complete}
+          onClick={() => onSubmit({ type: 'fill-in-blank', blanks })}
+          className="w-full rounded-full bg-brand py-3.5 text-sm font-semibold text-white transition hover:bg-brand-dark disabled:opacity-50"
+        >
+          <SubmitLabel />
+        </button>
+      </div>
     </div>
   )
 }

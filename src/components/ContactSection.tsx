@@ -443,13 +443,6 @@ export default function ContactSection() {
               <div className="relative mt-6 border-t border-white/15 pt-5">
                 <p className="text-sm font-semibold">Need immediate help?</p>
                 <div className="mt-3 flex flex-wrap gap-2">
-                  <button
-                    type="button"
-                    onClick={() => console.log('Open live chat')}
-                    className="inline-flex items-center gap-1.5 rounded-full bg-white px-4 py-2 text-sm font-semibold text-brand transition hover:bg-brand-light"
-                  >
-                    Live Chat →
-                  </button>
                   <a
                     href="https://t.me/englishifu"
                     target="_blank"

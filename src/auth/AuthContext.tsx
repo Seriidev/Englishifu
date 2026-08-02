@@ -2,6 +2,7 @@ import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useState,
   type ReactNode,
@@ -14,9 +15,13 @@ import {
   logoutSession,
   registerStudent,
   registerTutor,
+  updateStudentProfile,
+  updateTutorProfile,
   type CompleteTutorProfileInput,
   type CreateStudentInput,
   type CreateTutorInput,
+  type UpdateStudentProfileInput,
+  type UpdateTutorProfileInput,
 } from '../utils/authStorage'
 
 interface AuthContextValue {
@@ -34,6 +39,12 @@ interface AuthContextValue {
   completeProfile: (
     input: CompleteTutorProfileInput,
   ) => Promise<{ ok: true; user: PublicUser } | { ok: false; error: string }>
+  updateStudent: (
+    input: UpdateStudentProfileInput,
+  ) => Promise<{ ok: true; user: PublicUser } | { ok: false; error: string }>
+  updateTutor: (
+    input: UpdateTutorProfileInput,
+  ) => Promise<{ ok: true; user: PublicUser } | { ok: false; error: string }>
   logout: () => void
 }
 
@@ -41,6 +52,11 @@ const AuthContext = createContext<AuthContextValue | null>(null)
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<PublicUser | null>(() => getSessionUser())
+
+  // Re-hydrate after migrations / hard refresh
+  useEffect(() => {
+    setUser(getSessionUser())
+  }, [])
 
   const login = useCallback(async (email: string, password: string) => {
     const result = await loginUser(email, password)
@@ -76,6 +92,32 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     [user],
   )
 
+  const updateStudent = useCallback(
+    async (input: UpdateStudentProfileInput) => {
+      if (!user || user.role !== 'student') {
+        return { ok: false as const, error: 'Not signed in as student' }
+      }
+      const result = updateStudentProfile(user.id, input)
+      if ('error' in result) return { ok: false as const, error: result.error }
+      setUser(result.user)
+      return { ok: true as const, user: result.user }
+    },
+    [user],
+  )
+
+  const updateTutor = useCallback(
+    async (input: UpdateTutorProfileInput) => {
+      if (!user || user.role !== 'tutor') {
+        return { ok: false as const, error: 'Not signed in as tutor' }
+      }
+      const result = updateTutorProfile(user.id, input)
+      if ('error' in result) return { ok: false as const, error: result.error }
+      setUser(result.user)
+      return { ok: true as const, user: result.user }
+    },
+    [user],
+  )
+
   const logout = useCallback(() => {
     logoutSession()
     setUser(null)
@@ -88,9 +130,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       registerAsStudent,
       registerAsTutor,
       completeProfile,
+      updateStudent,
+      updateTutor,
       logout,
     }),
-    [user, login, registerAsStudent, registerAsTutor, completeProfile, logout],
+    [
+      user,
+      login,
+      registerAsStudent,
+      registerAsTutor,
+      completeProfile,
+      updateStudent,
+      updateTutor,
+      logout,
+    ],
   )
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

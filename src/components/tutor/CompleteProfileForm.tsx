@@ -8,8 +8,9 @@ import {
   type TutorProfileValidationErrors,
 } from '../../utils/validation'
 import { tutorProfilePath } from '../../utils/authStorage'
+import { normalizeCertifications } from '../../utils/certifications'
 import AuthShell from '../auth/AuthShell'
-import CertificationInput from '../auth/CertificationInput'
+import CertificationUploadInput from './CertificationUploadInput'
 import {
   errorClass,
   fieldClass,
@@ -25,7 +26,7 @@ export default function CompleteProfileForm() {
     if (user?.role === 'tutor') {
       return {
         yearsOfExperience: user.yearsOfExperience ?? '',
-        certifications: user.certifications ?? [],
+        certifications: normalizeCertifications(user.certifications),
         aboutMe: user.aboutMe ?? '',
       }
     }
@@ -104,8 +105,8 @@ export default function CompleteProfileForm() {
 
         <div>
           <label className={labelClass}>Certifications</label>
-          <CertificationInput
-            value={form.certifications}
+          <CertificationUploadInput
+            certifications={form.certifications}
             onChange={(certs) =>
               setForm((prev) => ({ ...prev, certifications: certs }))
             }

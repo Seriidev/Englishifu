@@ -1,4 +1,4 @@
-import { BrowserRouter, Navigate, Route, Routes, useNavigate } from 'react-router-dom'
+import { BrowserRouter, Navigate, Route, Routes, useNavigate, useParams } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import ScrollToTopButton from './components/ScrollToTopButton'
 import Hero from './components/Hero'
@@ -24,12 +24,14 @@ import PlacementTestFlow from './components/placement/PlacementTestFlow'
 import StartAuth from './components/auth/StartAuth'
 import RoleSelector from './components/auth/RoleSelector'
 import LoginForm from './components/auth/LoginForm'
-import StudentSignupForm from './components/auth/StudentSignupForm'
-import TutorSignupForm from './components/auth/TutorSignupForm'
-import StudentDashboard from './components/dashboard/StudentDashboard'
+import SignupForm from './components/auth/SignupForm'
+import StudentHomeRedirect from './routes/StudentHomeRedirect'
 import TutorDashboardRedirect from './components/dashboard/TutorDashboardRedirect'
 import CompleteProfileForm from './components/tutor/CompleteProfileForm'
 import TutorProfilePage from './components/tutor-profile/TutorProfilePage'
+import EditTutorProfileForm from './components/tutor-profile/EditTutorProfileForm'
+import StudentProfilePage from './components/profile/StudentProfilePage'
+import EditProfileForm from './components/profile/EditProfileForm'
 import ProtectedRoute from './routes/ProtectedRoute'
 import { readingMockConfig } from './mocks/readingMock'
 import { listeningMockConfig } from './mocks/listeningMock'
@@ -116,6 +118,11 @@ function PlacementPage() {
   return <PlacementTestFlow onExit={() => navigate('/')} />
 }
 
+function LegacyTutorProfileRedirect() {
+  const { handle = '' } = useParams()
+  return <Navigate to={`/tutor/profile/${handle}`} replace />
+}
+
 export default function App() {
   return (
     <BrowserRouter>
@@ -137,16 +144,25 @@ export default function App() {
         <Route path="/start" element={<StartAuth />} />
         <Route path="/login" element={<LoginForm />} />
         <Route path="/signup" element={<RoleSelector />} />
-        <Route path="/signup/student" element={<StudentSignupForm />} />
-        <Route path="/signup/tutor" element={<TutorSignupForm />} />
+        <Route path="/signup/student" element={<SignupForm role="student" />} />
+        <Route path="/signup/tutor" element={<SignupForm role="tutor" />} />
         <Route
           path="/dashboard"
           element={
             <ProtectedRoute requiredRole="student">
-              <StudentDashboard />
+              <StudentHomeRedirect />
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/profile/edit"
+          element={
+            <ProtectedRoute requiredRole="student">
+              <EditProfileForm />
+            </ProtectedRoute>
+          }
+        />
+        <Route path="/profile/:handle" element={<StudentProfilePage />} />
         <Route
           path="/tutor/dashboard"
           element={
@@ -163,7 +179,16 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-        <Route path="/tutors/:handle" element={<TutorProfilePage />} />
+        <Route
+          path="/tutor/profile/edit"
+          element={
+            <ProtectedRoute requiredRole="tutor">
+              <EditTutorProfileForm />
+            </ProtectedRoute>
+          }
+        />
+        <Route path="/tutor/profile/:handle" element={<TutorProfilePage />} />
+        <Route path="/tutors/:handle" element={<LegacyTutorProfileRedirect />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>

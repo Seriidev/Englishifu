@@ -2,10 +2,18 @@ export type UserRole = 'student' | 'tutor'
 
 export type TutorStatus = 'incomplete' | 'pending' | 'approved'
 
+export type TutorPosition = 'Teacher' | 'Speaker' | 'Specialist'
+
+export interface TutorCertification {
+  id: string
+  name: string
+  imageUrl?: string
+  uploadedAt?: string
+}
+
 export interface BaseUser {
   id: string
-  firstName: string
-  lastName: string
+  fullName: string
   email: string
   /** SHA-256 hex — never store plain password */
   passwordHash: string
@@ -15,16 +23,27 @@ export interface BaseUser {
 
 export interface StudentProfile extends BaseUser {
   role: 'student'
+  /** Public URL slug: /profile/{handle} */
+  handle: string
+  avatarUrl?: string
+  city?: string
+  headline?: string
+  summary?: string
+  isPublicProfile: boolean
 }
 
 export interface TutorProfile extends BaseUser {
   role: 'tutor'
-  /** Public URL slug: /tutors/{handle} */
+  /** Public URL slug: /tutor/profile/{handle} */
   handle: string
   status: TutorStatus
-  /** Filled on Complete Profile step */
+  position: TutorPosition
+  avatarUrl?: string
+  isPublicProfile: boolean
+  dailyStreak: number
+  /** Filled on Complete Profile step / shown as Summary */
   yearsOfExperience?: number
-  certifications?: string[]
+  certifications?: TutorCertification[]
   aboutMe?: string
 }
 

@@ -1,6 +1,11 @@
 import type { PublicTutor } from '../types/user'
-import type { TutorPublicProfile } from '../types/tutorProfile'
+import type {
+  TutorClassesStats,
+  TutorKPI,
+  TutorPublicProfile,
+} from '../types/tutorProfile'
 import { findTutorByHandle } from '../utils/authStorage'
+import { normalizeCertifications } from '../utils/certifications'
 import { generateTeachingActivity } from '../utils/activityHeatmap'
 
 const demoSpecializations: TutorPublicProfile['specializations'] = [
@@ -42,40 +47,116 @@ const demoSpecializations: TutorPublicProfile['specializations'] = [
   },
 ]
 
+const demoClassesStats: TutorClassesStats = {
+  totalStudents: 142,
+  totalClasses: 89,
+  speakingClubSessions: 34,
+}
+
+const demoKpis: TutorKPI[] = [
+  {
+    id: 'kpi-sat',
+    label: 'Student Satisfaction',
+    value: 96,
+    unit: '%',
+    trend: 'up',
+  },
+  {
+    id: 'kpi-lessons',
+    label: 'Lessons This Month',
+    value: 24,
+    trend: 'up',
+  },
+  {
+    id: 'kpi-response',
+    label: 'Response Time',
+    value: 18,
+    unit: ' min',
+    trend: 'neutral',
+  },
+]
+
 export const mockTutorProfile: TutorPublicProfile = {
   id: 'tutor-sarah-chen',
   handle: 'sarahchen',
-  firstName: 'Sarah',
-  lastName: 'Chen',
+  fullName: 'Sarah Chen',
+  position: 'Teacher',
   avatarUrl: 'https://i.pravatar.cc/240?img=5',
   aboutMe:
     "I've been teaching English for over 5 years, specializing in TOEFL Speaking and Business English. My approach is practice-first: short drills, clear feedback, and real conversation. Students often say lessons feel like coaching, not lectures — and that's exactly the goal.",
   yearsOfExperience: 5,
-  certifications: ['TEFL', 'CELTA', 'TOEFL iBT Trainer'],
+  certifications: [
+    { id: 'cert-tefl', name: 'TEFL' },
+    { id: 'cert-celta', name: 'CELTA' },
+    { id: 'cert-ielts', name: 'IELTS Examiner Certified' },
+  ],
+  isPublicProfile: true,
+  dailyStreak: 12,
   studentsCount: 142,
   reviewsCount: 89,
   averageRating: 4.8,
   specializations: demoSpecializations,
   teachingActivity: generateTeachingActivity(365, 42),
+  classesStats: demoClassesStats,
+  kpis: demoKpis,
+}
+
+function emptyStatsForNewTutor(): {
+  classesStats: TutorClassesStats
+  kpis: TutorKPI[]
+} {
+  return {
+    classesStats: {
+      totalStudents: 0,
+      totalClasses: 0,
+      speakingClubSessions: 0,
+    },
+    kpis: [
+      {
+        id: 'kpi-sat',
+        label: 'Student Satisfaction',
+        value: '—',
+        trend: 'neutral',
+      },
+      {
+        id: 'kpi-lessons',
+        label: 'Lessons This Month',
+        value: 0,
+        trend: 'neutral',
+      },
+      {
+        id: 'kpi-response',
+        label: 'Response Time',
+        value: '—',
+        trend: 'neutral',
+      },
+    ],
+  }
 }
 
 function fromRegisteredTutor(tutor: PublicTutor): TutorPublicProfile {
+  const metrics = emptyStatsForNewTutor()
   return {
     id: tutor.id,
     handle: tutor.handle,
-    firstName: tutor.firstName,
-    lastName: tutor.lastName,
-    avatarUrl: `https://api.dicebear.com/9.x/adventurer/svg?seed=${encodeURIComponent(tutor.handle)}`,
+    fullName: tutor.fullName,
+    position: tutor.position ?? 'Teacher',
+    avatarUrl:
+      tutor.avatarUrl ??
+      `https://api.dicebear.com/9.x/adventurer/svg?seed=${encodeURIComponent(tutor.handle)}`,
     aboutMe:
       tutor.aboutMe?.trim() ||
       'This tutor is still finishing their profile. Check back soon for a full bio, certifications, and teaching focus.',
     yearsOfExperience: tutor.yearsOfExperience ?? 0,
-    certifications: tutor.certifications ?? [],
+    certifications: normalizeCertifications(tutor.certifications),
+    isPublicProfile: tutor.isPublicProfile ?? true,
+    dailyStreak: tutor.dailyStreak ?? 0,
     studentsCount: 0,
     reviewsCount: 0,
     averageRating: 0,
     specializations: demoSpecializations.slice(0, 2),
     teachingActivity: generateTeachingActivity(365, tutor.id.length * 17),
+    ...metrics,
   }
 }
 

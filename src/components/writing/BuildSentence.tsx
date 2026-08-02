@@ -43,7 +43,7 @@ export default function BuildSentence({ wordBank, onSubmit }: Props) {
         </div>
       </div>
 
-      <div className="mt-4 flex flex-wrap gap-2">
+      <div className="mt-4 mb-2 flex flex-wrap gap-2">
         {pool.map((w, i) => (
           <button
             key={`${w}-pool-${i}`}
@@ -56,14 +56,16 @@ export default function BuildSentence({ wordBank, onSubmit }: Props) {
         ))}
       </div>
 
-      <button
-        type="button"
-        disabled={built.length === 0}
-        onClick={() => onSubmit(built)}
-        className="mt-auto rounded-full bg-brand py-3 text-sm font-semibold text-white disabled:opacity-50"
-      >
-        Submit Sentence
-      </button>
+      <div className="mt-auto border-t border-gray-100 pt-6 pb-1">
+        <button
+          type="button"
+          disabled={built.length === 0}
+          onClick={() => onSubmit(built)}
+          className="w-full rounded-full bg-brand py-3 text-sm font-semibold text-white disabled:opacity-50"
+        >
+          Submit Sentence
+        </button>
+      </div>
     </div>
   )
 }

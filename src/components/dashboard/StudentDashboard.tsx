@@ -1,6 +1,8 @@
 import { Link, useNavigate } from 'react-router-dom'
-import { GraduationCap, LogOut } from 'lucide-react'
+import { GraduationCap, LogOut, UserRound } from 'lucide-react'
 import { useAuth } from '../../auth/AuthContext'
+import { studentPublicProfilePath } from '../../utils/authStorage'
+import { firstNameFromFullName } from '../../utils/name'
 import {
   mockCurrentCourse,
   mockStudentGamification,
@@ -12,7 +14,9 @@ import GamificationSidebar from './GamificationSidebar'
 export default function StudentDashboard() {
   const { user, logout } = useAuth()
   const navigate = useNavigate()
-  const firstName = user?.firstName ?? 'Student'
+  const firstName = user?.fullName
+    ? firstNameFromFullName(user.fullName)
+    : 'Student'
   const gamification = mockStudentGamification(user?.id ?? 'demo')
   const course = mockCurrentCourse
 
@@ -32,6 +36,15 @@ export default function StudentDashboard() {
             <span className="font-bold text-ink">Englishifu</span>
           </Link>
           <div className="flex items-center gap-2">
+            {user?.role === 'student' && user.handle ? (
+              <Link
+                to={studentPublicProfilePath(user.handle)}
+                className="inline-flex items-center gap-1.5 rounded-full border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-ink transition hover:bg-gray-50"
+              >
+                <UserRound className="h-4 w-4" aria-hidden />
+                Profile
+              </Link>
+            ) : null}
             <Link
               to="/placement"
               className="hidden rounded-full border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-ink transition hover:bg-gray-50 sm:inline-flex"

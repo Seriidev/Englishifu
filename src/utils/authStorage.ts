@@ -2,13 +2,23 @@ import {
   isTutorProfileComplete,
   type PublicUser,
   type StudentProfile,
+  type TutorCertification,
+  type TutorPosition,
   type TutorProfile,
   type UserProfile,
   type UserRole,
 } from '../types/user'
+import { normalizeCertifications } from './certifications'
 
 const USERS_KEY = 'englishifu_users_v1'
 const SESSION_KEY = 'englishifu_session_v1'
+
+/** Legacy shape before fullName migration */
+type LegacyNameFields = {
+  firstName?: string
+  lastName?: string
+  fullName?: string
+}
 
 async function sha256Hex(value: string): Promise<string> {
   const data = new TextEncoder().encode(value)
@@ -21,50 +31,97 @@ async function sha256Hex(value: string): Promise<string> {
 function slugifyHandle(raw: string): string {
   return raw
     .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '')
-    .slice(0, 24)
+    .replace(/[^a-z0-9_]+/g, '')
+    .slice(0, 20)
 }
 
-function makeHandle(
-  firstName: string,
-  lastName: string,
-  email: string,
-  taken: Set<string>,
-): string {
-  const base =
-    slugifyHandle(`${firstName}${lastName}`) ||
-    slugifyHandle(email.split('@')[0] ?? '') ||
-    'tutor'
+function collectTakenHandles(users: UserProfile[]): Set<string> {
+  const taken = new Set<string>()
+  for (const u of users) {
+    if ('handle' in u && u.handle) {
+      taken.add(u.handle.toLowerCase())
+    }
+  }
+  return taken
+}
 
-  if (!taken.has(base)) return base
+function makeHandle(fullName: string, email: string, taken: Set<string>): string {
+  const base =
+    slugifyHandle(fullName.replace(/\s+/g, '')) ||
+    slugifyHandle(email.split('@')[0] ?? '') ||
+    'user'
+
+  if (!taken.has(base) && base.length >= 3) return base
   let i = 2
-  while (taken.has(`${base}${i}`)) i++
-  return `${base}${i}`
+  while (taken.has(`${base}${i}`) || `${base}${i}`.length < 3) i++
+  return `${base}${i}`.slice(0, 20)
+}
+
+function resolveFullName(user: LegacyNameFields): string {
+  if (user.fullName?.trim()) return user.fullName.trim()
+  return [user.firstName, user.lastName].filter(Boolean).join(' ').trim()
+}
+
+function migrateUser(
+  raw: UserProfile & LegacyNameFields,
+  taken: Set<string>,
+): UserProfile {
+  const fullName = resolveFullName(raw) || 'User'
+  const withoutLegacy = { ...raw } as UserProfile & LegacyNameFields
+  delete withoutLegacy.firstName
+  delete withoutLegacy.lastName
+
+  if (raw.role === 'tutor') {
+    const legacy = withoutLegacy as TutorProfile & {
+      position?: TutorPosition
+      isPublicProfile?: boolean
+      dailyStreak?: number
+    }
+    const handle = raw.handle || makeHandle(fullName, raw.email, taken)
+    if (!raw.handle) taken.add(handle)
+    return {
+      ...legacy,
+      role: 'tutor',
+      fullName,
+      handle,
+      status: raw.status,
+      position: legacy.position ?? 'Teacher',
+      isPublicProfile: legacy.isPublicProfile ?? true,
+      dailyStreak: legacy.dailyStreak ?? 0,
+      certifications: normalizeCertifications(legacy.certifications),
+    }
+  }
+
+  const student = withoutLegacy as StudentProfile & {
+    handle?: string
+    isPublicProfile?: boolean
+  }
+  const handle =
+    student.handle || makeHandle(fullName, raw.email, taken)
+  if (!student.handle) taken.add(handle)
+
+  return {
+    ...student,
+    role: 'student',
+    fullName,
+    handle,
+    isPublicProfile: student.isPublicProfile ?? true,
+  }
 }
 
 function readUsers(): UserProfile[] {
   try {
     const raw = localStorage.getItem(USERS_KEY)
     if (!raw) return []
-    const parsed = JSON.parse(raw) as UserProfile[]
-    const taken = new Set(
-      parsed
-        .filter((u): u is TutorProfile => u.role === 'tutor' && Boolean(u.handle))
-        .map((u) => u.handle.toLowerCase()),
-    )
+    const parsed = JSON.parse(raw) as Array<UserProfile & LegacyNameFields>
+    const taken = collectTakenHandles(parsed as UserProfile[])
 
     let changed = false
     const users = parsed.map((user) => {
-      if (user.role !== 'tutor' || user.handle) return user
-      const handle = makeHandle(
-        user.firstName,
-        user.lastName,
-        user.email,
-        taken,
-      )
-      taken.add(handle)
-      changed = true
-      return { ...user, handle }
+      const before = JSON.stringify(user)
+      const next = migrateUser(user, taken)
+      if (JSON.stringify(next) !== before) changed = true
+      return next
     })
 
     if (changed) writeUsers(users)
@@ -91,23 +148,17 @@ export function getSessionUser(): PublicUser | null {
   try {
     const raw = localStorage.getItem(SESSION_KEY)
     if (!raw) return null
-    const session = JSON.parse(raw) as PublicUser
-    if (session.role === 'tutor' && !session.handle) {
-      const fresh = findTutorByEmail(session.email)
-      if (fresh) {
-        setSessionUser(fresh)
-        return fresh
-      }
+    const session = JSON.parse(raw) as PublicUser & LegacyNameFields
+    const fresh = findUserByEmail(session.email)
+    if (!fresh) return session as PublicUser
+    const publicUser = toPublic(fresh)
+    if (!('fullName' in session) || !session.fullName || !session.handle) {
+      setSessionUser(publicUser)
     }
-    return session
+    return publicUser
   } catch {
     return null
   }
-}
-
-function findTutorByEmail(email: string): PublicUser | null {
-  const user = findUserByEmail(email)
-  return user?.role === 'tutor' ? toPublic(user) : null
 }
 
 export function setSessionUser(user: PublicUser | null) {
@@ -123,18 +174,27 @@ export function findUserByEmail(email: string): UserProfile | undefined {
   return readUsers().find((u) => u.email.toLowerCase() === normalized)
 }
 
+export function isHandleTaken(handle: string, excludeUserId?: string): boolean {
+  const normalized = handle.replace(/^@/, '').toLowerCase()
+  return readUsers().some(
+    (u) =>
+      'handle' in u &&
+      u.handle?.toLowerCase() === normalized &&
+      u.id !== excludeUserId,
+  )
+}
+
+export function createUniqueHandle(fullName: string, email: string): string {
+  return makeHandle(fullName, email, collectTakenHandles(readUsers()))
+}
+
+/** @deprecated use createUniqueHandle(fullName, email) */
 export function createUniqueTutorHandle(
   firstName: string,
   lastName: string,
   email: string,
 ): string {
-  const users = readUsers()
-  const taken = new Set(
-    users
-      .filter((u): u is TutorProfile => u.role === 'tutor')
-      .map((u) => u.handle.toLowerCase()),
-  )
-  return makeHandle(firstName, lastName, email, taken)
+  return createUniqueHandle(`${firstName} ${lastName}`, email)
 }
 
 export function findTutorByHandle(handle: string): PublicUser | null {
@@ -145,13 +205,24 @@ export function findTutorByHandle(handle: string): PublicUser | null {
   return user ? toPublic(user) : null
 }
 
+export function findStudentByHandle(handle: string): PublicUser | null {
+  const normalized = handle.replace(/^@/, '').toLowerCase()
+  const user = readUsers().find(
+    (u) => u.role === 'student' && u.handle.toLowerCase() === normalized,
+  )
+  return user ? toPublic(user) : null
+}
+
 export function tutorProfilePath(handle: string): string {
-  return `/tutors/${handle.replace(/^@/, '')}`
+  return `/tutor/profile/${handle.replace(/^@/, '')}`
+}
+
+export function studentPublicProfilePath(handle: string): string {
+  return `/profile/${handle.replace(/^@/, '')}`
 }
 
 export interface CreateStudentInput {
-  firstName: string
-  lastName: string
+  fullName: string
   email: string
   password: string
 }
@@ -160,8 +231,27 @@ export type CreateTutorInput = CreateStudentInput
 
 export interface CompleteTutorProfileInput {
   yearsOfExperience: number
-  certifications: string[]
+  certifications: TutorCertification[]
   aboutMe: string
+}
+
+export interface UpdateStudentProfileInput {
+  fullName: string
+  handle: string
+  city?: string
+  headline?: string
+  summary?: string
+  avatarUrl?: string
+  isPublicProfile?: boolean
+}
+
+export interface UpdateTutorProfileInput {
+  fullName: string
+  position: TutorPosition
+  aboutMe?: string
+  avatarUrl?: string
+  isPublicProfile?: boolean
+  certifications?: TutorCertification[]
 }
 
 export async function registerStudent(
@@ -171,13 +261,17 @@ export async function registerStudent(
     return { error: 'An account with this email already exists' }
   }
 
+  const fullName = input.fullName.trim()
+  const email = input.email.trim().toLowerCase()
+
   const user: StudentProfile = {
     id: crypto.randomUUID(),
-    firstName: input.firstName.trim(),
-    lastName: input.lastName.trim(),
-    email: input.email.trim().toLowerCase(),
+    fullName,
+    email,
     passwordHash: await hashPassword(input.password),
     role: 'student',
+    handle: createUniqueHandle(fullName, email),
+    isPublicProfile: true,
     createdAt: new Date().toISOString(),
   }
 
@@ -197,19 +291,20 @@ export async function registerTutor(
     return { error: 'An account with this email already exists' }
   }
 
-  const firstName = input.firstName.trim()
-  const lastName = input.lastName.trim()
+  const fullName = input.fullName.trim()
   const email = input.email.trim().toLowerCase()
 
   const user: TutorProfile = {
     id: crypto.randomUUID(),
-    firstName,
-    lastName,
+    fullName,
     email,
     passwordHash: await hashPassword(input.password),
     role: 'tutor',
-    handle: createUniqueTutorHandle(firstName, lastName, email),
+    handle: createUniqueHandle(fullName, email),
     status: 'incomplete',
+    position: 'Teacher',
+    isPublicProfile: true,
+    dailyStreak: 0,
     createdAt: new Date().toISOString(),
   }
 
@@ -222,10 +317,6 @@ export async function registerTutor(
   return { user: publicUser }
 }
 
-/**
- * Completes tutor profile. Without moderation we set `approved` when complete;
- * otherwise stays `incomplete`. Field `pending` is reserved for future review.
- */
 export function completeTutorProfile(
   userId: string,
   input: CompleteTutorProfileInput,
@@ -241,7 +332,7 @@ export function completeTutorProfile(
   const draft: TutorProfile = {
     ...existing,
     yearsOfExperience: input.yearsOfExperience,
-    certifications: input.certifications,
+    certifications: normalizeCertifications(input.certifications),
     aboutMe: input.aboutMe.trim(),
   }
 
@@ -254,6 +345,86 @@ export function completeTutorProfile(
 
   const status = options?.requireModeration ? 'pending' : 'approved'
   const updated: TutorProfile = { ...draft, status }
+  users[index] = updated
+  writeUsers(users)
+
+  const publicUser = toPublic(updated)
+  setSessionUser(publicUser)
+  return { user: publicUser }
+}
+
+export function updateStudentProfile(
+  userId: string,
+  input: UpdateStudentProfileInput,
+): { user: PublicUser } | { error: string } {
+  const users = readUsers()
+  const index = users.findIndex((u) => u.id === userId)
+  if (index < 0) return { error: 'User not found' }
+
+  const existing = users[index]
+  if (existing.role !== 'student') return { error: 'Not a student account' }
+
+  const handle = input.handle.replace(/^@/, '').trim().toLowerCase()
+  if (!/^[a-z0-9_]{3,20}$/.test(handle)) {
+    return {
+      error:
+        'Username must be 3-20 characters, lowercase letters, numbers, and underscores only',
+    }
+  }
+  if (isHandleTaken(handle, userId)) {
+    return { error: 'Username is already taken' }
+  }
+
+  const updated: StudentProfile = {
+    ...existing,
+    fullName: input.fullName.trim(),
+    handle,
+    city: input.city?.trim() || undefined,
+    headline: input.headline?.trim() || undefined,
+    summary: input.summary?.trim() || undefined,
+    avatarUrl: input.avatarUrl ?? existing.avatarUrl,
+    isPublicProfile: input.isPublicProfile ?? existing.isPublicProfile,
+  }
+
+  users[index] = updated
+  writeUsers(users)
+
+  const publicUser = toPublic(updated)
+  setSessionUser(publicUser)
+  return { user: publicUser }
+}
+
+export function updateTutorProfile(
+  userId: string,
+  input: UpdateTutorProfileInput,
+): { user: PublicUser } | { error: string } {
+  const users = readUsers()
+  const index = users.findIndex((u) => u.id === userId)
+  if (index < 0) return { error: 'User not found' }
+
+  const existing = users[index]
+  if (existing.role !== 'tutor') return { error: 'Not a tutor account' }
+
+  if (!input.fullName.trim()) {
+    return { error: 'Full name is required' }
+  }
+  if (!input.position) {
+    return { error: 'Please select a position' }
+  }
+
+  const updated: TutorProfile = {
+    ...existing,
+    fullName: input.fullName.trim(),
+    position: input.position,
+    aboutMe: input.aboutMe?.trim() || existing.aboutMe,
+    avatarUrl: input.avatarUrl ?? existing.avatarUrl,
+    isPublicProfile: input.isPublicProfile ?? existing.isPublicProfile,
+    certifications:
+      input.certifications !== undefined
+        ? normalizeCertifications(input.certifications)
+        : existing.certifications,
+  }
+
   users[index] = updated
   writeUsers(users)
 
@@ -285,12 +456,18 @@ export function logoutSession() {
   setSessionUser(null)
 }
 
-export function dashboardPathForRole(role: UserRole, user?: PublicUser | null): string {
+export function dashboardPathForRole(
+  role: UserRole,
+  user?: PublicUser | null,
+): string {
   if (role === 'tutor') {
     if (user?.role === 'tutor' && user.handle) {
       return tutorProfilePath(user.handle)
     }
-    return '/tutors/sarahchen'
+    return '/tutor/profile/sarahchen'
   }
-  return '/dashboard'
+  if (user?.role === 'student' && user.handle) {
+    return studentPublicProfilePath(user.handle)
+  }
+  return '/start'
 }

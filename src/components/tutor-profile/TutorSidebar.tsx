@@ -17,8 +17,6 @@ export default function TutorSidebar({
   profile,
   isOwner = false,
 }: TutorSidebarProps) {
-  const fullName = `${profile.firstName} ${profile.lastName}`
-
   return (
     <aside className="space-y-5">
       <div>
@@ -27,11 +25,11 @@ export default function TutorSidebar({
             profile.avatarUrl ??
             `https://api.dicebear.com/9.x/adventurer/svg?seed=${encodeURIComponent(profile.handle)}`
           }
-          alt={fullName}
+          alt={profile.fullName}
           className="h-40 w-40 rounded-full border-4 border-white object-cover shadow-lg shadow-brand/10 ring-1 ring-[#c7d7f5] sm:h-52 sm:w-52"
         />
         <h1 className="mt-4 text-2xl font-bold tracking-tight text-ink">
-          {fullName}
+          {profile.fullName}
         </h1>
         <p className="text-base text-muted">@{profile.handle}</p>
 
@@ -85,10 +83,10 @@ export default function TutorSidebar({
           <div className="flex flex-wrap gap-1.5">
             {profile.certifications.map((cert) => (
               <span
-                key={cert}
+                key={cert.id}
                 className="rounded-full bg-brand-light px-2.5 py-1 text-xs font-semibold text-brand"
               >
-                {cert}
+                {cert.name}
               </span>
             ))}
           </div>

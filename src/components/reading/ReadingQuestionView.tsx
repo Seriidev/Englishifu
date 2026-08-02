@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import type { ReadingQuestion } from './types'
 import { useLanguage } from '../../i18n/LanguageContext'
+import CompleteWordsView from './CompleteWordsView'
 
 interface Props {
   question: ReadingQuestion
@@ -73,57 +74,6 @@ export default function ReadingQuestionView({
   )
 }
 
-function CompleteWordsView({
-  question,
-  value,
-  onChange,
-  onSubmit,
-}: {
-  question: ReadingQuestion
-  value: Record<string, string>
-  onChange: (v: Record<string, string>) => void
-  onSubmit: () => void
-}) {
-  const blankCount = question.blankAnswers?.length ?? 0
-  const parts = (question.blankTemplate ?? '').split('___')
-  const complete =
-    blankCount > 0 &&
-    Array.from({ length: blankCount }, (_, i) => value[String(i)]?.trim()).every(
-      Boolean,
-    )
-
-  return (
-    <div className="flex h-full flex-col gap-6">
-      <div className="flex-1">
-        <p className="text-base font-semibold text-ink">{question.prompt}</p>
-        <p className="mt-4 text-sm leading-relaxed text-ink">
-          {parts.map((part, i) => (
-            <span key={i}>
-              {part}
-              {i < blankCount && (
-                <input
-                  value={value[String(i)] ?? ''}
-                  onChange={(e) =>
-                    onChange({ ...value, [String(i)]: e.target.value })
-                  }
-                  className="mx-0.5 inline-block w-16 border-b-2 border-brand bg-transparent px-1 text-center text-sm outline-none sm:w-20"
-                  aria-label={`Word ending ${i + 1}`}
-                  autoComplete="off"
-                  spellCheck={false}
-                />
-              )}
-            </span>
-          ))}
-        </p>
-        <p className="mt-3 text-xs text-muted">
-          Type the missing letters to complete each word.
-        </p>
-      </div>
-      <SubmitBar disabled={!complete} onSubmit={onSubmit} />
-    </div>
-  )
-}
-
 function MatchQuestionView({
   question,
   value,
@@ -138,7 +88,6 @@ function MatchQuestionView({
   const refs = question.paragraphRefs ?? []
   const complete = refs.every((id) => Boolean(value[id]))
 
-  // For sentence-ending with single synthetic ref
   const rows = useMemo(() => {
     if (question.type === 'match-sentence-ending' && refs.length === 1) {
       return [{ id: refs[0], label: 'Sentence ending' }]
@@ -186,7 +135,7 @@ function SubmitBar({
 }) {
   const { t } = useLanguage()
   return (
-    <div className="mt-auto border-t border-gray-100 pt-4">
+    <div className="mt-auto border-t border-gray-100 pt-5 pb-2 sm:pb-3">
       <button
         type="button"
         disabled={disabled}
@@ -195,7 +144,7 @@ function SubmitBar({
       >
         {t('toefl.submitContinue')}
       </button>
-      <p className="mt-2 text-center text-xs text-muted">{t('toefl.noBack')}</p>
+      <p className="mt-2.5 text-center text-xs text-muted">{t('toefl.noBack')}</p>
     </div>
   )
 }
