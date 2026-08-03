@@ -7,6 +7,7 @@ import type {
 import { findTutorByHandle } from '../utils/authStorage'
 import { normalizeCertifications } from '../utils/certifications'
 import { generateTeachingActivity } from '../utils/activityHeatmap'
+import { generateTutorKpiChart } from './tutorKpiChartMock'
 
 const demoSpecializations: TutorPublicProfile['specializations'] = [
   {
@@ -99,11 +100,13 @@ export const mockTutorProfile: TutorPublicProfile = {
   teachingActivity: generateTeachingActivity(365, 42),
   classesStats: demoClassesStats,
   kpis: demoKpis,
+  kpiChart: generateTutorKpiChart(42),
 }
 
-function emptyStatsForNewTutor(): {
+function emptyStatsForNewTutor(seed: number): {
   classesStats: TutorClassesStats
   kpis: TutorKPI[]
+  kpiChart: ReturnType<typeof generateTutorKpiChart>
 } {
   return {
     classesStats: {
@@ -131,11 +134,12 @@ function emptyStatsForNewTutor(): {
         trend: 'neutral',
       },
     ],
+    kpiChart: generateTutorKpiChart(seed),
   }
 }
 
 function fromRegisteredTutor(tutor: PublicTutor): TutorPublicProfile {
-  const metrics = emptyStatsForNewTutor()
+  const metrics = emptyStatsForNewTutor(tutor.id.length * 17)
   return {
     id: tutor.id,
     handle: tutor.handle,

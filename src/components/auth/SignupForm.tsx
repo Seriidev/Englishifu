@@ -68,7 +68,7 @@ export default function SignupForm({ role }: SignupFormProps) {
     >
       <button
         type="button"
-        onClick={() => navigate('/signup')}
+        onClick={() => navigate('/start')}
         className="mb-4 inline-flex items-center rounded-full border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-ink shadow-sm transition hover:bg-gray-50"
       >
         Back

@@ -3,12 +3,12 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import {
   BookOpen,
   CheckCircle2,
+  ClipboardList,
   FlaskConical,
   GraduationCap,
   LogOut,
   Pencil,
   Share2,
-  Star,
   Flame,
 } from 'lucide-react'
 import { useAuth } from '../../auth/AuthContext'
@@ -24,9 +24,9 @@ import {
 } from '../../utils/authStorage'
 import { fileToAvatarDataUrl } from '../../utils/avatarUpload'
 import AvatarUpload from './AvatarUpload'
+import CefrLevelBadge from './CefrLevelBadge'
 import ProfileTabs, { type ProfileTabId } from './ProfileTabs'
 import StatCard from './StatCard'
-import VerifiedBadge from './VerifiedBadge'
 
 export default function StudentProfilePage() {
   const { handle = '' } = useParams()
@@ -84,6 +84,8 @@ export default function StudentProfilePage() {
   const stats = mockStudentLearningStats(profile.id)
   const counts = mockStudentProfileTabCounts(profile.id)
   const displayName = profile.fullName
+  const cefrLevel = profile.cefrLevel
+  const needsPlacement = isOwner && !cefrLevel
 
   const onAvatarChange = async (file: File) => {
     if (!isOwner || !user || user.role !== 'student') return
@@ -149,7 +151,10 @@ export default function StudentProfilePage() {
             {isOwner ? (
               <button
                 type="button"
-                onClick={logout}
+                onClick={() => {
+                  logout()
+                  navigate('/', { replace: true })
+                }}
                 className="inline-flex items-center gap-1.5 rounded-full border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-muted transition hover:bg-gray-50"
               >
                 <LogOut className="h-4 w-4" aria-hidden />
@@ -161,6 +166,33 @@ export default function StudentProfilePage() {
       </header>
 
       <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
+        {needsPlacement ? (
+          <div className="mb-6 overflow-hidden rounded-3xl border border-brand/20 bg-gradient-to-r from-brand-light/80 to-white p-5 shadow-sm sm:p-6">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex gap-3">
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-brand text-white">
+                  <ClipboardList className="h-5 w-5" aria-hidden />
+                </span>
+                <div>
+                  <p className="text-base font-bold text-ink">
+                    Take your Placement Test
+                  </p>
+                  <p className="mt-0.5 text-sm text-muted">
+                    Get your CEFR rank badge (A1–C2) — about 5 minutes.
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => navigate('/placement')}
+                className="shrink-0 rounded-full bg-brand px-6 py-3 text-sm font-semibold text-white hover:bg-brand-dark"
+              >
+                Start Placement Test
+              </button>
+            </div>
+          </div>
+        ) : null}
+
         <section className="rounded-3xl border border-[#c7d7f5]/70 bg-white/90 p-5 shadow-sm sm:p-8">
           <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
             <div className="flex min-w-0 flex-1 gap-4 sm:gap-5">
@@ -172,31 +204,40 @@ export default function StudentProfilePage() {
                 size="lg"
               />
               <div className="min-w-0 flex-1 pt-0.5">
-                <p className="text-sm font-semibold text-brand">
-                  @{live.handle}
-                </p>
-                <div className="mt-0.5 flex flex-wrap items-center gap-2">
+                <div className="flex flex-wrap items-center gap-2">
                   <h1 className="text-2xl font-bold tracking-tight text-ink sm:text-3xl">
                     {live.fullName}
                   </h1>
-                  <VerifiedBadge size="lg" />
+                  {cefrLevel ? (
+                    <CefrLevelBadge level={cefrLevel} size="lg" />
+                  ) : null}
                 </div>
+                <p className="mt-0.5 text-sm font-semibold text-brand">
+                  @{live.handle}
+                </p>
                 <p className="mt-1.5 text-sm text-muted">
                   {[live.headline, live.city].filter(Boolean).join(' · ') ||
                     'Student on Englishifu'}
                 </p>
                 <div className="mt-3 flex flex-wrap gap-2">
-                  <div className="inline-flex items-center gap-1.5 rounded-full bg-brand-light px-3 py-1.5 text-xs font-semibold text-ink">
-                    <Star className="h-3.5 w-3.5 text-brand" aria-hidden />
-                    Level {gamification.level}
-                  </div>
                   <div className="inline-flex items-center gap-1.5 rounded-full bg-orange-50 px-3 py-1.5 text-xs font-semibold text-ink">
                     <Flame className="h-3.5 w-3.5 text-orange-500" aria-hidden />
                     Streak {gamification.weeklyStreak}
                   </div>
-                  <div className="inline-flex items-center gap-1.5 rounded-full bg-gray-50 px-3 py-1.5 text-xs font-semibold text-muted">
-                    CEFR {gamification.cefrLevel}
-                  </div>
+                  {!cefrLevel && isOwner ? (
+                    <button
+                      type="button"
+                      onClick={() => navigate('/placement')}
+                      className="inline-flex items-center gap-1.5 rounded-full border border-dashed border-brand/40 bg-brand-light/50 px-3 py-1.5 text-xs font-semibold text-brand transition hover:bg-brand-light"
+                    >
+                      No rank yet — take Placement
+                    </button>
+                  ) : null}
+                  {!cefrLevel && !isOwner ? (
+                    <div className="inline-flex items-center gap-1.5 rounded-full bg-gray-50 px-3 py-1.5 text-xs font-semibold text-muted">
+                      CEFR not set
+                    </div>
+                  ) : null}
                 </div>
                 {live.summary ? (
                   <p className="mt-3 max-w-xl text-sm leading-relaxed text-ink/90 sm:text-[15px]">
@@ -234,6 +275,15 @@ export default function StudentProfilePage() {
                     <Pencil className="h-3.5 w-3.5" aria-hidden />
                     Edit Profile
                   </button>
+                  {cefrLevel ? (
+                    <button
+                      type="button"
+                      onClick={() => navigate('/placement')}
+                      className="inline-flex items-center gap-1.5 rounded-full border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-muted transition hover:bg-gray-50"
+                    >
+                      Retake Placement
+                    </button>
+                  ) : null}
                   <button
                     type="button"
                     onClick={togglePublic}
@@ -273,7 +323,6 @@ export default function StudentProfilePage() {
               active={tab}
               onChange={setTab}
               badgesLabel={`(${counts.badgesEarned}/${counts.badgesTotal})`}
-              certificationsCount={counts.certifications}
               certificatesCount={counts.certificatesOfCompletion}
             />
 
@@ -304,17 +353,27 @@ export default function StudentProfilePage() {
               ) : null}
 
               {tab === 'badges' ? (
-                <EmptyTab
-                  title="No badges yet"
-                  body="Earn badges by keeping streaks and finishing lessons."
-                />
-              ) : null}
-
-              {tab === 'certifications' ? (
-                <EmptyTab
-                  title="No certifications yet"
-                  body="Course certifications will show up here when available."
-                />
+                cefrLevel ? (
+                  <div className="rounded-2xl border border-gray-100 bg-white px-6 py-8">
+                    <p className="text-sm font-semibold text-muted">
+                      Placement rank
+                    </p>
+                    <div className="mt-4 flex items-center gap-3">
+                      <CefrLevelBadge level={cefrLevel} size="lg" />
+                      <p className="text-sm text-ink">
+                        Earned from your Placement Test
+                        {live.placementCompletedAt
+                          ? ` · ${new Date(live.placementCompletedAt).toLocaleDateString()}`
+                          : ''}
+                      </p>
+                    </div>
+                  </div>
+                ) : (
+                  <EmptyTab
+                    title="No badges yet"
+                    body="Take the Placement Test to unlock your CEFR rank badge."
+                  />
+                )
               ) : null}
 
               {tab === 'certificates' ? (

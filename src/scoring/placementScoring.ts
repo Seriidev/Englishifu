@@ -1,7 +1,8 @@
 import type { PlacementQuestion } from '../data/placementQuestions'
 import { PLACEMENT_QUESTIONS } from '../data/placementQuestions'
+import { CEFR_BADGE_STYLES, type CefrLevel } from '../types/cefr'
 
-export type CefrLevel = 'A1' | 'A2' | 'B1' | 'B2' | 'C1'
+export type { CefrLevel }
 
 export interface PlacementResult {
   rawScore: number
@@ -44,17 +45,25 @@ export const RECOMMENDATIONS: Record<CefrLevel, LevelRecommendation> = {
     suggestedPath: '/toefl',
     ctaLabel: 'Go to TOEFL Hub',
   },
+  C2: {
+    message:
+      'Near-native proficiency — challenge yourself with full TOEFL simulations.',
+    suggestedPath: '/toefl',
+    ctaLabel: 'Take Full TOEFL Test',
+  },
 }
 
+/** Map raw score (0–50) to CEFR A1–C2 — Score Breakdown from Placement test.docx */
 export function scoreToLevel(rawScore: number): {
   cefr: CefrLevel
   label: string
 } {
-  if (rawScore <= 11) return { cefr: 'A1', label: 'Beginner' }
-  if (rawScore <= 19) return { cefr: 'A2', label: 'Elementary' }
-  if (rawScore <= 27) return { cefr: 'B1', label: 'Intermediate' }
-  if (rawScore <= 34) return { cefr: 'B2', label: 'Upper Intermediate' }
-  return { cefr: 'C1', label: 'Advanced' }
+  if (rawScore <= 12) return { cefr: 'A1', label: CEFR_BADGE_STYLES.A1.label }
+  if (rawScore <= 21) return { cefr: 'A2', label: CEFR_BADGE_STYLES.A2.label }
+  if (rawScore <= 31) return { cefr: 'B1', label: CEFR_BADGE_STYLES.B1.label }
+  if (rawScore <= 40) return { cefr: 'B2', label: CEFR_BADGE_STYLES.B2.label }
+  if (rawScore <= 46) return { cefr: 'C1', label: CEFR_BADGE_STYLES.C1.label }
+  return { cefr: 'C2', label: CEFR_BADGE_STYLES.C2.label }
 }
 
 export function scorePlacementAnswers(

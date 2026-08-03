@@ -17,7 +17,7 @@ export const PLACEMENT_QUESTIONS: PlacementQuestion[] = [
   {
     id: 2,
     prompt: '"_____ Martha English?" "Yes, she _____."',
-    options: ["Is / isn't", 'Are / is', 'Is / is', 'Are / are'],
+    options: ["Is / isn't", 'Are / is', 'Is / is', 'Are / is'],
     correctIndex: 2,
   },
   {
@@ -104,7 +104,7 @@ export const PLACEMENT_QUESTIONS: PlacementQuestion[] = [
   },
   {
     id: 15,
-    context: "'_____?' 'He's very nice.'",
+    context: "'_____?' \"He's very nice.\"",
     prompt: 'Choose the correct option.',
     options: [
       'What does he look like?',
@@ -213,12 +213,12 @@ export const PLACEMENT_QUESTIONS: PlacementQuestion[] = [
   {
     id: 27,
     prompt:
-      "Suppose! If it _____ last weekend, we _____ to play tennis.",
+      'Suppose! If it _____ last weekend, we _____ to play tennis.',
     options: [
       "rained - wouldn't be able",
       "rains - won't be able",
       'rain - would be able',
-      'had rained -- could',
+      'had rained – could',
     ],
     correctIndex: 0,
   },
@@ -354,6 +354,100 @@ export const PLACEMENT_QUESTIONS: PlacementQuestion[] = [
       'to be deleting',
       'to have been deleted',
       'having been deleted',
+    ],
+    correctIndex: 2,
+  },
+  {
+    id: 41,
+    prompt: 'I eat pasta ______ week.',
+    options: ['twice in a', 'twice a', 'one time a', 'once in a'],
+    correctIndex: 1,
+  },
+  {
+    id: 42,
+    prompt: 'The building ______',
+    options: [
+      'was damaged in the hurricane badly last year',
+      'was badly damaged last year in the hurricane',
+      'was badly damaged in the hurricane last year',
+      'last year was damaged badly in the hurricane',
+    ],
+    correctIndex: 2,
+  },
+  {
+    id: 43,
+    prompt: 'Which is correct?',
+    options: [
+      'How older people are, wiser they become',
+      'If older people are, wiser they become',
+      'The more old the people, the more wise',
+      'The older people are, the wiser they become',
+    ],
+    correctIndex: 3,
+  },
+  {
+    id: 44,
+    prompt: "We _____ or we'll be late.",
+    options: [
+      'had better hurry',
+      "didn't need to hurry",
+      'had to hurry',
+      "needn't have hurried",
+    ],
+    correctIndex: 0,
+  },
+  {
+    id: 45,
+    prompt: 'Two wrongs ______ make a right.',
+    options: ["doesn't", "haven't", "isn't", "don't"],
+    correctIndex: 3,
+  },
+  {
+    id: 46,
+    prompt: 'If I fail my exam, ____ I ___ take it again?',
+    options: [
+      'will / have to',
+      'did / have to',
+      'does / have to',
+      "do / won't have",
+    ],
+    correctIndex: 0,
+  },
+  {
+    id: 47,
+    prompt:
+      "That's the dictionary _____ Bill gave me for my birthday.",
+    options: ['(no word)', 'who', 'when', 'where'],
+    correctIndex: 0,
+  },
+  {
+    id: 48,
+    prompt:
+      "You _____ any more aspirins; you've had four already.",
+    options: [
+      "mustn't take",
+      "needn't have taken",
+      "shouldn't have taken",
+      'had better not take',
+    ],
+    correctIndex: 0,
+  },
+  {
+    id: 49,
+    prompt: 'Are you ______ or against Nuclear Power?',
+    options: ['on', 'for', 'in', 'near'],
+    correctIndex: 1,
+  },
+  {
+    id: 50,
+    context:
+      "A: I don't like horror films, and you?\nB: _____. I can't sleep after seeing such films. I like fantastic films.\nA: _____. I've got some at home.",
+    prompt: 'Choose the correct option.',
+    options: [
+      "Yes, do / I don't like them",
+      "No, don't / I like it",
+      'Neither do I / So do I',
+      'So do I / Neither do I',
     ],
     correctIndex: 2,
   },

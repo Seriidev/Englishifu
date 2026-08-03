@@ -45,10 +45,6 @@ export default function RoleSelector() {
       </div>
 
       <p className="mt-6 text-center text-sm text-muted">
-        <Link to="/start" className="font-semibold text-brand hover:underline">
-          Back
-        </Link>
-        {' · '}
         Already have an account?{' '}
         <Link to="/login" className="font-semibold text-brand hover:underline">
           Log in

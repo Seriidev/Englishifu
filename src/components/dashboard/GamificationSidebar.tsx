@@ -2,7 +2,7 @@ import { Flame, Snowflake, Sparkles } from 'lucide-react'
 import type { CefrLevel, StudentGamificationState } from '../../types/gamification'
 import LevelProgressBar from './LevelProgressBar'
 
-const CEFR_ORDER: CefrLevel[] = ['A1', 'A2', 'B1', 'B2', 'C1']
+const CEFR_ORDER: CefrLevel[] = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2']
 
 interface GamificationSidebarProps {
   firstName: string
@@ -80,7 +80,9 @@ export default function GamificationSidebar({
             ? 'Beginner'
             : gamification.cefrLevel === 'B1' || gamification.cefrLevel === 'B2'
               ? 'Intermediate'
-              : 'Advanced'}
+              : gamification.cefrLevel === 'C1'
+                ? 'Advanced'
+                : 'Proficiency'}
         </p>
         <div className="mt-3">
           <CefrDots level={gamification.cefrLevel} />

@@ -1,8 +1,10 @@
 import { useNavigate } from 'react-router-dom'
 import { RotateCcw } from 'lucide-react'
 import type { PlacementResult } from '../../scoring/placementScoring'
+import { CEFR_BADGE_STYLES } from '../../types/cefr'
 import { useLanguage } from '../../i18n/LanguageContext'
 import LangSwitcher from '../shared/LangSwitcher'
+import CefrLevelBadge from '../profile/CefrLevelBadge'
 
 interface Props {
   result: PlacementResult
@@ -16,6 +18,7 @@ const PATHS: Record<string, string> = {
   B1: '/#speaking-club',
   B2: '/toefl',
   C1: '/toefl',
+  C2: '/full-test',
 }
 
 export default function PlacementResults({ result, onRetake, onExit }: Props) {
@@ -23,6 +26,7 @@ export default function PlacementResults({ result, onRetake, onExit }: Props) {
   const { t } = useLanguage()
   const levelKey = `placement.level.${result.levelLabel}`
   const levelLabel = t(levelKey)
+  const badge = CEFR_BADGE_STYLES[result.cefrLevel]
 
   const goToRecommendation = () => {
     const path = PATHS[result.cefrLevel] ?? '/toefl'
@@ -58,13 +62,16 @@ export default function PlacementResults({ result, onRetake, onExit }: Props) {
         </p>
 
         <div className="mt-8 rounded-3xl border border-brand/15 bg-white p-8 text-center shadow-sm">
-          <p className="text-6xl font-bold tracking-tight text-brand">
+          <div className="flex justify-center">
+            <CefrLevelBadge level={result.cefrLevel} size="lg" showLabel={false} />
+          </div>
+          <p className={`mt-4 text-6xl font-bold tracking-tight ${badge.text}`}>
             {result.cefrLevel}
           </p>
           <p className="mt-2 text-lg font-semibold text-ink">{levelLabel}</p>
           <div className="mx-auto mt-6 h-2 max-w-xs overflow-hidden rounded-full bg-gray-100">
             <div
-              className="h-full rounded-full bg-brand"
+              className={`h-full rounded-full ${badge.bg}`}
               style={{
                 width: `${(result.rawScore / result.totalQuestions) * 100}%`,
               }}
@@ -86,6 +93,13 @@ export default function PlacementResults({ result, onRetake, onExit }: Props) {
           >
             {t(`placement.cta.${result.cefrLevel}`)}
           </button>
+          <button
+            type="button"
+            onClick={onExit}
+            className="mt-3 w-full rounded-full border border-gray-200 py-3.5 text-sm font-semibold text-ink hover:bg-gray-50"
+          >
+            {t('placement.backToProfile')}
+          </button>
         </div>
 
         <div className="mt-8 flex flex-wrap justify-center gap-3">
@@ -96,13 +110,6 @@ export default function PlacementResults({ result, onRetake, onExit }: Props) {
           >
             <RotateCcw className="h-4 w-4" aria-hidden />
             {t('placement.retake')}
-          </button>
-          <button
-            type="button"
-            onClick={onExit}
-            className="rounded-full border border-gray-200 px-6 py-3 text-sm font-semibold text-ink hover:bg-gray-50"
-          >
-            {t('placement.backHome')}
           </button>
         </div>
       </div>

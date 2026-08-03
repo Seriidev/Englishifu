@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { GraduationCap, LogOut, Pencil, Share2 } from 'lucide-react'
+import { GraduationCap, LogOut, Pencil, Share2, Briefcase } from 'lucide-react'
 import { useAuth } from '../../auth/AuthContext'
 import { isTutorProfileComplete } from '../../types/user'
 import { getTutorProfileByHandle } from '../../mocks/tutorProfileMock'
@@ -67,6 +67,9 @@ export default function TutorProfilePage() {
   const position = liveOwner?.position ?? profile.position ?? 'Teacher'
   const avatarUrl = liveOwner?.avatarUrl ?? profile.avatarUrl
   const aboutMe = liveOwner?.aboutMe ?? profile.aboutMe
+  const yearsOfExperience = isOwnProfile
+    ? liveOwner?.yearsOfExperience
+    : profile.yearsOfExperience
   const isPublic = liveOwner?.isPublicProfile ?? profile.isPublicProfile ?? true
   const certifications = normalizeCertifications(
     liveOwner?.certifications ?? profile.certifications,
@@ -153,7 +156,10 @@ export default function TutorProfilePage() {
             {isOwnProfile ? (
               <button
                 type="button"
-                onClick={logout}
+                onClick={() => {
+                  logout()
+                  navigate('/', { replace: true })
+                }}
                 className="inline-flex items-center gap-1.5 rounded-full border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-muted transition hover:bg-gray-50"
               >
                 <LogOut className="h-4 w-4" aria-hidden />
@@ -187,6 +193,24 @@ export default function TutorProfilePage() {
                 <p className="mt-1.5 text-base font-semibold text-brand">
                   {position}
                 </p>
+                {typeof yearsOfExperience === 'number' ? (
+                  <p className="mt-2 inline-flex items-center gap-1.5 text-sm font-medium text-ink">
+                    <Briefcase className="h-4 w-4 text-muted" aria-hidden />
+                    {yearsOfExperience}{' '}
+                    {yearsOfExperience === 1 ? 'year' : 'years'} experience
+                  </p>
+                ) : isOwnProfile ? (
+                  <p className="mt-2 text-sm text-muted">
+                    Add your years of experience in{' '}
+                    <button
+                      type="button"
+                      onClick={() => navigate('/tutor/profile/edit')}
+                      className="font-semibold text-brand hover:underline"
+                    >
+                      Edit Profile
+                    </button>
+                  </p>
+                ) : null}
                 {aboutMe ? (
                   <p className="mt-3 max-w-xl text-sm leading-relaxed text-ink/90 sm:text-[15px]">
                     {aboutMe}
@@ -260,7 +284,9 @@ export default function TutorProfilePage() {
               {tab === 'classes' ? (
                 <ClassesTab stats={profile.classesStats} />
               ) : null}
-              {tab === 'kpi' ? <KPITab kpis={profile.kpis} /> : null}
+              {tab === 'kpi' ? (
+                <KPITab kpis={profile.kpis} chart={profile.kpiChart} />
+              ) : null}
               {tab === 'certifications' ? (
                 <CertificationsTab certifications={certifications} />
               ) : null}

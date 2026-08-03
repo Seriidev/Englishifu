@@ -8,6 +8,7 @@ import {
   type UserProfile,
   type UserRole,
 } from '../types/user'
+import type { CefrLevel } from '../types/cefr'
 import { normalizeCertifications } from './certifications'
 
 const USERS_KEY = 'englishifu_users_v1'
@@ -249,9 +250,15 @@ export interface UpdateTutorProfileInput {
   fullName: string
   position: TutorPosition
   aboutMe?: string
+  yearsOfExperience?: number
   avatarUrl?: string
   isPublicProfile?: boolean
   certifications?: TutorCertification[]
+}
+
+export interface SaveStudentPlacementInput {
+  cefrLevel: CefrLevel
+  completedAt: string
 }
 
 export async function registerStudent(
@@ -384,6 +391,34 @@ export function updateStudentProfile(
     summary: input.summary?.trim() || undefined,
     avatarUrl: input.avatarUrl ?? existing.avatarUrl,
     isPublicProfile: input.isPublicProfile ?? existing.isPublicProfile,
+    cefrLevel: existing.cefrLevel,
+    placementCompletedAt: existing.placementCompletedAt,
+  }
+
+  users[index] = updated
+  writeUsers(users)
+
+  const publicUser = toPublic(updated)
+  setSessionUser(publicUser)
+  return { user: publicUser }
+}
+
+/** Persist Placement Test CEFR rank on the student profile */
+export function saveStudentPlacementResult(
+  userId: string,
+  input: SaveStudentPlacementInput,
+): { user: PublicUser } | { error: string } {
+  const users = readUsers()
+  const index = users.findIndex((u) => u.id === userId)
+  if (index < 0) return { error: 'User not found' }
+
+  const existing = users[index]
+  if (existing.role !== 'student') return { error: 'Not a student account' }
+
+  const updated: StudentProfile = {
+    ...existing,
+    cefrLevel: input.cefrLevel,
+    placementCompletedAt: input.completedAt,
   }
 
   users[index] = updated
@@ -417,6 +452,10 @@ export function updateTutorProfile(
     fullName: input.fullName.trim(),
     position: input.position,
     aboutMe: input.aboutMe?.trim() || existing.aboutMe,
+    yearsOfExperience:
+      input.yearsOfExperience !== undefined
+        ? input.yearsOfExperience
+        : existing.yearsOfExperience,
     avatarUrl: input.avatarUrl ?? existing.avatarUrl,
     isPublicProfile: input.isPublicProfile ?? existing.isPublicProfile,
     certifications:

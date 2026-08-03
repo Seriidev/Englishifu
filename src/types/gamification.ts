@@ -1,4 +1,6 @@
-export type CefrLevel = 'A1' | 'A2' | 'B1' | 'B2' | 'C1'
+import type { CefrLevel } from './cefr'
+
+export type { CefrLevel }
 
 export interface StudentGamificationState {
   userId: string

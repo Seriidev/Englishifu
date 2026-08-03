@@ -1,8 +1,12 @@
+import type { CefrLevel } from './cefr'
+
 export type UserRole = 'student' | 'tutor'
 
 export type TutorStatus = 'incomplete' | 'pending' | 'approved'
 
 export type TutorPosition = 'Teacher' | 'Speaker' | 'Specialist'
+
+export type { CefrLevel }
 
 export interface TutorCertification {
   id: string
@@ -30,6 +34,9 @@ export interface StudentProfile extends BaseUser {
   headline?: string
   summary?: string
   isPublicProfile: boolean
+  /** Set after Placement Test — student rank badge */
+  cefrLevel?: CefrLevel
+  placementCompletedAt?: string
 }
 
 export interface TutorProfile extends BaseUser {

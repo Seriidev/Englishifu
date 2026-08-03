@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react'
-import { ArrowRight, ArrowUpRight } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 import { useLanguage } from '../i18n/LanguageContext'
 
 type Phase = 'typing' | 'pausing' | 'deleting'
@@ -133,15 +133,6 @@ export default function Hero() {
         </p>
 
         <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
-          <a
-            href="#tutors"
-            className="group inline-flex items-center gap-3 rounded-full bg-ink px-7 py-3.5 text-base font-semibold text-white shadow-lg shadow-ink/15 transition hover:bg-[#15284f]"
-          >
-            {t('hero.ctaPrimary')}
-            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white text-ink transition group-hover:rotate-12">
-              <ArrowUpRight className="h-4 w-4" aria-hidden />
-            </span>
-          </a>
           <a
             href="/toefl"
             className="group inline-flex items-center gap-3 rounded-full bg-brand px-7 py-3.5 text-base font-semibold text-white shadow-lg shadow-brand/25 transition hover:bg-brand-dark"

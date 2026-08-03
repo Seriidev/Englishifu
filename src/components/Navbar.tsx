@@ -1,9 +1,11 @@
 import { useState, type MouseEvent } from 'react'
 import { GraduationCap, Menu, X } from 'lucide-react'
 import { useNavigate, useLocation } from 'react-router-dom'
+import { useAuth } from '../auth/AuthContext'
 import { smoothScrollTo } from '../utils/scroll'
 import { useLanguage } from '../i18n/LanguageContext'
 import { LANG_OPTIONS, type LangCode } from '../i18n/dictionaries'
+import { dashboardPathForRole } from '../utils/authStorage'
 
 const navKeys = [
   { key: 'nav.home', href: '#home', label: 'Home' },
@@ -18,6 +20,7 @@ type NavLabel = (typeof navKeys)[number]['label']
 export default function Navbar() {
   const navigate = useNavigate()
   const location = useLocation()
+  const { user } = useAuth()
   const { lang, setLang, t } = useLanguage()
   const [activeNav, setActiveNav] = useState<NavLabel>('Home')
   const [mobileOpen, setMobileOpen] = useState(false)
@@ -37,6 +40,32 @@ export default function Navbar() {
     }
     smoothScrollTo(href)
   }
+
+  const goPrimary = () => {
+    setMobileOpen(false)
+    if (user) {
+      navigate(dashboardPathForRole(user.role, user))
+      return
+    }
+    navigate('/login')
+  }
+
+  const isLoggedIn = Boolean(user)
+  const primaryLabel = isLoggedIn ? t('nav.profile') : t('nav.login')
+
+  const AuthButtons = ({ mobile = false }: { mobile?: boolean }) => (
+    <button
+      type="button"
+      onClick={goPrimary}
+      className={
+        mobile
+          ? 'rounded-full bg-brand px-4 py-2.5 text-sm font-semibold whitespace-nowrap text-white'
+          : 'rounded-full bg-brand px-5 py-2.5 text-sm font-semibold text-white transition duration-300 hover:bg-brand-dark'
+      }
+    >
+      {primaryLabel}
+    </button>
+  )
 
   const LangSwitcher = ({ compact = false }: { compact?: boolean }) => (
     <div
@@ -82,7 +111,7 @@ export default function Navbar() {
           </a>
 
           <nav
-            className="absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 items-center gap-1 lg:flex"
+            className="absolute top-1/2 left-1/2 hidden max-w-[min(52%,420px)] -translate-x-1/2 -translate-y-1/2 items-center justify-center gap-0.5 overflow-hidden xl:flex"
             aria-label="Main"
           >
             {navKeys.map((link) => {
@@ -92,7 +121,7 @@ export default function Navbar() {
                   key={link.label}
                   href={link.href}
                   onClick={(e) => handleNavClick(e, link.label, link.href)}
-                  className={`rounded-full px-3.5 py-2 text-sm font-medium whitespace-nowrap transition-colors duration-300 xl:px-4 ${
+                  className={`rounded-full px-2.5 py-2 text-sm font-medium whitespace-nowrap transition-colors duration-300 2xl:px-4 ${
                     isActive ? 'text-brand' : 'text-gray-500 hover:text-ink'
                   }`}
                 >
@@ -102,36 +131,33 @@ export default function Navbar() {
             })}
           </nav>
 
-          <div className="relative z-10 flex shrink-0 items-center gap-2">
+          <div className="relative z-20 flex shrink-0 items-center gap-1.5 sm:gap-2">
             <div className="hidden sm:flex">
               <LangSwitcher />
             </div>
 
-            <button
-              type="button"
-              onClick={() => {
-                setMobileOpen(false)
-                navigate('/start')
-              }}
-              className="hidden rounded-full bg-brand px-5 py-2.5 text-sm font-semibold text-white transition duration-300 hover:bg-brand-dark sm:inline-flex"
-            >
-              {t('nav.startLearning')}
-            </button>
+            <div className="hidden items-center gap-1.5 sm:flex">
+              <AuthButtons />
+            </div>
 
             <button
               type="button"
-              className="inline-flex h-10 w-10 items-center justify-center rounded-full text-ink transition hover:bg-gray-50 lg:hidden"
+              className="inline-flex h-10 w-10 items-center justify-center rounded-full text-ink transition hover:bg-gray-50 xl:hidden"
               aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
               aria-expanded={mobileOpen}
               onClick={() => setMobileOpen((v) => !v)}
             >
-              {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+              {mobileOpen ? (
+                <X className="h-5 w-5" />
+              ) : (
+                <Menu className="h-5 w-5" />
+              )}
             </button>
           </div>
         </div>
 
         <div
-          className={`origin-top overflow-hidden transition-all duration-300 ease-out lg:hidden ${
+          className={`origin-top overflow-hidden transition-all duration-300 ease-out xl:hidden ${
             mobileOpen
               ? 'mt-2 max-h-[420px] scale-100 opacity-100'
               : 'pointer-events-none max-h-0 scale-95 opacity-0'
@@ -158,18 +184,11 @@ export default function Navbar() {
               })}
             </nav>
 
-            <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-gray-100 pt-3 sm:hidden">
-              <LangSwitcher compact />
-              <button
-                type="button"
-                onClick={() => {
-                  setMobileOpen(false)
-                  navigate('/start')
-                }}
-                className="rounded-full bg-brand px-4 py-2.5 text-sm font-semibold whitespace-nowrap text-white"
-              >
-                {t('nav.startLearning')}
-              </button>
+            <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-gray-100 pt-3">
+              <div className="w-full sm:hidden">
+                <LangSwitcher compact />
+              </div>
+              <AuthButtons mobile />
             </div>
           </div>
         </div>

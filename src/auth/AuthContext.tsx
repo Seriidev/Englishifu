@@ -15,11 +15,13 @@ import {
   logoutSession,
   registerStudent,
   registerTutor,
+  saveStudentPlacementResult,
   updateStudentProfile,
   updateTutorProfile,
   type CompleteTutorProfileInput,
   type CreateStudentInput,
   type CreateTutorInput,
+  type SaveStudentPlacementInput,
   type UpdateStudentProfileInput,
   type UpdateTutorProfileInput,
 } from '../utils/authStorage'
@@ -44,6 +46,9 @@ interface AuthContextValue {
   ) => Promise<{ ok: true; user: PublicUser } | { ok: false; error: string }>
   updateTutor: (
     input: UpdateTutorProfileInput,
+  ) => Promise<{ ok: true; user: PublicUser } | { ok: false; error: string }>
+  savePlacementResult: (
+    input: SaveStudentPlacementInput,
   ) => Promise<{ ok: true; user: PublicUser } | { ok: false; error: string }>
   logout: () => void
 }
@@ -118,6 +123,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     [user],
   )
 
+  const savePlacementResult = useCallback(
+    async (input: SaveStudentPlacementInput) => {
+      if (!user || user.role !== 'student') {
+        return { ok: false as const, error: 'Not signed in as student' }
+      }
+      const result = saveStudentPlacementResult(user.id, input)
+      if ('error' in result) return { ok: false as const, error: result.error }
+      setUser(result.user)
+      return { ok: true as const, user: result.user }
+    },
+    [user],
+  )
+
   const logout = useCallback(() => {
     logoutSession()
     setUser(null)
@@ -132,6 +150,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       completeProfile,
       updateStudent,
       updateTutor,
+      savePlacementResult,
       logout,
     }),
     [
@@ -142,6 +161,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       completeProfile,
       updateStudent,
       updateTutor,
+      savePlacementResult,
       logout,
     ],
   )

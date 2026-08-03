@@ -1,4 +1,4 @@
-import { useMemo, useState, type FormEvent } from 'react'
+import { useMemo, useState, type ChangeEvent, type FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { GraduationCap } from 'lucide-react'
 import { useAuth } from '../../auth/AuthContext'
@@ -18,11 +18,18 @@ export default function EditTutorProfileForm() {
 
   const initial = useMemo<TutorEditProfileFormData>(() => {
     if (!user || user.role !== 'tutor') {
-      return { fullName: '', position: 'Teacher', certifications: [] }
+      return {
+        fullName: '',
+        position: 'Teacher',
+        yearsOfExperience: '',
+        certifications: [],
+      }
     }
     return {
       fullName: user.fullName,
       position: user.position,
+      yearsOfExperience:
+        user.yearsOfExperience !== undefined ? user.yearsOfExperience : '',
       aboutMe: user.aboutMe ?? '',
       certifications: normalizeCertifications(user.certifications),
     }
@@ -56,6 +63,7 @@ export default function EditTutorProfileForm() {
     const result = await updateTutor({
       fullName: form.fullName.trim(),
       position: form.position as TutorPosition,
+      yearsOfExperience: Number(form.yearsOfExperience),
       aboutMe: form.aboutMe?.trim(),
       avatarUrl: user.avatarUrl,
       isPublicProfile: user.isPublicProfile,
@@ -148,6 +156,34 @@ export default function EditTutorProfileForm() {
               </select>
               {errors.position ? (
                 <p className={errorClass}>{errors.position}</p>
+              ) : null}
+            </div>
+
+            <div>
+              <label className={labelClass} htmlFor="tutor-edit-years">
+                Years of Experience *
+              </label>
+              <input
+                id="tutor-edit-years"
+                type="number"
+                min={0}
+                max={60}
+                step={1}
+                inputMode="numeric"
+                className={fieldClass}
+                value={
+                  form.yearsOfExperience === '' ? '' : form.yearsOfExperience
+                }
+                onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                  setField(
+                    'yearsOfExperience',
+                    e.target.value === '' ? '' : Number(e.target.value),
+                  )
+                }
+                placeholder="e.g. 5"
+              />
+              {errors.yearsOfExperience ? (
+                <p className={errorClass}>{errors.yearsOfExperience}</p>
               ) : null}
             </div>
 

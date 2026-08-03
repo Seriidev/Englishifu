@@ -43,6 +43,7 @@ export interface TutorPublicProfile {
   teachingActivity: TeachingActivityDay[]
   classesStats: TutorClassesStats
   kpis: TutorKPI[]
+  kpiChart: TutorKpiChart
 }
 
 export interface TutorClassesStats {
@@ -57,6 +58,23 @@ export interface TutorKPI {
   value: number | string
   unit?: string
   trend?: 'up' | 'down' | 'neutral'
+}
+
+/** Dual-series area chart point for KPI tab */
+export interface TutorKpiChartPoint {
+  date: string
+  primary: number
+  secondary: number
+}
+
+export interface TutorKpiChart {
+  title: string
+  primaryLabel: string
+  secondaryLabel: string
+  /** Unit suffix for Y-axis / tooltip, e.g. "" or "h" */
+  primaryUnit?: string
+  secondaryUnit?: string
+  points: TutorKpiChartPoint[]
 }
 
 export const TUTOR_POSITIONS: TutorPosition[] = [

@@ -1,10 +1,13 @@
 import { useMemo, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { PLACEMENT_QUESTIONS } from '../../data/placementQuestions'
 import {
   scorePlacementAnswers,
   type PlacementResult,
 } from '../../scoring/placementScoring'
+import { useAuth } from '../../auth/AuthContext'
 import { useLanguage } from '../../i18n/LanguageContext'
+import { studentPublicProfilePath } from '../../utils/authStorage'
 import LangSwitcher from '../shared/LangSwitcher'
 import PlacementTestIntro from './PlacementTestIntro'
 import PlacementResults from './PlacementResults'
@@ -17,6 +20,8 @@ interface Props {
 
 export default function PlacementTestFlow({ onExit }: Props) {
   const { t } = useLanguage()
+  const { user, savePlacementResult } = useAuth()
+  const navigate = useNavigate()
   const questions = PLACEMENT_QUESTIONS
   const [stage, setStage] = useState<Stage>('intro')
   const [index, setIndex] = useState(0)
@@ -30,14 +35,29 @@ export default function PlacementTestFlow({ onExit }: Props) {
     [answers],
   )
 
-  const finish = () => {
-    setResult(scorePlacementAnswers(answers, questions))
+  const goToStudentHome = () => {
+    if (user?.role === 'student' && user.handle) {
+      navigate(studentPublicProfilePath(user.handle), { replace: true })
+      return
+    }
+    onExit()
+  }
+
+  const finish = async () => {
+    const scored = scorePlacementAnswers(answers, questions)
+    if (user?.role === 'student') {
+      await savePlacementResult({
+        cefrLevel: scored.cefrLevel,
+        completedAt: scored.completedAt,
+      })
+    }
+    setResult(scored)
     setStage('results')
   }
 
   const goNext = () => {
     if (index + 1 < questions.length) setIndex((i) => i + 1)
-    else finish()
+    else void finish()
   }
 
   const goBack = () => {
@@ -55,7 +75,7 @@ export default function PlacementTestFlow({ onExit }: Props) {
               setResult(null)
               setStage('questions')
             }}
-            onExit={onExit}
+            onExit={goToStudentHome}
           />
         </div>
       </div>
@@ -72,7 +92,7 @@ export default function PlacementTestFlow({ onExit }: Props) {
           setResult(null)
           setStage('intro')
         }}
-        onExit={onExit}
+        onExit={goToStudentHome}
       />
     )
   }
@@ -101,7 +121,7 @@ export default function PlacementTestFlow({ onExit }: Props) {
               <LangSwitcher />
               <button
                 type="button"
-                onClick={onExit}
+                onClick={goToStudentHome}
                 className="rounded-full border border-gray-200 px-4 py-2 text-sm font-semibold text-ink hover:bg-gray-50"
               >
                 {t('placement.exit')}
@@ -119,7 +139,7 @@ export default function PlacementTestFlow({ onExit }: Props) {
           </p>
         </header>
 
-        <div className="flex flex-1 flex-col px-5 py-6 sm:px-8">
+        <div className="flex-1 flex flex-col px-5 py-6 sm:px-8">
           {current.context && (
             <p className="rounded-2xl bg-brand-light/60 px-4 py-3 text-sm leading-relaxed text-ink whitespace-pre-wrap">
               {current.context}

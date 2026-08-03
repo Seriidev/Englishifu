@@ -133,6 +133,7 @@ export function hasEditProfileErrors(
 export interface TutorEditProfileFormData {
   fullName: string
   position: string
+  yearsOfExperience: number | ''
   aboutMe?: string
   certifications: TutorCertification[]
 }
@@ -147,5 +148,13 @@ export function validateTutorEditProfileForm(
   const errors: TutorEditProfileValidationErrors = {}
   if (!data.fullName?.trim()) errors.fullName = 'Full name is required'
   if (!data.position) errors.position = 'Please select a position'
+
+  const years = data.yearsOfExperience
+  if (years === '' || years === undefined || Number.isNaN(Number(years))) {
+    errors.yearsOfExperience = 'Enter years of experience'
+  } else if (Number(years) < 0 || Number(years) > 60) {
+    errors.yearsOfExperience = 'Enter a number between 0 and 60'
+  }
+
   return errors
 }

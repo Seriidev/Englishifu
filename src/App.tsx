@@ -21,7 +21,6 @@ import ListeningLibrary from './components/listening/ListeningLibrary'
 import ListeningPracticeRunner from './components/listening/ListeningPracticeRunner'
 import WritingSection from './components/writing/WritingSection'
 import PlacementTestFlow from './components/placement/PlacementTestFlow'
-import StartAuth from './components/auth/StartAuth'
 import RoleSelector from './components/auth/RoleSelector'
 import LoginForm from './components/auth/LoginForm'
 import SignupForm from './components/auth/SignupForm'
@@ -115,7 +114,13 @@ function WritingPage() {
 
 function PlacementPage() {
   const navigate = useNavigate()
-  return <PlacementTestFlow onExit={() => navigate('/')} />
+  return (
+    <PlacementTestFlow
+      onExit={() => {
+        navigate('/')
+      }}
+    />
+  )
 }
 
 function LegacyTutorProfileRedirect() {
@@ -141,9 +146,9 @@ export default function App() {
         />
         <Route path="/speaking" element={<SpeakingPage />} />
         <Route path="/writing" element={<WritingPage />} />
-        <Route path="/start" element={<StartAuth />} />
+        <Route path="/start" element={<RoleSelector />} />
+        <Route path="/signup" element={<Navigate to="/start" replace />} />
         <Route path="/login" element={<LoginForm />} />
-        <Route path="/signup" element={<RoleSelector />} />
         <Route path="/signup/student" element={<SignupForm role="student" />} />
         <Route path="/signup/tutor" element={<SignupForm role="tutor" />} />
         <Route

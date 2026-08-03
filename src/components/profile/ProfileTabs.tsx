@@ -1,8 +1,4 @@
-export type ProfileTabId =
-  | 'learning'
-  | 'badges'
-  | 'certifications'
-  | 'certificates'
+export type ProfileTabId = 'learning' | 'badges' | 'certificates'
 
 interface TabDef {
   id: ProfileTabId
@@ -14,7 +10,6 @@ interface ProfileTabsProps {
   active: ProfileTabId
   onChange: (id: ProfileTabId) => void
   badgesLabel: string
-  certificationsCount: number
   certificatesCount: number
 }
 
@@ -22,17 +17,11 @@ export default function ProfileTabs({
   active,
   onChange,
   badgesLabel,
-  certificationsCount,
   certificatesCount,
 }: ProfileTabsProps) {
   const tabs: TabDef[] = [
     { id: 'learning', label: 'Learning Progress' },
     { id: 'badges', label: 'Badges', countLabel: badgesLabel },
-    {
-      id: 'certifications',
-      label: 'Certifications',
-      countLabel: `(${certificationsCount})`,
-    },
     {
       id: 'certificates',
       label: 'Certificates of Completion',
