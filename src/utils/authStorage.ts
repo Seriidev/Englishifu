@@ -505,8 +505,8 @@ export function dashboardPathForRole(
     }
     return '/tutor/profile/sarahchen'
   }
-  if (user?.role === 'student' && user.handle) {
-    return studentPublicProfilePath(user.handle)
+  if (role === 'student') {
+    return '/study'
   }
   return '/start'
 }

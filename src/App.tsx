@@ -32,6 +32,15 @@ import EditTutorProfileForm from './components/tutor-profile/EditTutorProfileFor
 import StudentProfilePage from './components/profile/StudentProfilePage'
 import EditProfileForm from './components/profile/EditProfileForm'
 import ProtectedRoute from './routes/ProtectedRoute'
+import StudyPlaceLayout from './components/study/StudyPlaceLayout'
+import StudyPlaceHome from './pages/StudyPlaceHome'
+import StudyComingSoon from './pages/StudyComingSoon'
+import StudyBadgesPage from './pages/StudyBadgesPage'
+import StudyCertificatesPage from './pages/StudyCertificatesPage'
+import FindTutorPage from './pages/FindTutorPage'
+import StudyTutorDetailPage from './pages/StudyTutorDetailPage'
+import SpeakingClubPage from './pages/SpeakingClubPage'
+import StudySettingsPage from './pages/StudySettingsPage'
 import { readingMockConfig } from './mocks/readingMock'
 import { listeningMockConfig } from './mocks/listeningMock'
 import { writingMockConfig } from './mocks/writingMock'
@@ -159,6 +168,40 @@ export default function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/study"
+          element={
+            <ProtectedRoute requiredRole="student">
+              <StudyPlaceLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<StudyPlaceHome />} />
+          <Route path="tutors" element={<FindTutorPage />} />
+          <Route path="tutors/:handle" element={<StudyTutorDetailPage />} />
+          <Route path="speaking-club" element={<SpeakingClubPage />} />
+          <Route
+            path="progress"
+            element={
+              <StudyComingSoon
+                title="My Progress"
+                description="Detailed progress analytics are on the way."
+              />
+            }
+          />
+          <Route path="badges" element={<StudyBadgesPage />} />
+          <Route path="certificates" element={<StudyCertificatesPage />} />
+          <Route
+            path="bookings"
+            element={
+              <StudyComingSoon
+                title="Bookings"
+                description="Full booking management is coming soon."
+              />
+            }
+          />
+          <Route path="settings" element={<StudySettingsPage />} />
+        </Route>
         <Route
           path="/profile/edit"
           element={

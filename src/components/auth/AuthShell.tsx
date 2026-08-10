@@ -17,7 +17,7 @@ export default function AuthShell({ title, subtitle, children }: AuthShellProps)
             <span className="flex h-10 w-10 items-center justify-center rounded-full bg-brand text-white">
               <GraduationCap className="h-5 w-5" aria-hidden />
             </span>
-            <span className="text-lg font-bold text-ink">Englishifu</span>
+            <span className="text-lg font-bold text-ink">Englishcore</span>
           </Link>
           <Link
             to="/"

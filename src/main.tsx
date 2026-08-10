@@ -4,6 +4,7 @@ import './index.css'
 import App from './App.tsx'
 import { LanguageProvider } from './i18n/LanguageContext'
 import { AuthProvider } from './auth/AuthContext'
+import { ThemeProvider } from './theme/ThemeContext'
 
 // Prefer HTTPS so microphone / mediaDevices APIs work (skip local dev).
 if (
@@ -16,10 +17,12 @@ if (
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <LanguageProvider>
-      <AuthProvider>
-        <App />
-      </AuthProvider>
-    </LanguageProvider>
+    <ThemeProvider>
+      <LanguageProvider>
+        <AuthProvider>
+          <App />
+        </AuthProvider>
+      </LanguageProvider>
+    </ThemeProvider>
   </StrictMode>,
 )

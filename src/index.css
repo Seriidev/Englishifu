@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --color-brand: #4f7cff;
   --color-brand-dark: #3d6aef;
@@ -50,6 +52,63 @@ input[type='number'] {
     radial-gradient(ellipse 70% 45% at 55% 18%, rgba(224, 242, 254, 0.7), transparent 60%),
     radial-gradient(ellipse 55% 40% at 40% 55%, rgba(238, 242, 255, 0.55), transparent 65%),
     linear-gradient(180deg, #f8faff 0%, #f4f7fc 40%, #f6f8fc 100%);
+}
+
+/* Study Place hub only — dark mode does not affect landing */
+.study-place.dark {
+  color-scheme: dark;
+}
+
+.study-place.dark .bg-white {
+  background-color: rgb(30 41 59);
+}
+
+.study-place.dark .bg-slate-50,
+.study-place.dark .bg-slate-50\/60,
+.study-place.dark .bg-slate-50\/80,
+.study-place.dark .bg-slate-50\/90 {
+  background-color: rgb(15 23 42);
+}
+
+.study-place.dark .border-slate-100,
+.study-place.dark .border-slate-200 {
+  border-color: rgb(51 65 85);
+}
+
+.study-place.dark .text-slate-900 {
+  color: rgb(248 250 252);
+}
+
+.study-place.dark .text-slate-800,
+.study-place.dark .text-slate-700 {
+  color: rgb(226 232 240);
+}
+
+.study-place.dark .text-slate-600 {
+  color: rgb(203 213 225);
+}
+
+.study-place.dark .text-slate-500,
+.study-place.dark .text-slate-400 {
+  color: rgb(148 163 184);
+}
+
+.study-place.dark .bg-indigo-50,
+.study-place.dark .bg-indigo-50\/50 {
+  background-color: rgb(30 27 75 / 0.55);
+}
+
+.study-place.dark .bg-orange-50\/50 {
+  background-color: rgb(67 20 7 / 0.45);
+}
+
+.study-place.dark .hover\:bg-slate-50:hover,
+.study-place.dark .hover\:bg-gray-50:hover {
+  background-color: rgb(51 65 85);
+}
+
+.study-place.dark .hover\:bg-slate-100:hover {
+  background-color: rgb(51 65 85);
 }
 
 #root {

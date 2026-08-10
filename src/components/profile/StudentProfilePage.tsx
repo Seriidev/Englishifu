@@ -15,7 +15,6 @@ import { useAuth } from '../../auth/AuthContext'
 import { mockStudentGamification } from '../../mocks/studentDashboardMock'
 import {
   mockStudentLearningStats,
-  mockStudentProfileTabCounts,
 } from '../../mocks/studentProfileMock'
 import type { PublicStudent } from '../../types/user'
 import {
@@ -82,7 +81,6 @@ export default function StudentProfilePage() {
 
   const gamification = mockStudentGamification(profile.id)
   const stats = mockStudentLearningStats(profile.id)
-  const counts = mockStudentProfileTabCounts(profile.id)
   const displayName = profile.fullName
   const cefrLevel = profile.cefrLevel
   const needsPlacement = isOwner && !cefrLevel
@@ -139,7 +137,7 @@ export default function StudentProfilePage() {
             <span className="flex h-9 w-9 items-center justify-center rounded-full bg-brand text-white">
               <GraduationCap className="h-4 w-4" aria-hidden />
             </span>
-            <span className="font-bold text-ink">Englishifu</span>
+            <span className="font-bold text-ink">Englishcore</span>
           </Link>
           <div className="flex items-center gap-2">
             <Link
@@ -184,7 +182,13 @@ export default function StudentProfilePage() {
               </div>
               <button
                 type="button"
-                onClick={() => navigate('/placement')}
+                onClick={() =>
+                  navigate('/placement', {
+                    state: {
+                      returnTo: studentPublicProfilePath(live.handle),
+                    },
+                  })
+                }
                 className="shrink-0 rounded-full bg-brand px-6 py-3 text-sm font-semibold text-white hover:bg-brand-dark"
               >
                 Start Placement Test
@@ -217,7 +221,7 @@ export default function StudentProfilePage() {
                 </p>
                 <p className="mt-1.5 text-sm text-muted">
                   {[live.headline, live.city].filter(Boolean).join(' · ') ||
-                    'Student on Englishifu'}
+                    'Student on Englishcore'}
                 </p>
                 <div className="mt-3 flex flex-wrap gap-2">
                   <div className="inline-flex items-center gap-1.5 rounded-full bg-orange-50 px-3 py-1.5 text-xs font-semibold text-ink">
@@ -227,7 +231,13 @@ export default function StudentProfilePage() {
                   {!cefrLevel && isOwner ? (
                     <button
                       type="button"
-                      onClick={() => navigate('/placement')}
+                      onClick={() =>
+                        navigate('/placement', {
+                          state: {
+                            returnTo: studentPublicProfilePath(live.handle),
+                          },
+                        })
+                      }
                       className="inline-flex items-center gap-1.5 rounded-full border border-dashed border-brand/40 bg-brand-light/50 px-3 py-1.5 text-xs font-semibold text-brand transition hover:bg-brand-light"
                     >
                       No rank yet — take Placement
@@ -278,7 +288,13 @@ export default function StudentProfilePage() {
                   {cefrLevel ? (
                     <button
                       type="button"
-                      onClick={() => navigate('/placement')}
+                      onClick={() =>
+                        navigate('/placement', {
+                          state: {
+                            returnTo: studentPublicProfilePath(live.handle),
+                          },
+                        })
+                      }
                       className="inline-flex items-center gap-1.5 rounded-full border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-muted transition hover:bg-gray-50"
                     >
                       Retake Placement
@@ -319,12 +335,7 @@ export default function StudentProfilePage() {
           </div>
 
           <div className="mt-8">
-            <ProfileTabs
-              active={tab}
-              onChange={setTab}
-              badgesLabel={`(${counts.badgesEarned}/${counts.badgesTotal})`}
-              certificatesCount={counts.certificatesOfCompletion}
-            />
+            <ProfileTabs active={tab} onChange={setTab} />
 
             <div className="mt-5" role="tabpanel">
               {tab === 'learning' ? (
@@ -351,37 +362,6 @@ export default function StudentProfilePage() {
                   />
                 </div>
               ) : null}
-
-              {tab === 'badges' ? (
-                cefrLevel ? (
-                  <div className="rounded-2xl border border-gray-100 bg-white px-6 py-8">
-                    <p className="text-sm font-semibold text-muted">
-                      Placement rank
-                    </p>
-                    <div className="mt-4 flex items-center gap-3">
-                      <CefrLevelBadge level={cefrLevel} size="lg" />
-                      <p className="text-sm text-ink">
-                        Earned from your Placement Test
-                        {live.placementCompletedAt
-                          ? ` · ${new Date(live.placementCompletedAt).toLocaleDateString()}`
-                          : ''}
-                      </p>
-                    </div>
-                  </div>
-                ) : (
-                  <EmptyTab
-                    title="No badges yet"
-                    body="Take the Placement Test to unlock your CEFR rank badge."
-                  />
-                )
-              ) : null}
-
-              {tab === 'certificates' ? (
-                <EmptyTab
-                  title="No certificates of completion"
-                  body="Finish a TOEFL Full Test to earn a certificate of completion."
-                />
-              ) : null}
             </div>
           </div>
         </section>
@@ -390,11 +370,3 @@ export default function StudentProfilePage() {
   )
 }
 
-function EmptyTab({ title, body }: { title: string; body: string }) {
-  return (
-    <div className="rounded-2xl border border-dashed border-gray-200 bg-gray-50/60 px-6 py-12 text-center">
-      <p className="text-base font-semibold text-ink">{title}</p>
-      <p className="mt-1 text-sm text-muted">{body}</p>
-    </div>
-  )
-}

@@ -1,78 +1,64 @@
-import { ArrowRight, GraduationCap } from 'lucide-react'
 import { teachers } from '../data/teachers'
 import { useLanguage } from '../i18n/LanguageContext'
-
-const cardOverlays = [
-  'from-blue-950/55 via-blue-900/15 to-transparent',
-  'from-[#1e4fd6]/50 via-[#4F7CFF]/10 to-transparent',
-  'from-blue-900/55 via-blue-800/15 to-transparent',
-  'from-[#0b1b3d]/55 via-brand/15 to-transparent',
-] as const
 
 export default function Teachers() {
   const { t } = useLanguage()
 
   return (
-    <section id="tutors" className="bg-gradient-to-b from-transparent via-[#eef3ff]/70 to-transparent py-16 sm:py-20 lg:py-24">
+    <section
+      id="tutors"
+      className="bg-gradient-to-b from-transparent via-[#eef3ff]/50 to-transparent py-16 sm:py-20 lg:py-24"
+    >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
-          <div className="max-w-xl">
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-gray-200 bg-white px-3 py-1 text-sm font-medium text-gray-700">
-              <GraduationCap className="h-3.5 w-3.5" aria-hidden />
-              {t('teachers.badge')}
-            </span>
-            <h2 className="mt-4 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+        <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between sm:gap-6">
+          <div className="max-w-2xl">
+            <h2 className="text-3xl font-bold tracking-tight text-ink sm:text-4xl lg:text-[2.5rem] lg:leading-tight">
               {t('teachers.title')}
             </h2>
-          </div>
-
-          <div className="flex flex-col gap-5 lg:max-w-[350px] lg:items-end lg:text-right">
-            <p className="text-base leading-relaxed text-gray-500">
+            <p className="mt-3 max-w-xl text-base leading-relaxed text-muted sm:text-lg">
               {t('teachers.body')}
             </p>
-
-            <div className="flex flex-wrap items-center gap-3 lg:justify-end">
-              <a
-                href="#tutors"
-                className="inline-flex items-center gap-2 rounded-full border border-gray-300 bg-white px-5 py-2.5 text-sm font-semibold text-gray-900 transition hover:bg-gray-100"
-              >
-                {t('teachers.viewAll')}
-                <ArrowRight className="h-4 w-4" aria-hidden />
-              </a>
-            </div>
           </div>
+
+          <a
+            href="#tutors"
+            className="inline-flex w-fit shrink-0 items-center rounded-full border border-gray-200 bg-white px-5 py-2.5 text-sm font-semibold text-ink shadow-sm transition hover:bg-gray-50"
+          >
+            {t('teachers.badge')}
+          </a>
         </div>
 
-        <div className="mt-12 flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-          {teachers.map((teacher, index) => {
-            const overlay = cardOverlays[index % cardOverlays.length]
-            return (
-              <article
-                key={teacher.id}
-                className="relative h-[380px] w-[220px] shrink-0 snap-start overflow-hidden rounded-3xl sm:h-[400px] sm:w-[260px] lg:h-[420px] lg:w-[280px]"
-              >
-                <img
-                  src={teacher.photo.replace('/300?', '/600?')}
-                  alt={teacher.name}
-                  className="absolute inset-0 h-full w-full object-cover object-top"
-                />
-                <div
-                  className={`absolute inset-0 bg-gradient-to-t ${overlay}`}
-                  aria-hidden
-                />
-                <div
-                  className="absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-black/80 to-transparent"
-                  aria-hidden
-                />
-                <div className="absolute inset-x-0 bottom-0 p-5">
-                  <h3 className="text-lg font-bold text-white">{teacher.name}</h3>
-                  <p className="mt-1 text-sm text-white/80">
-                    {teacher.specialization}
-                  </p>
+        <div className="mt-10 flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2 sm:mt-12 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          {teachers.map((teacher) => (
+            <article
+              key={teacher.id}
+              className="group relative h-[400px] w-[min(78vw,260px)] shrink-0 snap-start overflow-hidden rounded-[1.75rem] sm:h-[440px] sm:w-[calc((100%-3rem)/4)] sm:min-w-[200px] lg:h-[480px]"
+            >
+              <img
+                src={teacher.photo}
+                alt={teacher.name}
+                className="absolute inset-0 h-full w-full object-cover object-top transition duration-500 group-hover:scale-[1.03]"
+              />
+              <div
+                className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent"
+                aria-hidden
+              />
+              <div className="absolute inset-x-0 bottom-0 flex flex-col p-5 sm:p-6">
+                <p className="text-sm text-white/80">@{teacher.handle}</p>
+                <h3 className="mt-1 text-xl font-bold tracking-tight text-white sm:text-[1.35rem]">
+                  {teacher.name}
+                </h3>
+                <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-white/85">
+                  {teacher.bio}
+                </p>
+                <div className="mt-4">
+                  <span className="inline-flex rounded-full bg-white/15 px-3.5 py-1.5 text-xs font-semibold text-white backdrop-blur-sm ring-1 ring-white/20">
+                    {teacher.badge}
+                  </span>
                 </div>
-              </article>
-            )
-          })}
+              </div>
+            </article>
+          ))}
         </div>
       </div>
     </section>

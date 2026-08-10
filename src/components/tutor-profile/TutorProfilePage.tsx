@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { GraduationCap, LogOut, Pencil, Share2, Briefcase } from 'lucide-react'
+import { GraduationCap, LogOut, Pencil, Briefcase, FileText, X } from 'lucide-react'
 import { useAuth } from '../../auth/AuthContext'
 import { isTutorProfileComplete } from '../../types/user'
 import { getTutorProfileByHandle } from '../../mocks/tutorProfileMock'
@@ -28,6 +28,7 @@ export default function TutorProfilePage() {
   const navigate = useNavigate()
   const [tab, setTab] = useState<TutorTabId>('classes')
   const [avatarError, setAvatarError] = useState<string | null>(null)
+  const [resumeSentOpen, setResumeSentOpen] = useState(false)
 
   const routeHandle = normalizeHandle(handle)
   const rawSession = user ?? getSessionUser()
@@ -115,27 +116,6 @@ export default function TutorProfilePage() {
     }
   }
 
-  const togglePublic = () => {
-    if (!liveOwner) return
-    void updateTutor({
-      fullName: liveOwner.fullName,
-      position: liveOwner.position ?? 'Teacher',
-      aboutMe: liveOwner.aboutMe,
-      avatarUrl: liveOwner.avatarUrl,
-      isPublicProfile: !liveOwner.isPublicProfile,
-    })
-  }
-
-  const shareProfile = async () => {
-    const slug = liveOwner?.handle ?? profile.handle
-    const url = `${window.location.origin}${tutorProfilePath(slug)}`
-    try {
-      await navigator.clipboard.writeText(url)
-    } catch {
-      /* ignore */
-    }
-  }
-
   return (
     <div className="landing-shell min-h-svh">
       <header className="border-b border-[#c7d7f5]/60 bg-white/70 backdrop-blur-xl">
@@ -144,7 +124,7 @@ export default function TutorProfilePage() {
             <span className="flex h-9 w-9 items-center justify-center rounded-full bg-brand text-white">
               <GraduationCap className="h-4 w-4" aria-hidden />
             </span>
-            <span className="font-bold text-ink">Englishifu</span>
+            <span className="font-bold text-ink">Englishcore</span>
           </Link>
           <div className="flex items-center gap-2">
             <Link
@@ -237,43 +217,22 @@ export default function TutorProfilePage() {
 
             <div className="flex shrink-0 flex-wrap items-center gap-2 sm:justify-end">
               {isOwnProfile ? (
-                <>
-                  <button
-                    type="button"
-                    onClick={() => navigate('/tutor/profile/edit')}
-                    className="inline-flex items-center gap-1.5 rounded-full border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-ink transition hover:bg-gray-50"
-                  >
-                    <Pencil className="h-3.5 w-3.5" aria-hidden />
-                    Edit Profile
-                  </button>
-                  <button
-                    type="button"
-                    onClick={togglePublic}
-                    className="inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white px-3 py-2 text-xs font-semibold text-muted"
-                    title="Toggle public profile"
-                  >
-                    Public
-                    <span
-                      className={`relative inline-flex h-5 w-9 items-center rounded-full transition ${
-                        isPublic ? 'bg-brand' : 'bg-gray-300'
-                      }`}
-                    >
-                      <span
-                        className={`inline-block h-3.5 w-3.5 rounded-full bg-white transition ${
-                          isPublic ? 'translate-x-4' : 'translate-x-1'
-                        }`}
-                      />
-                    </span>
-                  </button>
-                </>
+                <button
+                  type="button"
+                  onClick={() => navigate('/tutor/profile/edit')}
+                  className="inline-flex items-center gap-1.5 rounded-full border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-ink transition hover:bg-gray-50"
+                >
+                  <Pencil className="h-3.5 w-3.5" aria-hidden />
+                  Edit Profile
+                </button>
               ) : null}
               <button
                 type="button"
-                onClick={() => void shareProfile()}
-                className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-gray-200 bg-white text-muted transition hover:bg-gray-50"
-                aria-label="Copy profile link"
+                onClick={() => setResumeSentOpen(true)}
+                className="inline-flex items-center gap-1.5 rounded-full bg-brand px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-dark"
               >
-                <Share2 className="h-4 w-4" aria-hidden />
+                <FileText className="h-4 w-4" aria-hidden />
+                Send resume
               </button>
             </div>
           </div>
@@ -294,6 +253,51 @@ export default function TutorProfilePage() {
           </div>
         </section>
       </main>
+
+      {resumeSentOpen ? (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 p-4"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="resume-sent-title"
+        >
+          <button
+            type="button"
+            className="absolute inset-0 cursor-default"
+            aria-label="Close dialog"
+            onClick={() => setResumeSentOpen(false)}
+          />
+          <div className="relative w-full max-w-sm rounded-3xl border border-gray-100 bg-white p-6 text-center shadow-xl">
+            <button
+              type="button"
+              onClick={() => setResumeSentOpen(false)}
+              className="absolute top-3 right-3 inline-flex h-8 w-8 items-center justify-center rounded-full text-muted transition hover:bg-gray-50 hover:text-ink"
+              aria-label="Close"
+            >
+              <X className="h-4 w-4" aria-hidden />
+            </button>
+            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-emerald-50 text-emerald-600">
+              <FileText className="h-5 w-5" aria-hidden />
+            </div>
+            <h2
+              id="resume-sent-title"
+              className="mt-4 text-xl font-bold tracking-tight text-ink"
+            >
+              Successfully sent
+            </h2>
+            <p className="mt-2 text-sm leading-relaxed text-muted">
+              Our team will review your resume and send a letter to your email.
+            </p>
+            <button
+              type="button"
+              onClick={() => setResumeSentOpen(false)}
+              className="mt-6 w-full rounded-full bg-brand px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-dark"
+            >
+              OK
+            </button>
+          </div>
+        </div>
+      ) : null}
     </div>
   )
 }

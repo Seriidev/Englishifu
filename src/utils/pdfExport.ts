@@ -44,7 +44,7 @@ export function downloadResultsPDF(result: FullTestResult): void {
   y += 8
   doc.setFontSize(9)
   doc.setTextColor(120)
-  doc.text('Englishifu · Practice simulation (not an official ETS score report)', 20, y)
+  doc.text('Englishcore · Practice simulation (not an official ETS score report)', 20, y)
 
   doc.save(`toefl-results-${Date.now()}.pdf`)
 }

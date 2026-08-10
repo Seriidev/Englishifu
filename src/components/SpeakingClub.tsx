@@ -1,4 +1,4 @@
-import { ArrowRight, BarChart2, Calendar, Clock, Users } from 'lucide-react'
+import { Calendar, Clock, Users, Sparkles } from 'lucide-react'
 import { speakingClubMeetings } from '../data/speakingClub'
 import { useLanguage } from '../i18n/LanguageContext'
 
@@ -11,18 +11,30 @@ export default function SpeakingClub() {
 
   return (
     <section id="speaking-club" className="bg-transparent py-16 sm:py-20">
-      <div className="mx-auto max-w-7xl px-6">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <h2 className="text-3xl font-bold tracking-tight text-ink sm:text-4xl">
-            {t('club.title')}
-          </h2>
-          <a
-            href="#speaking-club"
-            className="inline-flex items-center gap-1.5 text-base font-semibold text-brand transition hover:underline"
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <h2 className="sr-only">{t('club.title')}</h2>
+        <div className="flex flex-col items-start justify-between gap-5 rounded-[1.75rem] bg-brand px-5 py-5 shadow-lg shadow-brand/25 sm:flex-row sm:items-center sm:gap-8 sm:px-7 sm:py-6">
+          <div className="flex min-w-0 items-start gap-4 sm:items-center">
+            <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-white/20 text-white backdrop-blur-sm">
+              <Sparkles className="h-5 w-5" aria-hidden />
+            </span>
+            <div className="min-w-0">
+              <p className="text-xl font-bold tracking-tight text-white sm:text-2xl">
+                {t('club.smallTitle')}
+              </p>
+              <p className="mt-1 max-w-xl text-sm leading-relaxed text-white/90 sm:text-[15px]">
+                {t('club.smallBody')}
+              </p>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => console.log('Speaking Club')}
+            className="inline-flex w-full shrink-0 items-center justify-center rounded-full bg-white/25 px-7 py-3 text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-white/35 sm:w-auto"
           >
-            {t('club.viewAll')}
-            <ArrowRight className="h-4 w-4" aria-hidden />
-          </a>
+            {t('club.button')}
+          </button>
         </div>
 
         <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -40,7 +52,6 @@ export default function SpeakingClub() {
                   className="aspect-[16/9] w-full object-cover"
                 />
                 <span className="absolute top-3 left-3 inline-flex items-center gap-1.5 rounded-full bg-white px-2.5 py-1 text-xs font-semibold text-ink shadow-sm">
-                  <BarChart2 className="h-3.5 w-3.5 text-brand" aria-hidden />
                   {meeting.level}
                 </span>
               </div>
@@ -68,7 +79,7 @@ export default function SpeakingClub() {
                     <button
                       type="button"
                       onClick={() => handleBook(meeting.title)}
-                      className="rounded-lg bg-brand px-5 py-2 text-sm font-semibold text-white transition hover:bg-brand-dark"
+                      className="rounded-full bg-brand px-5 py-2 text-sm font-semibold text-white transition hover:bg-brand-dark"
                     >
                       {t('club.book')}
                     </button>
@@ -77,26 +88,6 @@ export default function SpeakingClub() {
               </div>
             </article>
           ))}
-        </div>
-
-        <div className="mt-10 flex flex-col items-start justify-between gap-5 rounded-2xl bg-brand-light p-6 sm:flex-row sm:items-center">
-          <div className="flex items-start gap-4 sm:items-center">
-            <span className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white text-brand">
-              <Users className="h-6 w-6" aria-hidden />
-            </span>
-            <div>
-              <p className="font-bold text-ink">{t('club.smallTitle')}</p>
-              <p className="mt-0.5 text-sm text-muted">{t('club.smallBody')}</p>
-            </div>
-          </div>
-
-          <button
-            type="button"
-            onClick={() => console.log('Book a meeting')}
-            className="rounded-lg bg-brand px-6 py-3 text-sm font-semibold text-white transition hover:bg-brand-dark"
-          >
-            {t('club.bookMeeting')}
-          </button>
         </div>
       </div>
     </section>

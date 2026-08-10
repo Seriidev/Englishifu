@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { ArrowRight, ChartColumn } from 'lucide-react'
+import { Sparkles } from 'lucide-react'
 import { useLanguage } from '../../i18n/LanguageContext'
 
 export default function PlacementTestCTA() {
@@ -7,38 +7,30 @@ export default function PlacementTestCTA() {
   const { t } = useLanguage()
 
   return (
-    <section
-      id="placement"
-      className="relative z-10 -mt-2 border-y border-[#c7d7f5]/50 bg-gradient-to-br from-[#e8f1ff]/70 via-[#eef0ff]/40 to-transparent py-6 sm:py-8"
-    >
-      {/* Same width as header: max-w-6xl + side padding */}
+    <section id="placement" className="relative z-10 py-6 sm:py-8">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
-        <div className="flex flex-col items-start justify-between gap-6 rounded-3xl border border-[#c7d7f5]/80 bg-white/90 p-6 shadow-sm shadow-brand/5 backdrop-blur-sm sm:flex-row sm:items-center sm:p-8">
-          <div className="flex gap-4">
-            <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-brand-light text-brand">
-              <ChartColumn className="h-6 w-6" aria-hidden />
+        <div className="flex flex-col items-start justify-between gap-5 rounded-[1.75rem] bg-brand px-5 py-5 shadow-lg shadow-brand/25 sm:flex-row sm:items-center sm:gap-8 sm:px-7 sm:py-6">
+          <div className="flex min-w-0 items-start gap-4 sm:items-center">
+            <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-white/20 text-white backdrop-blur-sm">
+              <Sparkles className="h-5 w-5" aria-hidden />
             </span>
-            <div>
-              <h2 className="text-xl font-bold tracking-tight text-ink sm:text-2xl">
+            <div className="min-w-0">
+              <h2 className="text-xl font-bold tracking-tight text-white sm:text-2xl">
                 {t('placement.ctaTitle')}
               </h2>
-              <p className="mt-1.5 max-w-xl text-sm leading-relaxed text-muted">
+              <p className="mt-1 max-w-xl text-sm leading-relaxed text-white/90 sm:text-[15px]">
                 {t('placement.ctaBody')}
               </p>
             </div>
           </div>
 
-          <div className="w-full shrink-0 sm:w-auto sm:text-right">
-            <button
-              type="button"
-              onClick={() => navigate('/placement')}
-              className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-brand px-7 py-3.5 text-sm font-semibold text-white shadow-md shadow-brand/20 transition hover:bg-brand-dark sm:w-auto"
-            >
-              {t('placement.ctaButton')}
-              <ArrowRight className="h-4 w-4" aria-hidden />
-            </button>
-            <p className="mt-2 text-xs text-muted">{t('placement.ctaMeta')}</p>
-          </div>
+          <button
+            type="button"
+            onClick={() => navigate('/placement', { state: { returnTo: '/' } })}
+            className="inline-flex w-full shrink-0 items-center justify-center rounded-full bg-white/25 px-7 py-3 text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-white/35 sm:w-auto"
+          >
+            {t('placement.ctaButton')}
+          </button>
         </div>
       </div>
     </section>

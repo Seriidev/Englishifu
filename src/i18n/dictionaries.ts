@@ -22,10 +22,10 @@ const en: Dict = {
   'nav.signUp': 'Sign up',
   'nav.profile': 'Profile',
 
-  'placement.ctaTitle': 'Find Your English Level',
+  'placement.ctaTitle': 'Find your level',
   'placement.ctaBody':
-    'Discover your level first — then start learning with a path that fits you. Free 5-minute test.',
-  'placement.ctaButton': 'Start Placement Test',
+    'Take a quick test to see your current English level and choose the right program.',
+  'placement.ctaButton': 'Check my level',
   'placement.ctaMeta': 'No registration required · ~5 min',
 
   'placement.introTitle': 'English Placement Test',
@@ -74,7 +74,7 @@ const en: Dict = {
   'toefl.hubTitle': 'TOEFL Practice Hub',
   'toefl.hubBody':
     'New 2026 format modules. Reading and Listening are adaptive. Speaking and Writing follow the updated task types.',
-  'toefl.back': '← Back to Englishifu',
+  'toefl.back': '← Back to Englishcore',
   'toefl.reading': 'Reading',
   'toefl.listening': 'Listening',
   'toefl.speaking': 'Speaking',
@@ -141,17 +141,21 @@ const en: Dict = {
   'features.s4.desc': 'Highly rated by our learning community',
 
   'teachers.badge': 'Teachers',
-  'teachers.title': 'Learn From Over 500+ Expert Tutors',
+  'teachers.title': 'Students and professionals learn with us',
   'teachers.body':
-    'EnglishUp tutors help you hit TOEFL goals and build real speaking confidence through personalized, practice-first mentoring.',
+    'Expert tutors on Englishcore help ambitious learners prepare for TOEFL and speak with confidence.',
   'teachers.viewAll': 'View All Teachers',
+  'teachers.prev': 'Previous teachers',
+  'teachers.next': 'Next teachers',
 
   'club.title': 'Upcoming Speaking Clubs',
   'club.viewAll': 'View all meetings',
+  'club.button': 'Speaking Club',
   'club.spots': '{count} spots left',
   'club.book': 'Book',
-  'club.smallTitle': 'Small groups',
-  'club.smallBody': 'No more than 8 people — everyone gets attention',
+  'club.smallTitle': 'Join a Speaking Club',
+  'club.smallBody':
+    'Practice real conversation in small groups and build fluency with guided sessions.',
   'club.bookMeeting': 'Book a meeting',
 
   'toeflSim.title': 'Try a Free TOEFL Simulation',
@@ -231,10 +235,10 @@ const ru: Dict = {
   'nav.signUp': 'Регистрация',
   'nav.profile': 'Профиль',
 
-  'placement.ctaTitle': 'Узнай свой уровень английского',
+  'placement.ctaTitle': 'Узнай свой уровень',
   'placement.ctaBody':
-    'Сначала узнай свой уровень — потом начни обучение по подходящему пути. Бесплатный тест ~5 мин.',
-  'placement.ctaButton': 'Начать Placement Test',
+    'Пройди короткий тест, чтобы понять текущий уровень и выбрать подходящую программу.',
+  'placement.ctaButton': 'Check my level',
   'placement.ctaMeta': 'Без регистрации · ~5 мин',
 
   'placement.introTitle': 'Тест на уровень английского',
@@ -283,7 +287,7 @@ const ru: Dict = {
   'toefl.hubTitle': 'TOEFL Practice Hub',
   'toefl.hubBody':
     'Модули нового формата 2026. Reading и Listening — адаптивные. Speaking и Writing — обновлённые типы заданий.',
-  'toefl.back': '← Назад на Englishifu',
+  'toefl.back': '← Назад на Englishcore',
   'toefl.reading': 'Reading',
   'toefl.listening': 'Listening',
   'toefl.speaking': 'Speaking',
@@ -350,17 +354,21 @@ const ru: Dict = {
   'features.s4.desc': 'Высокие оценки от нашего сообщества',
 
   'teachers.badge': 'Преподаватели',
-  'teachers.title': 'Учитесь у 500+ экспертов',
+  'teachers.title': 'С нами учатся студенты и профессионалы',
   'teachers.body':
-    'Тьюторы EnglishUp помогают достигать целей по TOEFL и уверенно говорить через персональную практику.',
+    'Экспертные тьюторы Englishcore помогают готовиться к TOEFL и уверенно говорить.',
   'teachers.viewAll': 'Все преподаватели',
+  'teachers.prev': 'Предыдущие преподаватели',
+  'teachers.next': 'Следующие преподаватели',
 
   'club.title': 'Ближайшие Speaking Clubs',
   'club.viewAll': 'Все встречи',
+  'club.button': 'Speaking Club',
   'club.spots': 'Осталось мест: {count}',
   'club.book': 'Записаться',
-  'club.smallTitle': 'Маленькие группы',
-  'club.smallBody': 'Не больше 8 человек — внимание каждому',
+  'club.smallTitle': 'Присоединяйся к Speaking Club',
+  'club.smallBody':
+    'Практикуй живой разговор в маленьких группах и прокачивай fluency.',
   'club.bookMeeting': 'Записаться на встречу',
 
   'toeflSim.title': 'Бесплатная симуляция TOEFL',
@@ -440,10 +448,10 @@ const tm: Dict = {
   'nav.signUp': 'Hasaba dur',
   'nav.profile': 'Profil',
 
-  'placement.ctaTitle': 'Iňlisçe derejäňizi anyklaň',
+  'placement.ctaTitle': 'Derejäňizi anyklaň',
   'placement.ctaBody':
-    'Ilki derejäňizi anyklaň — soňra size laýyk ýol bilen okaň. Mugt 5 minutlyk test.',
-  'placement.ctaButton': 'Placement Teste başla',
+    'Häzirki iňlisçe derejäňizi bilmek we dogry programmasy saýlamak üçin çalt test geçiň.',
+  'placement.ctaButton': 'Check my level',
   'placement.ctaMeta': 'Hasaba durmazdan · ~5 min',
 
   'placement.introTitle': 'Iňlisçe dereje testi',
@@ -492,7 +500,7 @@ const tm: Dict = {
   'toefl.hubTitle': 'TOEFL Practice Hub',
   'toefl.hubBody':
     '2026 täze format. Reading we Listening — adaptiv. Speaking we Writing — täzelenen tabşyryk görnüşleri.',
-  'toefl.back': '← Englishifu-a yza',
+  'toefl.back': '← Englishcore-a yza',
   'toefl.reading': 'Reading',
   'toefl.listening': 'Listening',
   'toefl.speaking': 'Speaking',
@@ -559,17 +567,21 @@ const tm: Dict = {
   'features.s4.desc': 'Jemgyýetimiz tarapyndan ýokary baha',
 
   'teachers.badge': 'Mugallymlar',
-  'teachers.title': '500+ hünärmenden öwreniň',
+  'teachers.title': 'Talyp we hünärmenler biziň bilen okaýar',
   'teachers.body':
-    'EnglishUp mugallymlary TOEFL maksatlaryna ýetmäge we ynamly gürlemäge kömek edýär.',
+    'Englishcore mugallymlary TOEFL taýýarlygynda we ynamly gepleşikde kömek edýär.',
   'teachers.viewAll': 'Ähli mugallymlar',
+  'teachers.prev': 'Öňki mugallymlar',
+  'teachers.next': 'Indiki mugallymlar',
 
   'club.title': 'Geljekki Speaking Club-lar',
   'club.viewAll': 'Ähli duşuşyklar',
+  'club.button': 'Speaking Club',
   'club.spots': '{count} ýer galdy',
   'club.book': 'Ýazyl',
-  'club.smallTitle': 'Kiçi toparlar',
-  'club.smallBody': '8 adamdan köp däl — herkese üns berilýär',
+  'club.smallTitle': 'Speaking Club-a goşul',
+  'club.smallBody':
+    'Kiçi toparlarda hakyky gepleşigi öwreniň we fluencyňizi ösdüriň.',
   'club.bookMeeting': 'Duşuşyga ýazyl',
 
   'toeflSim.title': 'Mugt TOEFL simulýasiýasy',

@@ -41,7 +41,7 @@ export default function Footer() {
               <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/10">
                 <GraduationCap className="h-5 w-5" aria-hidden />
               </span>
-              <span className="text-xl font-bold">Englishifu</span>
+              <span className="text-xl font-bold">Englishcore</span>
             </div>
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-white/60">
               {t('footer.tagline')}
@@ -89,7 +89,7 @@ export default function Footer() {
         </div>
 
         <div className="mt-12 border-t border-white/10 pt-6 text-center text-sm text-white/50">
-          © 2026 Englishifu. All rights reserved.
+          © 2026 Englishcore. All rights reserved.
         </div>
       </div>
     </footer>

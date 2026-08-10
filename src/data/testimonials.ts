@@ -10,7 +10,7 @@ export const testimonials: Testimonial[] = [
   {
     id: 1,
     quote:
-      'Englishifu helped me raise my TOEFL score from 78 to 108 in just three months. The tutors are incredibly supportive and the practice tests feel just like the real exam.',
+      'Englishcore helped me raise my TOEFL score from 78 to 108 in just three months. The tutors are incredibly supportive and the practice tests feel just like the real exam.',
     name: 'Aisha Rahman',
     photo: 'https://i.pravatar.cc/300?img=47',
     toeflScore: 108,

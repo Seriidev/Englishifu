@@ -36,26 +36,26 @@ const contactItems = [
   {
     icon: Mail,
     label: 'Email',
-    value: 'support@englishifu.com',
-    href: 'mailto:support@englishifu.com',
+    value: 'support@englishcore.com',
+    href: 'mailto:support@englishcore.com',
   },
   {
     icon: Send,
     label: 'Telegram',
-    value: '@englishifu',
-    href: 'https://t.me/englishifu',
+    value: '@englishcore',
+    href: 'https://t.me/englishcore',
   },
   {
     icon: Camera,
     label: 'Instagram',
-    value: '@englishifu',
-    href: 'https://instagram.com/englishifu',
+    value: '@englishcore',
+    href: 'https://instagram.com/englishcore',
   },
   {
     icon: Music2,
     label: 'TikTok',
-    value: '@englishifu',
-    href: 'https://tiktok.com/@englishifu',
+    value: '@englishcore',
+    href: 'https://tiktok.com/@englishcore',
   },
   {
     icon: Globe2,
@@ -444,7 +444,7 @@ export default function ContactSection() {
                 <p className="text-sm font-semibold">Need immediate help?</p>
                 <div className="mt-3 flex flex-wrap gap-2">
                   <a
-                    href="https://t.me/englishifu"
+                    href="https://t.me/englishcore"
                     target="_blank"
                     rel="noreferrer"
                     className="inline-flex items-center gap-1.5 rounded-full border border-white/35 px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/10"

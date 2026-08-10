@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { Eye, EyeOff } from 'lucide-react'
 import { useAuth } from '../../auth/AuthContext'
 import { dashboardPathForRole } from '../../utils/authStorage'
 import AuthShell from './AuthShell'
@@ -10,6 +11,7 @@ export default function LoginForm() {
   const { login } = useAuth()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
 
@@ -39,7 +41,7 @@ export default function LoginForm() {
   return (
     <AuthShell
       title="Welcome back"
-      subtitle="Log in to continue learning or teaching on Englishifu."
+      subtitle="Log in to continue learning or teaching on Englishcore."
     >
       <form className="space-y-4" onSubmit={(e) => void onSubmit(e)} noValidate>
         <div>
@@ -60,14 +62,28 @@ export default function LoginForm() {
           <label className={labelClass} htmlFor="login-password">
             Password
           </label>
-          <input
-            id="login-password"
-            type="password"
-            className={fieldClass}
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            autoComplete="current-password"
-          />
+          <div className="relative">
+            <input
+              id="login-password"
+              type={showPassword ? 'text' : 'password'}
+              className={`${fieldClass} pr-12`}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              autoComplete="current-password"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword((v) => !v)}
+              className="absolute top-1/2 right-3 -translate-y-1/2 rounded-lg p-1 text-muted transition hover:text-ink"
+              aria-label={showPassword ? 'Hide password' : 'Show password'}
+            >
+              {showPassword ? (
+                <EyeOff className="h-[18px] w-[18px]" aria-hidden />
+              ) : (
+                <Eye className="h-[18px] w-[18px]" aria-hidden />
+              )}
+            </button>
+          </div>
         </div>
 
         {error ? <p className={errorClass}>{error}</p> : null}

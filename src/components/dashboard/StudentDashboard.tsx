@@ -33,7 +33,7 @@ export default function StudentDashboard() {
             <span className="flex h-9 w-9 items-center justify-center rounded-full bg-brand text-white">
               <GraduationCap className="h-4 w-4" aria-hidden />
             </span>
-            <span className="font-bold text-ink">Englishifu</span>
+            <span className="font-bold text-ink">Englishcore</span>
           </Link>
           <div className="flex items-center gap-2">
             {user?.role === 'student' && user.handle ? (

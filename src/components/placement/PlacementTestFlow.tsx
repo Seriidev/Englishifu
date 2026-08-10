@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { PLACEMENT_QUESTIONS } from '../../data/placementQuestions'
 import {
   scorePlacementAnswers,
@@ -7,7 +7,6 @@ import {
 } from '../../scoring/placementScoring'
 import { useAuth } from '../../auth/AuthContext'
 import { useLanguage } from '../../i18n/LanguageContext'
-import { studentPublicProfilePath } from '../../utils/authStorage'
 import LangSwitcher from '../shared/LangSwitcher'
 import PlacementTestIntro from './PlacementTestIntro'
 import PlacementResults from './PlacementResults'
@@ -22,6 +21,7 @@ export default function PlacementTestFlow({ onExit }: Props) {
   const { t } = useLanguage()
   const { user, savePlacementResult } = useAuth()
   const navigate = useNavigate()
+  const location = useLocation()
   const questions = PLACEMENT_QUESTIONS
   const [stage, setStage] = useState<Stage>('intro')
   const [index, setIndex] = useState(0)
@@ -35,9 +35,15 @@ export default function PlacementTestFlow({ onExit }: Props) {
     [answers],
   )
 
-  const goToStudentHome = () => {
-    if (user?.role === 'student' && user.handle) {
-      navigate(studentPublicProfilePath(user.handle), { replace: true })
+  const returnTo =
+    typeof (location.state as { returnTo?: unknown } | null)?.returnTo ===
+    'string'
+      ? (location.state as { returnTo: string }).returnTo
+      : null
+
+  const handleExit = () => {
+    if (returnTo && returnTo.startsWith('/')) {
+      navigate(returnTo, { replace: true })
       return
     }
     onExit()
@@ -75,7 +81,7 @@ export default function PlacementTestFlow({ onExit }: Props) {
               setResult(null)
               setStage('questions')
             }}
-            onExit={goToStudentHome}
+            onExit={handleExit}
           />
         </div>
       </div>
@@ -92,7 +98,7 @@ export default function PlacementTestFlow({ onExit }: Props) {
           setResult(null)
           setStage('intro')
         }}
-        onExit={goToStudentHome}
+        onExit={handleExit}
       />
     )
   }
@@ -121,7 +127,7 @@ export default function PlacementTestFlow({ onExit }: Props) {
               <LangSwitcher />
               <button
                 type="button"
-                onClick={goToStudentHome}
+                onClick={handleExit}
                 className="rounded-full border border-gray-200 px-4 py-2 text-sm font-semibold text-ink hover:bg-gray-50"
               >
                 {t('placement.exit')}
