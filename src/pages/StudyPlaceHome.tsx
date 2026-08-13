@@ -1,9 +1,11 @@
 import { useNavigate } from 'react-router-dom'
 import { Mic, Users } from 'lucide-react'
+import { useAuth } from '../auth/AuthContext'
 import ContinueSelfStudyCard from '../components/study/ContinueSelfStudyCard'
 import QuickActionCard from '../components/study/QuickActionCard'
 import UpcomingBookingsList from '../components/study/UpcomingBookingsList'
 import StudyStatCard from '../components/study/StudyStatCard'
+import MeetInvitesBanner from '../components/study/MeetInvitesBanner'
 import {
   mockSelfStudyProgress,
   mockSpeakingAvatars,
@@ -37,10 +39,14 @@ const sparkColors: Record<string, string> = {
 
 export default function StudyPlaceHome() {
   const navigate = useNavigate()
+  const { user } = useAuth()
   const selfStudy = mockSelfStudyProgress
+  const studentId = user?.role === 'student' ? user.id : null
 
   return (
     <div className="space-y-6">
+      {studentId ? <MeetInvitesBanner studentId={studentId} /> : null}
+
       <ContinueSelfStudyCard
         empty={!selfStudy}
         courseName={selfStudy?.courseName}

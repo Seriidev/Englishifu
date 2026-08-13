@@ -65,8 +65,6 @@ export default function StudyPlaceLayout() {
             fullName={student?.fullName ?? user?.fullName ?? 'Student'}
             cefrLevel={student?.cefrLevel}
             xp={mockStudyHeaderStats.xp}
-            streakDays={mockStudyHeaderStats.streakDays}
-            level={mockStudyHeaderStats.level}
             hasNotifications={mockStudyHeaderStats.hasNotifications}
             avatarUrl={user?.avatarUrl}
             isOnline

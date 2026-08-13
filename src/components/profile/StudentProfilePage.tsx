@@ -8,7 +8,6 @@ import {
   GraduationCap,
   LogOut,
   Pencil,
-  Share2,
   Flame,
 } from 'lucide-react'
 import { useAuth } from '../../auth/AuthContext'
@@ -102,28 +101,6 @@ export default function StudentProfilePage() {
       if (!result.ok) setAvatarError(result.error)
     } catch (err) {
       setAvatarError(err instanceof Error ? err.message : 'Upload failed')
-    }
-  }
-
-  const togglePublic = () => {
-    if (!isOwner || !user || user.role !== 'student') return
-    void updateStudent({
-      fullName: user.fullName,
-      handle: user.handle,
-      city: user.city,
-      headline: user.headline,
-      summary: user.summary,
-      avatarUrl: user.avatarUrl,
-      isPublicProfile: !user.isPublicProfile,
-    })
-  }
-
-  const shareProfile = async () => {
-    const url = `${window.location.origin}${studentPublicProfilePath(profile.handle)}`
-    try {
-      await navigator.clipboard.writeText(url)
-    } catch {
-      /* ignore */
     }
   }
 
@@ -276,61 +253,15 @@ export default function StudentProfilePage() {
 
             <div className="flex shrink-0 flex-wrap items-center gap-2 sm:justify-end">
               {isOwner ? (
-                <>
-                  <button
-                    type="button"
-                    onClick={() => navigate('/profile/edit')}
-                    className="inline-flex items-center gap-1.5 rounded-full border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-ink transition hover:bg-gray-50"
-                  >
-                    <Pencil className="h-3.5 w-3.5" aria-hidden />
-                    Edit Profile
-                  </button>
-                  {cefrLevel ? (
-                    <button
-                      type="button"
-                      onClick={() =>
-                        navigate('/placement', {
-                          state: {
-                            returnTo: studentPublicProfilePath(live.handle),
-                          },
-                        })
-                      }
-                      className="inline-flex items-center gap-1.5 rounded-full border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-muted transition hover:bg-gray-50"
-                    >
-                      Retake Placement
-                    </button>
-                  ) : null}
-                  <button
-                    type="button"
-                    onClick={togglePublic}
-                    className="inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white px-3 py-2 text-xs font-semibold text-muted"
-                    title="Toggle public profile"
-                  >
-                    Public
-                    <span
-                      className={`relative inline-flex h-5 w-9 items-center rounded-full transition ${
-                        live.isPublicProfile ? 'bg-brand' : 'bg-gray-300'
-                      }`}
-                    >
-                      <span
-                        className={`inline-block h-3.5 w-3.5 rounded-full bg-white transition ${
-                          live.isPublicProfile
-                            ? 'translate-x-4'
-                            : 'translate-x-1'
-                        }`}
-                      />
-                    </span>
-                  </button>
-                </>
+                <button
+                  type="button"
+                  onClick={() => navigate('/profile/edit')}
+                  className="inline-flex items-center gap-1.5 rounded-full border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-ink transition hover:bg-gray-50"
+                >
+                  <Pencil className="h-3.5 w-3.5" aria-hidden />
+                  Edit Profile
+                </button>
               ) : null}
-              <button
-                type="button"
-                onClick={() => void shareProfile()}
-                className="inline-flex items-center gap-1.5 rounded-full border border-gray-200 bg-white px-3 py-2 text-sm font-semibold text-muted transition hover:bg-gray-50"
-                aria-label="Copy profile link"
-              >
-                <Share2 className="h-4 w-4" aria-hidden />
-              </button>
             </div>
           </div>
 

@@ -1,13 +1,24 @@
 import { useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { GraduationCap, LogOut, Pencil, Briefcase, FileText, X } from 'lucide-react'
+import {
+  GraduationCap,
+  LogOut,
+  Pencil,
+  Briefcase,
+  FileText,
+  X,
+  Video,
+} from 'lucide-react'
 import { useAuth } from '../../auth/AuthContext'
 import { isTutorProfileComplete } from '../../types/user'
 import { getTutorProfileByHandle } from '../../mocks/tutorProfileMock'
+import { getStudentsForTutor } from '../../mocks/tutorStudentsMock'
+import type { TutorStudent } from '../../types/tutorStudent'
 import {
   getSessionUser,
   tutorProfilePath,
 } from '../../utils/authStorage'
+import { sendMeetInviteToMany } from '../../utils/meetLinks'
 import { normalizeCertifications } from '../../utils/certifications'
 import { fileToAvatarDataUrl } from '../../utils/avatarUpload'
 import AvatarUpload from '../profile/AvatarUpload'
@@ -15,7 +26,9 @@ import VerifiedBadge from '../profile/VerifiedBadge'
 import IncompleteProfileBanner from '../tutor/IncompleteProfileBanner'
 import CertificationsTab from './CertificationsTab'
 import ClassesTab from './ClassesTab'
+import CreateMeetModal from './CreateMeetModal'
 import KPITab from './KPITab'
+import StudentsTab from './StudentsTab'
 import TutorTabs, { type TutorTabId } from './TutorTabs'
 
 function normalizeHandle(h: string) {
@@ -29,6 +42,11 @@ export default function TutorProfilePage() {
   const [tab, setTab] = useState<TutorTabId>('classes')
   const [avatarError, setAvatarError] = useState<string | null>(null)
   const [resumeSentOpen, setResumeSentOpen] = useState(false)
+  const [meetModal, setMeetModal] = useState<{
+    open: boolean
+    student?: TutorStudent
+  }>({ open: false })
+  const [meetSentOpen, setMeetSentOpen] = useState(false)
 
   const routeHandle = normalizeHandle(handle)
   const rawSession = user ?? getSessionUser()
@@ -71,10 +89,15 @@ export default function TutorProfilePage() {
   const yearsOfExperience = isOwnProfile
     ? liveOwner?.yearsOfExperience
     : profile.yearsOfExperience
+  const hourlyRateUsd = isOwnProfile
+    ? liveOwner?.hourlyRateUsd
+    : profile.hourlyRateUsd
   const isPublic = liveOwner?.isPublicProfile ?? profile.isPublicProfile ?? true
   const certifications = normalizeCertifications(
     liveOwner?.certifications ?? profile.certifications,
   )
+  const students = getStudentsForTutor()
+  const tutorId = liveOwner?.id ?? profile.id
 
   if (!isPublic && !isOwnProfile) {
     return (
@@ -191,6 +214,22 @@ export default function TutorProfilePage() {
                     </button>
                   </p>
                 ) : null}
+                {typeof hourlyRateUsd === 'number' ? (
+                  <p className="mt-1.5 text-sm font-semibold text-ink">
+                    ${hourlyRateUsd}/hour
+                  </p>
+                ) : isOwnProfile ? (
+                  <p className="mt-1.5 text-sm text-muted">
+                    Set your hourly rate in{' '}
+                    <button
+                      type="button"
+                      onClick={() => navigate('/tutor/profile/edit')}
+                      className="font-semibold text-brand hover:underline"
+                    >
+                      Edit Profile
+                    </button>
+                  </p>
+                ) : null}
                 {aboutMe ? (
                   <p className="mt-3 max-w-xl text-sm leading-relaxed text-ink/90 sm:text-[15px]">
                     {aboutMe}
@@ -226,6 +265,16 @@ export default function TutorProfilePage() {
                   Edit Profile
                 </button>
               ) : null}
+              {isOwnProfile ? (
+                <button
+                  type="button"
+                  onClick={() => setMeetModal({ open: true })}
+                  className="inline-flex items-center gap-1.5 rounded-full border border-indigo-200 bg-indigo-50 px-4 py-2 text-sm font-semibold text-indigo-700 transition hover:bg-indigo-100"
+                >
+                  <Video className="h-4 w-4" aria-hidden />
+                  Create Google Meet
+                </button>
+              ) : null}
               <button
                 type="button"
                 onClick={() => setResumeSentOpen(true)}
@@ -243,6 +292,15 @@ export default function TutorProfilePage() {
               {tab === 'classes' ? (
                 <ClassesTab stats={profile.classesStats} />
               ) : null}
+              {tab === 'students' ? (
+                <StudentsTab
+                  students={students}
+                  canManage={isOwnProfile}
+                  onSendMeetLink={(student) =>
+                    setMeetModal({ open: true, student })
+                  }
+                />
+              ) : null}
               {tab === 'kpi' ? (
                 <KPITab kpis={profile.kpis} chart={profile.kpiChart} />
               ) : null}
@@ -253,6 +311,66 @@ export default function TutorProfilePage() {
           </div>
         </section>
       </main>
+
+      {meetModal.open && isOwnProfile ? (
+        <CreateMeetModal
+          students={students}
+          studentId={meetModal.student?.id}
+          studentName={meetModal.student?.fullName}
+          onClose={() => setMeetModal({ open: false })}
+          onSend={(meetLink, studentIds) => {
+            sendMeetInviteToMany(tutorId, fullName, studentIds, meetLink)
+            setMeetModal({ open: false })
+            setMeetSentOpen(true)
+          }}
+        />
+      ) : null}
+
+      {meetSentOpen ? (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 p-4"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="meet-sent-title"
+        >
+          <button
+            type="button"
+            className="absolute inset-0 cursor-default"
+            aria-label="Close dialog"
+            onClick={() => setMeetSentOpen(false)}
+          />
+          <div className="relative w-full max-w-sm rounded-3xl border border-gray-100 bg-white p-6 text-center shadow-xl">
+            <button
+              type="button"
+              onClick={() => setMeetSentOpen(false)}
+              className="absolute top-3 right-3 inline-flex h-8 w-8 items-center justify-center rounded-full text-muted transition hover:bg-gray-50 hover:text-ink"
+              aria-label="Close"
+            >
+              <X className="h-4 w-4" aria-hidden />
+            </button>
+            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-indigo-50 text-indigo-600">
+              <Video className="h-5 w-5" aria-hidden />
+            </div>
+            <h2
+              id="meet-sent-title"
+              className="mt-4 text-xl font-bold tracking-tight text-ink"
+            >
+              Link sent
+            </h2>
+            <p className="mt-2 text-sm leading-relaxed text-muted">
+              The Google Meet link was saved and will appear for the selected
+              students in Study Place.
+            </p>
+            <button
+              type="button"
+              onClick={() => setMeetSentOpen(false)}
+              className="mt-6 w-full rounded-full bg-brand px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-dark"
+            >
+              OK
+            </button>
+          </div>
+        </div>
+      ) : null}
 
       {resumeSentOpen ? (
         <div

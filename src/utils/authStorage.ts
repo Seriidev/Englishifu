@@ -251,6 +251,7 @@ export interface UpdateTutorProfileInput {
   position: TutorPosition
   aboutMe?: string
   yearsOfExperience?: number
+  hourlyRateUsd?: number
   avatarUrl?: string
   isPublicProfile?: boolean
   certifications?: TutorCertification[]
@@ -456,6 +457,10 @@ export function updateTutorProfile(
       input.yearsOfExperience !== undefined
         ? input.yearsOfExperience
         : existing.yearsOfExperience,
+    hourlyRateUsd:
+      input.hourlyRateUsd !== undefined
+        ? input.hourlyRateUsd
+        : existing.hourlyRateUsd,
     avatarUrl: input.avatarUrl ?? existing.avatarUrl,
     isPublicProfile: input.isPublicProfile ?? existing.isPublicProfile,
     certifications:

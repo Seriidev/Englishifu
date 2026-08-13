@@ -78,7 +78,7 @@ export const mockTutorListings: TutorListingCard[] = names.map(
       languages: langs,
       rating: Math.min(5, rating),
       reviewsCount: 12 + i * 7,
-      pricePerHour: 18 + (i % 10) * 4,
+      pricePerHour: 20 + (i % 10) * 4,
     }
   },
 )

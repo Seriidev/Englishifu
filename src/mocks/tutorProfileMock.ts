@@ -86,6 +86,7 @@ export const mockTutorProfile: TutorPublicProfile = {
   aboutMe:
     "I've been teaching English for over 5 years, specializing in TOEFL Speaking and Business English. My approach is practice-first: short drills, clear feedback, and real conversation. Students often say lessons feel like coaching, not lectures — and that's exactly the goal.",
   yearsOfExperience: 5,
+  hourlyRateUsd: 45,
   certifications: [
     { id: 'cert-tefl', name: 'TEFL' },
     { id: 'cert-celta', name: 'CELTA' },
@@ -152,6 +153,7 @@ function fromRegisteredTutor(tutor: PublicTutor): TutorPublicProfile {
       tutor.aboutMe?.trim() ||
       'This tutor is still finishing their profile. Check back soon for a full bio, certifications, and teaching focus.',
     yearsOfExperience: tutor.yearsOfExperience ?? 0,
+    hourlyRateUsd: tutor.hourlyRateUsd,
     certifications: normalizeCertifications(tutor.certifications),
     isPublicProfile: tutor.isPublicProfile ?? true,
     dailyStreak: tutor.dailyStreak ?? 0,

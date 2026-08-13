@@ -50,6 +50,8 @@ export interface TutorProfile extends BaseUser {
   dailyStreak: number
   /** Filled on Complete Profile step / shown as Summary */
   yearsOfExperience?: number
+  /** Hourly lesson rate in USD — minimum $20 */
+  hourlyRateUsd?: number
   certifications?: TutorCertification[]
   aboutMe?: string
 }

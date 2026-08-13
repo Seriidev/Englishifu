@@ -22,6 +22,7 @@ export default function EditTutorProfileForm() {
         fullName: '',
         position: 'Teacher',
         yearsOfExperience: '',
+        hourlyRateUsd: '',
         certifications: [],
       }
     }
@@ -30,6 +31,8 @@ export default function EditTutorProfileForm() {
       position: user.position,
       yearsOfExperience:
         user.yearsOfExperience !== undefined ? user.yearsOfExperience : '',
+      hourlyRateUsd:
+        user.hourlyRateUsd !== undefined ? user.hourlyRateUsd : '',
       aboutMe: user.aboutMe ?? '',
       certifications: normalizeCertifications(user.certifications),
     }
@@ -64,6 +67,7 @@ export default function EditTutorProfileForm() {
       fullName: form.fullName.trim(),
       position: form.position as TutorPosition,
       yearsOfExperience: Number(form.yearsOfExperience),
+      hourlyRateUsd: Number(form.hourlyRateUsd),
       aboutMe: form.aboutMe?.trim(),
       avatarUrl: user.avatarUrl,
       isPublicProfile: user.isPublicProfile,
@@ -185,6 +189,41 @@ export default function EditTutorProfileForm() {
               {errors.yearsOfExperience ? (
                 <p className={errorClass}>{errors.yearsOfExperience}</p>
               ) : null}
+            </div>
+
+            <div>
+              <label className={labelClass} htmlFor="tutor-edit-rate">
+                Hourly rate (USD) *
+              </label>
+              <div className="relative">
+                <span className="pointer-events-none absolute top-1/2 left-4 -translate-y-1/2 text-sm font-semibold text-muted">
+                  $
+                </span>
+                <input
+                  id="tutor-edit-rate"
+                  type="number"
+                  min={20}
+                  max={500}
+                  step={1}
+                  inputMode="numeric"
+                  className={`${fieldClass} pl-8`}
+                  value={form.hourlyRateUsd === '' ? '' : form.hourlyRateUsd}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                    setField(
+                      'hourlyRateUsd',
+                      e.target.value === '' ? '' : Number(e.target.value),
+                    )
+                  }
+                  placeholder="20"
+                />
+              </div>
+              {errors.hourlyRateUsd ? (
+                <p className={errorClass}>{errors.hourlyRateUsd}</p>
+              ) : (
+                <p className="mt-1.5 text-xs text-muted">
+                  Minimum $20 per hour. Students will see this on your profile.
+                </p>
+              )}
             </div>
 
             <div>

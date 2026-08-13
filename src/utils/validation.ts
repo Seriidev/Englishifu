@@ -134,6 +134,7 @@ export interface TutorEditProfileFormData {
   fullName: string
   position: string
   yearsOfExperience: number | ''
+  hourlyRateUsd: number | ''
   aboutMe?: string
   certifications: TutorCertification[]
 }
@@ -154,6 +155,15 @@ export function validateTutorEditProfileForm(
     errors.yearsOfExperience = 'Enter years of experience'
   } else if (Number(years) < 0 || Number(years) > 60) {
     errors.yearsOfExperience = 'Enter a number between 0 and 60'
+  }
+
+  const rate = data.hourlyRateUsd
+  if (rate === '' || rate === undefined || Number.isNaN(Number(rate))) {
+    errors.hourlyRateUsd = 'Enter your hourly rate'
+  } else if (Number(rate) < 20) {
+    errors.hourlyRateUsd = 'Minimum rate is $20 per hour'
+  } else if (Number(rate) > 500) {
+    errors.hourlyRateUsd = 'Enter a rate of $500 or less'
   }
 
   return errors

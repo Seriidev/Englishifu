@@ -1,4 +1,4 @@
-export type TutorTabId = 'classes' | 'kpi' | 'certifications'
+export type TutorTabId = 'classes' | 'students' | 'kpi' | 'certifications'
 
 interface TabDef {
   id: TutorTabId
@@ -12,6 +12,7 @@ interface TutorTabsProps {
 
 const tabs: TabDef[] = [
   { id: 'classes', label: 'Classes' },
+  { id: 'students', label: 'Students' },
   { id: 'kpi', label: 'KPI' },
   { id: 'certifications', label: 'Certifications' },
 ]

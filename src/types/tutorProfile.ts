@@ -33,6 +33,8 @@ export interface TutorPublicProfile {
   avatarUrl?: string
   aboutMe: string
   yearsOfExperience: number
+  /** Hourly lesson rate in USD */
+  hourlyRateUsd?: number
   certifications: TutorCertification[]
   isPublicProfile: boolean
   dailyStreak: number

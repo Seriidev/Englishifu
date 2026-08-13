@@ -1,4 +1,4 @@
-import { Bell, Flame, Star, Trophy, User } from 'lucide-react'
+import { Bell, Star, User } from 'lucide-react'
 import type { CefrLevel } from '../../types/cefr'
 import CefrLevelBadge from '../profile/CefrLevelBadge'
 
@@ -6,8 +6,6 @@ export interface StudyPlaceHeaderProps {
   fullName: string
   cefrLevel?: CefrLevel
   xp: number
-  streakDays: number
-  level: number
   hasNotifications: boolean
   avatarUrl?: string
   isOnline?: boolean
@@ -17,8 +15,6 @@ export default function StudyPlaceHeader({
   fullName,
   cefrLevel,
   xp,
-  streakDays,
-  level,
   hasNotifications,
   avatarUrl,
   isOnline = true,
@@ -38,14 +34,6 @@ export default function StudyPlaceHeader({
         <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-200 bg-amber-50 px-3 py-1.5 text-sm font-medium text-slate-700 dark:border-amber-900/60 dark:bg-amber-950/50 dark:text-slate-200">
           <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-500" aria-hidden />
           {xp} XP
-        </span>
-        <span className="inline-flex items-center gap-1.5 rounded-full border border-orange-200 bg-orange-50 px-3 py-1.5 text-sm font-medium text-slate-700 dark:border-orange-900/60 dark:bg-orange-950/50 dark:text-slate-200">
-          <Flame className="h-3.5 w-3.5 text-orange-500" aria-hidden />
-          {streakDays} Day Streak
-        </span>
-        <span className="inline-flex items-center gap-1.5 rounded-full border border-purple-200 bg-purple-50 px-3 py-1.5 text-sm font-medium text-slate-700 dark:border-purple-900/60 dark:bg-purple-950/50 dark:text-slate-200">
-          <Trophy className="h-3.5 w-3.5 text-purple-500" aria-hidden />
-          Level {level}
         </span>
 
         <button
