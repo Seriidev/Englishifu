@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom'
-import { Heart, Star, User } from 'lucide-react'
+import { Star, User } from 'lucide-react'
+import { MdVerified } from 'react-icons/md'
 import type { TutorListingCard } from '../../../types/tutorListing'
-import VerifiedBadge from '../../profile/VerifiedBadge'
+import { StatusBadge } from '../../shared/StatusBadge'
 
 export interface TutorCardProps {
   tutor: TutorListingCard
@@ -10,163 +11,115 @@ export interface TutorCardProps {
   viewMode?: 'grid' | 'list'
 }
 
-const statusColor = {
-  online: 'bg-green-500',
-  busy: 'bg-red-500',
-  away: 'bg-slate-400',
-} as const
+function photoUrl(url?: string) {
+  if (!url) return undefined
+  return url.replace(/\/\d+(\?|$)/, '/480$1')
+}
 
-const statusLabel = {
-  online: 'Online',
-  busy: 'Busy',
-  away: 'Away',
-} as const
-
-export default function TutorCard({
+function TutorPhoto({
   tutor,
-  onFavorite,
-  isFavorited,
-  viewMode = 'grid',
-}: TutorCardProps) {
-  if (viewMode === 'list') {
+  className,
+}: {
+  tutor: TutorListingCard
+  className: string
+}) {
+  const src = photoUrl(tutor.avatarUrl)
+  if (src) {
     return (
-      <article className="flex flex-col gap-4 rounded-2xl border border-slate-100 bg-white p-4 transition hover:shadow-md sm:flex-row sm:items-center sm:p-5">
-        <div className="flex min-w-0 flex-1 items-center gap-4">
-          <div className="relative shrink-0">
-            {tutor.avatarUrl ? (
-              <img
-                src={tutor.avatarUrl}
-                alt=""
-                className="h-14 w-14 rounded-full object-cover"
-              />
-            ) : (
-              <span className="flex h-14 w-14 items-center justify-center rounded-full bg-indigo-50 text-indigo-500">
-                <User className="h-6 w-6" aria-hidden />
-              </span>
-            )}
-            <span
-              className={`absolute right-0 bottom-0 h-3 w-3 rounded-full ring-2 ring-white ${statusColor[tutor.availabilityStatus]}`}
-            />
-          </div>
-          <div className="min-w-0">
-            <div className="flex flex-wrap items-center gap-1.5">
-              <h3 className="font-semibold text-slate-900">{tutor.fullName}</h3>
-              {tutor.isVerified ? <VerifiedBadge size="md" /> : null}
-            </div>
-            <p className="text-sm text-slate-500">{tutor.positionLabel}</p>
-            <div className="mt-1.5 flex flex-wrap gap-1.5">
-              {tutor.specialtyTags.map((tag) => (
-                <span
-                  key={tag}
-                  className="rounded-full bg-indigo-50 px-2 py-0.5 text-xs text-indigo-600"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
-        <div className="flex flex-wrap items-center gap-3 sm:justify-end">
-          <span className="inline-flex items-center gap-1 text-sm text-slate-700">
-            <Star
-              className="h-3.5 w-3.5 fill-amber-400 text-amber-400"
-              aria-hidden
-            />
-            {tutor.rating} ({tutor.reviewsCount})
-          </span>
-          <span className="text-sm font-semibold text-slate-900">
-            ${tutor.pricePerHour}/hour
-          </span>
-          <button
-            type="button"
-            onClick={onFavorite}
-            className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-slate-100"
-            aria-label={isFavorited ? 'Remove favorite' : 'Add favorite'}
-          >
-            <Heart
-              className={`h-4 w-4 ${isFavorited ? 'fill-red-400 text-red-400' : 'text-slate-300'}`}
-              aria-hidden
-            />
-          </button>
-          <Link
-            to={`/study/tutors/${tutor.handle}`}
-            className="rounded-xl bg-indigo-500 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-indigo-600"
-          >
-            View Profile & Book
-          </Link>
-        </div>
-      </article>
+      <img src={src} alt="" className={`object-cover object-top ${className}`} />
     )
   }
+  return (
+    <span
+      className={`flex items-center justify-center bg-slate-100 text-slate-400 ${className}`}
+    >
+      <User className="h-12 w-12" aria-hidden />
+    </span>
+  )
+}
+
+function TutorCardBody({ tutor }: { tutor: TutorListingCard }) {
+  const tags = tutor.specialtyTags.slice(0, 2)
 
   return (
-    <article className="flex flex-col items-center rounded-2xl border border-slate-100 bg-white p-5 text-center transition hover:shadow-md">
-      <div className="mb-2 flex w-full items-center justify-between">
-        <span className="flex items-center gap-1.5 text-xs text-slate-500">
-          <span
-            className={`h-2 w-2 rounded-full ${statusColor[tutor.availabilityStatus]}`}
-          />
-          {statusLabel[tutor.availabilityStatus]}
-        </span>
-        <button
-          type="button"
-          onClick={onFavorite}
-          aria-label={isFavorited ? 'Remove favorite' : 'Add favorite'}
-        >
-          <Heart
-            className={`h-4 w-4 ${isFavorited ? 'fill-red-400 text-red-400' : 'text-slate-300'}`}
-            aria-hidden
-          />
-        </button>
+    <>
+      <div className="flex items-start justify-between gap-2">
+        <div className="min-w-0">
+          <div className="flex min-w-0 items-center gap-1.5">
+            <h3 className="truncate text-base font-bold text-slate-900">
+              {tutor.fullName}
+            </h3>
+            {tutor.isVerified ? (
+              <MdVerified
+                className="h-5 w-5 shrink-0 text-indigo-500"
+                title="Verified"
+                aria-label="Verified"
+              />
+            ) : null}
+          </div>
+          <p className="mt-0.5 text-sm text-slate-500">{tutor.positionLabel}</p>
+        </div>
+        <StatusBadge status={tutor.availabilityStatus} />
       </div>
 
-      {tutor.avatarUrl ? (
-        <img
-          src={tutor.avatarUrl}
-          alt=""
-          className="mb-3 h-16 w-16 rounded-full object-cover"
-        />
-      ) : (
-        <span className="mb-3 flex h-16 w-16 items-center justify-center rounded-full bg-indigo-50 text-indigo-500">
-          <User className="h-7 w-7" aria-hidden />
-        </span>
-      )}
-
-      <div className="mb-0.5 flex items-center gap-1">
-        <span className="font-semibold text-slate-900">{tutor.fullName}</span>
-        {tutor.isVerified ? <VerifiedBadge size="md" /> : null}
-      </div>
-      <p className="mb-3 text-sm text-slate-500">{tutor.positionLabel}</p>
-
-      <div className="mb-3 flex flex-wrap justify-center gap-1.5">
-        {tutor.specialtyTags.map((tag) => (
+      <div className="mt-3 flex flex-wrap gap-1.5">
+        {tags.map((tag) => (
           <span
             key={tag}
-            className="rounded-full bg-indigo-50 px-2 py-0.5 text-xs text-indigo-600"
+            className="rounded-full border border-slate-800/80 bg-white px-2.5 py-0.5 text-[11px] font-medium text-slate-900"
           >
             {tag}
           </span>
         ))}
       </div>
 
-      <div className="mb-4 flex flex-wrap items-center justify-center gap-2 text-sm text-slate-700">
-        <span className="flex items-center gap-1">
+      <div className="mt-3 flex items-center justify-between gap-2 text-sm">
+        <span className="inline-flex items-center gap-1 text-slate-500">
           <Star
             className="h-3.5 w-3.5 fill-amber-400 text-amber-400"
             aria-hidden
           />
-          {tutor.rating} ({tutor.reviewsCount} reviews)
+          {tutor.rating.toFixed(1)} ({tutor.reviewsCount} reviews)
         </span>
-        <span className="text-slate-400">·</span>
-        <span className="font-medium">${tutor.pricePerHour}/hour</span>
+        <span className="shrink-0 font-medium text-slate-800">
+          $ {tutor.pricePerHour}/hour
+        </span>
       </div>
 
       <Link
         to={`/study/tutors/${tutor.handle}`}
-        className="w-full rounded-xl bg-indigo-500 py-2.5 text-center text-sm font-medium text-white transition hover:bg-indigo-600"
+        className="mt-4 block w-full rounded-[12px] bg-indigo-500 py-2.5 text-center text-sm font-bold text-white transition hover:bg-indigo-600"
       >
-        View Profile & Book
+        Book
       </Link>
+    </>
+  )
+}
+
+export default function TutorCard({
+  tutor,
+  viewMode = 'grid',
+}: TutorCardProps) {
+  if (viewMode === 'list') {
+    return (
+      <article className="flex overflow-hidden rounded-[24px] bg-white shadow-[0_10px_28px_rgba(0,0,0,0.12)] sm:flex-row">
+        <TutorPhoto
+          tutor={tutor}
+          className="h-44 w-full shrink-0 sm:h-auto sm:w-48 lg:w-56"
+        />
+        <div className="flex min-w-0 flex-1 flex-col p-4 sm:p-5">
+          <TutorCardBody tutor={tutor} />
+        </div>
+      </article>
+    )
+  }
+
+  return (
+    <article className="flex h-full flex-col overflow-hidden rounded-[24px] bg-white shadow-[0_10px_28px_rgba(0,0,0,0.12)]">
+      <TutorPhoto tutor={tutor} className="aspect-[5/4] w-full" />
+      <div className="flex flex-1 flex-col px-4 pt-3 pb-4">
+        <TutorCardBody tutor={tutor} />
+      </div>
     </article>
   )
 }

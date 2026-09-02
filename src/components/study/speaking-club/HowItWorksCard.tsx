@@ -32,7 +32,7 @@ export default function HowItWorksCard() {
               </span>
               <div>
                 <p className="text-sm font-semibold text-slate-800">
-                  <span className="text-indigo-500">{i + 1}. </span>
+                  <span className="text-indigo-600">{i + 1}. </span>
                   {step.title}
                 </p>
                 <p className="mt-0.5 text-xs text-slate-500">{step.body}</p>

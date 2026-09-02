@@ -65,7 +65,7 @@ export default function UpcomingBookingsList({
           <div className="mt-4 flex flex-wrap justify-center gap-2">
             <Link
               to="/study/tutors"
-              className="rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-700"
+              className="rounded-xl bg-indigo-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-600"
             >
               Browse Tutors
             </Link>
@@ -89,7 +89,7 @@ export default function UpcomingBookingsList({
         </h2>
         <Link
           to="/study/bookings"
-          className="text-sm font-semibold text-indigo-600 transition hover:text-indigo-700"
+          className="text-sm font-semibold text-indigo-600 transition hover:text-indigo-600"
         >
           View all bookings →
         </Link>
@@ -107,8 +107,8 @@ export default function UpcomingBookingsList({
               ? 'border border-orange-200 bg-white text-orange-700 hover:bg-orange-50'
               : 'bg-orange-500 text-white hover:bg-orange-600'
             : showDetails
-              ? 'border border-indigo-200 bg-white text-indigo-700 hover:bg-indigo-50'
-              : 'bg-indigo-600 text-white hover:bg-indigo-700'
+              ? 'border border-indigo-200 bg-white text-indigo-600 hover:bg-indigo-50'
+              : 'bg-indigo-500 text-white hover:bg-indigo-600'
 
           return (
             <li key={booking.id} className="relative flex gap-4 pb-6 last:pb-0">

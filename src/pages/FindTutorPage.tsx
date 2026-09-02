@@ -1,14 +1,14 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { LayoutGrid, List } from 'lucide-react'
 import TutorFiltersBar from '../components/study/tutors/TutorFiltersBar'
 import TutorCard from '../components/study/tutors/TutorCard'
 import TutorGridPagination from '../components/study/tutors/TutorGridPagination'
 import {
-  mockTutorListings,
   TUTOR_PRICE_PRESETS,
 } from '../mocks/tutorListingsMock'
-import type { TutorSortBy, TutorViewMode } from '../types/tutorListing'
+import type { TutorListingCard, TutorSortBy, TutorViewMode } from '../types/tutorListing'
+import { fetchApprovedTutors, fetchTutorReviews } from '../utils/platformApi'
 
 const PAGE_SIZE = 8
 const FAV_KEY = 'englishcore_tutor_favorites_v1'
@@ -31,6 +31,26 @@ export default function FindTutorPage() {
   const [params, setParams] = useSearchParams()
   const [favorites, setFavorites] = useState(() => loadFavorites())
   const [viewMode, setViewMode] = useState<TutorViewMode>('grid')
+  const [tutors, setTutors] = useState<TutorListingCard[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    let cancelled = false
+    setLoading(true)
+    void fetchApprovedTutors()
+      .then((rows) => {
+        if (!cancelled) setTutors(rows)
+      })
+      .catch(() => {
+        if (!cancelled) setTutors([])
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false)
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [])
 
   const page = Math.max(1, Number(params.get('page') ?? '1') || 1)
   const specialization = params.get('specialization') ?? ''
@@ -41,7 +61,7 @@ export default function FindTutorPage() {
   const sortBy = (params.get('sort') as TutorSortBy) || 'recommended'
 
   const filtered = useMemo(() => {
-    let list = [...mockTutorListings]
+    let list = [...tutors]
 
     if (specialization) {
       list = list.filter((t) => t.specialtyTags.includes(specialization))
@@ -92,7 +112,7 @@ export default function FindTutorPage() {
     }
 
     return list
-  }, [specialization, priceLabel, minRating, availability, language, sortBy])
+  }, [tutors, specialization, priceLabel, minRating, availability, language, sortBy])
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE))
   const safePage = Math.min(page, totalPages)
@@ -100,6 +120,54 @@ export default function FindTutorPage() {
     (safePage - 1) * PAGE_SIZE,
     safePage * PAGE_SIZE,
   )
+
+  const [liveRatings, setLiveRatings] = useState<
+    Record<string, { rating: number; reviewsCount: number }>
+  >({})
+
+  const pageHandlesKey = pageItems.map((t) => t.handle).join(',')
+
+  useEffect(() => {
+    let cancelled = false
+    const handles = pageHandlesKey ? pageHandlesKey.split(',') : []
+    void Promise.all(
+      handles.map(async (handle) => {
+        try {
+          const data = await fetchTutorReviews(handle)
+          return [
+            handle.toLowerCase(),
+            { rating: data.averageRating, reviewsCount: data.totalReviews },
+          ] as const
+        } catch {
+          return null
+        }
+      }),
+    ).then((entries) => {
+      if (cancelled) return
+      setLiveRatings((prev) => {
+        const next = { ...prev }
+        for (const entry of entries) {
+          if (!entry) continue
+          const [handle, stats] = entry
+          if (stats.reviewsCount > 0) next[handle] = stats
+        }
+        return next
+      })
+    })
+    return () => {
+      cancelled = true
+    }
+  }, [pageHandlesKey])
+
+  const displayItems: TutorListingCard[] = pageItems.map((tutor) => {
+    const live = liveRatings[tutor.handle.toLowerCase()]
+    if (!live) return tutor
+    return {
+      ...tutor,
+      rating: live.rating,
+      reviewsCount: live.reviewsCount,
+    }
+  })
 
   const setPage = (next: number) => {
     const n = new URLSearchParams(params)
@@ -164,16 +232,24 @@ export default function FindTutorPage() {
         </div>
       </div>
 
-      {pageItems.length === 0 ? (
+      {loading ? (
+        <div className="rounded-2xl border border-slate-100 bg-white px-6 py-12 text-center text-sm text-slate-500">
+          Loading tutors…
+        </div>
+      ) : pageItems.length === 0 ? (
         <div className="rounded-2xl border border-dashed border-slate-200 bg-white px-6 py-12 text-center">
-          <p className="font-semibold text-slate-900">No tutors match</p>
+          <p className="font-semibold text-slate-900">
+            {tutors.length === 0 ? 'No tutors yet' : 'No tutors match'}
+          </p>
           <p className="mt-1 text-sm text-slate-500">
-            Try resetting filters to see more results.
+            {tutors.length === 0
+              ? 'Approved teachers will appear here for students.'
+              : 'Try resetting filters to see more results.'}
           </p>
         </div>
       ) : viewMode === 'grid' ? (
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-          {pageItems.map((tutor) => (
+          {displayItems.map((tutor) => (
             <TutorCard
               key={tutor.id}
               tutor={tutor}
@@ -184,7 +260,7 @@ export default function FindTutorPage() {
         </div>
       ) : (
         <div className="space-y-3">
-          {pageItems.map((tutor) => (
+          {displayItems.map((tutor) => (
             <TutorCard
               key={tutor.id}
               tutor={tutor}

@@ -1,105 +1,122 @@
-import { useNavigate } from 'react-router-dom'
-import { Mic, Users } from 'lucide-react'
+import { useEffect, useMemo, useState } from 'react'
 import { useAuth } from '../auth/AuthContext'
-import ContinueSelfStudyCard from '../components/study/ContinueSelfStudyCard'
-import QuickActionCard from '../components/study/QuickActionCard'
-import UpcomingBookingsList from '../components/study/UpcomingBookingsList'
-import StudyStatCard from '../components/study/StudyStatCard'
+import { firstNameFromFullName } from '../utils/name'
 import MeetInvitesBanner from '../components/study/MeetInvitesBanner'
+import WelcomeBanner from '../components/study/home/WelcomeBanner'
+import FullTestSimulationCard from '../components/study/home/FullTestSimulationCard'
+import TestWeaknessCard from '../components/study/home/TestWeaknessCard'
+import SkillResultsRow from '../components/study/home/SkillResultsRow'
+import PracticeExercisesList from '../components/study/home/PracticeExercisesList'
+import DashboardTutors from '../components/study/home/DashboardTutors'
+import ToeflNewsCard from '../components/study/home/ToeflNewsCard'
+import DashboardSpeakingClubs from '../components/study/home/DashboardSpeakingClubs'
+import DashboardProgressCard from '../components/study/home/DashboardProgressCard'
+import { mockSpeakingClubSessions } from '../mocks/speakingClubMock'
 import {
-  mockSelfStudyProgress,
-  mockSpeakingAvatars,
+  mockPracticeExercises,
+  mockSkillResults,
   mockStudyStats,
-  mockTutorAvatars,
-  mockUpcomingBookings,
+  mockToeflNews,
+  mockWelcomeSlides,
 } from '../mocks/studyPlaceMock'
-
-function TutorIllustration() {
-  return (
-    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-indigo-100 text-indigo-600">
-      <Users className="h-6 w-6" aria-hidden />
-    </div>
-  )
-}
-
-function SpeakingIllustration() {
-  return (
-    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-orange-100 text-orange-600">
-      <Mic className="h-6 w-6" aria-hidden />
-    </div>
-  )
-}
-
-const sparkColors: Record<string, string> = {
-  words: '#8b5cf6',
-  lessons: '#3b82f6',
-  speaking: '#f97316',
-  accuracy: '#10b981',
-}
+import { loadFullTestResult } from '../scoring/overallScoring'
+import { buildTestAnalysis } from '../scoring/testAnalysis'
+import {
+  fetchPublicBanners,
+  fetchPublicNews,
+} from '../utils/adminPanelApi'
+import { fetchApprovedTutors } from '../utils/platformApi'
+import type { TutorListingCard } from '../types/tutorListing'
 
 export default function StudyPlaceHome() {
-  const navigate = useNavigate()
   const { user } = useAuth()
-  const selfStudy = mockSelfStudyProgress
   const studentId = user?.role === 'student' ? user.id : null
+  const firstName = firstNameFromFullName(user?.fullName ?? 'Student')
+  const [tutors, setTutors] = useState<TutorListingCard[]>([])
+  const clubs = mockSpeakingClubSessions.slice(0, 3)
+  const fullResult = useMemo(() => loadFullTestResult(), [])
+  const analysis = useMemo(() => buildTestAnalysis(fullResult), [fullResult])
+  const skillResults = fullResult
+    ? [
+        {
+          id: 'reading',
+          label: 'Reading',
+          score: fullResult.reading.bandScore.toFixed(1),
+        },
+        {
+          id: 'speaking',
+          label: 'Speaking',
+          score: fullResult.speaking.bandScore.toFixed(1),
+        },
+        {
+          id: 'writing',
+          label: 'Writing',
+          score: fullResult.writing.bandScore.toFixed(1),
+        },
+        {
+          id: 'listening',
+          label: 'Listening',
+          score: fullResult.listening.bandScore.toFixed(1),
+        },
+      ]
+    : mockSkillResults
+
+  const [bannerSlides, setBannerSlides] = useState(mockWelcomeSlides)
+  const [newsItems, setNewsItems] = useState(
+    mockToeflNews ? [mockToeflNews] : [],
+  )
+
+  useEffect(() => {
+    void fetchApprovedTutors()
+      .then((rows) => setTutors(rows.slice(0, 4)))
+      .catch(() => setTutors([]))
+    void fetchPublicBanners().then((banners) => {
+      if (!banners.length) return
+      setBannerSlides(
+        banners.map((b) => ({
+          id: String(b.id),
+          title: b.title,
+          body: b.subtitle || '',
+          backgroundColor: b.background_color || undefined,
+          imageUrl: b.image_url || undefined,
+          ctaLabel: b.cta_label || undefined,
+          ctaLink: b.cta_link || undefined,
+        })),
+      )
+    })
+    void fetchPublicNews().then((posts) => {
+      if (!posts.length) return
+      setNewsItems(
+        posts.map((p) => ({
+          id: String(p.id),
+          title: p.title,
+          excerpt: p.body.slice(0, 160),
+          body: p.body,
+          imageUrl: p.cover_image_url || undefined,
+        })),
+      )
+    })
+  }, [])
 
   return (
     <div className="space-y-6">
       {studentId ? <MeetInvitesBanner studentId={studentId} /> : null}
 
-      <ContinueSelfStudyCard
-        empty={!selfStudy}
-        courseName={selfStudy?.courseName}
-        unitLabel={selfStudy?.unitLabel}
-        progressPercent={selfStudy?.progressPercent}
-        estimatedMinutes={selfStudy?.estimatedMinutes}
-        onContinue={() => navigate('/toefl')}
-        onViewCourse={() => navigate('/toefl')}
-        onBrowseCourses={() => navigate('/toefl')}
-      />
+      <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_18.5rem] xl:grid-cols-[minmax(0,1fr)_20rem]">
+        <div className="space-y-5">
+          <WelcomeBanner firstName={firstName} slides={bannerSlides} />
+          <FullTestSimulationCard />
+          <SkillResultsRow results={skillResults} />
+          <PracticeExercisesList items={mockPracticeExercises} />
+        </div>
 
-      <div className="grid gap-4 md:grid-cols-2">
-        <QuickActionCard
-          illustration={<TutorIllustration />}
-          title="Find a Tutor"
-          description="Book 1:1 lessons with certified teachers tailored to your goals."
-          avatarStack={mockTutorAvatars}
-          metaText="24 tutors available"
-          metaColor="indigo"
-          ctaLabel="Browse tutors"
-          ctaPath="/study/tutors"
-          accentBg="bg-indigo-50/50"
-        />
-        <QuickActionCard
-          illustration={<SpeakingIllustration />}
-          title="Speaking Club"
-          description="Join live group sessions and practice real conversation."
-          avatarStack={mockSpeakingAvatars}
-          metaText="6 sessions this week"
-          metaColor="orange"
-          ctaLabel="View sessions"
-          ctaPath="/study/speaking-club"
-          accentBg="bg-orange-50/50"
-        />
-      </div>
-
-      <UpcomingBookingsList bookings={mockUpcomingBookings} />
-
-      <div className="grid grid-cols-2 gap-3 lg:grid-cols-4 lg:gap-4">
-        {mockStudyStats.map((stat) => (
-          <StudyStatCard
-            key={stat.id}
-            icon={stat.icon}
-            iconBg={stat.iconBg}
-            iconColor={stat.iconColor}
-            label={stat.label}
-            value={stat.value}
-            trend={stat.trend}
-            trendPositive={stat.trendPositive}
-            sparkline={stat.sparkline}
-            sparkStroke={sparkColors[stat.id]}
-          />
-        ))}
+        <div className="space-y-5">
+          <DashboardTutors tutors={tutors} />
+          <ToeflNewsCard news={newsItems} />
+          <DashboardSpeakingClubs sessions={clubs} />
+          <DashboardProgressCard stats={mockStudyStats} />
+          <TestWeaknessCard analysis={analysis} />
+        </div>
       </div>
     </div>
   )

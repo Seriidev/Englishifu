@@ -29,7 +29,11 @@ export default function LoginForm() {
     setSubmitting(false)
 
     if (!result.ok) {
-      setError(result.error)
+      setError(
+        result.error.includes('431')
+          ? `${result.error} Open site settings → clear cookies for this site, then try again.`
+          : result.error,
+      )
       return
     }
 

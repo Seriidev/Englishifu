@@ -1,4 +1,4 @@
-import { BrowserRouter, Navigate, Route, Routes, useNavigate, useParams } from 'react-router-dom'
+import { BrowserRouter, Navigate, Route, Routes, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import ScrollToTopButton from './components/ScrollToTopButton'
 import Hero from './components/Hero'
@@ -28,19 +28,44 @@ import StudentHomeRedirect from './routes/StudentHomeRedirect'
 import TutorDashboardRedirect from './components/dashboard/TutorDashboardRedirect'
 import CompleteProfileForm from './components/tutor/CompleteProfileForm'
 import TutorProfilePage from './components/tutor-profile/TutorProfilePage'
-import EditTutorProfileForm from './components/tutor-profile/EditTutorProfileForm'
 import StudentProfilePage from './components/profile/StudentProfilePage'
 import EditProfileForm from './components/profile/EditProfileForm'
 import ProtectedRoute from './routes/ProtectedRoute'
 import StudyPlaceLayout from './components/study/StudyPlaceLayout'
 import StudyPlaceHome from './pages/StudyPlaceHome'
-import StudyComingSoon from './pages/StudyComingSoon'
 import StudyBadgesPage from './pages/StudyBadgesPage'
+import StudyEssayPage from './pages/StudyEssayPage'
 import StudyCertificatesPage from './pages/StudyCertificatesPage'
 import FindTutorPage from './pages/FindTutorPage'
 import StudyTutorDetailPage from './pages/StudyTutorDetailPage'
 import SpeakingClubPage from './pages/SpeakingClubPage'
 import StudySettingsPage from './pages/StudySettingsPage'
+import StudyBookingsPage from './pages/StudyBookingsPage'
+import StudyLevelTestPage from './pages/StudyLevelTestPage'
+import StudyLeaderboardPage from './pages/StudyLeaderboardPage'
+import StudyVocabularyPage from './pages/StudyVocabularyPage'
+import StudyLibraryPage from './pages/StudyLibraryPage'
+import LibraryReaderPage from './pages/LibraryReaderPage'
+import AdminLayout from './pages/admin/AdminLayout'
+import AdminOverviewPage from './pages/admin/AdminOverviewPage'
+import AdminPendingTutorsPage from './pages/admin/AdminPendingTutorsPage'
+import AdminTutorsDirectoryPage from './pages/admin/AdminTutorsDirectoryPage'
+import AdminStudentsPage from './pages/admin/AdminStudentsPage'
+import AdminBannersPage from './pages/admin/AdminBannersPage'
+import AdminBooksPage from './pages/admin/AdminBooksPage'
+import AdminReferralsPage from './pages/admin/AdminReferralsPage'
+import AdminNewsPage from './pages/admin/AdminNewsPage'
+import AdminSpeakingClubPage from './pages/admin/AdminSpeakingClubPage'
+import AdminConsultationRequestsPage from './pages/admin/AdminConsultationRequestsPage'
+import AdminSendMessagePage from './pages/admin/AdminSendMessagePage'
+import TutorWorkspaceLayout from './components/tutor/TutorWorkspaceLayout'
+import TutorClassesPage from './pages/tutor/TutorClassesPage'
+import TutorStudentsPage from './pages/tutor/TutorStudentsPage'
+import TutorKpiPage from './pages/tutor/TutorKpiPage'
+import TutorCertificatesPage from './pages/tutor/TutorCertificatesPage'
+import TutorWorkspaceProfilePage from './pages/tutor/TutorWorkspaceProfilePage'
+import TutorBookingsInbox from './pages/tutor/TutorBookingsInbox'
+import TutorCreateMeetingPage from './pages/tutor/TutorCreateMeetingPage'
 import { readingMockConfig } from './mocks/readingMock'
 import { listeningMockConfig } from './mocks/listeningMock'
 import { writingMockConfig } from './mocks/writingMock'
@@ -132,6 +157,12 @@ function PlacementPage() {
   )
 }
 
+function SignupToStartRedirect() {
+  const [params] = useSearchParams()
+  const q = params.toString()
+  return <Navigate to={q ? `/start?${q}` : '/start'} replace />
+}
+
 function LegacyTutorProfileRedirect() {
   const { handle = '' } = useParams()
   return <Navigate to={`/tutor/profile/${handle}`} replace />
@@ -156,7 +187,7 @@ export default function App() {
         <Route path="/speaking" element={<SpeakingPage />} />
         <Route path="/writing" element={<WritingPage />} />
         <Route path="/start" element={<RoleSelector />} />
-        <Route path="/signup" element={<Navigate to="/start" replace />} />
+        <Route path="/signup" element={<SignupToStartRedirect />} />
         <Route path="/login" element={<LoginForm />} />
         <Route path="/signup/student" element={<SignupForm role="student" />} />
         <Route path="/signup/tutor" element={<SignupForm role="tutor" />} />
@@ -180,26 +211,16 @@ export default function App() {
           <Route path="tutors" element={<FindTutorPage />} />
           <Route path="tutors/:handle" element={<StudyTutorDetailPage />} />
           <Route path="speaking-club" element={<SpeakingClubPage />} />
-          <Route
-            path="progress"
-            element={
-              <StudyComingSoon
-                title="My Progress"
-                description="Detailed progress analytics are on the way."
-              />
-            }
-          />
+          <Route path="essay" element={<StudyEssayPage />} />
+          <Route path="progress" element={<Navigate to="/study/essay" replace />} />
           <Route path="badges" element={<StudyBadgesPage />} />
           <Route path="certificates" element={<StudyCertificatesPage />} />
-          <Route
-            path="bookings"
-            element={
-              <StudyComingSoon
-                title="Bookings"
-                description="Full booking management is coming soon."
-              />
-            }
-          />
+          <Route path="level-test" element={<StudyLevelTestPage />} />
+          <Route path="leaderboard" element={<StudyLeaderboardPage />} />
+          <Route path="vocabulary" element={<StudyVocabularyPage />} />
+          <Route path="library" element={<StudyLibraryPage />} />
+          <Route path="library/:bookId" element={<LibraryReaderPage />} />
+          <Route path="bookings" element={<StudyBookingsPage />} />
           <Route path="settings" element={<StudySettingsPage />} />
         </Route>
         <Route
@@ -211,6 +232,26 @@ export default function App() {
           }
         />
         <Route path="/profile/:handle" element={<StudentProfilePage />} />
+        <Route
+          path="/tutor"
+          element={
+            <ProtectedRoute requiredRole="tutor">
+              <TutorWorkspaceLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<TutorClassesPage />} />
+          <Route path="students" element={<TutorStudentsPage />} />
+          <Route path="bookings" element={<TutorBookingsInbox />} />
+          <Route path="kpi" element={<TutorKpiPage />} />
+          <Route path="certificates" element={<TutorCertificatesPage />} />
+          <Route path="library" element={<StudyLibraryPage />} />
+          <Route path="library/:bookId" element={<LibraryReaderPage />} />
+          <Route path="vocabulary" element={<StudyVocabularyPage />} />
+          <Route path="create-meeting" element={<TutorCreateMeetingPage />} />
+          <Route path="profile" element={<TutorWorkspaceProfilePage />} />
+          <Route path="settings" element={<StudySettingsPage />} />
+        </Route>
         <Route
           path="/tutor/dashboard"
           element={
@@ -229,14 +270,23 @@ export default function App() {
         />
         <Route
           path="/tutor/profile/edit"
-          element={
-            <ProtectedRoute requiredRole="tutor">
-              <EditTutorProfileForm />
-            </ProtectedRoute>
-          }
+          element={<Navigate to="/tutor/profile" replace />}
         />
         <Route path="/tutor/profile/:handle" element={<TutorProfilePage />} />
         <Route path="/tutors/:handle" element={<LegacyTutorProfileRedirect />} />
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route index element={<AdminOverviewPage />} />
+          <Route path="tutors" element={<AdminPendingTutorsPage />} />
+          <Route path="tutors/directory" element={<AdminTutorsDirectoryPage />} />
+          <Route path="students" element={<AdminStudentsPage />} />
+          <Route path="banners" element={<AdminBannersPage />} />
+          <Route path="books" element={<AdminBooksPage />} />
+          <Route path="referrals" element={<AdminReferralsPage />} />
+          <Route path="news" element={<AdminNewsPage />} />
+          <Route path="speaking-club" element={<AdminSpeakingClubPage />} />
+          <Route path="requests" element={<AdminConsultationRequestsPage />} />
+          <Route path="messages" element={<AdminSendMessagePage />} />
+        </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>

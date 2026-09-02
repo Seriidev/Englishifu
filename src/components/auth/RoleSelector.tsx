@@ -1,9 +1,12 @@
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { BookOpen, GraduationCap } from 'lucide-react'
 import AuthShell from './AuthShell'
 
 export default function RoleSelector() {
   const navigate = useNavigate()
+  const [params] = useSearchParams()
+  const q = params.toString()
+  const suffix = q ? `?${q}` : ''
 
   return (
     <AuthShell
@@ -13,7 +16,7 @@ export default function RoleSelector() {
       <div className="grid gap-3 sm:grid-cols-2">
         <button
           type="button"
-          onClick={() => navigate('/signup/student')}
+          onClick={() => navigate(`/signup/student${suffix}`)}
           className="flex flex-col items-start gap-3 rounded-2xl border border-gray-200 bg-white p-5 text-left transition hover:-translate-y-0.5 hover:border-brand/40 hover:shadow-md hover:shadow-brand/10"
         >
           <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-light text-brand">
@@ -29,7 +32,7 @@ export default function RoleSelector() {
 
         <button
           type="button"
-          onClick={() => navigate('/signup/tutor')}
+          onClick={() => navigate(`/signup/tutor${suffix}`)}
           className="flex flex-col items-start gap-3 rounded-2xl border border-gray-200 bg-white p-5 text-left transition hover:-translate-y-0.5 hover:border-brand/40 hover:shadow-md hover:shadow-brand/10"
         >
           <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-light text-brand">

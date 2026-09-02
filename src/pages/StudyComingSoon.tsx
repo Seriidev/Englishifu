@@ -20,9 +20,9 @@ export default function StudyComingSoon({
       </p>
       <Link
         to="/study"
-        className="mt-6 inline-flex rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-700"
+        className="mt-6 inline-flex rounded-xl bg-indigo-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-600"
       >
-        Back to Study Place
+        Back to Dashboard
       </Link>
     </section>
   )

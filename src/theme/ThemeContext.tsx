@@ -10,21 +10,20 @@ import {
 
 export type ThemeMode = 'light' | 'dark'
 
-const THEME_KEY = 'englishcore_theme_v1'
+const STORAGE_KEY = 'englishcore_theme'
 
-interface ThemeContextValue {
+type ThemeContextValue = {
   theme: ThemeMode
-  isDark: boolean
   setTheme: (theme: ThemeMode) => void
   toggleTheme: () => void
 }
 
 const ThemeContext = createContext<ThemeContextValue | null>(null)
 
-function readStoredTheme(): ThemeMode {
+function readTheme(): ThemeMode {
   try {
-    const raw = localStorage.getItem(THEME_KEY)
-    if (raw === 'dark' || raw === 'light') return raw
+    const stored = localStorage.getItem(STORAGE_KEY)
+    if (stored === 'dark' || stored === 'light') return stored
   } catch {
     /* ignore */
   }
@@ -32,14 +31,11 @@ function readStoredTheme(): ThemeMode {
 }
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setThemeState] = useState<ThemeMode>(() => readStoredTheme())
+  const [theme, setThemeState] = useState<ThemeMode>(readTheme)
 
   useEffect(() => {
-    // Dark mode is scoped to Study Place only — never tint the whole document / landing.
-    document.documentElement.classList.remove('dark')
-    document.documentElement.style.colorScheme = 'light'
     try {
-      localStorage.setItem(THEME_KEY, theme)
+      localStorage.setItem(STORAGE_KEY, theme)
     } catch {
       /* ignore */
     }
@@ -54,22 +50,17 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   }, [])
 
   const value = useMemo(
-    () => ({
-      theme,
-      isDark: theme === 'dark',
-      setTheme,
-      toggleTheme,
-    }),
+    () => ({ theme, setTheme, toggleTheme }),
     [theme, setTheme, toggleTheme],
   )
 
-  return (
-    <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
-  )
+  return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
 }
 
 export function useTheme() {
   const ctx = useContext(ThemeContext)
-  if (!ctx) throw new Error('useTheme must be used within ThemeProvider')
+  if (!ctx) {
+    throw new Error('useTheme must be used within ThemeProvider')
+  }
   return ctx
 }

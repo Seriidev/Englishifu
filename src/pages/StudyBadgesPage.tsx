@@ -37,9 +37,8 @@ export default function StudyBadgesPage() {
         Take the Level Test to unlock your CEFR rank badge.
       </p>
       <Link
-        to="/placement"
-        state={{ returnTo: '/study/badges' }}
-        className="mt-6 inline-flex rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-700"
+        to="/study/level-test"
+        className="mt-6 inline-flex rounded-xl bg-indigo-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-600"
       >
         Take Level Test
       </Link>

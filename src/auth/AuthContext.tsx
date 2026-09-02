@@ -9,8 +9,10 @@ import {
 } from 'react'
 import type { PublicUser } from '../types/user'
 import {
+  applyTutorServerStatus,
+  changePassword as changePasswordRequest,
   completeTutorProfile,
-  getSessionUser,
+  fetchSessionUser,
   loginUser,
   logoutSession,
   registerStudent,
@@ -25,9 +27,31 @@ import {
   type UpdateStudentProfileInput,
   type UpdateTutorProfileInput,
 } from '../utils/authStorage'
+import { clearApiToken, setApiToken, syncApiSession } from '../utils/bookingApi'
+import { fetchTutorMe } from '../utils/adminApi'
+
+async function syncTutorModeration(user: PublicUser) {
+  if (user.role !== 'tutor') return user
+  try {
+    await syncApiSession(user)
+    const me = await fetchTutorMe()
+    if (me?.status) {
+      return (
+        applyTutorServerStatus(
+          me.status as 'incomplete' | 'pending' | 'approved',
+          user,
+        ) ?? user
+      )
+    }
+  } catch {
+    /* offline */
+  }
+  return user
+}
 
 interface AuthContextValue {
   user: PublicUser | null
+  isLoading: boolean
   login: (
     email: string,
     password: string,
@@ -50,30 +74,61 @@ interface AuthContextValue {
   savePlacementResult: (
     input: SaveStudentPlacementInput,
   ) => Promise<{ ok: true; user: PublicUser } | { ok: false; error: string }>
-  logout: () => void
+  changePassword: (
+    currentPassword: string,
+    newPassword: string,
+  ) => Promise<{ ok: true; user: PublicUser } | { ok: false; error: string }>
+  refreshUser: () => Promise<PublicUser | null>
+  logout: () => Promise<void>
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null)
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<PublicUser | null>(() => getSessionUser())
+  const [user, setUser] = useState<PublicUser | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
 
-  // Re-hydrate after migrations / hard refresh
   useEffect(() => {
-    setUser(getSessionUser())
+    let cancelled = false
+    void (async () => {
+      const session = await fetchSessionUser()
+      if (cancelled) return
+      if (!session) {
+        setUser(null)
+        setIsLoading(false)
+        return
+      }
+      const next =
+        session.role === 'tutor'
+          ? await syncTutorModeration(session)
+          : session
+      if (!cancelled) {
+        setUser(next)
+        setIsLoading(false)
+      }
+    })()
+    return () => {
+      cancelled = true
+    }
   }, [])
 
   const login = useCallback(async (email: string, password: string) => {
     const result = await loginUser(email, password)
     if ('error' in result) return { ok: false as const, error: result.error }
-    setUser(result.user)
-    return { ok: true as const, user: result.user }
+    await syncApiSession(result.user)
+    const next =
+      result.user.role === 'tutor'
+        ? await syncTutorModeration(result.user)
+        : result.user
+    setUser(next)
+    return { ok: true as const, user: next }
   }, [])
 
   const registerAsStudent = useCallback(async (input: CreateStudentInput) => {
     const result = await registerStudent(input)
     if ('error' in result) return { ok: false as const, error: result.error }
     setUser(result.user)
+    void syncApiSession(result.user)
     return { ok: true as const, user: result.user }
   }, [])
 
@@ -81,6 +136,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const result = await registerTutor(input)
     if ('error' in result) return { ok: false as const, error: result.error }
     setUser(result.user)
+    void syncApiSession(result.user)
     return { ok: true as const, user: result.user }
   }, [])
 
@@ -89,9 +145,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (!user || user.role !== 'tutor') {
         return { ok: false as const, error: 'Not signed in as tutor' }
       }
-      const result = completeTutorProfile(user.id, input)
+      const result = await completeTutorProfile(user.id, input)
       if ('error' in result) return { ok: false as const, error: result.error }
       setUser(result.user)
+      void syncApiSession(result.user)
       return { ok: true as const, user: result.user }
     },
     [user],
@@ -102,7 +159,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (!user || user.role !== 'student') {
         return { ok: false as const, error: 'Not signed in as student' }
       }
-      const result = updateStudentProfile(user.id, input)
+      const result = await updateStudentProfile(user.id, input)
       if ('error' in result) return { ok: false as const, error: result.error }
       setUser(result.user)
       return { ok: true as const, user: result.user }
@@ -115,8 +172,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (!user || user.role !== 'tutor') {
         return { ok: false as const, error: 'Not signed in as tutor' }
       }
-      const result = updateTutorProfile(user.id, input)
+      const result = await updateTutorProfile(user.id, input)
       if ('error' in result) return { ok: false as const, error: result.error }
+      if (result.user.role !== 'tutor') {
+        return {
+          ok: false as const,
+          error: 'Could not save teacher profile. Please log in again.',
+        }
+      }
       setUser(result.user)
       return { ok: true as const, user: result.user }
     },
@@ -128,7 +191,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (!user || user.role !== 'student') {
         return { ok: false as const, error: 'Not signed in as student' }
       }
-      const result = saveStudentPlacementResult(user.id, input)
+      const result = await saveStudentPlacementResult(user.id, input)
       if ('error' in result) return { ok: false as const, error: result.error }
       setUser(result.user)
       return { ok: true as const, user: result.user }
@@ -136,14 +199,41 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     [user],
   )
 
-  const logout = useCallback(() => {
-    logoutSession()
+  const changePassword = useCallback(
+    async (currentPassword: string, newPassword: string) => {
+      if (!user) {
+        return { ok: false as const, error: 'Not signed in' }
+      }
+      const result = await changePasswordRequest(currentPassword, newPassword)
+      if ('error' in result) return { ok: false as const, error: result.error }
+      setUser(result.user)
+      return { ok: true as const, user: result.user }
+    },
+    [user],
+  )
+
+  const refreshUser = useCallback(async () => {
+    const session = await fetchSessionUser()
+    if (!session) return null
+    const next =
+      session.role === 'tutor'
+        ? await syncTutorModeration(session)
+        : session
+    setUser(next)
+    return next
+  }, [])
+
+  const logout = useCallback(async () => {
+    await logoutSession()
+    clearApiToken()
+    setApiToken(null)
     setUser(null)
   }, [])
 
   const value = useMemo(
     () => ({
       user,
+      isLoading,
       login,
       registerAsStudent,
       registerAsTutor,
@@ -151,10 +241,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       updateStudent,
       updateTutor,
       savePlacementResult,
+      changePassword,
+      refreshUser,
       logout,
     }),
     [
       user,
+      isLoading,
       login,
       registerAsStudent,
       registerAsTutor,
@@ -162,6 +255,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       updateStudent,
       updateTutor,
       savePlacementResult,
+      changePassword,
+      refreshUser,
       logout,
     ],
   )

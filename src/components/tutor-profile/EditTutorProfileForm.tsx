@@ -3,7 +3,6 @@ import { Link, useNavigate } from 'react-router-dom'
 import { GraduationCap } from 'lucide-react'
 import { useAuth } from '../../auth/AuthContext'
 import { TUTOR_POSITIONS, type TutorPosition } from '../../types/tutorProfile'
-import { tutorProfilePath } from '../../utils/authStorage'
 import { normalizeCertifications } from '../../utils/certifications'
 import {
   validateTutorEditProfileForm,
@@ -11,6 +10,8 @@ import {
 } from '../../utils/validation'
 import { errorClass, fieldClass, labelClass } from '../auth/formStyles'
 import CertificationUploadInput from '../tutor/CertificationUploadInput'
+import AvailabilitySettings from './AvailabilitySettings'
+import CreateSpeakingClubSessionForm from './CreateSpeakingClubSessionForm'
 
 export default function EditTutorProfileForm() {
   const { user, updateTutor } = useAuth()
@@ -20,6 +21,7 @@ export default function EditTutorProfileForm() {
     if (!user || user.role !== 'tutor') {
       return {
         fullName: '',
+        handle: '',
         position: 'Teacher',
         yearsOfExperience: '',
         hourlyRateUsd: '',
@@ -28,6 +30,7 @@ export default function EditTutorProfileForm() {
     }
     return {
       fullName: user.fullName,
+      handle: user.handle,
       position: user.position,
       yearsOfExperience:
         user.yearsOfExperience !== undefined ? user.yearsOfExperience : '',
@@ -50,7 +53,7 @@ export default function EditTutorProfileForm() {
     value: TutorEditProfileFormData[K],
   ) => setForm((prev) => ({ ...prev, [key]: value }))
 
-  const onCancel = () => navigate(tutorProfilePath(user.handle))
+  const onCancel = () => navigate('/tutor/profile')
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault()
@@ -65,6 +68,7 @@ export default function EditTutorProfileForm() {
     setSaving(true)
     const result = await updateTutor({
       fullName: form.fullName.trim(),
+      handle: form.handle.replace(/^@/, '').trim().toLowerCase(),
       position: form.position as TutorPosition,
       yearsOfExperience: Number(form.yearsOfExperience),
       hourlyRateUsd: Number(form.hourlyRateUsd),
@@ -80,9 +84,7 @@ export default function EditTutorProfileForm() {
       return
     }
 
-    const handle =
-      result.user.role === 'tutor' ? result.user.handle : user.handle
-    navigate(tutorProfilePath(handle))
+    navigate('/tutor/profile')
   }
 
   return (
@@ -143,8 +145,51 @@ export default function EditTutorProfileForm() {
             </div>
 
             <div>
+              <label className={labelClass} htmlFor="tutor-edit-handle">
+                Username *
+              </label>
+              <div className="relative">
+                <span className="pointer-events-none absolute top-1/2 left-4 -translate-y-1/2 text-muted">
+                  @
+                </span>
+                <input
+                  id="tutor-edit-handle"
+                  className={`${fieldClass} pl-8`}
+                  value={form.handle.replace(/^@/, '')}
+                  onChange={(e) =>
+                    setField(
+                      'handle',
+                      e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, ''),
+                    )
+                  }
+                  autoComplete="username"
+                />
+              </div>
+              {errors.handle ? (
+                <p className={errorClass}>{errors.handle}</p>
+              ) : null}
+            </div>
+
+            <div>
+              <label className={labelClass} htmlFor="tutor-edit-email">
+                Email
+              </label>
+              <input
+                id="tutor-edit-email"
+                className={`${fieldClass} bg-gray-100 text-muted`}
+                value={user.email}
+                readOnly
+                autoComplete="email"
+              />
+              <p className="mt-1.5 text-xs text-muted">
+                Used to log in. Change your password on your profile under
+                Account.
+              </p>
+            </div>
+
+            <div>
               <label className={labelClass} htmlFor="tutor-edit-position">
-                Position *
+                Specialization *
               </label>
               <select
                 id="tutor-edit-position"
@@ -249,6 +294,11 @@ export default function EditTutorProfileForm() {
             {submitError ? <p className={errorClass}>{submitError}</p> : null}
           </div>
         </form>
+
+        <div className="mt-8 space-y-8">
+          <AvailabilitySettings />
+          <CreateSpeakingClubSessionForm onCreated={() => undefined} />
+        </div>
       </main>
     </div>
   )

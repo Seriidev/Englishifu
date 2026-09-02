@@ -15,6 +15,7 @@ import {
   type SectionScore,
 } from '../../scoring/overallScoring'
 import { registerToeflTryOnce } from '../../utils/toeflTryCounter'
+import { saveTestResult } from '../../utils/adminPanelApi'
 
 type Phase = 'section' | 'transition' | 'break'
 
@@ -51,6 +52,17 @@ export default function FullTestOrchestrator() {
     (results: Record<FullTestSection, SectionScore>) => {
       const full = buildFullTestResult(results, startedAt)
       saveFullTestResult(full)
+      void saveTestResult({
+        testType: 'full-test',
+        overallBandScore: full.overallBandScore,
+        sectionScores: {
+          reading: full.reading,
+          listening: full.listening,
+          speaking: full.speaking,
+          writing: full.writing,
+        },
+        completedAt: full.completedAt,
+      })
       navigate('/results', { state: { result: full }, replace: true })
     },
     [navigate, startedAt],

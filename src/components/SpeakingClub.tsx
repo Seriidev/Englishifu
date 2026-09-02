@@ -1,13 +1,12 @@
 import { Calendar, Clock, Users, Sparkles } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 import { speakingClubMeetings } from '../data/speakingClub'
 import { useLanguage } from '../i18n/LanguageContext'
 
 export default function SpeakingClub() {
   const { t } = useLanguage()
-
-  const handleBook = (meetingTitle: string) => {
-    console.log('Book meeting:', meetingTitle)
-  }
+  const navigate = useNavigate()
+  const goSignup = () => navigate('/start')
 
   return (
     <section id="speaking-club" className="bg-transparent py-16 sm:py-20">
@@ -30,7 +29,7 @@ export default function SpeakingClub() {
 
           <button
             type="button"
-            onClick={() => console.log('Speaking Club')}
+            onClick={goSignup}
             className="inline-flex w-full shrink-0 items-center justify-center rounded-full bg-white/25 px-7 py-3 text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-white/35 sm:w-auto"
           >
             {t('club.button')}
@@ -78,7 +77,7 @@ export default function SpeakingClub() {
                     </span>
                     <button
                       type="button"
-                      onClick={() => handleBook(meeting.title)}
+                      onClick={goSignup}
                       className="rounded-full bg-brand px-5 py-2 text-sm font-semibold text-white transition hover:bg-brand-dark"
                     >
                       {t('club.book')}

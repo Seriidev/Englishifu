@@ -59,7 +59,7 @@ export default function ContinueSelfStudyCard({
             <button
               type="button"
               onClick={onBrowseCourses ?? onViewCourse}
-              className="mt-4 inline-flex items-center rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-700"
+              className="mt-4 inline-flex items-center rounded-xl bg-indigo-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-600"
             >
               Browse Courses
             </button>
@@ -106,7 +106,7 @@ export default function ContinueSelfStudyCard({
             <button
               type="button"
               onClick={onContinue}
-              className="inline-flex items-center justify-center rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-700"
+              className="inline-flex items-center justify-center rounded-xl bg-indigo-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-600"
             >
               Continue Learning →
             </button>

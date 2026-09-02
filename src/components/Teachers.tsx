@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { teachers } from '../data/teachers'
 import { useLanguage } from '../i18n/LanguageContext'
 
@@ -20,18 +21,19 @@ export default function Teachers() {
             </p>
           </div>
 
-          <a
-            href="#tutors"
+          <Link
+            to="/start"
             className="inline-flex w-fit shrink-0 items-center rounded-full border border-gray-200 bg-white px-5 py-2.5 text-sm font-semibold text-ink shadow-sm transition hover:bg-gray-50"
           >
             {t('teachers.badge')}
-          </a>
+          </Link>
         </div>
 
         <div className="mt-10 flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2 sm:mt-12 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {teachers.map((teacher) => (
-            <article
+            <Link
               key={teacher.id}
+              to="/start"
               className="group relative h-[400px] w-[min(78vw,260px)] shrink-0 snap-start overflow-hidden rounded-[1.75rem] sm:h-[440px] sm:w-[calc((100%-3rem)/4)] sm:min-w-[200px] lg:h-[480px]"
             >
               <img
@@ -57,7 +59,7 @@ export default function Teachers() {
                   </span>
                 </div>
               </div>
-            </article>
+            </Link>
           ))}
         </div>
       </div>

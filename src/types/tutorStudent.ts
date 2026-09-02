@@ -6,6 +6,8 @@ export interface TutorStudent {
   avatarUrl?: string
   handle: string
   cefrLevel?: CefrLevel
+  xp: number
+  canDailyBoost: boolean
   lessonsCompleted: number
   nextLessonDate?: string
   status: 'active' | 'paused'

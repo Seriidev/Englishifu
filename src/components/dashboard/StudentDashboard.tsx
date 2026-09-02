@@ -53,7 +53,7 @@ export default function StudentDashboard() {
             </Link>
             <button
               type="button"
-              onClick={logout}
+              onClick={() => void logout()}
               className="inline-flex items-center gap-1.5 rounded-full border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-muted transition hover:bg-gray-50"
             >
               <LogOut className="h-4 w-4" aria-hidden />

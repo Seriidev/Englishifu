@@ -1,4 +1,4 @@
-export type ProfileTabId = 'learning'
+export type ProfileTabId = 'learning' | 'account'
 
 interface TabDef {
   id: ProfileTabId
@@ -8,10 +8,18 @@ interface TabDef {
 interface ProfileTabsProps {
   active: ProfileTabId
   onChange: (id: ProfileTabId) => void
+  showAccount?: boolean
 }
 
-export default function ProfileTabs({ active, onChange }: ProfileTabsProps) {
-  const tabs: TabDef[] = [{ id: 'learning', label: 'Learning Progress' }]
+export default function ProfileTabs({
+  active,
+  onChange,
+  showAccount = false,
+}: ProfileTabsProps) {
+  const tabs: TabDef[] = [
+    { id: 'learning', label: 'Learning Progress' },
+    ...(showAccount ? [{ id: 'account' as const, label: 'Account' }] : []),
+  ]
 
   return (
     <div

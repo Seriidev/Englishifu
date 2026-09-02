@@ -1,6 +1,12 @@
 import type { WritingRubricScores, WritingTask } from '../components/writing/types'
+import type {
+  WritingAiTaskType,
+  WritingRubricScore,
+} from '../types/aiRubric'
 
-/** Placeholder LLM rubric prompt for future backend scoring */
+export type { WritingRubricScore }
+
+/** Placeholder LLM rubric prompt (kept for docs / offline reference) */
 export const WRITING_LLM_RUBRIC_PROMPT = `
 Score the TOEFL Writing response on four dimensions (0-5 each):
 1) Grammar — accuracy of sentence structure and morphology
@@ -9,6 +15,46 @@ Score the TOEFL Writing response on four dimensions (0-5 each):
 4) Coherence — clarity of ideas and cohesion devices
 Return JSON: { grammar, vocabulary, organization, coherence, feedback }
 `.trim()
+
+/**
+ * Calls Vercel `/api/score-writing` (Claude). Requires ANTHROPIC_API_KEY on the server.
+ */
+export async function scoreWritingWithAI(
+  taskType: WritingAiTaskType | string,
+  prompt: string,
+  studentResponse: string,
+): Promise<WritingRubricScore> {
+  const response = await fetch('/api/score-writing', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ taskType, prompt, studentResponse }),
+  })
+  if (!response.ok) {
+    const detail = await response.text().catch(() => '')
+    throw new Error(detail || 'Scoring failed')
+  }
+  return response.json() as Promise<WritingRubricScore>
+}
+
+/** Map AI rubric dimensions to a single 0–5 task score for band aggregation. */
+export function taskScoreFromWritingRubric(score: WritingRubricScore): number {
+  const avg =
+    (score.grammar +
+      score.vocabulary +
+      score.organization +
+      score.taskAchievement) /
+    4
+  return Math.max(0, Math.min(5, Math.round(avg)))
+}
+
+/** Length-based heuristic when AI scoring is unavailable (local / misconfigured). */
+export function heuristicWritingScore(text: string, minWords = 60): number {
+  const words = text.trim().split(/\s+/).filter(Boolean).length
+  if (words >= minWords + 40) return 4
+  if (words >= minWords) return 3
+  if (words > 0) return 2
+  return 0
+}
 
 export function scoreBuildSentence(
   assembled: string[],

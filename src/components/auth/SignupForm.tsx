@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { Eye, EyeOff } from 'lucide-react'
 import { useAuth } from '../../auth/AuthContext'
 import type { UserRole } from '../../types/user'
@@ -17,6 +17,8 @@ interface SignupFormProps {
 
 export default function SignupForm({ role }: SignupFormProps) {
   const navigate = useNavigate()
+  const [search] = useSearchParams()
+  const referralCode = (search.get('ref') || '').trim()
   const { registerAsStudent, registerAsTutor } = useAuth()
   const [fullName, setFullName] = useState('')
   const [email, setEmail] = useState('')
@@ -25,6 +27,7 @@ export default function SignupForm({ role }: SignupFormProps) {
   const [errors, setErrors] = useState<SignupValidationErrors>({})
   const [submitError, setSubmitError] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
+  const [marketingOptIn, setMarketingOptIn] = useState(false)
 
   const isStudent = role === 'student'
 
@@ -41,6 +44,8 @@ export default function SignupForm({ role }: SignupFormProps) {
       fullName: fullName.trim(),
       email: email.trim(),
       password,
+      referralCode: referralCode || undefined,
+      marketingOptIn,
     }
     const result = isStudent
       ? await registerAsStudent(payload)
@@ -140,6 +145,27 @@ export default function SignupForm({ role }: SignupFormProps) {
           ) : null}
         </div>
 
+        {referralCode ? (
+          <p className="rounded-xl bg-indigo-50 px-3 py-2 text-xs text-indigo-700">
+            Invited with code {referralCode}. Rewards unlock after the first
+            completed lesson.
+          </p>
+        ) : null}
+
+        <label className="flex items-start gap-2 text-sm text-muted">
+          <input
+            type="checkbox"
+            className="mt-1"
+            checked={marketingOptIn}
+            onChange={(e) => setMarketingOptIn(e.target.checked)}
+          />
+          <span>
+            I agree to receive optional emails about courses, admissions help,
+            and offers. You can unsubscribe anytime. In-app notifications still
+            work without this.
+          </span>
+        </label>
+
         {submitError ? <p className={errorClass}>{submitError}</p> : null}
 
         <button type="submit" className={primaryBtnClass} disabled={submitting}>
@@ -149,7 +175,11 @@ export default function SignupForm({ role }: SignupFormProps) {
         <p className="text-center text-sm text-muted">
           {isStudent ? 'Want to teach instead? ' : 'Want to learn instead? '}
           <Link
-            to={isStudent ? '/signup/tutor' : '/signup/student'}
+            to={
+              isStudent
+                ? `/signup/tutor${referralCode ? `?ref=${encodeURIComponent(referralCode)}` : ''}`
+                : `/signup/student${referralCode ? `?ref=${encodeURIComponent(referralCode)}` : ''}`
+            }
             className="font-semibold text-brand hover:underline"
           >
             {isStudent ? 'Sign up as Tutor' : 'Sign up as Student'}

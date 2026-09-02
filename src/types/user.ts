@@ -4,7 +4,21 @@ export type UserRole = 'student' | 'tutor'
 
 export type TutorStatus = 'incomplete' | 'pending' | 'approved'
 
-export type TutorPosition = 'Teacher' | 'Speaker' | 'Specialist'
+export const TUTOR_POSITIONS = [
+  'Teacher',
+  'Speaker',
+  'Specialist',
+  'TOEFL',
+  'IELTS',
+  'Business English',
+  'Speaking',
+  'Writing',
+  'Academic English',
+  'Conversation',
+  'Pronunciation',
+] as const
+
+export type TutorPosition = (typeof TUTOR_POSITIONS)[number]
 
 export type { CefrLevel }
 
@@ -19,8 +33,8 @@ export interface BaseUser {
   id: string
   fullName: string
   email: string
-  /** SHA-256 hex — never store plain password */
-  passwordHash: string
+  /** @deprecated Server stores bcrypt hash; never returned to the client. */
+  passwordHash?: string
   role: UserRole
   createdAt: string
 }
@@ -37,6 +51,8 @@ export interface StudentProfile extends BaseUser {
   /** Set after Placement Test — student rank badge */
   cefrLevel?: CefrLevel
   placementCompletedAt?: string
+  /** Total XP from teacher boosts and lessons. */
+  xp?: number
 }
 
 export interface TutorProfile extends BaseUser {

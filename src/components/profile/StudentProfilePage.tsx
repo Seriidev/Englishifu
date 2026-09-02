@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import {
   BookOpen,
@@ -21,6 +21,7 @@ import {
   studentPublicProfilePath,
 } from '../../utils/authStorage'
 import { fileToAvatarDataUrl } from '../../utils/avatarUpload'
+import AccountPanel from './AccountPanel'
 import AvatarUpload from './AvatarUpload'
 import CefrLevelBadge from './CefrLevelBadge'
 import ProfileTabs, { type ProfileTabId } from './ProfileTabs'
@@ -28,17 +29,46 @@ import StatCard from './StatCard'
 
 export default function StudentProfilePage() {
   const { handle = '' } = useParams()
-  const { user, logout, updateStudent } = useAuth()
+  const { user, logout, updateStudent, isLoading: authLoading } = useAuth()
   const navigate = useNavigate()
   const [tab, setTab] = useState<ProfileTabId>('learning')
   const [avatarError, setAvatarError] = useState<string | null>(null)
+  const [stored, setStored] = useState<PublicStudent | null>(null)
+  const [profileLoading, setProfileLoading] = useState(true)
 
-  const stored = findStudentByHandle(handle) as PublicStudent | null
-  const profile =
-    user?.role === 'student' &&
-    user.handle.toLowerCase() === handle.replace(/^@/, '').toLowerCase()
-      ? user
-      : stored
+  const routeHandle = handle.replace(/^@/, '').trim().toLowerCase()
+  const isOwnRoute =
+    user?.role === 'student' && user.handle.toLowerCase() === routeHandle
+
+  useEffect(() => {
+    if (isOwnRoute) {
+      setStored(null)
+      setProfileLoading(false)
+      return
+    }
+    let cancelled = false
+    setProfileLoading(true)
+    void findStudentByHandle(routeHandle).then((found) => {
+      if (cancelled) return
+      setStored(found?.role === 'student' ? found : null)
+      setProfileLoading(false)
+    })
+    return () => {
+      cancelled = true
+    }
+  }, [routeHandle, isOwnRoute])
+
+  const profile: PublicStudent | null = isOwnRoute
+    ? (user as PublicStudent)
+    : stored
+
+  if (authLoading || profileLoading) {
+    return (
+      <div className="landing-shell flex min-h-svh items-center justify-center text-sm text-muted">
+        Loading…
+      </div>
+    )
+  }
 
   if (!profile) {
     return (
@@ -127,8 +157,7 @@ export default function StudentProfilePage() {
               <button
                 type="button"
                 onClick={() => {
-                  logout()
-                  navigate('/', { replace: true })
+                  void logout().then(() => navigate('/', { replace: true }))
                 }}
                 className="inline-flex items-center gap-1.5 rounded-full border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-muted transition hover:bg-gray-50"
               >
@@ -196,9 +225,11 @@ export default function StudentProfilePage() {
                 <p className="mt-0.5 text-sm font-semibold text-brand">
                   @{live.handle}
                 </p>
+                {isOwner ? (
+                  <p className="mt-1 text-sm text-muted">{live.email}</p>
+                ) : null}
                 <p className="mt-1.5 text-sm text-muted">
-                  {[live.headline, live.city].filter(Boolean).join(' · ') ||
-                    'Student on Englishcore'}
+                  {live.city || 'Student on Englishcore'}
                 </p>
                 <div className="mt-3 flex flex-wrap gap-2">
                   <div className="inline-flex items-center gap-1.5 rounded-full bg-orange-50 px-3 py-1.5 text-xs font-semibold text-ink">
@@ -266,7 +297,11 @@ export default function StudentProfilePage() {
           </div>
 
           <div className="mt-8">
-            <ProfileTabs active={tab} onChange={setTab} />
+            <ProfileTabs
+              active={tab}
+              onChange={setTab}
+              showAccount={isOwner}
+            />
 
             <div className="mt-5" role="tabpanel">
               {tab === 'learning' ? (
@@ -292,6 +327,9 @@ export default function StudentProfilePage() {
                     label="Tests Completed"
                   />
                 </div>
+              ) : null}
+              {tab === 'account' && isOwner ? (
+                <AccountPanel user={live} />
               ) : null}
             </div>
           </div>

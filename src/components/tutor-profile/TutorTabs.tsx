@@ -1,4 +1,10 @@
-export type TutorTabId = 'classes' | 'students' | 'kpi' | 'certifications'
+export type TutorTabId =
+  | 'classes'
+  | 'students'
+  | 'bookings'
+  | 'kpi'
+  | 'certifications'
+  | 'account'
 
 interface TabDef {
   id: TutorTabId
@@ -8,16 +14,26 @@ interface TabDef {
 interface TutorTabsProps {
   active: TutorTabId
   onChange: (id: TutorTabId) => void
+  showAccount?: boolean
 }
 
-const tabs: TabDef[] = [
+const baseTabs: TabDef[] = [
   { id: 'classes', label: 'Classes' },
   { id: 'students', label: 'Students' },
+  { id: 'bookings', label: 'Bookings' },
   { id: 'kpi', label: 'KPI' },
   { id: 'certifications', label: 'Certifications' },
 ]
 
-export default function TutorTabs({ active, onChange }: TutorTabsProps) {
+export default function TutorTabs({
+  active,
+  onChange,
+  showAccount = false,
+}: TutorTabsProps) {
+  const tabs = showAccount
+    ? [...baseTabs, { id: 'account' as const, label: 'Account' }]
+    : baseTabs
+
   return (
     <div
       className="flex gap-1 overflow-x-auto border-b border-gray-200 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"

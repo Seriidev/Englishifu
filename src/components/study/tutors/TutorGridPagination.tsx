@@ -54,7 +54,7 @@ export default function TutorGridPagination({
               onClick={() => onPageChange(p)}
               className={`inline-flex h-9 min-w-9 items-center justify-center rounded-lg px-2 text-sm font-semibold transition ${
                 p === page
-                  ? 'bg-indigo-600 text-white'
+                  ? 'bg-indigo-500 text-white'
                   : 'border border-slate-200 bg-white text-slate-600 hover:bg-slate-50'
               }`}
             >

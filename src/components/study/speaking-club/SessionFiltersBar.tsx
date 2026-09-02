@@ -6,7 +6,7 @@ import {
 } from '../../../mocks/speakingClubMock'
 
 const selectClass =
-  'rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 outline-none transition hover:border-slate-300 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100'
+  'rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 outline-none transition hover:border-slate-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200'
 
 export default function SessionFiltersBar() {
   const [params, setParams] = useSearchParams()
@@ -35,7 +35,7 @@ export default function SessionFiltersBar() {
             placeholder="Search sessions..."
             value={params.get('q') ?? ''}
             onChange={(e) => setKey('q', e.target.value)}
-            className="w-full rounded-xl border border-slate-200 bg-white py-2 pr-3 pl-9 text-sm text-slate-700 outline-none transition focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100"
+            className="w-full rounded-xl border border-slate-200 bg-white py-2 pr-3 pl-9 text-sm text-slate-700 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200"
           />
         </label>
 

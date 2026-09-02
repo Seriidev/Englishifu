@@ -132,6 +132,7 @@ export function hasEditProfileErrors(
 
 export interface TutorEditProfileFormData {
   fullName: string
+  handle: string
   position: string
   yearsOfExperience: number | ''
   hourlyRateUsd: number | ''
@@ -148,6 +149,13 @@ export function validateTutorEditProfileForm(
 ): TutorEditProfileValidationErrors {
   const errors: TutorEditProfileValidationErrors = {}
   if (!data.fullName?.trim()) errors.fullName = 'Full name is required'
+  const handle = data.handle?.replace(/^@/, '').trim().toLowerCase() ?? ''
+  if (!handle) {
+    errors.handle = 'Username is required'
+  } else if (!/^[a-z0-9_]{3,20}$/.test(handle)) {
+    errors.handle =
+      'Username must be 3-20 characters, lowercase letters, numbers, and underscores only'
+  }
   if (!data.position) errors.position = 'Please select a position'
 
   const years = data.yearsOfExperience
@@ -167,4 +175,11 @@ export function validateTutorEditProfileForm(
   }
 
   return errors
+}
+
+/** All required profile fields filled — Send resume can be enabled. */
+export function canSendTutorResume(data: TutorEditProfileFormData): boolean {
+  if (Object.keys(validateTutorEditProfileForm(data)).length > 0) return false
+  if ((data.aboutMe?.trim().length ?? 0) < 50) return false
+  return data.certifications.length >= 1
 }

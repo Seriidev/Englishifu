@@ -12,8 +12,16 @@ export default function ProtectedRoute({
   requiredRole,
   children,
 }: ProtectedRouteProps) {
-  const { user } = useAuth()
+  const { user, isLoading } = useAuth()
   const location = useLocation()
+
+  if (isLoading) {
+    return (
+      <div className="flex min-h-svh items-center justify-center bg-slate-50 text-sm text-slate-600">
+        Loading…
+      </div>
+    )
+  }
 
   if (!user) {
     return <Navigate to="/start" replace state={{ from: location.pathname }} />

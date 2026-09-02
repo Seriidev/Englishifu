@@ -1,21 +1,28 @@
 @import "tailwindcss";
 
-@custom-variant dark (&:where(.dark, .dark *));
+@custom-variant dark (&:where(.study-place.dark, .study-place.dark *));
 
 @theme {
-  --color-brand: #4f7cff;
-  --color-brand-dark: #3d6aef;
-  --color-brand-light: #e8efff;
-  --color-ink: #0b1b3d;
+  --color-brand: #6366f1;
+  --color-brand-dark: #4f46e5;
+  --color-brand-light: #e0e7ff;
+  --color-primary: #6366f1;
+  --color-primary-hover: #4f46e5;
+  --color-status-red: #ef4444;
+  --color-status-green: #22c55e;
+  --color-status-purple: #a855f7;
+  --color-status-orange: #f97316;
+  --color-ink: #0f172a;
   --color-muted: #64748b;
-  --color-mist: #f4f7fc;
-  --color-mist-blue: #e8f1ff;
+  --color-mist: #f8fafc;
+  --color-mist-blue: #eef2ff;
   --color-mist-lavender: #eef0ff;
   --font-sans: "Plus Jakarta Sans", sans-serif;
 }
 
 html {
   scroll-behavior: smooth;
+  color-scheme: light;
 }
 
 section[id] {
@@ -26,7 +33,7 @@ body {
   margin: 0;
   font-family: var(--font-sans);
   color: var(--color-ink);
-  background: #f4f7fc;
+  background: #f8fafc;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -54,61 +61,60 @@ input[type='number'] {
     linear-gradient(180deg, #f8faff 0%, #f4f7fc 40%, #f6f8fc 100%);
 }
 
-/* Study Place hub only — dark mode does not affect landing */
+.study-place {
+  --sp-bg: #f8fafc;
+  --sp-card: #ffffff;
+  --sp-border: #e2e8f0;
+  --sp-text: #0f172a;
+  --sp-muted: #64748b;
+  background-color: var(--sp-bg);
+  color: var(--sp-text);
+}
+
 .study-place.dark {
+  --sp-bg: #0f172a;
+  --sp-card: #1e293b;
+  --sp-border: #334155;
+  --sp-text: #f1f5f9;
+  --sp-muted: #94a3b8;
   color-scheme: dark;
+  --color-slate-50: #0f172a;
+  --color-slate-100: #1e293b;
+  --color-slate-200: #334155;
+  --color-slate-300: #475569;
 }
 
 .study-place.dark .bg-white {
-  background-color: rgb(30 41 59);
+  background-color: var(--sp-card);
 }
 
-.study-place.dark .bg-slate-50,
-.study-place.dark .bg-slate-50\/60,
-.study-place.dark .bg-slate-50\/80,
-.study-place.dark .bg-slate-50\/90 {
-  background-color: rgb(15 23 42);
+.study-place.dark .keep-white,
+.study-place.dark .bg-white.keep-white {
+  background-color: #ffffff;
+}
+
+.study-place.dark .text-slate-900,
+.study-place.dark .text-slate-800 {
+  color: var(--sp-text);
+}
+
+.study-place.dark .text-slate-700 {
+  color: #cbd5e1;
 }
 
 .study-place.dark .border-slate-100,
 .study-place.dark .border-slate-200 {
-  border-color: rgb(51 65 85);
+  border-color: var(--sp-border);
 }
 
-.study-place.dark .text-slate-900 {
-  color: rgb(248 250 252);
+.pill-accent {
+  background-color: #eef2ff;
+  color: #4f46e5;
 }
 
-.study-place.dark .text-slate-800,
-.study-place.dark .text-slate-700 {
-  color: rgb(226 232 240);
-}
-
-.study-place.dark .text-slate-600 {
-  color: rgb(203 213 225);
-}
-
-.study-place.dark .text-slate-500,
-.study-place.dark .text-slate-400 {
-  color: rgb(148 163 184);
-}
-
-.study-place.dark .bg-indigo-50,
-.study-place.dark .bg-indigo-50\/50 {
-  background-color: rgb(30 27 75 / 0.55);
-}
-
-.study-place.dark .bg-orange-50\/50 {
-  background-color: rgb(67 20 7 / 0.45);
-}
-
-.study-place.dark .hover\:bg-slate-50:hover,
-.study-place.dark .hover\:bg-gray-50:hover {
-  background-color: rgb(51 65 85);
-}
-
-.study-place.dark .hover\:bg-slate-100:hover {
-  background-color: rgb(51 65 85);
+.study-place.dark .pill-accent {
+  background-color: rgb(99 102 241 / 0.2);
+  color: #a5b4fc;
 }
 
 #root {

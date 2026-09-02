@@ -70,7 +70,7 @@ export const mockTutorListings: TutorListingCard[] = names.map(
       id: `tutor-${i + 1}`,
       handle,
       fullName,
-      avatarUrl: `https://i.pravatar.cc/160?img=${(i % 70) + 1}`,
+      avatarUrl: `https://i.pravatar.cc/480?img=${(i % 70) + 1}`,
       isVerified: i % 3 !== 2,
       availabilityStatus: statuses[i % statuses.length],
       positionLabel: positions[i % positions.length],
@@ -84,6 +84,9 @@ export const mockTutorListings: TutorListingCard[] = names.map(
 )
 
 export const TUTOR_SPECIALIZATIONS = [
+  'Teacher',
+  'Speaker',
+  'Specialist',
   'TOEFL',
   'IELTS',
   'Business English',

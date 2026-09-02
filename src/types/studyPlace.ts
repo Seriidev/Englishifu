@@ -56,3 +56,31 @@ export interface StudyPlaceHeaderData {
   avatarUrl?: string
   isOnline?: boolean
 }
+
+export interface WelcomeSlide {
+  id: string
+  title: string
+  body: string
+}
+
+export interface SkillResultItem {
+  id: string
+  label: string
+  score: string
+}
+
+export interface PracticeExerciseItem {
+  id: string
+  title: string
+  description: string
+  path: string
+}
+
+export interface ToeflNewsItem {
+  id: string
+  title: string
+  excerpt: string
+  body: string
+  imageUrl?: string
+  imageAlt?: string
+}

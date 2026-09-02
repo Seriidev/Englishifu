@@ -71,16 +71,24 @@ export function buildFullTestResult(
 }
 
 export function saveFullTestResult(result: FullTestResult): void {
+  const raw = JSON.stringify(result)
   try {
-    sessionStorage.setItem(FULL_TEST_RESULT_KEY, JSON.stringify(result))
+    sessionStorage.setItem(FULL_TEST_RESULT_KEY, raw)
   } catch {
-    // ignore quota / private mode
+    /* ignore quota / private mode */
+  }
+  try {
+    localStorage.setItem(FULL_TEST_RESULT_KEY, raw)
+  } catch {
+    /* ignore */
   }
 }
 
 export function loadFullTestResult(): FullTestResult | null {
   try {
-    const raw = sessionStorage.getItem(FULL_TEST_RESULT_KEY)
+    const raw =
+      sessionStorage.getItem(FULL_TEST_RESULT_KEY) ??
+      localStorage.getItem(FULL_TEST_RESULT_KEY)
     if (!raw) return null
     return JSON.parse(raw) as FullTestResult
   } catch {

@@ -17,13 +17,35 @@ interface Props {
   onExit: () => void
 }
 
+type PlacementLocationState = {
+  returnTo?: unknown
+  start?: unknown
+}
+
+function readPlacementState(state: unknown): {
+  returnTo: string | null
+  start: boolean
+} {
+  if (!state || typeof state !== 'object') {
+    return { returnTo: null, start: false }
+  }
+  const next = state as PlacementLocationState
+  return {
+    returnTo: typeof next.returnTo === 'string' ? next.returnTo : null,
+    start: next.start === true,
+  }
+}
+
 export default function PlacementTestFlow({ onExit }: Props) {
   const { t } = useLanguage()
   const { user, savePlacementResult } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
   const questions = PLACEMENT_QUESTIONS
-  const [stage, setStage] = useState<Stage>('intro')
+  const { returnTo, start } = readPlacementState(location.state)
+  const [stage, setStage] = useState<Stage>(() =>
+    start ? 'questions' : 'intro',
+  )
   const [index, setIndex] = useState(0)
   const [answers, setAnswers] = useState<Record<number, number>>({})
   const [result, setResult] = useState<PlacementResult | null>(null)
@@ -34,12 +56,6 @@ export default function PlacementTestFlow({ onExit }: Props) {
     () => Object.keys(answers).length,
     [answers],
   )
-
-  const returnTo =
-    typeof (location.state as { returnTo?: unknown } | null)?.returnTo ===
-    'string'
-      ? (location.state as { returnTo: string }).returnTo
-      : null
 
   const handleExit = () => {
     if (returnTo && returnTo.startsWith('/')) {

@@ -1,29 +1,36 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import {
   GraduationCap,
   LogOut,
   Pencil,
   Briefcase,
-  FileText,
   X,
   Video,
 } from 'lucide-react'
 import { useAuth } from '../../auth/AuthContext'
 import { isTutorProfileComplete } from '../../types/user'
 import { getTutorProfileByHandle } from '../../mocks/tutorProfileMock'
-import { getStudentsForTutor } from '../../mocks/tutorStudentsMock'
-import type { TutorStudent } from '../../types/tutorStudent'
-import {
-  getSessionUser,
-  tutorProfilePath,
-} from '../../utils/authStorage'
+import type {
+  TutorStudent,
+} from '../../types/tutorStudent'
+import type { TutorReview } from '../../types/notifications'
+import type { TutorPublicProfile } from '../../types/tutorProfile'
+import { tutorProfilePath } from '../../utils/authStorage'
+import SendResumeButton from '../tutor/SendResumeButton'
 import { sendMeetInviteToMany } from '../../utils/meetLinks'
 import { normalizeCertifications } from '../../utils/certifications'
 import { fileToAvatarDataUrl } from '../../utils/avatarUpload'
+import { fetchTutorReviews } from '../../utils/platformApi'
+import { fetchTutorStudents } from '../../utils/adminApi'
+import { syncApiSession } from '../../utils/bookingApi'
+import AccountPanel from '../profile/AccountPanel'
 import AvatarUpload from '../profile/AvatarUpload'
 import VerifiedBadge from '../profile/VerifiedBadge'
 import IncompleteProfileBanner from '../tutor/IncompleteProfileBanner'
+import NotificationBell from '../shared/NotificationBell'
+import BookingsList from '../study/BookingsList'
+import ReviewsList from '../study/tutors/ReviewsList'
 import CertificationsTab from './CertificationsTab'
 import ClassesTab from './ClassesTab'
 import CreateMeetModal from './CreateMeetModal'
@@ -37,30 +44,121 @@ function normalizeHandle(h: string) {
 
 export default function TutorProfilePage() {
   const { handle = '' } = useParams()
-  const { user, logout, updateTutor } = useAuth()
+  const { user, logout, updateTutor, refreshUser } = useAuth()
   const navigate = useNavigate()
   const [tab, setTab] = useState<TutorTabId>('classes')
   const [avatarError, setAvatarError] = useState<string | null>(null)
-  const [resumeSentOpen, setResumeSentOpen] = useState(false)
   const [meetModal, setMeetModal] = useState<{
     open: boolean
     student?: TutorStudent
   }>({ open: false })
   const [meetSentOpen, setMeetSentOpen] = useState(false)
+  const [reviews, setReviews] = useState<TutorReview[]>([])
+  const [avgRating, setAvgRating] = useState(0)
+  const [totalReviews, setTotalReviews] = useState(0)
+  const [reviewsLoading, setReviewsLoading] = useState(true)
+  const [meetStudents, setMeetStudents] = useState<TutorStudent[]>([])
+  const [stored, setStored] = useState<TutorPublicProfile | null>(null)
+  const [profileLoading, setProfileLoading] = useState(true)
 
   const routeHandle = normalizeHandle(handle)
-  const rawSession = user ?? getSessionUser()
-  const sessionTutor = rawSession?.role === 'tutor' ? rawSession : null
-  const stored = getTutorProfileByHandle(routeHandle)
+  const sessionTutor = user?.role === 'tutor' ? user : null
+
+  useEffect(() => {
+    let cancelled = false
+    setProfileLoading(true)
+    void getTutorProfileByHandle(routeHandle).then((profile) => {
+      if (cancelled) return
+      setStored(profile)
+      setProfileLoading(false)
+    })
+    return () => {
+      cancelled = true
+    }
+  }, [routeHandle, user])
+
+  useEffect(() => {
+    let cancelled = false
+    setReviewsLoading(true)
+    void fetchTutorReviews(routeHandle)
+      .then((data) => {
+        if (cancelled) return
+        setReviews(data.reviews)
+        setAvgRating(data.averageRating)
+        setTotalReviews(data.totalReviews)
+      })
+      .catch(() => {
+        if (cancelled) return
+        setReviews([])
+        setAvgRating(stored?.averageRating ?? 0)
+        setTotalReviews(stored?.reviewsCount ?? 0)
+      })
+      .finally(() => {
+        if (!cancelled) setReviewsLoading(false)
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [routeHandle, stored?.averageRating, stored?.reviewsCount])
+
+  useEffect(() => {
+    if (!sessionTutor) {
+      setMeetStudents([])
+      return
+    }
+    let cancelled = false
+    void (async () => {
+      try {
+        await syncApiSession(sessionTutor)
+        const rows = await fetchTutorStudents(sessionTutor.id)
+        if (cancelled) return
+        setMeetStudents(
+          rows.map((r) => ({
+            id: r.id,
+            fullName: r.fullName,
+            avatarUrl: r.avatarUrl,
+            handle: r.handle,
+            cefrLevel: r.cefrLevel as TutorStudent['cefrLevel'],
+            xp: r.xp ?? 0,
+            canDailyBoost: Boolean(r.canDailyBoost),
+            lessonsCompleted: r.lessonsCompleted,
+            nextLessonDate: r.nextLessonDate,
+            status: r.status,
+          })),
+        )
+      } catch {
+        if (!cancelled) setMeetStudents([])
+      }
+    })()
+    return () => {
+      cancelled = true
+    }
+  }, [sessionTutor?.id])
 
   const isOwnProfile = Boolean(
     sessionTutor &&
-      stored &&
-      (sessionTutor.id === stored.id ||
-        normalizeHandle(sessionTutor.handle) === routeHandle ||
-        normalizeHandle(sessionTutor.handle) ===
-          normalizeHandle(stored.handle)),
+      (normalizeHandle(sessionTutor.handle) === routeHandle ||
+        (stored &&
+          (sessionTutor.id === stored.id ||
+            normalizeHandle(sessionTutor.handle) ===
+              normalizeHandle(stored.handle)))),
   )
+
+  if (profileLoading) {
+    return (
+      <div className="landing-shell flex min-h-svh items-center justify-center text-sm text-muted">
+        Loading…
+      </div>
+    )
+  }
+
+  if (profileLoading) {
+    return (
+      <div className="landing-shell flex min-h-svh items-center justify-center text-sm text-muted">
+        Loading…
+      </div>
+    )
+  }
 
   if (!stored) {
     return (
@@ -96,7 +194,6 @@ export default function TutorProfilePage() {
   const certifications = normalizeCertifications(
     liveOwner?.certifications ?? profile.certifications,
   )
-  const students = getStudentsForTutor()
   const tutorId = liveOwner?.id ?? profile.id
 
   if (!isPublic && !isOwnProfile) {
@@ -119,7 +216,9 @@ export default function TutorProfilePage() {
   const showIncompleteBanner =
     isOwnProfile &&
     liveOwner &&
-    (liveOwner.status === 'incomplete' || !isTutorProfileComplete(liveOwner))
+    (liveOwner.status === 'incomplete' ||
+      liveOwner.status === 'pending' ||
+      !isTutorProfileComplete(liveOwner))
 
   const onAvatarChange = async (file: File) => {
     if (!liveOwner) return
@@ -128,6 +227,7 @@ export default function TutorProfilePage() {
       const nextAvatar = await fileToAvatarDataUrl(file)
       const result = await updateTutor({
         fullName: liveOwner.fullName,
+        handle: liveOwner.handle,
         position: liveOwner.position ?? 'Teacher',
         aboutMe: liveOwner.aboutMe,
         avatarUrl: nextAvatar,
@@ -150,6 +250,7 @@ export default function TutorProfilePage() {
             <span className="font-bold text-ink">Englishcore</span>
           </Link>
           <div className="flex items-center gap-2">
+            {isOwnProfile ? <NotificationBell /> : null}
             <Link
               to="/"
               className="rounded-full border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-ink transition hover:bg-gray-50"
@@ -160,8 +261,7 @@ export default function TutorProfilePage() {
               <button
                 type="button"
                 onClick={() => {
-                  logout()
-                  navigate('/', { replace: true })
+                  void logout().then(() => navigate('/', { replace: true }))
                 }}
                 className="inline-flex items-center gap-1.5 rounded-full border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-muted transition hover:bg-gray-50"
               >
@@ -191,11 +291,21 @@ export default function TutorProfilePage() {
                   <h1 className="text-2xl font-bold tracking-tight text-ink sm:text-3xl">
                     {fullName}
                   </h1>
-                  <VerifiedBadge size="lg" />
+                  {(liveOwner?.status ?? (isOwnProfile ? 'incomplete' : 'approved')) ===
+                  'approved' ? (
+                    <VerifiedBadge size="lg" title="Verified teacher" />
+                  ) : null}
                 </div>
                 <p className="mt-1.5 text-base font-semibold text-brand">
                   {position}
                 </p>
+                {isOwnProfile && liveOwner ? (
+                  <p className="mt-1 text-sm text-muted">
+                    @{liveOwner.handle} · {liveOwner.email}
+                  </p>
+                ) : (
+                  <p className="mt-1 text-sm text-muted">@{profile.handle}</p>
+                )}
                 {typeof yearsOfExperience === 'number' ? (
                   <p className="mt-2 inline-flex items-center gap-1.5 text-sm font-medium text-ink">
                     <Briefcase className="h-4 w-4 text-muted" aria-hidden />
@@ -207,7 +317,7 @@ export default function TutorProfilePage() {
                     Add your years of experience in{' '}
                     <button
                       type="button"
-                      onClick={() => navigate('/tutor/profile/edit')}
+                      onClick={() => navigate('/tutor/profile')}
                       className="font-semibold text-brand hover:underline"
                     >
                       Edit Profile
@@ -217,13 +327,20 @@ export default function TutorProfilePage() {
                 {typeof hourlyRateUsd === 'number' ? (
                   <p className="mt-1.5 text-sm font-semibold text-ink">
                     ${hourlyRateUsd}/hour
+                    {!reviewsLoading && totalReviews > 0
+                      ? ` · ${avgRating.toFixed(1)}★ (${totalReviews} reviews)`
+                      : ''}
+                  </p>
+                ) : !reviewsLoading && totalReviews > 0 ? (
+                  <p className="mt-1.5 text-sm font-semibold text-ink">
+                    {avgRating.toFixed(1)}★ ({totalReviews} reviews)
                   </p>
                 ) : isOwnProfile ? (
                   <p className="mt-1.5 text-sm text-muted">
                     Set your hourly rate in{' '}
                     <button
                       type="button"
-                      onClick={() => navigate('/tutor/profile/edit')}
+                      onClick={() => navigate('/tutor/profile')}
                       className="font-semibold text-brand hover:underline"
                     >
                       Edit Profile
@@ -239,7 +356,7 @@ export default function TutorProfilePage() {
                     Add a short summary about your teaching.{' '}
                     <button
                       type="button"
-                      onClick={() => navigate('/tutor/profile/edit')}
+                      onClick={() => navigate('/tutor/profile')}
                       className="font-semibold text-brand hover:underline"
                     >
                       Edit Profile
@@ -258,12 +375,20 @@ export default function TutorProfilePage() {
               {isOwnProfile ? (
                 <button
                   type="button"
-                  onClick={() => navigate('/tutor/profile/edit')}
+                  onClick={() => navigate('/tutor/profile')}
                   className="inline-flex items-center gap-1.5 rounded-full border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-ink transition hover:bg-gray-50"
                 >
                   <Pencil className="h-3.5 w-3.5" aria-hidden />
                   Edit Profile
                 </button>
+              ) : null}
+              {isOwnProfile ? (
+                <Link
+                  to="/tutor/bookings"
+                  className="inline-flex items-center gap-1.5 rounded-full border border-indigo-200 bg-indigo-50 px-4 py-2 text-sm font-semibold text-indigo-700 transition hover:bg-indigo-100"
+                >
+                  Bookings inbox
+                </Link>
               ) : null}
               {isOwnProfile ? (
                 <button
@@ -275,37 +400,86 @@ export default function TutorProfilePage() {
                   Create Google Meet
                 </button>
               ) : null}
-              <button
-                type="button"
-                onClick={() => setResumeSentOpen(true)}
-                className="inline-flex items-center gap-1.5 rounded-full bg-brand px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-dark"
-              >
-                <FileText className="h-4 w-4" aria-hidden />
-                Send resume
-              </button>
+              {isOwnProfile && liveOwner ? (
+                <SendResumeButton
+                  enabled={
+                    isTutorProfileComplete(liveOwner) &&
+                    Boolean(liveOwner.handle) &&
+                    (liveOwner.hourlyRateUsd ?? 0) >= 20
+                  }
+                  status={liveOwner.status}
+                  onSent={() => void refreshUser()}
+                />
+              ) : null}
             </div>
           </div>
 
           <div className="mt-8">
-            <TutorTabs active={tab} onChange={setTab} />
+            <TutorTabs
+              active={tab}
+              onChange={setTab}
+              showAccount={isOwnProfile}
+            />
             <div className="mt-5" role="tabpanel">
               {tab === 'classes' ? (
-                <ClassesTab stats={profile.classesStats} />
+                <div className="space-y-8">
+                  <ClassesTab stats={profile.classesStats} />
+                  <div>
+                    <h3 className="mb-3 text-base font-bold text-ink">Reviews</h3>
+                    <ReviewsList
+                      reviews={reviews}
+                      averageRating={avgRating}
+                      totalReviews={totalReviews}
+                      loading={reviewsLoading}
+                      emptyHint="No student reviews yet."
+                    />
+                  </div>
+                </div>
               ) : null}
               {tab === 'students' ? (
-                <StudentsTab
-                  students={students}
-                  canManage={isOwnProfile}
-                  onSendMeetLink={(student) =>
-                    setMeetModal({ open: true, student })
-                  }
-                />
+                isOwnProfile ? (
+                  <StudentsTab tutorId={tutorId} />
+                ) : (
+                  <p className="text-sm text-muted">
+                    Student list is only visible to the tutor.
+                  </p>
+                )
+              ) : null}
+              {tab === 'bookings' ? (
+                isOwnProfile ? (
+                  <div className="space-y-3">
+                    <p className="text-sm text-muted">
+                      Full inbox with filters and &quot;Mark as Completed&quot;:{' '}
+                      <Link
+                        to="/tutor/bookings"
+                        className="font-semibold text-brand hover:underline"
+                      >
+                        Open bookings inbox
+                      </Link>
+                    </p>
+                    <BookingsList
+                      role="tutor"
+                      emptyHint="No student bookings yet."
+                    />
+                  </div>
+                ) : (
+                  <p className="text-sm text-muted">
+                    Incoming bookings are only visible to the tutor.
+                  </p>
+                )
               ) : null}
               {tab === 'kpi' ? (
-                <KPITab kpis={profile.kpis} chart={profile.kpiChart} />
+                <KPITab
+                  tutorId={tutorId}
+                  fallbackKpis={profile.kpis}
+                  fallbackChart={profile.kpiChart}
+                />
               ) : null}
               {tab === 'certifications' ? (
                 <CertificationsTab certifications={certifications} />
+              ) : null}
+              {tab === 'account' && isOwnProfile && liveOwner ? (
+                <AccountPanel user={liveOwner} />
               ) : null}
             </div>
           </div>
@@ -314,7 +488,7 @@ export default function TutorProfilePage() {
 
       {meetModal.open && isOwnProfile ? (
         <CreateMeetModal
-          students={students}
+          students={meetStudents}
           studentId={meetModal.student?.id}
           studentName={meetModal.student?.fullName}
           onClose={() => setMeetModal({ open: false })}
@@ -364,51 +538,6 @@ export default function TutorProfilePage() {
             <button
               type="button"
               onClick={() => setMeetSentOpen(false)}
-              className="mt-6 w-full rounded-full bg-brand px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-dark"
-            >
-              OK
-            </button>
-          </div>
-        </div>
-      ) : null}
-
-      {resumeSentOpen ? (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 p-4"
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="resume-sent-title"
-        >
-          <button
-            type="button"
-            className="absolute inset-0 cursor-default"
-            aria-label="Close dialog"
-            onClick={() => setResumeSentOpen(false)}
-          />
-          <div className="relative w-full max-w-sm rounded-3xl border border-gray-100 bg-white p-6 text-center shadow-xl">
-            <button
-              type="button"
-              onClick={() => setResumeSentOpen(false)}
-              className="absolute top-3 right-3 inline-flex h-8 w-8 items-center justify-center rounded-full text-muted transition hover:bg-gray-50 hover:text-ink"
-              aria-label="Close"
-            >
-              <X className="h-4 w-4" aria-hidden />
-            </button>
-            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-emerald-50 text-emerald-600">
-              <FileText className="h-5 w-5" aria-hidden />
-            </div>
-            <h2
-              id="resume-sent-title"
-              className="mt-4 text-xl font-bold tracking-tight text-ink"
-            >
-              Successfully sent
-            </h2>
-            <p className="mt-2 text-sm leading-relaxed text-muted">
-              Our team will review your resume and send a letter to your email.
-            </p>
-            <button
-              type="button"
-              onClick={() => setResumeSentOpen(false)}
               className="mt-6 w-full rounded-full bg-brand px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-dark"
             >
               OK

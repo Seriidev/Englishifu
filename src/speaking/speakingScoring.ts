@@ -1,4 +1,39 @@
-import type { SpeakingScoreResult } from './types'
+import type { SpeakingScoreResult, SpeakingTaskType } from './types'
+import type { SpeakingRubricScore } from '../types/aiRubric'
+
+export type { SpeakingRubricScore }
+
+/**
+ * Whisper transcription + Claude rubric via `/api/score-speaking`.
+ * Requires OPENAI_API_KEY + ANTHROPIC_API_KEY on the server.
+ */
+export async function scoreSpeakingWithAI(
+  audio: Blob,
+  prompt: string,
+  taskType: SpeakingTaskType | string,
+): Promise<SpeakingRubricScore> {
+  const form = new FormData()
+  form.append('audio', audio, 'recording.webm')
+  form.append('prompt', prompt)
+  form.append('taskType', taskType)
+
+  const response = await fetch('/api/score-speaking', {
+    method: 'POST',
+    body: form,
+  })
+  if (!response.ok) {
+    const detail = await response.text().catch(() => '')
+    throw new Error(detail || 'Speaking scoring failed')
+  }
+  return response.json() as Promise<SpeakingRubricScore>
+}
+
+/** Map AI speaking rubric to a single 0–5 item score. */
+export function itemScoreFromSpeakingRubric(score: SpeakingRubricScore): number {
+  const avg =
+    (score.fluencyCoherence + score.languageUse + score.topicDevelopment) / 3
+  return Math.max(0, Math.min(5, Math.round(avg)))
+}
 
 /** Listen and Repeat rubric labels (0–5) */
 export const LISTEN_REPEAT_RUBRIC: Record<number, string> = {

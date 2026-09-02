@@ -1,217 +1,69 @@
 import {
   isTutorProfileComplete,
   type PublicUser,
-  type StudentProfile,
   type TutorCertification,
   type TutorPosition,
-  type TutorProfile,
-  type UserProfile,
+  type TutorStatus,
   type UserRole,
 } from '../types/user'
 import type { CefrLevel } from '../types/cefr'
-import { normalizeCertifications } from './certifications'
+import { setApiToken } from './bookingApi'
 
-const USERS_KEY = 'englishifu_users_v1'
-const SESSION_KEY = 'englishifu_session_v1'
-
-/** Legacy shape before fullName migration */
-type LegacyNameFields = {
-  firstName?: string
-  lastName?: string
-  fullName?: string
-}
-
-async function sha256Hex(value: string): Promise<string> {
-  const data = new TextEncoder().encode(value)
-  const digest = await crypto.subtle.digest('SHA-256', data)
-  return Array.from(new Uint8Array(digest))
-    .map((b) => b.toString(16).padStart(2, '0'))
-    .join('')
-}
-
-function slugifyHandle(raw: string): string {
-  return raw
-    .toLowerCase()
-    .replace(/[^a-z0-9_]+/g, '')
-    .slice(0, 20)
-}
-
-function collectTakenHandles(users: UserProfile[]): Set<string> {
-  const taken = new Set<string>()
-  for (const u of users) {
-    if ('handle' in u && u.handle) {
-      taken.add(u.handle.toLowerCase())
-    }
-  }
-  return taken
-}
-
-function makeHandle(fullName: string, email: string, taken: Set<string>): string {
-  const base =
-    slugifyHandle(fullName.replace(/\s+/g, '')) ||
-    slugifyHandle(email.split('@')[0] ?? '') ||
-    'user'
-
-  if (!taken.has(base) && base.length >= 3) return base
-  let i = 2
-  while (taken.has(`${base}${i}`) || `${base}${i}`.length < 3) i++
-  return `${base}${i}`.slice(0, 20)
-}
-
-function resolveFullName(user: LegacyNameFields): string {
-  if (user.fullName?.trim()) return user.fullName.trim()
-  return [user.firstName, user.lastName].filter(Boolean).join(' ').trim()
-}
-
-function migrateUser(
-  raw: UserProfile & LegacyNameFields,
-  taken: Set<string>,
-): UserProfile {
-  const fullName = resolveFullName(raw) || 'User'
-  const withoutLegacy = { ...raw } as UserProfile & LegacyNameFields
-  delete withoutLegacy.firstName
-  delete withoutLegacy.lastName
-
-  if (raw.role === 'tutor') {
-    const legacy = withoutLegacy as TutorProfile & {
-      position?: TutorPosition
-      isPublicProfile?: boolean
-      dailyStreak?: number
-    }
-    const handle = raw.handle || makeHandle(fullName, raw.email, taken)
-    if (!raw.handle) taken.add(handle)
-    return {
-      ...legacy,
-      role: 'tutor',
-      fullName,
-      handle,
-      status: raw.status,
-      position: legacy.position ?? 'Teacher',
-      isPublicProfile: legacy.isPublicProfile ?? true,
-      dailyStreak: legacy.dailyStreak ?? 0,
-      certifications: normalizeCertifications(legacy.certifications),
-    }
-  }
-
-  const student = withoutLegacy as StudentProfile & {
-    handle?: string
-    isPublicProfile?: boolean
-  }
-  const handle =
-    student.handle || makeHandle(fullName, raw.email, taken)
-  if (!student.handle) taken.add(handle)
-
-  return {
-    ...student,
-    role: 'student',
-    fullName,
-    handle,
-    isPublicProfile: student.isPublicProfile ?? true,
-  }
-}
-
-function readUsers(): UserProfile[] {
+async function parseError(res: Response): Promise<string> {
   try {
-    const raw = localStorage.getItem(USERS_KEY)
-    if (!raw) return []
-    const parsed = JSON.parse(raw) as Array<UserProfile & LegacyNameFields>
-    const taken = collectTakenHandles(parsed as UserProfile[])
-
-    let changed = false
-    const users = parsed.map((user) => {
-      const before = JSON.stringify(user)
-      const next = migrateUser(user, taken)
-      if (JSON.stringify(next) !== before) changed = true
-      return next
-    })
-
-    if (changed) writeUsers(users)
-    return users
+    const data = (await res.json()) as { error?: string }
+    if (data?.error) return data.error
   } catch {
-    return []
+    /* ignore */
   }
+  return `Request failed (${res.status})`
 }
 
-function writeUsers(users: UserProfile[]) {
-  localStorage.setItem(USERS_KEY, JSON.stringify(users))
-}
+type AuthOk = { user: PublicUser; token?: string }
+type AuthErr = { error: string }
 
-function toPublic(user: UserProfile): PublicUser {
-  const { passwordHash: _hash, ...rest } = user
-  return rest
-}
-
-export async function hashPassword(password: string): Promise<string> {
-  return sha256Hex(password)
-}
-
-export function getSessionUser(): PublicUser | null {
+async function readAuthResponse(res: Response): Promise<AuthOk | AuthErr> {
+  let data: { user?: PublicUser; token?: string; error?: string } = {}
   try {
-    const raw = localStorage.getItem(SESSION_KEY)
-    if (!raw) return null
-    const session = JSON.parse(raw) as PublicUser & LegacyNameFields
-    const fresh = findUserByEmail(session.email)
-    if (!fresh) return session as PublicUser
-    const publicUser = toPublic(fresh)
-    if (!('fullName' in session) || !session.fullName || !session.handle) {
-      setSessionUser(publicUser)
-    }
-    return publicUser
+    data = (await res.json()) as typeof data
+  } catch {
+    /* ignore */
+  }
+  if (!res.ok) {
+    return { error: data.error || (await parseError(res)) }
+  }
+  if (!data.user) return { error: 'Invalid server response' }
+  if (data.token) setApiToken(data.token)
+  return { user: data.user, token: data.token }
+}
+
+/** Hydrate session from httpOnly cookie (and refresh Bearer token). */
+export async function fetchSessionUser(): Promise<PublicUser | null> {
+  try {
+    const res = await fetch('/api/auth/me', {
+      method: 'GET',
+      credentials: 'include',
+    })
+    if (!res.ok) return null
+    const result = await readAuthResponse(res)
+    if ('error' in result) return null
+    return result.user
   } catch {
     return null
   }
 }
 
-export function setSessionUser(user: PublicUser | null) {
-  if (!user) {
-    localStorage.removeItem(SESSION_KEY)
-    return
-  }
-  localStorage.setItem(SESSION_KEY, JSON.stringify(user))
+/**
+ * @deprecated Sync localStorage session removed — always returns null.
+ * Use fetchSessionUser() or AuthContext.user instead.
+ */
+export function getSessionUser(): PublicUser | null {
+  return null
 }
 
-export function findUserByEmail(email: string): UserProfile | undefined {
-  const normalized = email.trim().toLowerCase()
-  return readUsers().find((u) => u.email.toLowerCase() === normalized)
-}
-
-export function isHandleTaken(handle: string, excludeUserId?: string): boolean {
-  const normalized = handle.replace(/^@/, '').toLowerCase()
-  return readUsers().some(
-    (u) =>
-      'handle' in u &&
-      u.handle?.toLowerCase() === normalized &&
-      u.id !== excludeUserId,
-  )
-}
-
-export function createUniqueHandle(fullName: string, email: string): string {
-  return makeHandle(fullName, email, collectTakenHandles(readUsers()))
-}
-
-/** @deprecated use createUniqueHandle(fullName, email) */
-export function createUniqueTutorHandle(
-  firstName: string,
-  lastName: string,
-  email: string,
-): string {
-  return createUniqueHandle(`${firstName} ${lastName}`, email)
-}
-
-export function findTutorByHandle(handle: string): PublicUser | null {
-  const normalized = handle.replace(/^@/, '').toLowerCase()
-  const user = readUsers().find(
-    (u) => u.role === 'tutor' && u.handle.toLowerCase() === normalized,
-  )
-  return user ? toPublic(user) : null
-}
-
-export function findStudentByHandle(handle: string): PublicUser | null {
-  const normalized = handle.replace(/^@/, '').toLowerCase()
-  const user = readUsers().find(
-    (u) => u.role === 'student' && u.handle.toLowerCase() === normalized,
-  )
-  return user ? toPublic(user) : null
+/** @deprecated No-op — session lives in httpOnly cookie + AuthContext. */
+export function setSessionUser(_user: PublicUser | null) {
+  /* no-op */
 }
 
 export function tutorProfilePath(handle: string): string {
@@ -222,10 +74,48 @@ export function studentPublicProfilePath(handle: string): string {
   return `/profile/${handle.replace(/^@/, '')}`
 }
 
+export async function findTutorByHandle(
+  handle: string,
+): Promise<PublicUser | null> {
+  const normalized = handle.replace(/^@/, '').trim().toLowerCase()
+  if (!normalized) return null
+  try {
+    const res = await fetch(`/api/users/${encodeURIComponent(normalized)}`, {
+      credentials: 'include',
+    })
+    if (!res.ok) return null
+    const data = (await res.json()) as { user?: PublicUser }
+    if (!data.user || data.user.role !== 'tutor') return null
+    return data.user
+  } catch {
+    return null
+  }
+}
+
+export async function findStudentByHandle(
+  handle: string,
+): Promise<PublicUser | null> {
+  const normalized = handle.replace(/^@/, '').trim().toLowerCase()
+  if (!normalized) return null
+  try {
+    const res = await fetch(`/api/users/${encodeURIComponent(normalized)}`, {
+      credentials: 'include',
+    })
+    if (!res.ok) return null
+    const data = (await res.json()) as { user?: PublicUser }
+    if (!data.user || data.user.role !== 'student') return null
+    return data.user
+  } catch {
+    return null
+  }
+}
+
 export interface CreateStudentInput {
   fullName: string
   email: string
   password: string
+  referralCode?: string
+  marketingOptIn?: boolean
 }
 
 export type CreateTutorInput = CreateStudentInput
@@ -248,6 +138,7 @@ export interface UpdateStudentProfileInput {
 
 export interface UpdateTutorProfileInput {
   fullName: string
+  handle?: string
   position: TutorPosition
   aboutMe?: string
   yearsOfExperience?: number
@@ -265,239 +156,199 @@ export interface SaveStudentPlacementInput {
 export async function registerStudent(
   input: CreateStudentInput,
 ): Promise<{ user: PublicUser } | { error: string }> {
-  if (findUserByEmail(input.email)) {
-    return { error: 'An account with this email already exists' }
+  try {
+    const res = await fetch('/api/auth/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({
+        role: 'student',
+        fullName: input.fullName,
+        email: input.email,
+        password: input.password,
+        referralCode: input.referralCode || undefined,
+        marketingOptIn: Boolean(input.marketingOptIn),
+      }),
+    })
+    return readAuthResponse(res)
+  } catch {
+    return {
+      error:
+        'Could not reach auth API. Use vercel dev or a deployed preview with Postgres.',
+    }
   }
-
-  const fullName = input.fullName.trim()
-  const email = input.email.trim().toLowerCase()
-
-  const user: StudentProfile = {
-    id: crypto.randomUUID(),
-    fullName,
-    email,
-    passwordHash: await hashPassword(input.password),
-    role: 'student',
-    handle: createUniqueHandle(fullName, email),
-    isPublicProfile: true,
-    createdAt: new Date().toISOString(),
-  }
-
-  const users = readUsers()
-  users.push(user)
-  writeUsers(users)
-
-  const publicUser = toPublic(user)
-  setSessionUser(publicUser)
-  return { user: publicUser }
 }
 
 export async function registerTutor(
   input: CreateTutorInput,
 ): Promise<{ user: PublicUser } | { error: string }> {
-  if (findUserByEmail(input.email)) {
-    return { error: 'An account with this email already exists' }
+  try {
+    const res = await fetch('/api/auth/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({
+        role: 'tutor',
+        fullName: input.fullName,
+        email: input.email,
+        password: input.password,
+        referralCode: input.referralCode || undefined,
+        marketingOptIn: Boolean(input.marketingOptIn),
+      }),
+    })
+    return readAuthResponse(res)
+  } catch {
+    return {
+      error:
+        'Could not reach auth API. Use vercel dev or a deployed preview with Postgres.',
+    }
   }
-
-  const fullName = input.fullName.trim()
-  const email = input.email.trim().toLowerCase()
-
-  const user: TutorProfile = {
-    id: crypto.randomUUID(),
-    fullName,
-    email,
-    passwordHash: await hashPassword(input.password),
-    role: 'tutor',
-    handle: createUniqueHandle(fullName, email),
-    status: 'incomplete',
-    position: 'Teacher',
-    isPublicProfile: true,
-    dailyStreak: 0,
-    createdAt: new Date().toISOString(),
-  }
-
-  const users = readUsers()
-  users.push(user)
-  writeUsers(users)
-
-  const publicUser = toPublic(user)
-  setSessionUser(publicUser)
-  return { user: publicUser }
 }
 
-export function completeTutorProfile(
-  userId: string,
+export async function completeTutorProfile(
+  _userId: string,
   input: CompleteTutorProfileInput,
-  options?: { requireModeration?: boolean },
-): { user: PublicUser } | { error: string } {
-  const users = readUsers()
-  const index = users.findIndex((u) => u.id === userId)
-  if (index < 0) return { error: 'User not found' }
-
-  const existing = users[index]
-  if (existing.role !== 'tutor') return { error: 'Not a tutor account' }
-
-  const draft: TutorProfile = {
-    ...existing,
-    yearsOfExperience: input.yearsOfExperience,
-    certifications: normalizeCertifications(input.certifications),
-    aboutMe: input.aboutMe.trim(),
-  }
-
-  if (!isTutorProfileComplete(draft)) {
+  _options?: { requireModeration?: boolean },
+): Promise<{ user: PublicUser } | { error: string }> {
+  if (!isTutorProfileComplete(input)) {
     return {
       error:
         'Fill years of experience, at least one certification, and about me (50+ chars)',
     }
   }
-
-  const status = options?.requireModeration ? 'pending' : 'approved'
-  const updated: TutorProfile = { ...draft, status }
-  users[index] = updated
-  writeUsers(users)
-
-  const publicUser = toPublic(updated)
-  setSessionUser(publicUser)
-  return { user: publicUser }
+  try {
+    const res = await fetch('/api/auth/me', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({
+        action: 'completeProfile',
+        yearsOfExperience: input.yearsOfExperience,
+        certifications: input.certifications,
+        aboutMe: input.aboutMe,
+      }),
+    })
+    return readAuthResponse(res)
+  } catch {
+    return { error: 'Could not update tutor profile' }
+  }
 }
 
-export function updateStudentProfile(
-  userId: string,
+export async function updateStudentProfile(
+  _userId: string,
   input: UpdateStudentProfileInput,
-): { user: PublicUser } | { error: string } {
-  const users = readUsers()
-  const index = users.findIndex((u) => u.id === userId)
-  if (index < 0) return { error: 'User not found' }
-
-  const existing = users[index]
-  if (existing.role !== 'student') return { error: 'Not a student account' }
-
-  const handle = input.handle.replace(/^@/, '').trim().toLowerCase()
-  if (!/^[a-z0-9_]{3,20}$/.test(handle)) {
-    return {
-      error:
-        'Username must be 3-20 characters, lowercase letters, numbers, and underscores only',
-    }
+): Promise<{ user: PublicUser } | { error: string }> {
+  try {
+    const res = await fetch('/api/auth/me', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ action: 'update', ...input }),
+    })
+    return readAuthResponse(res)
+  } catch {
+    return { error: 'Could not update profile' }
   }
-  if (isHandleTaken(handle, userId)) {
-    return { error: 'Username is already taken' }
-  }
-
-  const updated: StudentProfile = {
-    ...existing,
-    fullName: input.fullName.trim(),
-    handle,
-    city: input.city?.trim() || undefined,
-    headline: input.headline?.trim() || undefined,
-    summary: input.summary?.trim() || undefined,
-    avatarUrl: input.avatarUrl ?? existing.avatarUrl,
-    isPublicProfile: input.isPublicProfile ?? existing.isPublicProfile,
-    cefrLevel: existing.cefrLevel,
-    placementCompletedAt: existing.placementCompletedAt,
-  }
-
-  users[index] = updated
-  writeUsers(users)
-
-  const publicUser = toPublic(updated)
-  setSessionUser(publicUser)
-  return { user: publicUser }
 }
 
-/** Persist Placement Test CEFR rank on the student profile */
-export function saveStudentPlacementResult(
-  userId: string,
+export async function saveStudentPlacementResult(
+  _userId: string,
   input: SaveStudentPlacementInput,
-): { user: PublicUser } | { error: string } {
-  const users = readUsers()
-  const index = users.findIndex((u) => u.id === userId)
-  if (index < 0) return { error: 'User not found' }
-
-  const existing = users[index]
-  if (existing.role !== 'student') return { error: 'Not a student account' }
-
-  const updated: StudentProfile = {
-    ...existing,
-    cefrLevel: input.cefrLevel,
-    placementCompletedAt: input.completedAt,
+): Promise<{ user: PublicUser } | { error: string }> {
+  try {
+    const res = await fetch('/api/auth/me', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({
+        action: 'placement',
+        cefrLevel: input.cefrLevel,
+        completedAt: input.completedAt,
+      }),
+    })
+    return readAuthResponse(res)
+  } catch {
+    return { error: 'Could not save placement result' }
   }
-
-  users[index] = updated
-  writeUsers(users)
-
-  const publicUser = toPublic(updated)
-  setSessionUser(publicUser)
-  return { user: publicUser }
 }
 
-export function updateTutorProfile(
-  userId: string,
+export async function updateTutorProfile(
+  _userId: string,
   input: UpdateTutorProfileInput,
-): { user: PublicUser } | { error: string } {
-  const users = readUsers()
-  const index = users.findIndex((u) => u.id === userId)
-  if (index < 0) return { error: 'User not found' }
-
-  const existing = users[index]
-  if (existing.role !== 'tutor') return { error: 'Not a tutor account' }
-
-  if (!input.fullName.trim()) {
-    return { error: 'Full name is required' }
+): Promise<{ user: PublicUser } | { error: string }> {
+  try {
+    const res = await fetch('/api/auth/me', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ action: 'update', ...input }),
+    })
+    return readAuthResponse(res)
+  } catch {
+    return { error: 'Could not update tutor profile' }
   }
-  if (!input.position) {
-    return { error: 'Please select a position' }
+}
+
+export async function changePassword(
+  currentPassword: string,
+  newPassword: string,
+): Promise<{ user: PublicUser } | { error: string }> {
+  try {
+    const res = await fetch('/api/auth/me', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({
+        action: 'changePassword',
+        currentPassword,
+        newPassword,
+      }),
+    })
+    return readAuthResponse(res)
+  } catch {
+    return { error: 'Could not update password' }
   }
-
-  const updated: TutorProfile = {
-    ...existing,
-    fullName: input.fullName.trim(),
-    position: input.position,
-    aboutMe: input.aboutMe?.trim() || existing.aboutMe,
-    yearsOfExperience:
-      input.yearsOfExperience !== undefined
-        ? input.yearsOfExperience
-        : existing.yearsOfExperience,
-    hourlyRateUsd:
-      input.hourlyRateUsd !== undefined
-        ? input.hourlyRateUsd
-        : existing.hourlyRateUsd,
-    avatarUrl: input.avatarUrl ?? existing.avatarUrl,
-    isPublicProfile: input.isPublicProfile ?? existing.isPublicProfile,
-    certifications:
-      input.certifications !== undefined
-        ? normalizeCertifications(input.certifications)
-        : existing.certifications,
-  }
-
-  users[index] = updated
-  writeUsers(users)
-
-  const publicUser = toPublic(updated)
-  setSessionUser(publicUser)
-  return { user: publicUser }
 }
 
 export async function loginUser(
   email: string,
   password: string,
 ): Promise<{ user: PublicUser } | { error: string }> {
-  const existing = findUserByEmail(email)
-  if (!existing) {
-    return { error: 'No account found with this email' }
+  try {
+    const res = await fetch('/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ email, password }),
+    })
+    return readAuthResponse(res)
+  } catch {
+    return {
+      error:
+        'Could not reach auth API. Use vercel dev or a deployed preview with Postgres.',
+    }
   }
-
-  const hash = await hashPassword(password)
-  if (existing.passwordHash !== hash) {
-    return { error: 'Incorrect email or password' }
-  }
-
-  const publicUser = toPublic(existing)
-  setSessionUser(publicUser)
-  return { user: publicUser }
 }
 
-export function logoutSession() {
-  setSessionUser(null)
+export async function logoutSession(): Promise<void> {
+  try {
+    await fetch('/api/auth/logout', {
+      method: 'POST',
+      credentials: 'include',
+    })
+  } catch {
+    /* ignore */
+  }
+}
+
+/** Merge Postgres moderation status onto an in-memory tutor user. */
+export function applyTutorServerStatus(
+  status: TutorStatus,
+  current: PublicUser | null = null,
+): PublicUser | null {
+  if (!current || current.role !== 'tutor') return current
+  if (current.status === status) return current
+  return { ...current, status }
 }
 
 export function dashboardPathForRole(
@@ -505,10 +356,7 @@ export function dashboardPathForRole(
   user?: PublicUser | null,
 ): string {
   if (role === 'tutor') {
-    if (user?.role === 'tutor' && user.handle) {
-      return tutorProfilePath(user.handle)
-    }
-    return '/tutor/profile/sarahchen'
+    return '/tutor'
   }
   if (role === 'student') {
     return '/study'

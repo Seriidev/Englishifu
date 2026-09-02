@@ -166,11 +166,11 @@ function fromRegisteredTutor(tutor: PublicTutor): TutorPublicProfile {
   }
 }
 
-export function getTutorProfileByHandle(
+export async function getTutorProfileByHandle(
   handle: string,
-): TutorPublicProfile | null {
+): Promise<TutorPublicProfile | null> {
   const normalized = handle.replace(/^@/, '').toLowerCase()
-  const registered = findTutorByHandle(normalized)
+  const registered = await findTutorByHandle(normalized)
   if (registered?.role === 'tutor') {
     return fromRegisteredTutor(registered)
   }

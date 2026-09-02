@@ -5,6 +5,7 @@ export interface SessionRowProps {
   session: SpeakingClubSession
   onJoin: () => void
   onSave: () => void
+  joining?: boolean
 }
 
 const TOPIC_COLORS = [
@@ -16,7 +17,7 @@ const TOPIC_COLORS = [
   '#ec4899',
 ]
 
-export function getAccentColorByTag(tag?: string): string {
+function getAccentColorByTag(tag?: string): string {
   if (!tag) return TOPIC_COLORS[0]
   let hash = 0
   for (let i = 0; i < tag.length; i++) hash = (hash + tag.charCodeAt(i) * 17) % 97
@@ -27,6 +28,7 @@ export default function SessionRow({
   session,
   onJoin,
   onSave,
+  joining = false,
 }: SessionRowProps) {
   const spotsPercent = Math.min(
     100,
@@ -39,7 +41,7 @@ export default function SessionRow({
   return (
     <div className="flex flex-col gap-4 border-b border-slate-100 py-4 last:border-0 lg:flex-row lg:items-center">
       <div className="w-24 shrink-0 text-left lg:text-center">
-        <span className="text-xs font-semibold text-indigo-500 uppercase">
+        <span className="text-xs font-semibold text-indigo-600 uppercase">
           {session.dateLabel}
         </span>
         <p className="text-xs text-slate-400">{session.dateSubtext}</p>
@@ -67,7 +69,7 @@ export default function SessionRow({
           {session.topicTags.map((tag) => (
             <span
               key={tag}
-              className="rounded-full bg-indigo-50 px-2 py-0.5 text-xs text-indigo-600"
+              className="pill-accent rounded-full px-2 py-0.5 text-xs"
             >
               {tag}
             </span>
@@ -120,11 +122,12 @@ export default function SessionRow({
         <button
           type="button"
           onClick={onJoin}
-          disabled={isFull}
-          style={{ backgroundColor: isFull ? undefined : accentColor }}
-          className={`w-full rounded-xl px-4 py-2 text-sm font-medium text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:bg-slate-300`}
+          disabled={isFull || joining}
+          className={`w-full rounded-xl px-4 py-2 text-sm font-medium text-white transition hover:bg-indigo-600 disabled:cursor-not-allowed disabled:bg-slate-300 ${
+            isFull ? '' : 'bg-indigo-500'
+          }`}
         >
-          {isFull ? 'Full' : 'Join Session'}
+          {isFull ? 'Full' : joining ? 'Joining…' : 'Join Session'}
         </button>
         <button
           type="button"

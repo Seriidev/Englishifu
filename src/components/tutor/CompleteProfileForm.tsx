@@ -7,7 +7,6 @@ import {
   type TutorProfileFormInput,
   type TutorProfileValidationErrors,
 } from '../../utils/validation'
-import { tutorProfilePath } from '../../utils/authStorage'
 import { normalizeCertifications } from '../../utils/certifications'
 import AuthShell from '../auth/AuthShell'
 import CertificationUploadInput from './CertificationUploadInput'
@@ -62,13 +61,13 @@ export default function CompleteProfileForm() {
       return
     }
     if (result.user.role === 'tutor') {
-      navigate(tutorProfilePath(result.user.handle), { replace: true })
+      navigate('/tutor', { replace: true })
     }
   }
 
   const goToProfile = () => {
     if (user?.role === 'tutor') {
-      navigate(tutorProfilePath(user.handle), { replace: true })
+      navigate('/tutor', { replace: true })
     }
   }
 

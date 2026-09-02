@@ -1,16 +1,17 @@
 import type { ReactNode } from 'react'
+import { Link } from 'react-router-dom'
 import { GraduationCap } from 'lucide-react'
 import { useLanguage } from '../i18n/LanguageContext'
 
 function SocialIcon({ label, children }: { label: string; children: ReactNode }) {
   return (
-    <a
-      href="#"
+    <Link
+      to="/start"
       aria-label={label}
       className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/20"
     >
       {children}
-    </a>
+    </Link>
   )
 }
 
@@ -74,12 +75,12 @@ export default function Footer() {
                 <ul className="mt-4 space-y-2.5">
                   {col.links.map((link) => (
                     <li key={link}>
-                      <a
-                        href="#"
+                      <Link
+                        to="/start"
                         className="text-sm text-white/60 transition hover:text-white"
                       >
                         {link}
-                      </a>
+                      </Link>
                     </li>
                   ))}
                 </ul>

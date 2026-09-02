@@ -2,7 +2,8 @@ import { useMemo, useState, type FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { GraduationCap } from 'lucide-react'
 import { useAuth } from '../../auth/AuthContext'
-import { isHandleTaken, studentPublicProfilePath } from '../../utils/authStorage'
+import { studentPublicProfilePath } from '../../utils/authStorage'
+import { listCountryNames, matchStoredCountry } from '../../utils/countries'
 import {
   hasEditProfileErrors,
   validateEditProfileForm,
@@ -13,10 +14,13 @@ import {
   fieldClass,
   labelClass,
 } from '../auth/formStyles'
+import ReferralWidget from '../study/ReferralWidget'
 
 export default function EditProfileForm() {
   const { user, updateStudent } = useAuth()
   const navigate = useNavigate()
+
+  const countries = useMemo(() => listCountryNames(), [])
 
   const initial = useMemo<EditProfileFormData>(() => {
     if (!user || user.role !== 'student') {
@@ -25,11 +29,10 @@ export default function EditProfileForm() {
     return {
       fullName: user.fullName,
       handle: user.handle,
-      city: user.city ?? '',
-      headline: user.headline ?? '',
+      city: matchStoredCountry(user.city, countries),
       summary: user.summary ?? '',
     }
-  }, [user])
+  }, [countries, user])
 
   const [form, setForm] = useState(initial)
   const [errors, setErrors] = useState<Record<string, string>>({})
@@ -58,10 +61,6 @@ export default function EditProfileForm() {
     const validation = validateEditProfileForm(form)
     const handle = form.handle.replace(/^@/, '').trim().toLowerCase()
 
-    if (handle && isHandleTaken(handle, user.id)) {
-      validation.handle = 'Username is already taken'
-    }
-
     if (hasEditProfileErrors(validation)) {
       setErrors(validation as Record<string, string>)
       return
@@ -72,8 +71,7 @@ export default function EditProfileForm() {
     const result = await updateStudent({
       fullName: form.fullName.trim(),
       handle,
-      city: form.city?.trim(),
-      headline: form.headline?.trim(),
+      city: form.city?.trim() || undefined,
       summary: form.summary?.trim(),
       avatarUrl: user.avatarUrl,
       isPublicProfile: user.isPublicProfile,
@@ -148,6 +146,23 @@ export default function EditProfileForm() {
             </div>
 
             <div>
+              <label className={labelClass} htmlFor="edit-email">
+                Email
+              </label>
+              <input
+                id="edit-email"
+                className={`${fieldClass} bg-gray-100 text-muted`}
+                value={user.email}
+                readOnly
+                autoComplete="email"
+              />
+              <p className="mt-1.5 text-xs text-muted">
+                Used to log in. Password can be changed on your profile under
+                Account.
+              </p>
+            </div>
+
+            <div>
               <label className={labelClass} htmlFor="edit-handle">
                 Username *
               </label>
@@ -174,33 +189,22 @@ export default function EditProfileForm() {
             </div>
 
             <div>
-              <label className={labelClass} htmlFor="edit-city">
-                What city are you located in?
+              <label className={labelClass} htmlFor="edit-country">
+                Country
               </label>
-              <input
-                id="edit-city"
+              <select
+                id="edit-country"
                 className={fieldClass}
                 value={form.city ?? ''}
                 onChange={(e) => setField('city', e.target.value)}
-                placeholder="Ashgabat, Turkmenistan"
-              />
-            </div>
-
-            <div>
-              <label className={labelClass} htmlFor="edit-headline">
-                Headline
-              </label>
-              <input
-                id="edit-headline"
-                className={fieldClass}
-                value={form.headline ?? ''}
-                onChange={(e) => setField('headline', e.target.value)}
-                placeholder="A short phrase under your name"
-                maxLength={80}
-              />
-              {errors.headline ? (
-                <p className={errorClass}>{errors.headline}</p>
-              ) : null}
+              >
+                <option value="">Select country</option>
+                {countries.map((name) => (
+                  <option key={name} value={name}>
+                    {name}
+                  </option>
+                ))}
+              </select>
             </div>
 
             <div>
@@ -226,6 +230,9 @@ export default function EditProfileForm() {
             {submitError ? <p className={errorClass}>{submitError}</p> : null}
           </div>
         </form>
+        <div className="mt-6">
+          <ReferralWidget />
+        </div>
       </main>
     </div>
   )

@@ -1,6 +1,6 @@
 import type { TutorCertification, TutorPosition } from './user'
 
-export type { TutorCertification, TutorPosition }
+export { TUTOR_POSITIONS, type TutorCertification, type TutorPosition } from './user'
 
 export type SkillTag =
   | 'speaking'
@@ -78,12 +78,6 @@ export interface TutorKpiChart {
   secondaryUnit?: string
   points: TutorKpiChartPoint[]
 }
-
-export const TUTOR_POSITIONS: TutorPosition[] = [
-  'Teacher',
-  'Speaker',
-  'Specialist',
-]
 
 export const SKILL_COLORS: Record<SkillTag, string> = {
   speaking: '#f59e0b',

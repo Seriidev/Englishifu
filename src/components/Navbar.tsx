@@ -47,7 +47,7 @@ export default function Navbar() {
       navigate(dashboardPathForRole(user.role, user))
       return
     }
-    navigate('/login')
+    navigate('/start')
   }
 
   const isLoggedIn = Boolean(user)
@@ -104,7 +104,7 @@ export default function Navbar() {
             : 'rounded-full bg-brand px-5 py-2.5 text-sm font-semibold text-white transition duration-300 hover:bg-brand-dark'
         }
       >
-        {t('nav.login')}
+        {t('nav.signUp')}
       </button>
     )
   }

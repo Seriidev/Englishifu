@@ -12,6 +12,7 @@ import {
   Star,
   Zap,
 } from 'lucide-react'
+import { submitConsultation } from '../utils/adminPanelApi'
 import { useLanguage } from '../i18n/LanguageContext'
 
 type Goal = '' | 'TOEFL' | 'Speaking' | 'IELTS' | 'General English'
@@ -105,9 +106,37 @@ export default function ContactSection() {
     return () => observer.disconnect()
   }, [])
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const [submitState, setSubmitState] = useState<
+    'idle' | 'sending' | 'ok' | 'error'
+  >('idle')
+  const [submitError, setSubmitError] = useState<string | null>(null)
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    console.log('Consultation booked:', form)
+    setSubmitState('sending')
+    setSubmitError(null)
+    try {
+      await submitConsultation({
+        fullName: form.name,
+        email: form.email,
+        phone: form.phone,
+        toeflScore: form.toeflScore,
+        learningGoal: form.goal,
+        message: form.message,
+      })
+      setSubmitState('ok')
+      setForm({
+        name: '',
+        email: '',
+        phone: '',
+        toeflScore: '',
+        goal: '',
+        message: '',
+      })
+    } catch (err) {
+      setSubmitState('error')
+      setSubmitError(err instanceof Error ? err.message : 'Could not submit')
+    }
   }
 
   return (
@@ -343,10 +372,18 @@ export default function ContactSection() {
 
                 <button
                   type="submit"
-                  className="group mt-2 w-full rounded-2xl bg-brand px-6 py-4 text-base font-semibold text-white shadow-lg shadow-brand/30 transition hover:-translate-y-0.5 hover:bg-brand-dark hover:shadow-xl hover:shadow-brand/35"
+                  disabled={submitState === 'sending'}
+                  className="group mt-2 w-full rounded-2xl bg-brand px-6 py-4 text-base font-semibold text-white shadow-lg shadow-brand/30 transition hover:-translate-y-0.5 hover:bg-brand-dark hover:shadow-xl hover:shadow-brand/35 disabled:opacity-60"
                 >
-                  {t('contact.submit')}
+                  {submitState === 'sending'
+                    ? 'Sending…'
+                    : submitState === 'ok'
+                      ? 'Request sent'
+                      : t('contact.submit')}
                 </button>
+                {submitError ? (
+                  <p className="text-center text-sm text-red-600">{submitError}</p>
+                ) : null}
 
                 <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 pt-1 text-sm text-gray-500">
                   <span className="inline-flex items-center gap-1 font-medium text-ink">

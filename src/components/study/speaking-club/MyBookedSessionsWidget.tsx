@@ -10,7 +10,7 @@ export default function MyBookedSessionsWidget() {
         <h3 className="text-sm font-bold text-slate-900">My booked sessions</h3>
         <Link
           to="/study/bookings"
-          className="text-xs font-semibold text-indigo-600 hover:text-indigo-700"
+          className="text-xs font-semibold text-indigo-600 hover:text-indigo-600"
         >
           View all
         </Link>
