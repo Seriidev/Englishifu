@@ -2,6 +2,15 @@ import type { VercelRequest, VercelResponse } from '@vercel/node'
 import { applyCors } from '../../_lib/auth'
 import { dbUnavailableResponse, isDbConfigured, sql } from '../../_lib/db'
 
+function pathSegment(req: VercelRequest): string {
+  const raw = req.query.id ?? req.query.handle
+  const value = Array.isArray(raw) ? raw[0] : raw
+  return String(value ?? '')
+    .replace(/^@/, '')
+    .trim()
+    .toLowerCase()
+}
+
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   applyCors(res)
   if (req.method === 'OPTIONS') return res.status(204).end()
@@ -11,14 +20,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(503).json(dbUnavailableResponse())
   }
 
-  const handleRaw = Array.isArray(req.query.handle)
-    ? req.query.handle[0]
-    : req.query.handle
-  const handle = String(handleRaw ?? '')
-    .replace(/^@/, '')
-    .trim()
-    .toLowerCase()
-
+  const handle = pathSegment(req)
   if (!handle) {
     return res.status(400).json({ error: 'Missing tutor handle' })
   }
