@@ -18,10 +18,11 @@ const FALLBACK_CODES = [
 
 function regionCodes(): string[] {
   try {
-    if (typeof Intl.supportedValuesOf === 'function') {
-      return Intl.supportedValuesOf('region').filter((code) =>
-        /^[A-Z]{2}$/.test(code),
-      )
+    const supportedValuesOf = (
+      Intl as typeof Intl & { supportedValuesOf?: (key: string) => string[] }
+    ).supportedValuesOf
+    if (typeof supportedValuesOf === 'function') {
+      return supportedValuesOf('region').filter((code) => /^[A-Z]{2}$/.test(code))
     }
   } catch {
     /* ignore */

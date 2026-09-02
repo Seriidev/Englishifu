@@ -1,5 +1,5 @@
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
-import { useEffect, useState, type FormEvent, type ComponentType } from 'react'
+import { useEffect, useState, type FormEvent } from 'react'
 import {
   Bell,
   BookOpen,
@@ -14,6 +14,7 @@ import {
   Send,
   UserCheck,
   Users,
+  type LucideIcon,
 } from 'lucide-react'
 import {
   adminLogin,
@@ -23,7 +24,7 @@ import {
 import { adminBtn, adminInput } from './adminUi'
 
 const ADMIN_NAV: {
-  icon: ComponentType<{ className?: string }>
+  icon: LucideIcon
   label: string
   path: string
 }[] = [

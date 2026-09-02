@@ -353,7 +353,7 @@ export function applyTutorServerStatus(
 
 export function dashboardPathForRole(
   role: UserRole,
-  user?: PublicUser | null,
+  _user?: PublicUser | null,
 ): string {
   if (role === 'tutor') {
     return '/tutor'
