@@ -1,4 +1,11 @@
 {
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "isolatedModules": true
+  },
   "files": [],
   "references": [
     { "path": "./tsconfig.app.json" },
