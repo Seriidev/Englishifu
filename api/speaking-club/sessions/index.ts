@@ -68,7 +68,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const durationMinutes = Number(body.durationMinutes) || 60
     const maxParticipants = Number(body.maxParticipants) || 8
     const topicTags = Array.isArray(body.topicTags)
-      ? body.topicTags.map(String).map((t) => t.trim()).filter(Boolean).slice(0, 8)
+      ? body.topicTags
+          .map((t: unknown) => String(t).trim())
+          .filter(Boolean)
+          .slice(0, 8)
       : []
 
     if (!title || title.length < 3) {

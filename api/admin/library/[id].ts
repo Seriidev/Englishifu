@@ -1,9 +1,9 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { applyCors } from '../../../_lib/auth'
-import { verifyAdminSession } from '../../../_lib/adminAuth'
-import { dbUnavailableResponse, isDbConfigured, sql } from '../../../_lib/db'
-import { parseBookInput } from '../../../_lib/libraryBook'
-import { saveLibraryPdf } from '../../../_lib/saveLibraryPdf'
+import { applyCors } from '../../_lib/auth'
+import { verifyAdminSession } from '../../_lib/adminAuth'
+import { dbUnavailableResponse, isDbConfigured, sql } from '../../_lib/db'
+import { parseBookInput } from '../../_lib/libraryBook'
+import { saveLibraryPdf } from '../../_lib/saveLibraryPdf'
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   applyCors(res)
