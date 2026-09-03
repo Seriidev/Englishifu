@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { applyCors, getAuthenticatedUser } from '../../_lib/auth'
-import { dbUnavailableResponse, isDbConfigured, sql } from '../../_lib/db'
+import { applyCors, getAuthenticatedUser } from '../../_lib/auth.js'
+import { dbUnavailableResponse, isDbConfigured, sql } from '../../_lib/db.js'
 
 /** Current tutor row from Postgres (status sync for localStorage clients). */
 export default async function handler(req: VercelRequest, res: VercelResponse) {

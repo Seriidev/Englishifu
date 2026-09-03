@@ -1,5 +1,5 @@
-import { sql } from './db'
-import { createNotification } from './createNotification'
+import { sql } from './db.js'
+import { createNotification } from './createNotification.js'
 
 export const REFERRAL_CREDIT = 1
 export const REFERRAL_XP = 50

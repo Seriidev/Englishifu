@@ -1,5 +1,5 @@
-import { createNotification } from './createNotification'
-import { sql } from './db'
+import { createNotification } from './createNotification.js'
+import { sql } from './db.js'
 
 export const TUTOR_BOOST_XP = 30
 

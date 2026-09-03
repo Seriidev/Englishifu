@@ -7,8 +7,8 @@ import {
   upsertAppUser,
   type AppRole,
   type AuthUser,
-} from '../../_lib/auth'
-import { dbUnavailableResponse, isDbConfigured } from '../../_lib/db'
+} from '../../_lib/auth.js'
+import { dbUnavailableResponse, isDbConfigured } from '../../_lib/db.js'
 
 /**
  * @deprecated Prefer /api/auth/login and /api/auth/register.

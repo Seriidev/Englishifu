@@ -1,7 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { applyCors, getAuthenticatedUser } from '../../_lib/auth'
-import { dbUnavailableResponse, isDbConfigured, sql } from '../../_lib/db'
-import { ensureUserReferralCode } from '../../_lib/rewards'
+import { applyCors, getAuthenticatedUser } from '../../_lib/auth.js'
+import { dbUnavailableResponse, isDbConfigured, sql } from '../../_lib/db.js'
+import { ensureUserReferralCode } from '../../_lib/rewards.js'
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   applyCors(res)

@@ -1,7 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { applyCors } from '../../../_lib/auth'
-import { verifyAdminSession } from '../../../_lib/adminAuth'
-import { dbUnavailableResponse, isDbConfigured, sql } from '../../../_lib/db'
+import { applyCors } from '../../../_lib/auth.js'
+import { verifyAdminSession } from '../../../_lib/adminAuth.js'
+import { dbUnavailableResponse, isDbConfigured, sql } from '../../../_lib/db.js'
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   applyCors(res)

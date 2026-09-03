@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { applyCors } from '../../../_lib/auth'
-import { dbUnavailableResponse, isDbConfigured, sql } from '../../../_lib/db'
+import { applyCors } from '../../../_lib/auth.js'
+import { dbUnavailableResponse, isDbConfigured, sql } from '../../../_lib/db.js'
 
 function pathSegment(req: VercelRequest): string {
   const raw = req.query.id ?? req.query.handle

@@ -3,9 +3,9 @@ import {
   applyCors,
   fetchAppUserByHandle,
   getAuthenticatedUser,
-} from '../../_lib/auth'
-import { dbUnavailableResponse, isDbConfigured } from '../../_lib/db'
-import { rowToPublicUser } from '../../_lib/userMapper'
+} from '../../_lib/auth.js'
+import { dbUnavailableResponse, isDbConfigured } from '../../_lib/db.js'
+import { rowToPublicUser } from '../../_lib/userMapper.js'
 
 /**
  * GET /api/users/:handle — public profile (student or tutor).

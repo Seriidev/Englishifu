@@ -1,7 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { applyCors } from '../../_lib/auth'
-import { dbUnavailableResponse, isDbConfigured, sql } from '../../_lib/db'
-import { loadLibraryPdf } from '../../_lib/saveLibraryPdf'
+import { applyCors } from '../../_lib/auth.js'
+import { dbUnavailableResponse, isDbConfigured, sql } from '../../_lib/db.js'
+import { loadLibraryPdf } from '../../_lib/saveLibraryPdf.js'
 
 function fileName(raw: unknown) {
   const name = String(raw || 'book.pdf').replace(/[^\w.\- ()]+/g, '_')

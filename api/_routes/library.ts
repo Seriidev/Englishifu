@@ -1,7 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { applyCors } from '../_lib/auth'
-import { dbUnavailableResponse, isDbConfigured, sql } from '../_lib/db'
-import { toPublicBook } from '../_lib/libraryBook'
+import { applyCors } from '../_lib/auth.js'
+import { dbUnavailableResponse, isDbConfigured, sql } from '../_lib/db.js'
+import { toPublicBook } from '../_lib/libraryBook.js'
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   applyCors(res)

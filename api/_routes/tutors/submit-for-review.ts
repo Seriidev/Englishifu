@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { applyCors, getAuthenticatedUser } from '../../_lib/auth'
-import { dbUnavailableResponse, isDbConfigured, sql } from '../../_lib/db'
+import { applyCors, getAuthenticatedUser } from '../../_lib/auth.js'
+import { dbUnavailableResponse, isDbConfigured, sql } from '../../_lib/db.js'
 
 /**
  * Tutor submits / re-submits profile for admin review → status pending in Postgres.

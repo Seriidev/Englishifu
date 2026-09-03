@@ -102,7 +102,7 @@ const routes = moved.map((file) => {
   return {
     relFile,
     ident: identFrom(relFile),
-    importPath: `./_routes/${relFile.replace(/\.ts$/, '')}`,
+    importPath: `./_routes/${relFile.replace(/\.ts$/, '')}.js`,
     regex: `^/api/${regexParts.join('/')}/?$`,
     keys,
     dynamicCount: keys.length,
@@ -203,6 +203,36 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   return match.handler(req, res)
 }
 `
+
+function withJsExtension(specifier) {
+  if (!specifier.startsWith('.')) return specifier
+  if (/\.(js|mjs|cjs|json)$/.test(specifier)) return specifier
+  return `${specifier.replace(/\.ts$/, '')}.js`
+}
+
+function addJsToRelativeImports(source) {
+  return source.replace(
+    /((?:from|import)\s+['"])(\.[^'"]+)(['"])/g,
+    (_m, prefix, spec, quote) => `${prefix}${withJsExtension(spec)}${quote}`,
+  )
+}
+
+function rewriteTree(dir) {
+  if (!fs.existsSync(dir)) return
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    const full = path.join(dir, entry.name)
+    if (entry.isDirectory()) {
+      rewriteTree(full)
+      continue
+    }
+    if (!entry.name.endsWith('.ts') || entry.name.endsWith('.d.ts')) continue
+    const next = addJsToRelativeImports(fs.readFileSync(full, 'utf8'))
+    fs.writeFileSync(full, next)
+  }
+}
+
+rewriteTree(path.join(apiDir, '_lib'))
+rewriteTree(path.join(apiDir, '_routes'))
 
 fs.writeFileSync(path.join(apiDir, 'index.ts'), gateway)
 const staleCatchAll = path.join(apiDir, '[[...path]].ts')

@@ -1,12 +1,12 @@
 import { createHmac, randomUUID, timingSafeEqual } from 'crypto'
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 import jwt from 'jsonwebtoken'
-import { sql } from './db'
+import { sql } from './db.js'
 import {
   rowToPublicUser,
   type AppUserRow,
   type PublicUserDto,
-} from './userMapper'
+} from './userMapper.js'
 
 export type AppRole = 'student' | 'tutor'
 

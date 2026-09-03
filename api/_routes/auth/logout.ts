@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { applyCors, clearSessionCookie } from '../../_lib/auth'
+import { applyCors, clearSessionCookie } from '../../_lib/auth.js'
 
 /** POST — clears httpOnly session cookie. */
 export default async function handler(req: VercelRequest, res: VercelResponse) {

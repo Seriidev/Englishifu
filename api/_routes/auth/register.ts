@@ -6,9 +6,9 @@ import {
   fetchAppUserByEmail,
   issueSession,
   newUserId,
-} from '../../_lib/auth'
-import { dbUnavailableResponse, isDbConfigured, sql } from '../../_lib/db'
-import { allocateReferralCode } from '../../_lib/rewards'
+} from '../../_lib/auth.js'
+import { dbUnavailableResponse, isDbConfigured, sql } from '../../_lib/db.js'
+import { allocateReferralCode } from '../../_lib/rewards.js'
 
 /**
  * POST { role, fullName, email, password }

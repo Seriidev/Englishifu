@@ -4,8 +4,8 @@ import {
   applyCors,
   fetchAppUserByEmail,
   issueSession,
-} from '../../_lib/auth'
-import { dbUnavailableResponse, isDbConfigured } from '../../_lib/db'
+} from '../../_lib/auth.js'
+import { dbUnavailableResponse, isDbConfigured } from '../../_lib/db.js'
 
 /**
  * POST { email, password } → Set-Cookie + { user, token }

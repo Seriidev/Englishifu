@@ -8,15 +8,15 @@ import {
   getAuthenticatedUser,
   issueSession,
   signToken,
-} from '../../_lib/auth'
-import { dbUnavailableResponse, isDbConfigured, sql } from '../../_lib/db'
+} from '../../_lib/auth.js'
+import { dbUnavailableResponse, isDbConfigured, sql } from '../../_lib/db.js'
 import {
   isTutorProfileComplete,
   rowToPublicUser,
   TUTOR_POSITIONS,
   type TutorCertification,
   type TutorPosition,
-} from '../../_lib/userMapper'
+} from '../../_lib/userMapper.js'
 
 const POSITIONS: readonly TutorPosition[] = TUTOR_POSITIONS
 
