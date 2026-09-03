@@ -1,8 +1,6 @@
 import Anthropic from '@anthropic-ai/sdk'
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 
-const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
-
 export type WritingTaskTypeAi =
   | 'build-sentence'
   | 'write-email'
@@ -55,9 +53,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' })
 
-  if (!process.env.ANTHROPIC_API_KEY) {
+  const anthropicKey = process.env.ANTHROPIC_API_KEY
+  if (!anthropicKey) {
     return res.status(503).json({ error: 'ANTHROPIC_API_KEY is not configured' })
   }
+
+  const anthropic = new Anthropic({ apiKey: anthropicKey })
 
   const body = req.body as ScoreWritingRequest
   const { taskType, prompt, studentResponse } = body ?? {}

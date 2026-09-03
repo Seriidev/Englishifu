@@ -11,9 +11,6 @@ export const config = {
   },
 }
 
-const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
-
 export interface SpeakingRubricScore {
   fluencyCoherence: number
   languageUse: number
@@ -81,11 +78,16 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(405).json({ error: 'Method not allowed' })
   }
 
-  if (!process.env.ANTHROPIC_API_KEY || !process.env.OPENAI_API_KEY) {
+  const anthropicKey = process.env.ANTHROPIC_API_KEY
+  const openaiKey = process.env.OPENAI_API_KEY
+  if (!anthropicKey || !openaiKey) {
     return res.status(503).json({
       error: 'ANTHROPIC_API_KEY and OPENAI_API_KEY must be configured',
     })
   }
+
+  const anthropic = new Anthropic({ apiKey: anthropicKey })
+  const openai = new OpenAI({ apiKey: openaiKey })
 
   try {
     const { fields, files } = await parseMultipart(req)
