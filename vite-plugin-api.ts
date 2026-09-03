@@ -49,7 +49,7 @@ function walkApiFiles(dir: string, relParts: string[], routes: ApiRoute[]) {
 
 function loadRoutes(apiDir: string): ApiRoute[] {
   const routes: ApiRoute[] = []
-  walkApiFiles(apiDir, [], routes)
+  walkApiFiles(path.join(apiDir, '_routes'), [], routes)
   routes.sort((a, b) => {
     if (a.dynamicCount !== b.dynamicCount) return a.dynamicCount - b.dynamicCount
     return b.staticLen - a.staticLen
