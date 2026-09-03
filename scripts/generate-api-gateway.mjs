@@ -11,6 +11,7 @@ function walk(dir, relParts, files) {
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
     if (entry.name.startsWith('_') || entry.name.startsWith('.')) continue
     if (entry.name === '[[...path]].ts') continue
+    if (entry.name === 'index.ts' && relParts.length === 0) continue
     const full = path.join(dir, entry.name)
     if (entry.isDirectory()) {
       walk(full, [...relParts, entry.name], files)
@@ -163,9 +164,19 @@ async function readJsonBody(req: VercelRequest): Promise<unknown> {
 }
 
 function pathnameOf(req: VercelRequest): string {
+  const routeQ = req.query.__route
+  if (routeQ) {
+    const raw = Array.isArray(routeQ) ? routeQ.join('/') : String(routeQ)
+    const cleaned = decodeURIComponent(raw).replace(/^\\/+/, '')
+    return cleaned ? \`/api/\${cleaned}\` : '/api'
+  }
+  const headerPath = [req.headers['x-forwarded-uri'], req.headers['x-invoke-path'], req.headers['x-real-url']]
+    .map((value) => (Array.isArray(value) ? value[0] : value))
+    .find((value) => typeof value === 'string' && value.startsWith('/api/'))
+  if (headerPath) return String(headerPath).split('?')[0]
   const url = req.url || '/'
   const pathOnly = url.split('?')[0]
-  if (pathOnly.startsWith('/api/')) return pathOnly
+  if (pathOnly.startsWith('/api/') && pathOnly !== '/api/' && pathOnly !== '/api/index') return pathOnly
   const pathQ = req.query.path
   const segs = Array.isArray(pathQ) ? pathQ : pathQ ? [String(pathQ)] : []
   return segs.length ? \`/api/\${segs.join('/')}\` : '/api'
@@ -193,5 +204,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 }
 `
 
-fs.writeFileSync(path.join(apiDir, '[[...path]].ts'), gateway)
-console.log(`Moved ${moved.length} routes into api/_routes and wrote api/[[...path]].ts`)
+fs.writeFileSync(path.join(apiDir, 'index.ts'), gateway)
+const staleCatchAll = path.join(apiDir, '[[...path]].ts')
+if (fs.existsSync(staleCatchAll)) fs.unlinkSync(staleCatchAll)
+console.log(`Wrote api/index.ts from ${moved.length} routes`)
