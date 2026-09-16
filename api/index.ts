@@ -3,13 +3,17 @@ import r_admin_consultation_requests from './_routes/admin/consultation-requests
 import r_tutors_submit_for_review from './_routes/tutors/submit-for-review.js'
 import r_notifications_mark_read from './_routes/notifications/mark-read.js'
 import r_speaking_club_sessions_index from './_routes/speaking-club/sessions/index.js'
+import r_speaking_club_requests from './_routes/speaking-club/requests.js'
 import r_consultation_requests from './_routes/consultation-requests.js'
 import r_admin_pending_tutors from './_routes/admin/pending-tutors.js'
+import r_admin_student_boosts from './_routes/admin/student-boosts.js'
+import r_students_leaderboard from './_routes/students/leaderboard.js'
 import r_admin_speaking_club from './_routes/admin/speaking-club.js'
 import r_admin_send_message from './_routes/admin/send-message.js'
 import r_tutor_availability_index from './_routes/tutor-availability/index.js'
 import r_admin_referrals from './_routes/admin/referrals.js'
 import r_admin_overview from './_routes/admin/overview.js'
+import r_admin_analytics from './_routes/admin/analytics.js'
 import r_admin_students from './_routes/admin/students.js'
 import r_score_speaking from './_routes/score-speaking.js'
 import r_student_boosts from './_routes/student-boosts.js'
@@ -49,6 +53,7 @@ import r_tutors_id_reviews from './_routes/tutors/[id]/reviews.js'
 import r_admin_banners_id from './_routes/admin/banners/[id].js'
 import r_admin_library_id from './_routes/admin/library/[id].js'
 import r_admin_tutors_id from './_routes/admin/tutors/[id].js'
+import r_admin_users_id from './_routes/admin/users/[id].js'
 import r_library_pdf_id from './_routes/library-pdf/[id].js'
 import r_admin_news_id from './_routes/admin/news/[id].js'
 import r_tutors_id_kpi from './_routes/tutors/[id]/kpi.js'
@@ -64,13 +69,17 @@ const routes: { re: RegExp; keys: string[]; handler: ApiHandler }[] = [
   { re: new RegExp("^/api/tutors/submit-for-review/?$"), keys: [], handler: r_tutors_submit_for_review },
   { re: new RegExp("^/api/notifications/mark-read/?$"), keys: [], handler: r_notifications_mark_read },
   { re: new RegExp("^/api/speaking-club/sessions/?$"), keys: [], handler: r_speaking_club_sessions_index },
+  { re: new RegExp("^/api/speaking-club/requests/?$"), keys: [], handler: r_speaking_club_requests },
   { re: new RegExp("^/api/consultation-requests/?$"), keys: [], handler: r_consultation_requests },
   { re: new RegExp("^/api/admin/pending-tutors/?$"), keys: [], handler: r_admin_pending_tutors },
+  { re: new RegExp("^/api/admin/student-boosts/?$"), keys: [], handler: r_admin_student_boosts },
+  { re: new RegExp("^/api/students/leaderboard/?$"), keys: [], handler: r_students_leaderboard },
   { re: new RegExp("^/api/admin/speaking-club/?$"), keys: [], handler: r_admin_speaking_club },
   { re: new RegExp("^/api/admin/send-message/?$"), keys: [], handler: r_admin_send_message },
   { re: new RegExp("^/api/tutor-availability/?$"), keys: [], handler: r_tutor_availability_index },
   { re: new RegExp("^/api/admin/referrals/?$"), keys: [], handler: r_admin_referrals },
   { re: new RegExp("^/api/admin/overview/?$"), keys: [], handler: r_admin_overview },
+  { re: new RegExp("^/api/admin/analytics/?$"), keys: [], handler: r_admin_analytics },
   { re: new RegExp("^/api/admin/students/?$"), keys: [], handler: r_admin_students },
   { re: new RegExp("^/api/score-speaking/?$"), keys: [], handler: r_score_speaking },
   { re: new RegExp("^/api/student-boosts/?$"), keys: [], handler: r_student_boosts },
@@ -110,6 +119,7 @@ const routes: { re: RegExp; keys: string[]; handler: ApiHandler }[] = [
   { re: new RegExp("^/api/admin/banners/([^/]+)/?$"), keys: ["id"], handler: r_admin_banners_id },
   { re: new RegExp("^/api/admin/library/([^/]+)/?$"), keys: ["id"], handler: r_admin_library_id },
   { re: new RegExp("^/api/admin/tutors/([^/]+)/?$"), keys: ["id"], handler: r_admin_tutors_id },
+  { re: new RegExp("^/api/admin/users/([^/]+)/?$"), keys: ["id"], handler: r_admin_users_id },
   { re: new RegExp("^/api/library-pdf/([^/]+)/?$"), keys: ["id"], handler: r_library_pdf_id },
   { re: new RegExp("^/api/admin/news/([^/]+)/?$"), keys: ["id"], handler: r_admin_news_id },
   { re: new RegExp("^/api/tutors/([^/]+)/kpi/?$"), keys: ["id"], handler: r_tutors_id_kpi },

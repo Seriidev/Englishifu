@@ -13,16 +13,18 @@ import {
   HiOutlineHome,
   HiOutlineLanguage,
   HiOutlineMicrophone,
+  HiOutlineMoon,
   HiOutlinePencilSquare,
   HiOutlineQuestionMarkCircle,
+  HiOutlineSun,
   HiOutlineTrophy,
   HiOutlineUser,
   HiOutlineUserGroup,
 } from 'react-icons/hi2'
 import { useAuth } from '../../auth/AuthContext'
+import { useTheme } from '../../theme/ThemeContext'
 import { studentPublicProfilePath } from '../../utils/authStorage'
 import StudyPlaceLogo from './StudyPlaceLogo'
-import ThemeToggle from '../shared/ThemeToggle'
 
 interface SidebarItem {
   icon: IconType
@@ -112,6 +114,7 @@ export default function StudySidebar({
   onNavigate,
 }: StudySidebarProps) {
   const { user, logout } = useAuth()
+  const { theme, toggleTheme } = useTheme()
   const navigate = useNavigate()
   const [menuOpen, setMenuOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
@@ -197,29 +200,11 @@ export default function StudySidebar({
         />
 
         {renderGroup(SECONDARY)}
-
-        <div
-          className={`my-3 h-px bg-slate-200 ${collapsed ? 'w-8' : 'mx-1'}`}
-        />
-
-        <button
-          type="button"
-          title={collapsed ? 'Help' : undefined}
-          onClick={() => {
-            onNavigate?.()
-            window.open('mailto:support@englishcore.com', '_blank')
-          }}
-          className={itemClass(false, collapsed)}
-        >
-          <HiOutlineQuestionMarkCircle className="h-[22px] w-[22px] shrink-0" aria-hidden />
-          <span className={collapsed ? 'sr-only' : 'truncate'}>Help</span>
-        </button>
       </nav>
 
       <div
-        className={`shrink-0 pb-3 ${collapsed ? 'flex flex-col items-center gap-3 px-2' : 'space-y-3 px-4'}`}
+        className={`shrink-0 pb-3 ${collapsed ? 'flex flex-col items-center px-2' : 'px-4'}`}
       >
-        <ThemeToggle collapsed={collapsed} />
         <div className="relative" ref={menuRef}>
           {collapsed ? (
             <button
@@ -285,6 +270,15 @@ export default function StudySidebar({
               <button
                 type="button"
                 role="menuitem"
+                onClick={() => go('/')}
+                className="flex w-full items-center gap-3 px-3 py-2 text-left text-sm hover:bg-slate-50"
+              >
+                <HiOutlineHome className="h-4 w-4 shrink-0" aria-hidden />
+                Home page
+              </button>
+              <button
+                type="button"
+                role="menuitem"
                 onClick={() => go(profilePath)}
                 className="flex w-full items-center gap-3 px-3 py-2 text-left text-sm hover:bg-slate-50"
               >
@@ -299,6 +293,28 @@ export default function StudySidebar({
               >
                 <HiOutlineCog6Tooth className="h-4 w-4 shrink-0" aria-hidden />
                 Settings
+              </button>
+              <button
+                type="button"
+                role="menuitem"
+                onClick={() => go('/study/help')}
+                className="flex w-full items-center gap-3 px-3 py-2 text-left text-sm hover:bg-slate-50"
+              >
+                <HiOutlineQuestionMarkCircle className="h-4 w-4 shrink-0" aria-hidden />
+                Help
+              </button>
+              <button
+                type="button"
+                role="menuitem"
+                onClick={toggleTheme}
+                className="flex w-full items-center gap-3 px-3 py-2 text-left text-sm hover:bg-slate-50"
+              >
+                {theme === 'dark' ? (
+                  <HiOutlineSun className="h-4 w-4 shrink-0" aria-hidden />
+                ) : (
+                  <HiOutlineMoon className="h-4 w-4 shrink-0" aria-hidden />
+                )}
+                {theme === 'dark' ? 'Light mode' : 'Dark mode'}
               </button>
               <button
                 type="button"

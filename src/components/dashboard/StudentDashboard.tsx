@@ -1,7 +1,8 @@
 import { Link, useNavigate } from 'react-router-dom'
-import { GraduationCap, LogOut, UserRound } from 'lucide-react'
+import { LogOut, UserRound } from 'lucide-react'
 import { useAuth } from '../../auth/AuthContext'
 import { studentPublicProfilePath } from '../../utils/authStorage'
+import BrandMark from '../shared/BrandMark'
 import { firstNameFromFullName } from '../../utils/name'
 import {
   mockCurrentCourse,
@@ -29,11 +30,8 @@ export default function StudentDashboard() {
     <div className="landing-shell min-h-svh">
       <header className="border-b border-[#c7d7f5]/60 bg-white/70 backdrop-blur-xl">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 sm:px-6">
-          <Link to="/" className="inline-flex items-center gap-2.5">
-            <span className="flex h-9 w-9 items-center justify-center rounded-full bg-brand text-white">
-              <GraduationCap className="h-4 w-4" aria-hidden />
-            </span>
-            <span className="font-bold text-ink">Englishcore</span>
+          <Link to="/" className="text-ink">
+            <BrandMark />
           </Link>
           <div className="flex items-center gap-2">
             {user?.role === 'student' && user.handle ? (
@@ -72,7 +70,7 @@ export default function StudentDashboard() {
             Welcome, {firstName}
           </h1>
           <p className="mt-1.5 text-sm text-muted">
-            Keep your streak alive — continue where you left off.
+            Continue where you left off.
           </p>
         </div>
 

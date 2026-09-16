@@ -80,7 +80,7 @@ export default function ListeningLibrary() {
           {t('listening.libraryBody')}{' '}
           <button
             type="button"
-            onClick={() => navigate('/listening/adaptive')}
+            onClick={() => navigate('/listening')}
             className="font-semibold text-brand hover:underline"
           >
             {t('listening.adaptiveLink')}

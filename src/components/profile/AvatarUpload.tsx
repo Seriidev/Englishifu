@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Plus, User } from 'lucide-react'
 
 interface AvatarUploadProps {
@@ -17,14 +17,30 @@ export default function AvatarUpload({
   size = 'md',
 }: AvatarUploadProps) {
   const inputRef = useRef<HTMLInputElement>(null)
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null)
   const box = size === 'lg' ? 'h-28 w-28 sm:h-32 sm:w-32' : 'h-24 w-24'
   const icon = size === 'lg' ? 'h-12 w-12' : 'h-10 w-10'
+  const shownUrl = previewUrl || currentAvatarUrl
+
+  useEffect(() => {
+    // After a successful save, parent updates currentAvatarUrl — drop blob preview.
+    setPreviewUrl((prev) => {
+      if (prev?.startsWith('blob:')) URL.revokeObjectURL(prev)
+      return null
+    })
+  }, [currentAvatarUrl])
+
+  useEffect(() => {
+    return () => {
+      if (previewUrl?.startsWith('blob:')) URL.revokeObjectURL(previewUrl)
+    }
+  }, [previewUrl])
 
   return (
     <div className={`group relative shrink-0 ${box}`}>
-      {currentAvatarUrl ? (
+      {shownUrl ? (
         <img
-          src={currentAvatarUrl}
+          src={shownUrl}
           alt={`${displayName} avatar`}
           className={`${box} rounded-full border-2 border-white object-cover shadow-md ring-1 ring-gray-200`}
         />
@@ -50,11 +66,18 @@ export default function AvatarUpload({
           <input
             ref={inputRef}
             type="file"
-            accept="image/png,image/jpeg,image/webp"
+            accept="image/png,image/jpeg,image/webp,image/jpg,.png,.jpg,.jpeg,.webp"
             className="hidden"
             onChange={(e) => {
               const file = e.target.files?.[0]
-              if (file) onAvatarChange(file)
+              if (file) {
+                const local = URL.createObjectURL(file)
+                setPreviewUrl((prev) => {
+                  if (prev?.startsWith('blob:')) URL.revokeObjectURL(prev)
+                  return local
+                })
+                onAvatarChange(file)
+              }
               e.target.value = ''
             }}
           />

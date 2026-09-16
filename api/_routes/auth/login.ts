@@ -5,6 +5,7 @@ import {
   fetchAppUserByEmail,
   issueSession,
 } from '../../_lib/auth.js'
+import { claimDailyLoginXp } from '../../_lib/dailyBonus.js'
 import { dbUnavailableResponse, isDbConfigured } from '../../_lib/db.js'
 
 /**
@@ -47,10 +48,21 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       })
     }
 
+    if (user.role === 'student') {
+      void claimDailyLoginXp(user.id).catch((xpErr) => {
+        console.error('auth/login daily xp:', xpErr)
+      })
+    }
     const session = issueSession(res, user)
     return res.status(200).json(session)
   } catch (err) {
     console.error('auth/login:', err)
+    const msg = err instanceof Error ? err.message : ''
+    if (msg.includes('timeout')) {
+      return res.status(503).json({
+        error: 'Database is waking up. Wait a few seconds and try again.',
+      })
+    }
     return res.status(500).json({ error: 'Failed to login' })
   }
 }

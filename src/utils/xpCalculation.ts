@@ -6,8 +6,8 @@ export const XP_REWARDS = {
   completeFullTest: 100,
   platformEntryBonus: 30,
   dailyLoginBonus: 5,
-  tutorDailyBoost: 30,
-  tutorLessonBoost: 30,
+  tutorDailyBoost: 0,
+  tutorLessonBoost: 10,
 } as const
 
 export function calculateLevelFromXP(totalXP: number): {

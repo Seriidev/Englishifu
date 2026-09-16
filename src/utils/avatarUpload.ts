@@ -1,27 +1,60 @@
-/** Max avatar size before reject (client-side until Vercel Blob is wired). */
-const MAX_BYTES = 1.5 * 1024 * 1024
+/** Accept files up to 5 MB; we compress before saving. */
+const MAX_INPUT_BYTES = 5 * 1024 * 1024
+/** Longest side after resize — keeps data URLs small enough for /api/auth/me. */
+const MAX_EDGE = 512
+const JPEG_QUALITY = 0.82
+
+function isAllowedImage(file: File) {
+  if (['image/png', 'image/jpeg', 'image/webp', 'image/jpg'].includes(file.type)) {
+    return true
+  }
+  // Some OS pickers leave type empty — fall back to extension.
+  return /\.(png|jpe?g|webp)$/i.test(file.name)
+}
+
+function loadImage(file: File): Promise<HTMLImageElement> {
+  return new Promise((resolve, reject) => {
+    const url = URL.createObjectURL(file)
+    const img = new Image()
+    img.onload = () => {
+      URL.revokeObjectURL(url)
+      resolve(img)
+    }
+    img.onerror = () => {
+      URL.revokeObjectURL(url)
+      reject(new Error('Could not read image'))
+    }
+    img.src = url
+  })
+}
 
 /**
- * Reads an image file into a data URL for localStorage-backed profiles.
- * Swap for @vercel/blob client upload when the API is available.
+ * Reads an image, resizes it, and returns a compact JPEG data URL.
+ * Large phone photos (up to 5 MB) are accepted, then compressed for storage.
  */
-export function fileToAvatarDataUrl(file: File): Promise<string> {
-  return new Promise((resolve, reject) => {
-    if (!['image/png', 'image/jpeg', 'image/webp'].includes(file.type)) {
-      reject(new Error('Use PNG, JPEG, or WebP'))
-      return
-    }
-    if (file.size > MAX_BYTES) {
-      reject(new Error('Image must be under 1.5 MB'))
-      return
-    }
+export async function fileToAvatarDataUrl(file: File): Promise<string> {
+  if (!isAllowedImage(file)) {
+    throw new Error('Use PNG, JPEG, or WebP')
+  }
+  if (file.size > MAX_INPUT_BYTES) {
+    throw new Error('Image must be under 5 MB')
+  }
 
-    const reader = new FileReader()
-    reader.onload = () => {
-      if (typeof reader.result === 'string') resolve(reader.result)
-      else reject(new Error('Could not read image'))
-    }
-    reader.onerror = () => reject(new Error('Could not read image'))
-    reader.readAsDataURL(file)
-  })
+  const img = await loadImage(file)
+  const scale = Math.min(1, MAX_EDGE / Math.max(img.width, img.height))
+  const width = Math.max(1, Math.round(img.width * scale))
+  const height = Math.max(1, Math.round(img.height * scale))
+
+  const canvas = document.createElement('canvas')
+  canvas.width = width
+  canvas.height = height
+  const ctx = canvas.getContext('2d')
+  if (!ctx) throw new Error('Could not process image')
+  ctx.drawImage(img, 0, 0, width, height)
+
+  const dataUrl = canvas.toDataURL('image/jpeg', JPEG_QUALITY)
+  if (!dataUrl.startsWith('data:image/')) {
+    throw new Error('Could not process image')
+  }
+  return dataUrl
 }

@@ -1,13 +1,14 @@
 import { useState, type FormEvent } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { Eye, EyeOff } from 'lucide-react'
 import { useAuth } from '../../auth/AuthContext'
-import { dashboardPathForRole } from '../../utils/authStorage'
+import { dashboardPathForRole, forgotPasswordPath } from '../../utils/authStorage'
 import AuthShell from './AuthShell'
 import { errorClass, fieldClass, labelClass, primaryBtnClass } from './formStyles'
 
 export default function LoginForm() {
   const navigate = useNavigate()
+  const [search] = useSearchParams()
   const { login } = useAuth()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -25,21 +26,26 @@ export default function LoginForm() {
     }
 
     setSubmitting(true)
-    const result = await login(email.trim(), password)
-    setSubmitting(false)
+    try {
+      const result = await login(email.trim(), password)
 
-    if (!result.ok) {
-      setError(
-        result.error.includes('431')
-          ? `${result.error} Open site settings → clear cookies for this site, then try again.`
-          : result.error,
-      )
-      return
+      if (!result.ok) {
+        setError(
+          result.error.includes('431')
+            ? `${result.error} Open site settings → clear cookies for this site, then try again.`
+            : result.error,
+        )
+        return
+      }
+
+      navigate(dashboardPathForRole(result.user.role, result.user), {
+        replace: true,
+      })
+    } catch {
+      setError('Could not log in. Try again.')
+    } finally {
+      setSubmitting(false)
     }
-
-    navigate(dashboardPathForRole(result.user.role, result.user), {
-      replace: true,
-    })
   }
 
   return (
@@ -63,9 +69,17 @@ export default function LoginForm() {
         </div>
 
         <div>
-          <label className={labelClass} htmlFor="login-password">
-            Password
-          </label>
+          <div className="mb-1.5 flex items-center justify-between gap-3">
+            <label className="block text-sm font-semibold text-ink" htmlFor="login-password">
+              Password
+            </label>
+            <Link
+              to={forgotPasswordPath(email)}
+              className="text-sm font-semibold text-brand hover:underline"
+            >
+              Forgot password?
+            </Link>
+          </div>
           <div className="relative">
             <input
               id="login-password"
@@ -89,6 +103,12 @@ export default function LoginForm() {
             </button>
           </div>
         </div>
+
+        {search.get('reset') === '1' && !error ? (
+          <p className="text-sm font-medium text-emerald-600">
+            Password updated. Log in with your new password.
+          </p>
+        ) : null}
 
         {error ? <p className={errorClass}>{error}</p> : null}
 

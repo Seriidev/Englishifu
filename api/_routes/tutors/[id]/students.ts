@@ -30,15 +30,23 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         u.handle,
         u.cefr_level,
         COALESCE(u.xp, 0)::int AS xp,
-        NOT EXISTS (
-          SELECT 1
-          FROM student_boosts sb
-          WHERE sb.tutor_id = ${tutorId}
-            AND sb.student_id = u.id
-            AND sb.kind = 'daily'
-            AND sb.boost_day = CURRENT_DATE
-        ) AS can_daily_boost,
-        COUNT(*) FILTER (WHERE b.status = 'completed')::int AS lessons_completed,
+        (
+          NOT EXISTS (
+            SELECT 1
+            FROM student_boosts sb
+            WHERE sb.tutor_id = ${tutorId}
+              AND sb.student_id = u.id
+              AND sb.kind = 'daily'
+              AND sb.boost_day = (CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Ashgabat')::date
+          )
+        ) AS can_boost,
+        (
+          SELECT COUNT(*)::int
+          FROM bookings b
+          WHERE b.tutor_id = ${tutorId}
+            AND b.student_id = u.id
+            AND b.status = 'completed'
+        ) AS lessons_completed,
         (
           SELECT MIN(b2.start_at)
           FROM bookings b2
@@ -47,11 +55,23 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             AND b2.status = 'confirmed'
             AND b2.start_at > NOW()
         ) AS next_lesson_date
-      FROM bookings b
-      JOIN app_users u ON u.id = b.student_id
-      WHERE b.tutor_id = ${tutorId}
-        AND b.status IN ('completed', 'confirmed')
-      GROUP BY u.id, u.full_name, u.avatar_url, u.handle, u.cefr_level, u.xp
+      FROM app_users u
+      WHERE u.role = 'student'
+        AND (
+          EXISTS (
+            SELECT 1 FROM bookings b
+            WHERE b.tutor_id = ${tutorId}
+              AND b.student_id = u.id
+              AND b.status IN ('confirmed', 'completed')
+          )
+          OR EXISTS (
+            SELECT 1
+            FROM speaking_club_participants p
+            JOIN speaking_club_sessions s ON s.id = p.session_id
+            WHERE s.host_tutor_id = ${tutorId}
+              AND p.student_id = u.id
+          )
+        )
       ORDER BY u.full_name ASC
     `
 
@@ -62,7 +82,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       handle: String(r.handle),
       cefrLevel: r.cefr_level ? String(r.cefr_level) : undefined,
       xp: Number(r.xp) || 0,
-      canDailyBoost: Boolean(r.can_daily_boost),
+      canBoost: Boolean(r.can_boost),
+      canDailyBoost: Boolean(r.can_boost),
       lessonsCompleted: Number(r.lessons_completed) || 0,
       nextLessonDate: r.next_lesson_date
         ? new Date(String(r.next_lesson_date)).toLocaleString(undefined, {

@@ -10,5 +10,5 @@ export const adminCard = 'rounded-xl border border-zinc-200 bg-white'
 export const adminSelect =
   'rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-800 outline-none'
 export const adminPageTitle =
-  'font-serif text-3xl font-semibold tracking-tight text-zinc-900'
+  'font-serif text-2xl font-semibold tracking-tight text-zinc-900 sm:text-3xl'
 export const adminMuted = 'text-sm text-zinc-500'

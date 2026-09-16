@@ -218,6 +218,43 @@ export async function joinSpeakingClubSession(
   return res.json() as Promise<{ meetingLink: string; alreadyJoined?: boolean }>
 }
 
+export interface SpeakingClubRequest {
+  id: number
+  topic: string
+  preferred_time: string | null
+  level_tag: string | null
+  note: string | null
+  status: string
+  created_at: string
+}
+
+export async function fetchMySpeakingClubRequests(): Promise<
+  SpeakingClubRequest[]
+> {
+  const res = await fetch('/api/speaking-club/requests', {
+    headers: authHeaders(),
+  })
+  if (!res.ok) throw new Error(await parseError(res))
+  const data = (await res.json()) as { requests: SpeakingClubRequest[] }
+  return data.requests ?? []
+}
+
+export async function createSpeakingClubRequest(input: {
+  topic: string
+  preferredTime?: string
+  levelTag?: string
+  note?: string
+}): Promise<SpeakingClubRequest> {
+  const res = await fetch('/api/speaking-club/requests', {
+    method: 'POST',
+    headers: authHeaders(),
+    body: JSON.stringify(input),
+  })
+  if (!res.ok) throw new Error(await parseError(res))
+  const data = (await res.json()) as { request: SpeakingClubRequest }
+  return data.request
+}
+
 export function formatRelativeTime(iso: string): string {
   const then = new Date(iso).getTime()
   const diff = Date.now() - then

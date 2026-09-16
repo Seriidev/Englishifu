@@ -55,6 +55,8 @@ export interface LibraryItem {
   coverBrand?: string
   coverSeries?: string
   coverByline?: string
+  /** True when a PDF exists; never a direct downloadable URL. */
+  hasPdf?: boolean
   pdfUrl?: string
   pdfFileName?: string
 }

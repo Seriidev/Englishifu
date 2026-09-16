@@ -1,71 +1,207 @@
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
+import type { BuildASentenceItem } from './types'
+import {
+  isBuildSentenceCorrect,
+  shuffleSentenceChips,
+} from './getRandomWritingSession'
+import { useLanguage } from '../../i18n/LanguageContext'
 
-interface Props {
-  wordBank: string[]
-  onSubmit: (ordered: string[]) => void
+interface Chip {
+  id: string
+  text: string
 }
 
-export default function BuildSentence({ wordBank, onSubmit }: Props) {
-  const shuffled = useMemo(() => [...wordBank].sort(() => Math.random() - 0.5), [wordBank])
-  const [pool, setPool] = useState<string[]>(shuffled)
-  const [built, setBuilt] = useState<string[]>([])
+interface Props {
+  item: BuildASentenceItem
+  onContinue: (correct: boolean) => void
+}
 
-  const add = (word: string, fromPoolIndex: number) => {
-    setBuilt((b) => [...b, word])
-    setPool((p) => p.filter((_, i) => i !== fromPoolIndex))
+function toChips(words: string[]): Chip[] {
+  return words.map((text, index) => ({ id: `${index}:${text}`, text }))
+}
+
+function moveChip(from: Chip[], to: Chip[], id: string, insertAt?: number): {
+  from: Chip[]
+  to: Chip[]
+} {
+  const index = from.findIndex((chip) => chip.id === id)
+  const chip = from[index]
+  if (!chip) return { from, to }
+  const nextFrom = from.filter((item) => item.id !== id)
+  const nextTo = [...to]
+  const at =
+    insertAt === undefined || insertAt < 0 || insertAt > nextTo.length
+      ? nextTo.length
+      : insertAt
+  nextTo.splice(at, 0, chip)
+  return { from: nextFrom, to: nextTo }
+}
+
+export default function BuildSentence({ item, onContinue }: Props) {
+  const { t } = useLanguage()
+  const [pool, setPool] = useState<Chip[]>(() =>
+    toChips(shuffleSentenceChips(item)),
+  )
+  const [built, setBuilt] = useState<Chip[]>([])
+  const [checked, setChecked] = useState(false)
+  const [draggingId, setDraggingId] = useState<string | null>(null)
+
+  const correct = checked && isBuildSentenceCorrect(
+    item,
+    built.map((chip) => chip.text),
+  )
+
+  const addFromPool = (id: string, insertAt?: number) => {
+    if (checked) return
+    const next = moveChip(pool, built, id, insertAt)
+    setPool(next.from)
+    setBuilt(next.to)
   }
 
-  const remove = (index: number) => {
-    const word = built[index]
-    setBuilt((b) => b.filter((_, i) => i !== index))
-    setPool((p) => [...p, word])
+  const returnToPool = (id: string) => {
+    if (checked) return
+    const next = moveChip(built, pool, id)
+    setBuilt(next.from)
+    setPool(next.to)
+  }
+
+  const reorderBuilt = (id: string, insertAt: number) => {
+    if (checked) return
+    const fromIndex = built.findIndex((chip) => chip.id === id)
+    if (fromIndex < 0) return
+    const chip = built[fromIndex]
+    if (!chip) return
+    const without = built.filter((itemChip) => itemChip.id !== id)
+    const at = insertAt > fromIndex ? insertAt - 1 : insertAt
+    without.splice(Math.max(0, at), 0, chip)
+    setBuilt(without)
+  }
+
+  const handleDropOnBuilt = (insertAt: number) => {
+    if (!draggingId) return
+    if (built.some((chip) => chip.id === draggingId)) {
+      reorderBuilt(draggingId, insertAt)
+    } else {
+      addFromPool(draggingId, insertAt)
+    }
+    setDraggingId(null)
+  }
+
+  const handleDropOnPool = () => {
+    if (!draggingId) return
+    if (built.some((chip) => chip.id === draggingId)) {
+      returnToPool(draggingId)
+    }
+    setDraggingId(null)
   }
 
   return (
     <div className="flex h-full flex-col">
-      <p className="text-sm text-muted">Tap words to build the sentence. Tap a placed word to remove it.</p>
+      <p className="text-xs font-semibold tracking-wide text-brand uppercase">
+        Build a Sentence
+      </p>
+      <p className="mt-2 text-base font-semibold text-ink">{item.prompt}</p>
+      <p className="mt-1 text-sm text-muted">
+        Drag chips into the sentence, or tap to add and remove them.
+      </p>
 
-      <div className="mt-4 min-h-16 rounded-2xl border border-dashed border-brand/40 bg-brand-light/40 p-3">
-        <div className="flex flex-wrap gap-2">
+      <div
+        className="mt-4 min-h-16 rounded-2xl border border-dashed border-brand/40 bg-brand-light/40 p-3"
+        onDragOver={(event) => event.preventDefault()}
+        onDrop={() => handleDropOnBuilt(built.length)}
+      >
+        <div className="flex flex-wrap items-center gap-2">
+          {item.response_prefix.trim() ? (
+            <span className="text-sm font-semibold text-ink">
+              {item.response_prefix.trim()}
+            </span>
+          ) : null}
+
           {built.length === 0 && (
-            <span className="text-sm text-muted">Your sentence appears here…</span>
+            <span className="text-sm text-muted">Drop or tap words here…</span>
           )}
-          {built.map((w, i) => (
+          {built.map((chip, index) => (
             <button
-              key={`${w}-${i}`}
+              key={chip.id}
               type="button"
-              onClick={() => remove(i)}
-              className="rounded-full bg-brand px-3 py-1.5 text-sm font-semibold text-white"
+              draggable={!checked}
+              onDragStart={() => setDraggingId(chip.id)}
+              onDragEnd={() => setDraggingId(null)}
+              onDragOver={(event) => event.preventDefault()}
+              onDrop={(event) => {
+                event.stopPropagation()
+                handleDropOnBuilt(index)
+              }}
+              onClick={() => returnToPool(chip.id)}
+              disabled={checked}
+              className="rounded-full bg-brand px-3 py-1.5 text-sm font-semibold text-white disabled:opacity-90"
             >
-              {w}
+              {chip.text}
             </button>
           ))}
+
+          {item.response_suffix.trim() ? (
+            <span className="text-sm font-semibold text-ink">
+              {item.response_suffix.trim()}
+            </span>
+          ) : null}
         </div>
       </div>
 
-      <div className="mt-4 mb-2 flex flex-wrap gap-2">
-        {pool.map((w, i) => (
+      <div
+        className="mt-4 mb-2 flex min-h-12 flex-wrap gap-2"
+        onDragOver={(event) => event.preventDefault()}
+        onDrop={handleDropOnPool}
+      >
+        {pool.map((chip) => (
           <button
-            key={`${w}-pool-${i}`}
+            key={chip.id}
             type="button"
-            onClick={() => add(w, i)}
-            className="rounded-full border border-gray-200 bg-white px-3 py-1.5 text-sm font-medium text-ink hover:border-brand"
+            draggable={!checked}
+            onDragStart={() => setDraggingId(chip.id)}
+            onDragEnd={() => setDraggingId(null)}
+            onClick={() => addFromPool(chip.id)}
+            disabled={checked}
+            className="rounded-full border border-gray-200 bg-white px-3 py-1.5 text-sm font-medium text-ink hover:border-brand disabled:opacity-60"
           >
-            {w}
+            {chip.text}
           </button>
         ))}
       </div>
 
-      <div className="mt-auto border-t border-gray-100 pt-6 pb-1">
-        <button
-          type="button"
-          disabled={built.length === 0}
-          onClick={() => onSubmit(built)}
-          className="w-full rounded-full bg-brand py-3 text-sm font-semibold text-white disabled:opacity-50"
-        >
-          Submit Sentence
-        </button>
-      </div>
+      {checked ? (
+        <div className="mt-auto border-t border-gray-100 pt-6 pb-1">
+          <p
+            className={`mb-2 text-center text-sm font-semibold ${
+              correct ? 'text-emerald-600' : 'text-red-600'
+            }`}
+          >
+            {correct ? 'Correct' : 'Not quite'}
+          </p>
+          {!correct && (
+            <p className="mb-4 text-center text-sm text-ink">{item.answer}</p>
+          )}
+          <button
+            type="button"
+            onClick={() => onContinue(correct)}
+            className="w-full rounded-full bg-brand py-3 text-sm font-semibold text-white"
+          >
+            Continue
+          </button>
+        </div>
+      ) : (
+        <div className="mt-auto border-t border-gray-100 pt-6 pb-1">
+          <button
+            type="button"
+            disabled={built.length === 0}
+            onClick={() => setChecked(true)}
+            className="w-full rounded-full bg-brand py-3 text-sm font-semibold text-white disabled:opacity-50"
+          >
+            {t('toefl.submitContinue')}
+          </button>
+          <p className="mt-2.5 text-center text-xs text-muted">{t('toefl.noBack')}</p>
+        </div>
+      )}
     </div>
   )
 }

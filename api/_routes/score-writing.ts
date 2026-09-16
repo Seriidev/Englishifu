@@ -1,5 +1,10 @@
-import Anthropic from '@anthropic-ai/sdk'
 import type { VercelRequest, VercelResponse } from '@vercel/node'
+import {
+  geminiGenerateJson,
+  geminiSpeakingApiKey,
+  geminiWritingApiKey,
+  uniqueGeminiKeys,
+} from '../_lib/gemini.js'
 
 export type WritingTaskTypeAi =
   | 'build-sentence'
@@ -53,12 +58,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' })
 
-  const anthropicKey = process.env.ANTHROPIC_API_KEY
-  if (!anthropicKey) {
-    return res.status(503).json({ error: 'ANTHROPIC_API_KEY is not configured' })
+  const apiKeys = uniqueGeminiKeys(
+    geminiWritingApiKey(),
+    geminiSpeakingApiKey(),
+  )
+  if (apiKeys.length === 0) {
+    return res.status(503).json({ error: 'GEMINI_WRITING_API_KEY is not configured' })
   }
-
-  const anthropic = new Anthropic({ apiKey: anthropicKey })
 
   const body = req.body as ScoreWritingRequest
   const { taskType, prompt, studentResponse } = body ?? {}
@@ -74,35 +80,39 @@ Score the student's response on 4 dimensions, each 0-5:
 - Organization & Coherence: logical structure, clear transitions, paragraph organization
 - Task Achievement: how well the response fulfills the specific task requirements
 
+Be a strict but fair rater. Do not inflate scores. Average independent-level writing is 3.0, not 4.5.
 Task type: ${taskType ?? 'unknown'}
 Task prompt: ${prompt ?? ''}
 
-Respond ONLY with valid JSON matching this exact schema, no other text:
-{
-  "grammar": number,
-  "vocabulary": number,
-  "organization": number,
-  "taskAchievement": number,
-  "feedback": string,
-  "strengths": string[],
-  "improvements": string[]
-}`
+Respond ONLY with valid JSON matching this exact schema, no other text.`
 
   try {
-    const message = await anthropic.messages.create({
-      model: 'claude-sonnet-4-5',
-      max_tokens: 1024,
+    const parsed = await geminiGenerateJson({
+      apiKey: apiKeys,
       system: systemPrompt,
-      messages: [{ role: 'user', content: studentResponse }],
+      parts: [{ text: studentResponse }],
+      schema: {
+        type: 'OBJECT',
+        properties: {
+          grammar: { type: 'NUMBER' },
+          vocabulary: { type: 'NUMBER' },
+          organization: { type: 'NUMBER' },
+          taskAchievement: { type: 'NUMBER' },
+          feedback: { type: 'STRING' },
+          strengths: { type: 'ARRAY', items: { type: 'STRING' } },
+          improvements: { type: 'ARRAY', items: { type: 'STRING' } },
+        },
+        required: [
+          'grammar',
+          'vocabulary',
+          'organization',
+          'taskAchievement',
+          'feedback',
+          'strengths',
+          'improvements',
+        ],
+      },
     })
-
-    const textBlock = message.content.find((b) => b.type === 'text')
-    if (!textBlock || textBlock.type !== 'text') {
-      throw new Error('No text response')
-    }
-
-    const cleaned = textBlock.text.replace(/```json|```/g, '').trim()
-    const parsed = JSON.parse(cleaned) as Record<string, unknown>
 
     const rubric = {
       grammar: clamp01to5(parsed.grammar),
@@ -128,7 +138,14 @@ Respond ONLY with valid JSON matching this exact schema, no other text:
 
     return res.status(200).json(result)
   } catch (err) {
+    const message = err instanceof Error ? err.message : 'Failed to score response'
     console.error('Writing scoring error:', err)
-    return res.status(500).json({ error: 'Failed to score response' })
+    if (/API key not valid/i.test(message)) {
+      return res.status(401).json({
+        error:
+          'GEMINI_WRITING_API_KEY is not valid. Copy the full key from Google AI Studio (it usually starts with AIza).',
+      })
+    }
+    return res.status(500).json({ error: message || 'Failed to score response' })
   }
 }

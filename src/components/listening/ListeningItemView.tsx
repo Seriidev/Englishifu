@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import type { ListeningItem } from './types'
+import type { ListeningItem } from '../../types/listening'
 import { playPromptAudio, cancelPromptAudio } from '../../speaking/hooks/playPromptAudio'
 import ListeningIndicator from '../shared/ListeningIndicator'
 import PromptImage from '../shared/PromptImage'

@@ -1,9 +1,8 @@
 import { createNotification } from './createNotification.js'
 import { sql } from './db.js'
 
-export const TUTOR_BOOST_XP = 30
-
-export type TutorBoostKind = 'daily' | 'lesson'
+export const LESSON_XP = 10
+export const BOOST_XP = 0
 
 function isUniqueViolation(err: unknown) {
   return Boolean(
@@ -14,40 +13,134 @@ function isUniqueViolation(err: unknown) {
   )
 }
 
-export async function grantTutorBoost(input: {
+export async function grantDailyBoost(input: {
   tutorId: string
   studentId: string
-  kind: TutorBoostKind
-  bookingId?: number | null
 }): Promise<{ ok: true; xp: number; awarded: number } | { ok: false; error: string }> {
-  if (input.kind === 'lesson') {
-    if (!input.bookingId) {
-      return { ok: false, error: 'Lesson boost needs a booking' }
-    }
-    const booking = await sql`
-      SELECT id FROM bookings
-      WHERE id = ${input.bookingId}
-        AND tutor_id = ${input.tutorId}
-        AND student_id = ${input.studentId}
-        AND status = 'completed'
-      LIMIT 1
-    `
-    if (booking.rows.length === 0) {
-      return { ok: false, error: 'Complete the lesson first' }
-    }
-  } else {
-    const related = await sql`
+  const student = await sql`
+    SELECT id, COALESCE(xp, 0)::int AS xp
+    FROM app_users
+    WHERE id = ${input.studentId} AND role = 'student'
+    LIMIT 1
+  `
+  if (student.rows.length === 0) {
+    return { ok: false, error: 'Student not found' }
+  }
+
+  const roster = await sql`
+    SELECT 1
+    WHERE EXISTS (
       SELECT 1 FROM bookings
       WHERE tutor_id = ${input.tutorId}
         AND student_id = ${input.studentId}
         AND status IN ('confirmed', 'completed')
-      LIMIT 1
-    `
-    if (related.rows.length === 0) {
-      return { ok: false, error: 'This student is not in your class list' }
-    }
+    )
+    OR EXISTS (
+      SELECT 1
+      FROM speaking_club_participants p
+      JOIN speaking_club_sessions s ON s.id = p.session_id
+      WHERE s.host_tutor_id = ${input.tutorId}
+        AND p.student_id = ${input.studentId}
+    )
+  `
+  if (roster.rows.length === 0) {
+    return { ok: false, error: 'Student is not on your list' }
   }
 
+  try {
+    await sql`
+      INSERT INTO student_boosts (
+        tutor_id, student_id, kind, xp_awarded, boost_day
+      )
+      VALUES (
+        ${input.tutorId},
+        ${input.studentId},
+        ${'daily'},
+        ${BOOST_XP},
+        (CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Ashgabat')::date
+      )
+    `
+  } catch (err) {
+    if (isUniqueViolation(err)) {
+      return { ok: false, error: 'You already boosted this student today' }
+    }
+    throw err
+  }
+
+  const { rows: tutorRows } = await sql`
+    SELECT full_name FROM app_users WHERE id = ${input.tutorId} LIMIT 1
+  `
+  const tutorName = tutorRows[0]?.full_name
+    ? String(tutorRows[0].full_name)
+    : 'Your teacher'
+  await createNotification({
+    userId: input.studentId,
+    type: 'xp_boost',
+    title: 'Teacher boost',
+    message: `${tutorName} boosted you today. Keep going!`,
+    linkPath: '/study',
+  })
+
+  return {
+    ok: true,
+    xp: Number(student.rows[0].xp) || 0,
+    awarded: 0,
+  }
+}
+
+export async function grantAdminBoost(studentId: string): Promise<
+  { ok: true; xp: number; awarded: number } | { ok: false; error: string }
+> {
+  const student = await sql`
+    SELECT id, COALESCE(xp, 0)::int AS xp
+    FROM app_users
+    WHERE id = ${studentId} AND role = 'student'
+    LIMIT 1
+  `
+  if (student.rows.length === 0) {
+    return { ok: false, error: 'Student not found' }
+  }
+
+  try {
+    await sql`
+      INSERT INTO student_boosts (
+        tutor_id, student_id, kind, xp_awarded, boost_day
+      )
+      VALUES (
+        NULL,
+        ${studentId},
+        ${'admin'},
+        ${BOOST_XP},
+        (CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Ashgabat')::date
+      )
+    `
+  } catch (err) {
+    if (isUniqueViolation(err)) {
+      return { ok: false, error: 'This student already got an admin boost today' }
+    }
+    throw err
+  }
+
+  await createNotification({
+    userId: studentId,
+    type: 'xp_boost',
+    title: 'Admin boost',
+    message: 'An admin boosted you today. Keep going!',
+    linkPath: '/study',
+  })
+
+  return {
+    ok: true,
+    xp: Number(student.rows[0].xp) || 0,
+    awarded: 0,
+  }
+}
+
+export async function grantLessonXp(input: {
+  tutorId: string
+  studentId: string
+  bookingId: number
+}): Promise<void> {
   try {
     await sql`
       INSERT INTO student_boosts (
@@ -56,60 +149,20 @@ export async function grantTutorBoost(input: {
       VALUES (
         ${input.tutorId},
         ${input.studentId},
-        ${input.kind},
-        ${input.kind === 'lesson' ? input.bookingId ?? null : null},
-        ${TUTOR_BOOST_XP},
-        CURRENT_DATE
+        ${'lesson'},
+        ${input.bookingId},
+        ${LESSON_XP},
+        (CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Ashgabat')::date
       )
     `
   } catch (err) {
-    if (isUniqueViolation(err)) {
-      return {
-        ok: false,
-        error:
-          input.kind === 'daily'
-            ? 'You already boosted this student today'
-            : 'This lesson was already boosted',
-      }
-    }
+    if (isUniqueViolation(err)) return
     throw err
   }
 
-  const { rows } = await sql`
+  await sql`
     UPDATE app_users
-    SET xp = COALESCE(xp, 0) + ${TUTOR_BOOST_XP}
+    SET xp = COALESCE(xp, 0) + ${LESSON_XP}, updated_at = NOW()
     WHERE id = ${input.studentId} AND role = 'student'
-    RETURNING xp
   `
-  const xp = Number(rows[0]?.xp ?? TUTOR_BOOST_XP)
-
-  await createNotification({
-    userId: input.studentId,
-    type: 'xp_boost',
-    title: input.kind === 'daily' ? 'Daily boost +30 XP' : 'Lesson boost +30 XP',
-    message:
-      input.kind === 'daily'
-        ? 'Your teacher sent you a daily boost. Keep going!'
-        : 'Your teacher boosted you after the lesson. Nice work!',
-    linkPath: '/study',
-  })
-
-  return { ok: true, xp, awarded: TUTOR_BOOST_XP }
-}
-
-export async function tryGrantLessonBoost(input: {
-  tutorId: string
-  studentId: string
-  bookingId: number
-}): Promise<void> {
-  try {
-    await grantTutorBoost({
-      tutorId: input.tutorId,
-      studentId: input.studentId,
-      kind: 'lesson',
-      bookingId: input.bookingId,
-    })
-  } catch (err) {
-    console.error('lesson boost:', err)
-  }
 }

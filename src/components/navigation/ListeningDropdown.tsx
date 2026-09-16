@@ -50,12 +50,19 @@ export default function ListeningDropdown({
               onClick={onNavigate}
               className="block rounded-xl px-3 py-2 text-sm font-medium text-ink hover:bg-brand-light"
             >
+              Full Listening section
+            </Link>
+            <Link
+              to="/listening/library"
+              onClick={onNavigate}
+              className="block rounded-xl px-3 py-2 text-sm font-medium text-ink hover:bg-brand-light"
+            >
               All Listening practices
             </Link>
             {LISTENING_TASK_TYPES.map((t) => (
               <Link
                 key={t.type}
-                to={`/listening?type=${t.type}`}
+                to={`/listening/library?type=${t.type}`}
                 onClick={onNavigate}
                 className="block rounded-xl px-3 py-2 text-sm text-muted hover:bg-brand-light hover:text-ink"
               >
@@ -88,13 +95,26 @@ export default function ListeningDropdown({
 
       {open && (
         <div className="absolute top-full left-1/2 z-50 mt-2 w-80 -translate-x-1/2 rounded-2xl border border-gray-100 bg-white p-2 shadow-lg shadow-black/8">
+          <Link
+            to="/listening"
+            onClick={() => {
+              setOpen(false)
+              onNavigate?.()
+            }}
+            className="mb-1 block rounded-xl px-3 py-2.5 transition hover:bg-brand-light"
+          >
+            <span className="text-sm font-semibold text-ink">Full Listening section</span>
+            <span className="mt-0.5 block text-xs text-muted">
+              Random session from the practice bank
+            </span>
+          </Link>
           <p className="px-3 py-2 text-[11px] font-bold tracking-wide text-muted uppercase">
             Practice tests
           </p>
           {LISTENING_TASK_TYPES.map((t) => (
             <Link
               key={t.type}
-              to={`/listening?type=${t.type}`}
+              to={`/listening/library?type=${t.type}`}
               onClick={() => {
                 setOpen(false)
                 onNavigate?.()
@@ -111,7 +131,7 @@ export default function ListeningDropdown({
             </Link>
           ))}
           <Link
-            to="/listening"
+            to="/listening/library"
             onClick={() => setOpen(false)}
             className="mt-1 block rounded-xl px-3 py-2 text-center text-xs font-semibold text-brand hover:bg-brand-light"
           >

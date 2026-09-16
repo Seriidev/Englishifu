@@ -16,8 +16,8 @@ export default function TutorStudentsPage() {
           Students
         </h2>
         <p className="mt-1 text-sm text-slate-500">
-          Boost a student once a day (+30 XP). They also get +30 XP after each
-          completed lesson.
+          Boost a student once a day, whenever you want. Boost does not add
+          XP — students get +5 daily and +10 per completed lesson.
         </p>
       </div>
       {tutorId ? (

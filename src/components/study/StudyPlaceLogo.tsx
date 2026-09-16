@@ -1,9 +1,14 @@
-/** Reserved slot for the Study Place wordmark. Drop the SVG in here later. */
+import { Link } from 'react-router-dom'
+import BrandMark from '../shared/BrandMark'
+
 export default function StudyPlaceLogo({ className = '' }: { className?: string }) {
   return (
-    <span
-      className={`block h-5 w-[7.25rem] shrink-0 ${className}`}
-      aria-hidden
-    />
+    <Link
+      to="/"
+      className={`min-w-0 truncate text-[17px] text-slate-900 ${className}`}
+      aria-label="EnglishCore home"
+    >
+      <BrandMark />
+    </Link>
   )
 }

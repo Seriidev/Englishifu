@@ -169,8 +169,8 @@ export default function AdminBooksPage() {
                   setError('Please upload a PDF file')
                   return
                 }
-                if (file.size > 8 * 1024 * 1024) {
-                  setError('PDF must be under 8MB')
+                if (file.size > 15 * 1024 * 1024) {
+                  setError('PDF must be under 15MB')
                   return
                 }
                 setError(null)
@@ -184,7 +184,7 @@ export default function AdminBooksPage() {
               }}
             />
             <span className="mt-1 block text-xs font-normal text-slate-500">
-              This is the actual book students open. Max 8MB.
+              This is the actual book students open. Max 15MB.
             </span>
           </label>
           {editing.pdf_file_name || editing.pdf_url ? (

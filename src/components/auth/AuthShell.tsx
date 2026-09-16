@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import { Link } from 'react-router-dom'
-import { GraduationCap } from 'lucide-react'
+import BrandMark from '../shared/BrandMark'
 
 interface AuthShellProps {
   title: string
@@ -13,11 +13,8 @@ export default function AuthShell({ title, subtitle, children }: AuthShellProps)
     <div className="landing-shell flex min-h-svh flex-col">
       <header className="px-4 pt-5 sm:px-6">
         <div className="mx-auto flex max-w-6xl items-center justify-between">
-          <Link to="/" className="inline-flex items-center gap-2.5">
-            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-brand text-white">
-              <GraduationCap className="h-5 w-5" aria-hidden />
-            </span>
-            <span className="text-lg font-bold text-ink">Englishcore</span>
+          <Link to="/" className="text-lg text-ink">
+            <BrandMark />
           </Link>
           <Link
             to="/"

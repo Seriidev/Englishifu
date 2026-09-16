@@ -12,7 +12,8 @@ export default function LibraryReaderPage() {
     : '/study/library'
   const [book, setBook] = useState<LibraryItem | null>(null)
   const [missing, setMissing] = useState(false)
-  const pdfSrc = bookId ? `/api/library-pdf/${bookId}` : ''
+  const [viewerUrl, setViewerUrl] = useState('')
+  const [loadError, setLoadError] = useState(false)
 
   useEffect(() => {
     if (!bookId) return
@@ -27,6 +28,48 @@ export default function LibraryReaderPage() {
       cancelled = true
     }
   }, [bookId])
+
+  useEffect(() => {
+    if (!bookId || missing) return
+    let cancelled = false
+    let objectUrl = ''
+
+    void (async () => {
+      try {
+        const res = await fetch(`/api/library-pdf/${bookId}`, {
+          credentials: 'include',
+        })
+        if (!res.ok) throw new Error('Failed to load PDF')
+        const blob = await res.blob()
+        if (cancelled) return
+        objectUrl = URL.createObjectURL(blob)
+        // Hide Chrome/Edge PDF toolbar (download / print icons).
+        setViewerUrl(`${objectUrl}#toolbar=0&navpanes=0`)
+        setLoadError(false)
+      } catch {
+        if (!cancelled) {
+          setLoadError(true)
+          setViewerUrl('')
+        }
+      }
+    })()
+
+    return () => {
+      cancelled = true
+      if (objectUrl) URL.revokeObjectURL(objectUrl)
+    }
+  }, [bookId, missing])
+
+  useEffect(() => {
+    const blockShortcuts = (event: KeyboardEvent) => {
+      const key = event.key.toLowerCase()
+      if ((event.ctrlKey || event.metaKey) && (key === 's' || key === 'p')) {
+        event.preventDefault()
+      }
+    }
+    window.addEventListener('keydown', blockShortcuts)
+    return () => window.removeEventListener('keydown', blockShortcuts)
+  }, [])
 
   return (
     <section className="flex min-h-0 flex-col gap-4">
@@ -46,28 +89,33 @@ export default function LibraryReaderPage() {
             <p className="truncate text-sm text-slate-500">{book.author}</p>
           ) : null}
         </div>
-        {pdfSrc ? (
-          <a
-            href={pdfSrc}
-            target="_blank"
-            rel="noreferrer"
-            className="ml-auto rounded-full bg-indigo-500 px-3 py-1.5 text-xs font-semibold text-white hover:bg-indigo-600"
-          >
-            Open in new tab
-          </a>
-        ) : null}
       </div>
 
       {missing && !book ? (
         <p className="rounded-2xl border border-dashed border-slate-200 bg-white px-4 py-10 text-center text-sm text-slate-500">
           This book is not in the library.
         </p>
+      ) : loadError ? (
+        <p className="rounded-2xl border border-dashed border-slate-200 bg-white px-4 py-10 text-center text-sm text-slate-500">
+          Could not open this book. Please sign in and try again.
+        </p>
       ) : (
-        <iframe
-          title={book?.title || 'Book'}
-          src={pdfSrc}
-          className="h-[calc(100svh-11rem)] w-full rounded-2xl border border-slate-200 bg-white"
-        />
+        <div
+          className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white"
+          onContextMenu={(event) => event.preventDefault()}
+        >
+          {viewerUrl ? (
+            <iframe
+              title={book?.title || 'Book'}
+              src={viewerUrl}
+              className="h-[calc(100svh-11rem)] w-full bg-white"
+            />
+          ) : (
+            <div className="flex h-[calc(100svh-11rem)] items-center justify-center text-sm text-slate-500">
+              Loading book…
+            </div>
+          )}
+        </div>
       )}
     </section>
   )

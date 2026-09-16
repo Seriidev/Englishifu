@@ -56,13 +56,18 @@ export async function adminLogout(): Promise<void> {
 }
 
 export async function checkAdminSession(): Promise<boolean> {
-  const res = await fetch('/api/admin/login', {
-    method: 'GET',
-    credentials: 'include',
-  })
-  if (!res.ok) return false
-  const data = (await res.json()) as { ok?: boolean }
-  return Boolean(data.ok)
+  try {
+    const res = await fetch('/api/admin/login', {
+      method: 'GET',
+      credentials: 'include',
+      signal: AbortSignal.timeout(8000),
+    })
+    if (!res.ok) return false
+    const data = (await res.json()) as { ok?: boolean }
+    return Boolean(data.ok)
+  } catch {
+    return false
+  }
 }
 
 export async function fetchPendingTutors(
@@ -157,6 +162,7 @@ export async function fetchTutorStudents(tutorId: string) {
       nextLessonDate?: string
       status: 'active' | 'paused'
       xp: number
+      canBoost?: boolean
       canDailyBoost: boolean
     }>
   }

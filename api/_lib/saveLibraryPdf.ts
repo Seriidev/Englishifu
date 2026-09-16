@@ -2,7 +2,7 @@ import fs from 'node:fs/promises'
 import path from 'node:path'
 import crypto from 'node:crypto'
 
-const MAX_BYTES = 8 * 1024 * 1024
+const MAX_BYTES = 15 * 1024 * 1024
 
 function uploadsDir() {
   return path.join(process.cwd(), 'public', 'uploads', 'library')
@@ -21,7 +21,7 @@ export async function saveLibraryPdf(dataUrl: string): Promise<string> {
   if (!base64) throw new Error('Invalid PDF')
   const buf = Buffer.from(base64, 'base64')
   if (buf.length > MAX_BYTES) {
-    throw new Error('PDF must be under 8MB')
+    throw new Error('PDF must be under 15MB')
   }
   const dir = uploadsDir()
   await fs.mkdir(dir, { recursive: true })

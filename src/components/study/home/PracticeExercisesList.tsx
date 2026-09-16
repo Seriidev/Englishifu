@@ -19,13 +19,13 @@ export default function PracticeExercisesList({
             <h3 className="text-sm font-bold text-slate-900">
               {item.title}
             </h3>
-            <p className="mt-1 text-sm text-slate-500">
+            <p className="mt-1 text-sm text-slate-500 break-words">
               {item.description}
             </p>
           </div>
           <Link
             to={item.path}
-            className="inline-flex shrink-0 items-center justify-center rounded-xl bg-indigo-500 px-5 py-2 text-sm font-semibold text-white transition hover:bg-indigo-600"
+            className="inline-flex w-full shrink-0 items-center justify-center rounded-xl bg-indigo-500 px-5 py-2 text-sm font-semibold text-white transition hover:bg-indigo-600 sm:w-auto"
           >
             Start
           </Link>

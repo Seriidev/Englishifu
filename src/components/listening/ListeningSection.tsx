@@ -1,125 +1,147 @@
-import { useCallback, useMemo, useState } from 'react'
-import type { ListeningSectionConfig } from './types'
+import { useCallback, useMemo, useRef, useState } from 'react'
+import toeflListeningJson from '../../data/toefl-listening.json'
+import type { ListeningPlayable, ListeningSession, ToeflListeningBank } from './types'
 import {
-  countCorrect,
-  DEFAULT_ADAPTIVE_CONFIG,
-  determineNextTier,
-  type DifficultyTier,
-} from '../../engine/adaptiveEngine'
-import {
-  blanksCorrect,
-  scoreObjectiveSection,
-  type ObjectiveItemResult,
-} from '../../scoring/readingListeningScoring'
+  countSessionAnswers,
+  findAcademicTalk,
+  findAnnouncement,
+  findConversation,
+  findListenAndChoose,
+  getRandomListeningSession,
+  listeningStepLabel,
+  questionsForItem,
+} from './getRandomListeningSession'
 import type { SectionScore } from '../../scoring/overallScoring'
 import TestShell from '../toefl/TestShell'
 import SectionTimer from '../toefl/SectionTimer'
-import ListeningItemView, {
-  type ListeningAnswerPayload,
-} from './ListeningItemView'
+import ListeningTaskView from './ListeningTaskView'
 
-type Stage = 'intro' | 'stage1' | 'bridge' | 'stage2' | 'results'
+const listeningBank = toeflListeningJson as ToeflListeningBank
+const SECTION_TIME_SECONDS = 36 * 60
 
-interface Props {
-  config: ListeningSectionConfig
+type Stage = 'intro' | 'running' | 'results'
+
+type SessionStep =
+  | { kind: 'listen_and_choose'; id: string }
+  | { kind: 'listen_to_a_conversation'; id: string }
+  | { kind: 'listen_to_an_announcement'; id: string }
+  | { kind: 'listen_to_an_academic_talk'; id: string }
+
+interface ListeningSectionProps {
   onExit: () => void
+  /** When set, skips the results screen and reports score to the parent (full test). */
   onComplete?: (score: SectionScore) => void
 }
 
-export default function ListeningSection({ config, onExit, onComplete }: Props) {
+export default function ListeningSection({
+  onExit,
+  onComplete,
+}: ListeningSectionProps) {
   const [stage, setStage] = useState<Stage>('intro')
-  const [stage2Tier, setStage2Tier] = useState<DifficultyTier>('easy')
-  const [index, setIndex] = useState(0)
-  const [results, setResults] = useState<ObjectiveItemResult[]>([])
+  const [session, setSession] = useState<ListeningSession | null>(null)
+  const [stepIndex, setStepIndex] = useState(0)
+  const [correctCount, setCorrectCount] = useState(0)
+  const [answeredCount, setAnsweredCount] = useState(0)
   const [timerRunning, setTimerRunning] = useState(false)
+  const correctRef = useRef(0)
+  const totalRef = useRef(0)
 
-  const stage1 = config.stage1Items
-  const stage2 =
-    stage2Tier === 'hard' ? config.stage2HardItems : config.stage2EasyItems
-  const queue = stage === 'stage2' ? stage2 : stage1
-  const current = queue[index]
-  const totalAll = stage1.length + stage2.length
-  const answered =
-    stage === 'stage2' ? stage1.length + index : index
+  const steps = useMemo<SessionStep[]>(() => {
+    if (!session) return []
+    return [
+      ...session.listen_and_choose.map((item) => ({
+        kind: 'listen_and_choose' as const,
+        id: item.id,
+      })),
+      ...session.listen_to_a_conversation.map((item) => ({
+        kind: 'listen_to_a_conversation' as const,
+        id: item.id,
+      })),
+      ...session.listen_to_an_announcement.map((item) => ({
+        kind: 'listen_to_an_announcement' as const,
+        id: item.id,
+      })),
+      ...session.listen_to_an_academic_talk.map((item) => ({
+        kind: 'listen_to_an_academic_talk' as const,
+        id: item.id,
+      })),
+    ]
+  }, [session])
 
-  const grade = (item = current, payload: ListeningAnswerPayload): boolean => {
-    if (!item) return false
-    if (payload.type === 'fill-in-blank') {
-      return blanksCorrect(payload.blanks, item.blankAnswers ?? [])
-    }
-    if (payload.type === 'multiple-choice') {
-      return payload.optionIndex === item.correctOptionIndex
-    }
-    const expected = item.correctHotspotMapping ?? {}
-    return Object.keys(expected).every((k) => payload.mapping[k] === expected[k])
+  const totalAnswers = session ? countSessionAnswers(session) : 0
+  const progressPercent =
+    totalAnswers === 0 ? 0 : (answeredCount / totalAnswers) * 100
+  const current = steps[stepIndex]
+  correctRef.current = correctCount
+  totalRef.current = totalAnswers
+
+  const toScore = useCallback((correct: number, total: number): SectionScore => {
+    const accuracy = total === 0 ? 0 : correct / total
+    const bandScore = Math.max(0, Math.min(6, Math.round(accuracy * 6 * 2) / 2))
+    return { rawScore: correct, bandScore }
+  }, [])
+
+  const begin = () => {
+    const next = getRandomListeningSession(listeningBank)
+    setSession(next)
+    setStepIndex(0)
+    setCorrectCount(0)
+    setAnsweredCount(0)
+    setTimerRunning(true)
+    setStage('running')
   }
 
-  const finishSection = useCallback(
-    (finalResults: ObjectiveItemResult[]) => {
-      const scored = scoreObjectiveSection(finalResults)
+  const finish = useCallback(
+    (correct: number, total: number) => {
+      setTimerRunning(false)
+      const score = toScore(correct, total)
       if (onComplete) {
-        onComplete({ rawScore: scored.rawScore, bandScore: scored.bandScore })
+        onComplete(score)
         return
       }
-      setResults(finalResults)
       setStage('results')
     },
-    [onComplete],
+    [onComplete, toScore],
   )
 
-  const handleSubmit = (payload: ListeningAnswerPayload) => {
-    if (!current) return
-    const correct = grade(current, payload)
-    const next = [
-      ...results,
-      { correct, tier: current.difficultyTier } satisfies ObjectiveItemResult,
-    ]
+  const handleExpire = useCallback(() => {
+    finish(correctRef.current, totalRef.current)
+  }, [finish])
 
-    if (stage === 'stage1') {
-      if (index + 1 < stage1.length) {
-        setResults(next)
-        setIndex((i) => i + 1)
-      } else {
-        const { correctCount, totalCount } = countCorrect(next.map((r) => r.correct))
-        const tier = determineNextTier(
-          { stage: 1, tier: 'baseline', correctCount, totalCount },
-          { ...DEFAULT_ADAPTIVE_CONFIG, stage1ItemCount: stage1.length },
-        )
-        setResults(next)
-        setStage2Tier(tier)
-        setStage('bridge')
-      }
+  const handleStepContinue = (correct: number, total: number) => {
+    const nextCorrect = correctCount + correct
+    const nextAnswered = answeredCount + total
+    setCorrectCount(nextCorrect)
+    setAnsweredCount(nextAnswered)
+
+    if (stepIndex + 1 < steps.length) {
+      setStepIndex((i) => i + 1)
       return
     }
-
-    setResults(next)
-    if (index + 1 < stage2.length) {
-      setIndex((i) => i + 1)
-    } else {
-      setTimerRunning(false)
-      finishSection(next)
-    }
+    finish(nextCorrect, nextAnswered)
   }
-
-  const score = useMemo(() => scoreObjectiveSection(results), [results])
 
   if (stage === 'intro') {
     return (
-      <TestShell title="TOEFL Listening" subtitle="Adaptive 2026 format" progressLabel="Ready" progressPercent={0} onExit={onExit}>
-        <div className="mx-auto max-w-xl rounded-3xl border bg-white p-8 text-center shadow-sm">
+      <TestShell
+        title="TOEFL Listening"
+        subtitle={listeningBank.meta.title}
+        progressLabel="Ready"
+        progressPercent={0}
+        onExit={onExit}
+      >
+        <div className="mx-auto max-w-xl rounded-3xl border border-gray-100 bg-white p-8 text-center shadow-sm">
           <h2 className="text-2xl font-bold text-ink">Listening Section</h2>
-          <p className="mt-3 text-sm text-muted">
-            Audio plays once. Stage 2 adapts to Stage 1. Fill-in-blank, multiple-choice, and map matching included.
+          <p className="mt-3 text-sm leading-relaxed text-muted">
+            Each attempt draws a new set: five short replies, two conversations,
+            two announcements, and one academic talk. Audio plays once. Speakers
+            are never announced — listen for the voices. You cannot go back after
+            submitting. Section time: 36 minutes.
           </p>
           <button
             type="button"
             className="mt-8 rounded-full bg-brand px-8 py-3 text-sm font-semibold text-white"
-            onClick={() => {
-              setStage('stage1')
-              setIndex(0)
-              setResults([])
-              setTimerRunning(true)
-            }}
+            onClick={begin}
           >
             Begin Listening
           </button>
@@ -128,83 +150,130 @@ export default function ListeningSection({ config, onExit, onComplete }: Props) 
     )
   }
 
-  if (stage === 'bridge') {
+  if (stage === 'results' || !session || !current) {
     return (
       <TestShell
         title="TOEFL Listening"
-        subtitle="Stage transition"
-        progressLabel={`Stage 2 → ${stage2Tier}`}
-        progressPercent={(stage1.length / Math.max(totalAll, 1)) * 100}
-        timer={<SectionTimer totalSeconds={config.sectionTimeSeconds} running={timerRunning} />}
+        subtitle="Results"
+        progressLabel="Complete"
+        progressPercent={100}
         onExit={onExit}
       >
-        <div className="mx-auto max-w-lg rounded-3xl border bg-white p-8 text-center shadow-sm">
-          <h2 className="text-2xl font-bold text-ink">Stage 2 ({stage2Tier})</h2>
-          <button
-            type="button"
-            className="mt-8 rounded-full bg-brand px-8 py-3 text-sm font-semibold text-white"
-            onClick={() => {
-              setIndex(0)
-              setStage('stage2')
-            }}
-          >
-            Continue
-          </button>
-        </div>
+        <ResultsCard
+          correctCount={correctCount}
+          totalAnswers={totalAnswers}
+          score={toScore(correctCount, totalAnswers)}
+          onExit={onExit}
+          onRetry={begin}
+        />
       </TestShell>
     )
   }
 
-  if (stage === 'results') {
-    return (
-      <TestShell title="TOEFL Listening" subtitle="Results" progressLabel="Complete" progressPercent={100} onExit={onExit}>
-        <div className="mx-auto max-w-lg rounded-3xl border bg-white p-8 text-center shadow-sm">
-          <h2 className="text-2xl font-bold text-ink">Listening Complete</h2>
-          <p className="mt-2 text-sm text-muted">Stage 2: {stage2Tier}</p>
-          <div className="mt-6 grid grid-cols-3 gap-3">
-            <div className="rounded-2xl bg-brand-light p-3">
-              <p className="text-xl font-bold">{score.rawScore}</p>
-              <p className="text-xs text-muted">Weighted</p>
-            </div>
-            <div className="rounded-2xl bg-brand-light p-3">
-              <p className="text-xl font-bold text-brand">{score.bandScore.toFixed(1)}</p>
-              <p className="text-xs text-muted">Band</p>
-            </div>
-            <div className="rounded-2xl bg-brand-light p-3">
-              <p className="text-xl font-bold">{score.cefr}</p>
-              <p className="text-xs text-muted">CEFR</p>
-            </div>
-          </div>
-          <button type="button" onClick={onExit} className="mt-8 rounded-full bg-brand px-8 py-3 text-sm font-semibold text-white">
-            Exit
-          </button>
-        </div>
-      </TestShell>
-    )
-  }
-
-  if (!current) return null
-  const stageLabel = stage === 'stage1' ? 'Stage 1' : `Stage 2 · ${stage2Tier}`
+  const playable = playableForStep(session, current)
+  const questions = questionsForItem(current.kind, session, current.id)
 
   return (
     <TestShell
       title="TOEFL Listening"
-      subtitle={stageLabel}
-      progressLabel={`Question ${answered + 1} of ~${totalAll}`}
-      progressPercent={(answered / Math.max(totalAll, 1)) * 100}
+      subtitle={listeningStepLabel(current.kind)}
+      progressLabel={`Part ${stepIndex + 1} of ${steps.length} · ${answeredCount}/${totalAnswers} answers`}
+      progressPercent={progressPercent}
       timer={
         <SectionTimer
-          totalSeconds={config.sectionTimeSeconds}
+          totalSeconds={SECTION_TIME_SECONDS}
           running={timerRunning}
-          onExpire={() => {
-            setTimerRunning(false)
-            finishSection(results)
-          }}
+          onExpire={handleExpire}
         />
       }
       onExit={onExit}
     >
-      <ListeningItemView key={current.id} item={current} onSubmit={handleSubmit} />
+      <div className="mx-auto w-full max-w-3xl rounded-3xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6">
+        {playable ? (
+          <ListeningTaskView
+            key={`${current.kind}-${current.id}`}
+            playable={playable}
+            questions={questions}
+            onContinue={handleStepContinue}
+          />
+        ) : null}
+      </div>
     </TestShell>
+  )
+}
+
+function playableForStep(
+  session: ListeningSession,
+  step: SessionStep,
+): ListeningPlayable | null {
+  if (step.kind === 'listen_and_choose') {
+    const item = findListenAndChoose(session, step.id)
+    return item ? { kind: 'listen_and_choose', item } : null
+  }
+  if (step.kind === 'listen_to_a_conversation') {
+    const item = findConversation(session, step.id)
+    return item ? { kind: 'listen_to_a_conversation', item } : null
+  }
+  if (step.kind === 'listen_to_an_announcement') {
+    const item = findAnnouncement(session, step.id)
+    return item ? { kind: 'listen_to_an_announcement', item } : null
+  }
+  const item = findAcademicTalk(session, step.id)
+  return item ? { kind: 'listen_to_an_academic_talk', item } : null
+}
+
+function ResultsCard({
+  correctCount,
+  totalAnswers,
+  score,
+  onExit,
+  onRetry,
+}: {
+  correctCount: number
+  totalAnswers: number
+  score: SectionScore
+  onExit: () => void
+  onRetry: () => void
+}) {
+  const accuracy =
+    totalAnswers === 0 ? 0 : Math.round((correctCount / totalAnswers) * 100)
+
+  return (
+    <div className="mx-auto max-w-lg rounded-3xl border border-gray-100 bg-white p-8 text-center shadow-sm">
+      <h2 className="text-2xl font-bold text-ink">Listening Complete</h2>
+      <p className="mt-2 text-sm text-muted">
+        Score is the number of correct answers in this session.
+      </p>
+      <div className="mt-6 grid grid-cols-3 gap-3">
+        <Stat label="Correct" value={`${correctCount}/${totalAnswers}`} />
+        <Stat label="Accuracy" value={`${accuracy}%`} />
+        <Stat label="Band" value={score.bandScore.toFixed(1)} />
+      </div>
+      <div className="mt-8 flex justify-center gap-3">
+        <button
+          type="button"
+          onClick={onExit}
+          className="rounded-full border px-5 py-2.5 text-sm font-semibold"
+        >
+          Exit
+        </button>
+        <button
+          type="button"
+          onClick={onRetry}
+          className="rounded-full bg-brand px-5 py-2.5 text-sm font-semibold text-white"
+        >
+          Retry
+        </button>
+      </div>
+    </div>
+  )
+}
+
+function Stat({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-2xl bg-brand-light p-3">
+      <p className="text-xl font-bold text-ink">{value}</p>
+      <p className="text-xs text-muted">{label}</p>
+    </div>
   )
 }

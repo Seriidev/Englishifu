@@ -1,9 +1,12 @@
-import Anthropic from '@anthropic-ai/sdk'
-import { createReadStream } from 'fs'
+import { readFile } from 'fs/promises'
 import formidable from 'formidable'
 import type { File as FormidableFile } from 'formidable'
-import OpenAI, { toFile } from 'openai'
 import type { VercelRequest, VercelResponse } from '@vercel/node'
+import {
+  audioMimeType,
+  geminiGenerateJson,
+  geminiSpeakingApiKey,
+} from '../_lib/gemini.js'
 
 export const config = {
   api: {
@@ -78,16 +81,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(405).json({ error: 'Method not allowed' })
   }
 
-  const anthropicKey = process.env.ANTHROPIC_API_KEY
-  const openaiKey = process.env.OPENAI_API_KEY
-  if (!anthropicKey || !openaiKey) {
+  const apiKey = geminiSpeakingApiKey()
+  if (!apiKey) {
     return res.status(503).json({
-      error: 'ANTHROPIC_API_KEY and OPENAI_API_KEY must be configured',
+      error: 'GEMINI_SPEAKING_API_KEY is not configured',
     })
   }
-
-  const anthropic = new Anthropic({ apiKey: anthropicKey })
-  const openai = new OpenAI({ apiKey: openaiKey })
 
   try {
     const { fields, files } = await parseMultipart(req)
@@ -99,17 +98,58 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(400).json({ error: 'No audio file provided' })
     }
 
-    const whisperFile = await toFile(
-      createReadStream(audio.filepath),
-      audio.originalFilename || 'recording.webm',
-    )
+    const audioBytes = await readFile(audio.filepath)
+    const mimeType = audioMimeType(audio.mimetype, audio.originalFilename)
 
-    const transcription = await openai.audio.transcriptions.create({
-      file: whisperFile,
-      model: 'whisper-1',
+    const systemPrompt = `You are an expert TOEFL iBT Speaking rater.
+First transcribe the student's spoken English exactly.
+Then score the response on 3 dimensions (0-5 each):
+- Fluency & Coherence: natural flow, hesitation, connected speech
+- Language Use: grammar and vocabulary range in spoken English
+- Topic Development: completeness and relevance of content
+
+Be a strict but fair rater. Do not inflate scores. A typical independent response is around 3.0, not 4.5.
+Task type: ${taskType}
+Task / question prompt: ${prompt}
+
+If there is no intelligible English speech, return an empty transcript and zeros.
+Respond ONLY with valid JSON.`
+
+    const parsed = await geminiGenerateJson({
+      apiKey,
+      system: systemPrompt,
+      parts: [
+        {
+          inlineData: {
+            mimeType,
+            data: audioBytes.toString('base64'),
+          },
+        },
+        {
+          text: 'Transcribe this recording and score it against the TOEFL speaking rubric.',
+        },
+      ],
+      schema: {
+        type: 'OBJECT',
+        properties: {
+          transcript: { type: 'STRING' },
+          fluencyCoherence: { type: 'NUMBER' },
+          languageUse: { type: 'NUMBER' },
+          topicDevelopment: { type: 'NUMBER' },
+          feedback: { type: 'STRING' },
+        },
+        required: [
+          'transcript',
+          'fluencyCoherence',
+          'languageUse',
+          'topicDevelopment',
+          'feedback',
+        ],
+      },
     })
 
-    const transcript = transcription.text?.trim() ?? ''
+    const transcript =
+      typeof parsed.transcript === 'string' ? parsed.transcript.trim() : ''
     if (!transcript) {
       return res.status(400).json({
         error: 'Could not transcribe audio',
@@ -122,39 +162,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           'No speech was detected in the recording. Try speaking more clearly and closer to the microphone.',
       })
     }
-
-    const systemPrompt = `You are an expert TOEFL iBT Speaking rater. Score this transcript on 3 dimensions (0-5 each):
-- Fluency & Coherence: natural flow, minimal hesitation markers visible in transcript
-- Language Use: grammar and vocabulary range in spoken English
-- Topic Development: completeness and relevance of content
-
-Task type: ${taskType}
-Task / question prompt: ${prompt}
-
-Note: pronunciation and intonation cannot be assessed from a text transcript alone — factor this into your Fluency score conservatively, and mention this limitation briefly in your feedback.
-
-Respond ONLY with valid JSON:
-{
-  "fluencyCoherence": number,
-  "languageUse": number,
-  "topicDevelopment": number,
-  "feedback": string
-}`
-
-    const message = await anthropic.messages.create({
-      model: 'claude-sonnet-4-5',
-      max_tokens: 512,
-      system: systemPrompt,
-      messages: [{ role: 'user', content: transcript }],
-    })
-
-    const textBlock = message.content.find((b) => b.type === 'text')
-    if (!textBlock || textBlock.type !== 'text') {
-      throw new Error('No text response from scorer')
-    }
-
-    const cleaned = textBlock.text.replace(/```json|```/g, '').trim()
-    const parsed = JSON.parse(cleaned) as Record<string, unknown>
 
     const rubric = {
       fluencyCoherence: clamp01to5(parsed.fluencyCoherence),
@@ -174,7 +181,15 @@ Respond ONLY with valid JSON:
 
     return res.status(200).json(result)
   } catch (err) {
+    const message =
+      err instanceof Error ? err.message : 'Failed to score speaking response'
     console.error('Speaking scoring error:', err)
-    return res.status(500).json({ error: 'Failed to score speaking response' })
+    if (/API key not valid/i.test(message)) {
+      return res.status(401).json({
+        error:
+          'GEMINI_SPEAKING_API_KEY is not valid. Copy the full key from Google AI Studio (it usually starts with AIza or AQ.).',
+      })
+    }
+    return res.status(500).json({ error: message || 'Failed to score speaking response' })
   }
 }

@@ -2,7 +2,7 @@ import type { VercelRequest, VercelResponse } from '@vercel/node'
 import { applyCors, getAuthenticatedUser } from '../../_lib/auth.js'
 import { createNotification } from '../../_lib/createNotification.js'
 import { dbUnavailableResponse, isDbConfigured, sql } from '../../_lib/db.js'
-import { tryGrantLessonBoost } from '../../_lib/studentXp.js'
+import { grantLessonXp } from '../../_lib/studentXp.js'
 
 function formatWhen(iso: string): string {
   try {
@@ -136,8 +136,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     try {
       // Lazy-complete past lessons so students can leave reviews
-      const justCompleted = listAsTutor
-        ? await sql`
+      if (listAsTutor) {
+        const completed = await sql`
             UPDATE bookings
             SET status = 'completed'
             WHERE tutor_id = ${user.id}
@@ -145,7 +145,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
               AND end_at < NOW()
             RETURNING id, tutor_id, student_id
           `
-        : await sql`
+        for (const row of completed.rows) {
+          await grantLessonXp({
+            tutorId: String(row.tutor_id),
+            studentId: String(row.student_id),
+            bookingId: Number(row.id),
+          })
+        }
+      } else {
+        const completed = await sql`
             UPDATE bookings
             SET status = 'completed'
             WHERE student_id = ${user.id}
@@ -153,8 +161,38 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
               AND end_at < NOW()
             RETURNING id, tutor_id, student_id
           `
-      for (const row of justCompleted.rows) {
-        await tryGrantLessonBoost({
+        for (const row of completed.rows) {
+          await grantLessonXp({
+            tutorId: String(row.tutor_id),
+            studentId: String(row.student_id),
+            bookingId: Number(row.id),
+          })
+        }
+      }
+
+      const missingLessonXp = listAsTutor
+        ? await sql`
+            SELECT id, tutor_id, student_id
+            FROM bookings
+            WHERE tutor_id = ${user.id}
+              AND status = 'completed'
+              AND NOT EXISTS (
+                SELECT 1 FROM student_boosts sb
+                WHERE sb.booking_id = bookings.id AND sb.kind = 'lesson'
+              )
+          `
+        : await sql`
+            SELECT id, tutor_id, student_id
+            FROM bookings
+            WHERE student_id = ${user.id}
+              AND status = 'completed'
+              AND NOT EXISTS (
+                SELECT 1 FROM student_boosts sb
+                WHERE sb.booking_id = bookings.id AND sb.kind = 'lesson'
+              )
+          `
+      for (const row of missingLessonXp.rows) {
+        await grantLessonXp({
           tutorId: String(row.tutor_id),
           studentId: String(row.student_id),
           bookingId: Number(row.id),

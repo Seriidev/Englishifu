@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 import { Link } from 'react-router-dom'
-import { GraduationCap } from 'lucide-react'
 import { useLanguage } from '../i18n/LanguageContext'
+import BrandMark from './shared/BrandMark'
 
 function SocialIcon({ label, children }: { label: string; children: ReactNode }) {
   return (
@@ -38,12 +38,7 @@ export default function Footer() {
       <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
         <div className="grid gap-10 lg:grid-cols-[1.2fr_2fr]">
           <div>
-            <div className="flex items-center gap-2.5">
-              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/10">
-                <GraduationCap className="h-5 w-5" aria-hidden />
-              </span>
-              <span className="text-xl font-bold">Englishcore</span>
-            </div>
+            <BrandMark className="text-xl text-white" />
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-white/60">
               {t('footer.tagline')}
             </p>
@@ -90,7 +85,7 @@ export default function Footer() {
         </div>
 
         <div className="mt-12 border-t border-white/10 pt-6 text-center text-sm text-white/50">
-          © 2026 Englishcore. All rights reserved.
+          © 2026 EnglishCore. All rights reserved.
         </div>
       </div>
     </footer>

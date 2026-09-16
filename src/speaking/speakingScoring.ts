@@ -4,8 +4,8 @@ import type { SpeakingRubricScore } from '../types/aiRubric'
 export type { SpeakingRubricScore }
 
 /**
- * Whisper transcription + Claude rubric via `/api/score-speaking`.
- * Requires OPENAI_API_KEY + ANTHROPIC_API_KEY on the server.
+ * Gemini audio + rubric via `/api/score-speaking`.
+ * Requires GEMINI_SPEAKING_API_KEY on the server.
  */
 export async function scoreSpeakingWithAI(
   audio: Blob,

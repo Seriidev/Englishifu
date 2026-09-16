@@ -1,20 +1,20 @@
-import { Mic, Trophy, Users } from 'lucide-react'
+import { Mic, MessageSquarePlus, Users } from 'lucide-react'
 
 const STEPS = [
   {
+    icon: MessageSquarePlus,
+    title: 'Request a club',
+    body: 'Tell us the topic, level, and time that work for you.',
+  },
+  {
     icon: Users,
-    title: 'Choose a session',
-    body: 'Pick a topic and level that matches your goals.',
+    title: 'We set it up',
+    body: 'A host opens a session that matches what students asked for.',
   },
   {
     icon: Mic,
-    title: 'Join the live session',
-    body: 'Hop into Google Meet with your host and peers.',
-  },
-  {
-    icon: Trophy,
-    title: 'Practice & improve',
-    body: 'Speak every week and track your fluency gains.',
+    title: 'Join and speak',
+    body: 'When it goes live, hop into the meeting and practice.',
   },
 ]
 

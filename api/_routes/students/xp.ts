@@ -1,5 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 import { applyCors, getAuthenticatedUser } from '../../_lib/auth.js'
+import { claimDailyLoginXp } from '../../_lib/dailyBonus.js'
 import { dbUnavailableResponse, isDbConfigured, sql } from '../../_lib/db.js'
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -16,23 +17,24 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
+    const bonus = await claimDailyLoginXp(user.id)
     const { rows } = await sql`
       SELECT
-        COALESCE(u.xp, 0)::int AS xp,
-        EXISTS (
-          SELECT 1
-          FROM student_boosts sb
-          WHERE sb.student_id = u.id
-            AND sb.boost_day = CURRENT_DATE
-        ) AS boosted_today
-      FROM app_users u
-      WHERE u.id = ${user.id} AND u.role = 'student'
-      LIMIT 1
+        COUNT(*)::int AS boost_count,
+        COUNT(*) FILTER (
+          WHERE boost_day = (CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Ashgabat')::date
+        )::int AS boosts_today
+      FROM student_boosts
+      WHERE student_id = ${user.id}
+        AND kind IN ('daily', 'admin')
     `
-    const row = rows[0]
+    const boostCount = Number(rows[0]?.boost_count) || 0
     return res.status(200).json({
-      xp: Number(row?.xp ?? 0),
-      boostedToday: Boolean(row?.boosted_today),
+      xp: bonus.xp,
+      boostCount,
+      boostedToday: Number(rows[0]?.boosts_today) > 0,
+      dailyBonusClaimedToday: bonus.claimedToday,
+      dailyBonusAwarded: bonus.awarded,
     })
   } catch (err) {
     console.error('GET students/xp:', err)

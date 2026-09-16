@@ -111,7 +111,7 @@ export default function StudyLibraryPage() {
           className={`rounded-full border px-4 py-1.5 text-sm font-medium transition ${
             myBooksOnly
               ? 'border-indigo-500 bg-indigo-600 text-white'
-              : 'border-slate-300 bg-white text-slate-800 hover:border-indigo-500 dark:border-white/20 dark:bg-[#1B3A56] dark:text-white'
+              : 'border-slate-300 bg-white text-slate-800 hover:border-indigo-400 dark:border-white/20 dark:bg-slate-800 dark:text-white'
           }`}
           aria-pressed={myBooksOnly}
         >
@@ -129,7 +129,7 @@ export default function StudyLibraryPage() {
           className={`w-fit rounded-full px-3 py-1.5 text-xs font-semibold transition ${
             level === 'all' && category === 'all'
               ? 'bg-indigo-600 text-white'
-              : 'border border-slate-300 bg-white text-slate-800 dark:border-white/20 dark:bg-[#1B3A56] dark:text-white'
+              : 'border border-slate-300 bg-white text-slate-800 hover:border-indigo-400 dark:border-white/20 dark:bg-slate-800 dark:text-white'
           }`}
         >
           All
@@ -154,7 +154,7 @@ export default function StudyLibraryPage() {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search"
-          className="w-full min-w-0 flex-1 rounded-full border border-slate-300 bg-white px-4 py-1.5 text-sm text-slate-900 outline-none placeholder:text-slate-400 focus:border-indigo-500 dark:border-white/15 dark:bg-[#1B3A56] dark:text-white dark:placeholder:text-white/50"
+          className="w-full min-w-0 flex-1 rounded-full border border-slate-300 bg-white px-4 py-1.5 text-sm text-slate-900 outline-none placeholder:text-slate-400 focus:border-indigo-500 dark:border-white/15 dark:bg-slate-800 dark:text-white dark:placeholder:text-white/50"
         />
 
         <div className="flex shrink-0 items-center gap-2 self-end lg:border-l lg:border-slate-200 lg:pl-3 dark:lg:border-white/15">
@@ -162,7 +162,7 @@ export default function StudyLibraryPage() {
             type="button"
             disabled={safePage <= 1}
             onClick={() => setPage((p) => Math.max(1, p - 1))}
-            className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-slate-300 bg-white text-slate-600 transition hover:bg-slate-50 disabled:opacity-40 dark:border-white/20 dark:bg-[#1B3A56] dark:text-white"
+            className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-slate-300 bg-white text-slate-600 transition hover:bg-slate-50 disabled:opacity-40 dark:border-white/20 dark:bg-slate-800 dark:text-white"
             aria-label="Previous page"
           >
             <HiOutlineChevronLeft className="h-4 w-4" aria-hidden />
@@ -174,7 +174,7 @@ export default function StudyLibraryPage() {
             type="button"
             disabled={safePage >= totalPages || filtered.length === 0}
             onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-            className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-slate-300 bg-white text-slate-600 transition hover:bg-slate-50 disabled:opacity-40 dark:border-white/20 dark:bg-[#1B3A56] dark:text-white"
+            className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-slate-300 bg-white text-slate-600 transition hover:bg-slate-50 disabled:opacity-40 dark:border-white/20 dark:bg-slate-800 dark:text-white"
             aria-label="Next page"
           >
             <HiOutlineChevronRight className="h-4 w-4" aria-hidden />
@@ -183,7 +183,7 @@ export default function StudyLibraryPage() {
       </div>
 
       {pageItems.length === 0 ? (
-        <p className="rounded-2xl border border-dashed border-slate-200 bg-white px-4 py-10 text-center text-sm text-slate-500 dark:border-white/15 dark:bg-[#1B3A56] dark:text-white/70">
+        <p className="rounded-2xl border border-dashed border-slate-200 bg-white px-4 py-10 text-center text-sm text-slate-500 dark:border-white/15 dark:bg-slate-800 dark:text-white/70">
           {myBooksOnly
             ? 'No saved books yet. Tap the ribbon on a card to add it here.'
             : 'No books yet. An admin can add them from Books in the admin panel.'}

@@ -1,0 +1,979 @@
+{
+  "meta": {
+    "title": "TOEFL-Style Writing Practice",
+    "sections": [
+      "build_a_sentence",
+      "write_an_email",
+      "write_for_academic_discussion"
+    ],
+    "counts": {
+      "build_a_sentence": 30,
+      "write_an_email": 5,
+      "write_for_academic_discussion": 5
+    },
+    "notice": "All prompts, scenarios, sentences and sample answers are original content written for this project. TOEFL is a registered trademark of ETS; this material is not produced, endorsed or approved by ETS."
+  },
+  "build_a_sentence": [
+    {
+      "id": "bas-01",
+      "number": 1,
+      "prompt": "What time does the museum open on weekends?",
+      "response_prefix": "",
+      "response_suffix": ".",
+      "chips_correct_order": [
+        "it",
+        "opens",
+        "an",
+        "hour",
+        "later",
+        "than",
+        "it",
+        "does",
+        "on",
+        "weekdays"
+      ],
+      "chips_shuffled": [
+        "weekdays",
+        "opens",
+        "hour",
+        "it",
+        "it",
+        "later",
+        "does",
+        "an",
+        "than",
+        "on"
+      ],
+      "answer": "It opens an hour later than it does on weekdays."
+    },
+    {
+      "id": "bas-02",
+      "number": 2,
+      "prompt": "I heard your sister moved to Seattle for work.",
+      "response_prefix": "Did she",
+      "response_suffix": "?",
+      "chips_correct_order": [
+        "tell",
+        "you",
+        "which",
+        "company",
+        "hired",
+        "her"
+      ],
+      "chips_shuffled": [
+        "her",
+        "company",
+        "hired",
+        "tell",
+        "which",
+        "you"
+      ],
+      "answer": "Did she tell you which company hired her?"
+    },
+    {
+      "id": "bas-03",
+      "number": 3,
+      "prompt": "Were you able to fix the printer in the office?",
+      "response_prefix": "I",
+      "response_suffix": "the cable was loose.",
+      "chips_correct_order": [
+        "realized",
+        "after",
+        "checking",
+        "the",
+        "settings",
+        "that"
+      ],
+      "chips_shuffled": [
+        "after",
+        "checking",
+        "the",
+        "realized",
+        "settings",
+        "that"
+      ],
+      "answer": "I realized after checking the settings that the cable was loose."
+    },
+    {
+      "id": "bas-04",
+      "number": 4,
+      "prompt": "Did you enjoy the concert last weekend?",
+      "response_prefix": "I",
+      "response_suffix": "so far from the stage.",
+      "chips_correct_order": [
+        "would",
+        "have",
+        "enjoyed",
+        "it",
+        "more",
+        "if",
+        "the",
+        "seats",
+        "hadn't",
+        "been"
+      ],
+      "chips_shuffled": [
+        "would",
+        "the",
+        "have",
+        "hadn't",
+        "enjoyed",
+        "more",
+        "been",
+        "seats",
+        "if",
+        "it"
+      ],
+      "answer": "I would have enjoyed it more if the seats hadn't been so far from the stage."
+    },
+    {
+      "id": "bas-05",
+      "number": 5,
+      "prompt": "Was the flight to Chicago smooth yesterday?",
+      "response_prefix": "",
+      "response_suffix": ", but the landing was a little rough.",
+      "chips_correct_order": [
+        "the",
+        "takeoff",
+        "went",
+        "fine"
+      ],
+      "chips_shuffled": [
+        "fine",
+        "the",
+        "went",
+        "takeoff"
+      ],
+      "answer": "The takeoff went fine, but the landing was a little rough."
+    },
+    {
+      "id": "bas-06",
+      "number": 6,
+      "prompt": "Why did you switch to a different gym?",
+      "response_prefix": "",
+      "response_suffix": ".",
+      "chips_correct_order": [
+        "I",
+        "wanted",
+        "a",
+        "place",
+        "closer",
+        "to",
+        "my",
+        "apartment"
+      ],
+      "chips_shuffled": [
+        "a",
+        "apartment",
+        "my",
+        "closer",
+        "I",
+        "wanted",
+        "place",
+        "to"
+      ],
+      "answer": "I wanted a place closer to my apartment."
+    },
+    {
+      "id": "bas-07",
+      "number": 7,
+      "prompt": "When did you last speak with your advisor?",
+      "response_prefix": "It",
+      "response_suffix": "during office hours.",
+      "chips_correct_order": [
+        "was",
+        "last",
+        "Tuesday",
+        "when",
+        "we",
+        "talked"
+      ],
+      "chips_shuffled": [
+        "talked",
+        "last",
+        "we",
+        "Tuesday",
+        "when",
+        "was"
+      ],
+      "answer": "It was last Tuesday when we talked during office hours."
+    },
+    {
+      "id": "bas-08",
+      "number": 8,
+      "prompt": "Which laptop did you end up buying?",
+      "response_prefix": "",
+      "response_suffix": "battery life and a lighter frame.",
+      "chips_correct_order": [
+        "I",
+        "chose",
+        "the",
+        "model",
+        "that",
+        "has",
+        "better"
+      ],
+      "chips_shuffled": [
+        "the",
+        "that",
+        "better",
+        "chose",
+        "has",
+        "model",
+        "I"
+      ],
+      "answer": "I chose the model that has better battery life and a lighter frame."
+    },
+    {
+      "id": "bas-09",
+      "number": 9,
+      "prompt": "How did you resolve the billing error?",
+      "response_prefix": "",
+      "response_suffix": "within three business days.",
+      "chips_correct_order": [
+        "I",
+        "asked",
+        "the",
+        "company",
+        "to",
+        "issue",
+        "a",
+        "refund"
+      ],
+      "chips_shuffled": [
+        "company",
+        "I",
+        "to",
+        "asked",
+        "issue",
+        "a",
+        "the",
+        "refund"
+      ],
+      "answer": "I asked the company to issue a refund within three business days."
+    },
+    {
+      "id": "bas-10",
+      "number": 10,
+      "prompt": "Marcus mentioned he adopted a new dog.",
+      "response_prefix": "",
+      "response_suffix": "?",
+      "chips_correct_order": [
+        "did",
+        "he",
+        "say",
+        "where",
+        "he",
+        "found",
+        "it"
+      ],
+      "chips_shuffled": [
+        "it",
+        "where",
+        "did",
+        "say",
+        "he",
+        "found",
+        "he"
+      ],
+      "answer": "Did he say where he found it?"
+    },
+    {
+      "id": "bas-11",
+      "number": 11,
+      "prompt": "How did your cousin react to switching schools?",
+      "response_prefix": "She",
+      "response_suffix": "the family moved.",
+      "chips_correct_order": [
+        "agreed",
+        "to",
+        "start",
+        "at",
+        "the",
+        "new",
+        "school",
+        "once"
+      ],
+      "chips_shuffled": [
+        "once",
+        "start",
+        "the",
+        "agreed",
+        "at",
+        "school",
+        "to",
+        "new"
+      ],
+      "answer": "She agreed to start at the new school once the family moved."
+    },
+    {
+      "id": "bas-12",
+      "number": 12,
+      "prompt": "Was the new software easy to install?",
+      "response_prefix": "",
+      "response_suffix": "the first time.",
+      "chips_correct_order": [
+        "I",
+        "wasn't",
+        "able",
+        "to",
+        "complete",
+        "the",
+        "setup"
+      ],
+      "chips_shuffled": [
+        "the",
+        "setup",
+        "complete",
+        "wasn't",
+        "to",
+        "able",
+        "I"
+      ],
+      "answer": "I wasn't able to complete the setup the first time."
+    },
+    {
+      "id": "bas-13",
+      "number": 13,
+      "prompt": "Why did the coach cancel today's practice?",
+      "response_prefix": "He",
+      "response_suffix": "the field.",
+      "chips_correct_order": [
+        "postponed",
+        "it",
+        "because",
+        "heavy",
+        "rain",
+        "flooded"
+      ],
+      "chips_shuffled": [
+        "flooded",
+        "postponed",
+        "because",
+        "it",
+        "heavy",
+        "rain"
+      ],
+      "answer": "He postponed it because heavy rain flooded the field."
+    },
+    {
+      "id": "bas-14",
+      "number": 14,
+      "prompt": "My roommate said she finally passed her driving test.",
+      "response_prefix": "",
+      "response_suffix": "many attempts she needed?",
+      "chips_correct_order": [
+        "did",
+        "she",
+        "mention",
+        "how"
+      ],
+      "chips_shuffled": [
+        "did",
+        "she",
+        "mention",
+        "how"
+      ],
+      "answer": "Did she mention how many attempts she needed?"
+    },
+    {
+      "id": "bas-15",
+      "number": 15,
+      "prompt": "The landlord said the rent will increase next year.",
+      "response_prefix": "",
+      "response_suffix": "the current tenants?",
+      "chips_correct_order": [
+        "has",
+        "he",
+        "explained",
+        "how",
+        "much",
+        "it",
+        "will",
+        "affect"
+      ],
+      "chips_shuffled": [
+        "it",
+        "will",
+        "affect",
+        "how",
+        "explained",
+        "he",
+        "much",
+        "has"
+      ],
+      "answer": "Has he explained how much it will affect the current tenants?"
+    },
+    {
+      "id": "bas-16",
+      "number": 16,
+      "prompt": "The professor mentioned there will be a guest lecture next week.",
+      "response_prefix": "",
+      "response_suffix": "attend?",
+      "chips_correct_order": [
+        "do",
+        "you",
+        "know",
+        "which",
+        "students",
+        "are",
+        "required",
+        "to"
+      ],
+      "chips_shuffled": [
+        "students",
+        "are",
+        "to",
+        "required",
+        "which",
+        "know",
+        "do",
+        "you"
+      ],
+      "answer": "Do you know which students are required to attend?"
+    },
+    {
+      "id": "bas-17",
+      "number": 17,
+      "prompt": "Did the technician explain the delay?",
+      "response_prefix": "She",
+      "response_suffix": "the missing part.",
+      "chips_correct_order": [
+        "told",
+        "me",
+        "which",
+        "supplier",
+        "still",
+        "had"
+      ],
+      "chips_shuffled": [
+        "which",
+        "supplier",
+        "told",
+        "still",
+        "had",
+        "me"
+      ],
+      "answer": "She told me which supplier still had the missing part."
+    },
+    {
+      "id": "bas-18",
+      "number": 18,
+      "prompt": "Why did the manager call you into the office?",
+      "response_prefix": "",
+      "response_suffix": "by Friday.",
+      "chips_correct_order": [
+        "he",
+        "asked",
+        "me",
+        "to",
+        "finish",
+        "the",
+        "client's",
+        "presentation"
+      ],
+      "chips_shuffled": [
+        "the",
+        "to",
+        "finish",
+        "me",
+        "client's",
+        "asked",
+        "he",
+        "presentation"
+      ],
+      "answer": "He asked me to finish the client's presentation by Friday."
+    },
+    {
+      "id": "bas-19",
+      "number": 19,
+      "prompt": "Why didn't you come to the study group?",
+      "response_prefix": "I",
+      "response_suffix": "an assignment due the next morning.",
+      "chips_correct_order": [
+        "would",
+        "have",
+        "joined",
+        "if",
+        "I",
+        "hadn't",
+        "had"
+      ],
+      "chips_shuffled": [
+        "had",
+        "would",
+        "I",
+        "joined",
+        "hadn't",
+        "have",
+        "if"
+      ],
+      "answer": "I would have joined if I hadn't had an assignment due the next morning."
+    },
+    {
+      "id": "bas-20",
+      "number": 20,
+      "prompt": "When will the new schedule take effect?",
+      "response_prefix": "",
+      "response_suffix": "the transition.",
+      "chips_correct_order": [
+        "it",
+        "will",
+        "begin",
+        "once",
+        "management",
+        "approves"
+      ],
+      "chips_shuffled": [
+        "begin",
+        "approves",
+        "once",
+        "it",
+        "will",
+        "management"
+      ],
+      "answer": "It will begin once management approves the transition."
+    },
+    {
+      "id": "bas-21",
+      "number": 21,
+      "prompt": "Diego told me he's learning to cook.",
+      "response_prefix": "",
+      "response_suffix": "yet?",
+      "chips_correct_order": [
+        "has",
+        "he",
+        "tried",
+        "any",
+        "difficult",
+        "recipes"
+      ],
+      "chips_shuffled": [
+        "tried",
+        "difficult",
+        "he",
+        "recipes",
+        "has",
+        "any"
+      ],
+      "answer": "Has he tried any difficult recipes yet?"
+    },
+    {
+      "id": "bas-22",
+      "number": 22,
+      "prompt": "I heard the community center is being renovated.",
+      "response_prefix": "",
+      "response_suffix": "open again?",
+      "chips_correct_order": [
+        "do",
+        "you",
+        "know",
+        "when",
+        "it",
+        "will"
+      ],
+      "chips_shuffled": [
+        "it",
+        "will",
+        "know",
+        "do",
+        "you",
+        "when"
+      ],
+      "answer": "Do you know when it will open again?"
+    },
+    {
+      "id": "bas-23",
+      "number": 23,
+      "prompt": "What did your neighbor decide about the garden fence?",
+      "response_prefix": "She",
+      "response_suffix": "a wooden one instead.",
+      "chips_correct_order": [
+        "decided",
+        "to",
+        "replace",
+        "the",
+        "metal",
+        "fence",
+        "with"
+      ],
+      "chips_shuffled": [
+        "replace",
+        "to",
+        "fence",
+        "decided",
+        "the",
+        "metal",
+        "with"
+      ],
+      "answer": "She decided to replace the metal fence with a wooden one instead."
+    },
+    {
+      "id": "bas-24",
+      "number": 24,
+      "prompt": "What happens if the shuttle arrives late tomorrow?",
+      "response_prefix": "",
+      "response_suffix": "until it comes.",
+      "chips_correct_order": [
+        "passengers",
+        "can",
+        "wait",
+        "inside",
+        "the",
+        "warm",
+        "shelter"
+      ],
+      "chips_shuffled": [
+        "can",
+        "the",
+        "inside",
+        "wait",
+        "warm",
+        "passengers",
+        "shelter"
+      ],
+      "answer": "Passengers can wait inside the warm shelter until it comes."
+    },
+    {
+      "id": "bas-25",
+      "number": 25,
+      "prompt": "Why didn't you finish the report last night?",
+      "response_prefix": "",
+      "response_suffix": "in the middle of the evening.",
+      "chips_correct_order": [
+        "the",
+        "internet",
+        "connection",
+        "stopped",
+        "working"
+      ],
+      "chips_shuffled": [
+        "stopped",
+        "internet",
+        "the",
+        "connection",
+        "working"
+      ],
+      "answer": "The internet connection stopped working in the middle of the evening."
+    },
+    {
+      "id": "bas-26",
+      "number": 26,
+      "prompt": "Why did the editor reject the first draft?",
+      "response_prefix": "She",
+      "response_suffix": ".",
+      "chips_correct_order": [
+        "thought",
+        "it",
+        "needed",
+        "a",
+        "stronger",
+        "introduction"
+      ],
+      "chips_shuffled": [
+        "needed",
+        "thought",
+        "a",
+        "stronger",
+        "introduction",
+        "it"
+      ],
+      "answer": "She thought it needed a stronger introduction."
+    },
+    {
+      "id": "bas-27",
+      "number": 27,
+      "prompt": "What are you planning after the semester ends?",
+      "response_prefix": "",
+      "response_suffix": "next month.",
+      "chips_correct_order": [
+        "I'm",
+        "planning",
+        "to",
+        "visit",
+        "my",
+        "grandparents",
+        "in",
+        "Osaka"
+      ],
+      "chips_shuffled": [
+        "planning",
+        "Osaka",
+        "in",
+        "my",
+        "visit",
+        "to",
+        "I'm",
+        "grandparents"
+      ],
+      "answer": "I'm planning to visit my grandparents in Osaka next month."
+    },
+    {
+      "id": "bas-28",
+      "number": 28,
+      "prompt": "How did you like working with the design team?",
+      "response_prefix": "I",
+      "response_suffix": "very open to feedback.",
+      "chips_correct_order": [
+        "enjoyed",
+        "it",
+        "because",
+        "everyone",
+        "was"
+      ],
+      "chips_shuffled": [
+        "everyone",
+        "it",
+        "was",
+        "because",
+        "enjoyed"
+      ],
+      "answer": "I enjoyed it because everyone was very open to feedback."
+    },
+    {
+      "id": "bas-29",
+      "number": 29,
+      "prompt": "Why did you sign up for the volunteer program?",
+      "response_prefix": "I",
+      "response_suffix": "outside a classroom.",
+      "chips_correct_order": [
+        "wanted",
+        "to",
+        "gain",
+        "some",
+        "experience"
+      ],
+      "chips_shuffled": [
+        "wanted",
+        "to",
+        "experience",
+        "gain",
+        "some"
+      ],
+      "answer": "I wanted to gain some experience outside a classroom."
+    },
+    {
+      "id": "bas-30",
+      "number": 30,
+      "prompt": "Why didn't Priya accept the internship offer?",
+      "response_prefix": "She",
+      "response_suffix": "the stipend was too low.",
+      "chips_correct_order": [
+        "decided",
+        "not",
+        "to",
+        "take",
+        "it",
+        "since"
+      ],
+      "chips_shuffled": [
+        "not",
+        "to",
+        "take",
+        "decided",
+        "since",
+        "it"
+      ],
+      "answer": "She decided not to take it since the stipend was too low."
+    }
+  ],
+  "write_an_email": [
+    {
+      "id": "email-01",
+      "number": 31,
+      "scenario": "You ordered a piece of furniture online three weeks ago, but it still has not arrived. You want to contact the store's customer service team to ask about the delay and find out what your options are.",
+      "to": "Customer Service",
+      "subject": "Delayed furniture order",
+      "instructions": [
+        "Explain what you ordered and when.",
+        "Describe the problem with the delivery.",
+        "Ask what can be done to resolve it."
+      ],
+      "time_limit_minutes": 7,
+      "min_words": null,
+      "sample_answer": "Dear Customer Service Team,\n\nI placed an order for a wooden bookshelf on your website three weeks ago, and according to the confirmation email, it should have arrived within ten business days. So far I have not received the item, and the tracking page has not updated since the order left the warehouse.\n\nThis delay is becoming inconvenient, since I moved into my new apartment and have been waiting to organize my books. Could you let me know the current status of the shipment? I would also like to know whether I have the option to cancel the order for a full refund if it cannot arrive within the next week.\n\nThank you for your attention to this matter,\n\nRenata Okafor"
+    },
+    {
+      "id": "email-02",
+      "number": 32,
+      "scenario": "You are the president of your university's photography club. A local gallery has offered to display student work for one month, and you want to write to the gallery owner, Ms. Alvarez, to confirm the details and ask a few remaining questions.",
+      "to": "Ms. Alvarez",
+      "subject": "Confirming details for the student photography display",
+      "instructions": [
+        "Thank her for the opportunity.",
+        "Confirm what your club can provide.",
+        "Ask any remaining questions about the arrangement."
+      ],
+      "time_limit_minutes": 7,
+      "min_words": null,
+      "sample_answer": "Dear Ms. Alvarez,\n\nOn behalf of the university photography club, I want to thank you for offering to display our members' work in your gallery next month. This opportunity means a great deal to our students, many of whom have never had their photographs shown publicly before.\n\nWe can provide up to twenty framed prints along with short artist statements for each piece. We are also happy to promote the exhibit through our club's social media accounts. Before we finalize the selection, could you tell us whether there is a size limit for the frames, and whether the gallery will need the prints delivered before a specific date?\n\nWe look forward to working with you,\n\nHalil Demir"
+    },
+    {
+      "id": "email-03",
+      "number": 33,
+      "scenario": "You recently started a part-time job at a café, but the schedule you were given conflicts with one of your required classes. You want to email your manager, Mr. Petrov, to explain the conflict and ask if your hours can be adjusted.",
+      "to": "Mr. Petrov",
+      "subject": "Schedule conflict with a required class",
+      "instructions": [
+        "Explain the scheduling conflict.",
+        "Describe why the class cannot be moved.",
+        "Ask for a change to your work hours."
+      ],
+      "time_limit_minutes": 7,
+      "min_words": null,
+      "sample_answer": "Dear Mr. Petrov,\n\nThank you for putting together this week's schedule. I noticed that I am scheduled to work on Tuesday and Thursday afternoons, which unfortunately overlaps with a required laboratory class for my chemistry course.\n\nI checked with the registrar, and this section is the only one offered this semester, so I am not able to switch to a different time slot. Would it be possible to move my shifts to Tuesday and Thursday mornings instead, or to another day that works better with the rest of the team's schedule? I am glad to work extra hours on the weekend to make up for the change.\n\nThank you for considering this,\n\nAna Beltran"
+    },
+    {
+      "id": "email-04",
+      "number": 34,
+      "scenario": "Your neighbor, Mr. Suzuki, took care of your plants and collected your mail while you were away on a two-week trip. Now that you are back, you want to thank him and offer to return the favor.",
+      "to": "Mr. Suzuki",
+      "subject": "Thank you for looking after things while I was away",
+      "instructions": [
+        "Thank him for his help while you were traveling.",
+        "Mention something specific that made a difference.",
+        "Offer to help him in a similar way in the future."
+      ],
+      "time_limit_minutes": 7,
+      "min_words": null,
+      "sample_answer": "Dear Mr. Suzuki,\n\nI just returned from my trip and wanted to thank you for taking care of my plants and collecting my mail while I was gone. Every plant looked healthy when I got home, which I know takes real effort during such a hot two weeks.\n\nI especially appreciated that you brought in the packages that arrived at my door, since I was worried about them sitting outside. It made coming home so much less stressful.\n\nPlease let me know if you ever need someone to check on your house or water your garden while you are away. I would be glad to return the favor.\n\nWith thanks,\n\nWen Jia"
+    },
+    {
+      "id": "email-05",
+      "number": 35,
+      "scenario": "You are a member of your dormitory's student council. The council is planning a welcome event for new students next semester, and you want to write to the housing office to request use of the common room and ask about equipment they can provide.",
+      "to": "Housing Office",
+      "subject": "Room request for new student welcome event",
+      "instructions": [
+        "Explain the purpose of the event.",
+        "Request the use of a specific space.",
+        "Ask what equipment the office can provide."
+      ],
+      "time_limit_minutes": 7,
+      "min_words": null,
+      "sample_answer": "Dear Housing Office,\n\nThe dormitory student council is organizing a welcome event for new students on the evening of September 5, and we would like to request the use of the first-floor common room for the occasion. We expect around forty students to attend, and the space should comfortably accommodate that number along with tables for refreshments.\n\nCould you also let us know whether the office is able to provide a projector and speakers for a short slideshow, or whether we should arrange for our own equipment? We would like to confirm these details as soon as possible so we can finish planning.\n\nThank you for your help,\n\nTomas Kowalski"
+    }
+  ],
+  "write_for_academic_discussion": [
+    {
+      "id": "disc-01",
+      "number": 36,
+      "course": "sociology",
+      "professor": "Dr. Whitfield",
+      "question": "Many neighborhoods are replacing small, independent shops with large chain stores. Some people believe this change benefits communities by offering lower prices and more convenience, while others argue that it weakens local identity and reduces the variety of goods available. Do you think the growth of chain stores benefits local communities overall? Explain why you think so.",
+      "student_posts": [
+        {
+          "name": "Farrah",
+          "text": "I think chain stores are mostly a positive change for neighborhoods. They tend to offer lower prices because they buy in bulk, which helps families with tight budgets. They also often provide more consistent hours and a wider selection of products than a small shop could manage on its own."
+        },
+        {
+          "name": "Devon",
+          "text": "I see Farrah's point about prices, but I think something important gets lost when chains replace local shops. Independent stores often reflect the character of a neighborhood and support the people who actually live there, since owners tend to reinvest in the local area. When chains take over, profits usually leave the community instead of staying in it."
+        }
+      ],
+      "instructions": [
+        "Express and support your opinion.",
+        "Make a contribution to the discussion in your own words."
+      ],
+      "time_limit_minutes": 10,
+      "min_words": 100,
+      "sample_answer": null
+    },
+    {
+      "id": "disc-02",
+      "number": 37,
+      "course": "environmental science",
+      "professor": "Dr. Osei",
+      "question": "Some cities have begun charging drivers a fee to enter busy downtown areas during peak hours, with the goal of reducing traffic and pollution. Supporters say this approach improves air quality and encourages public transportation, while critics argue it unfairly burdens people who have no other way to commute. Do you think cities should adopt these entrance fees? Explain why you think so.",
+      "student_posts": [
+        {
+          "name": "Marcus",
+          "text": "I support these fees because traffic congestion is a serious problem in many cities, and something has to change. If driving downtown becomes more expensive, more people will consider buses, trains, or biking instead, which should reduce both congestion and pollution over time."
+        },
+        {
+          "name": "Simone",
+          "text": "While I understand the environmental goal, I worry these fees mainly punish workers who cannot avoid driving, especially those in neighborhoods with poor public transit. Unless a city improves its transportation options first, charging people to enter downtown just adds another expense without giving them a realistic alternative."
+        }
+      ],
+      "instructions": [
+        "Express and support your opinion.",
+        "Make a contribution to the discussion in your own words."
+      ],
+      "time_limit_minutes": 10,
+      "min_words": 100,
+      "sample_answer": null
+    },
+    {
+      "id": "disc-03",
+      "number": 38,
+      "course": "education",
+      "professor": "Dr. Castellano",
+      "question": "Some schools have begun allowing students to choose their own major projects for a portion of their grade, instead of assigning the same project to everyone. Supporters argue this increases motivation and creativity, while critics worry it makes it harder to evaluate students fairly. Do you think students should be allowed to choose their own major projects? Explain why you think so.",
+      "student_posts": [
+        {
+          "name": "Yuki",
+          "text": "I think giving students choice is a great idea. When I got to pick a topic I actually cared about for a research project last year, I put in far more effort than I usually do, and I learned more as a result. Motivation matters a lot for how much a student actually retains."
+        },
+        {
+          "name": "Boris",
+          "text": "Yuki raises a fair point about motivation, but I think fairness in grading is a real concern here. If one student chooses a much harder topic than another, it becomes difficult for a teacher to compare their work using the same standard. Some structure seems necessary to keep the evaluation consistent."
+        }
+      ],
+      "instructions": [
+        "Express and support your opinion.",
+        "Make a contribution to the discussion in your own words."
+      ],
+      "time_limit_minutes": 10,
+      "min_words": 100,
+      "sample_answer": null
+    },
+    {
+      "id": "disc-04",
+      "number": 39,
+      "course": "business",
+      "professor": "Dr. Reyes",
+      "question": "As more companies allow employees to work from home permanently, some argue this arrangement improves productivity and work-life balance, while others believe it weakens collaboration and company culture. Do you think permanent remote work is good for most companies? Explain why you think so.",
+      "student_posts": [
+        {
+          "name": "Anaya",
+          "text": "I believe remote work benefits most companies in the long run. Employees save time and money on commuting, which tends to make them happier and less likely to leave their jobs. Many studies also show that people are just as productive, if not more so, when they can manage their own schedule."
+        },
+        {
+          "name": "Colin",
+          "text": "I'd push back on that a little. In my own internship, the ideas that led to our best projects almost always came from quick conversations in the hallway or over lunch, not from scheduled video calls. I think something about spontaneous collaboration is difficult to replace remotely, especially for teams that need to be creative together."
+        }
+      ],
+      "instructions": [
+        "Express and support your opinion.",
+        "Make a contribution to the discussion in your own words."
+      ],
+      "time_limit_minutes": 10,
+      "min_words": 100,
+      "sample_answer": null
+    },
+    {
+      "id": "disc-05",
+      "number": 40,
+      "course": "psychology",
+      "professor": "Dr. Nakashima",
+      "question": "Some researchers argue that taking short breaks throughout the workday improves focus and overall performance, while others believe breaks disrupt concentration and make it harder to return to difficult tasks. Do you think regular breaks during work or study sessions are beneficial? Explain why you think so.",
+      "student_posts": [
+        {
+          "name": "Leila",
+          "text": "I'm a strong believer in taking regular breaks. Whenever I study for more than an hour without stopping, my concentration clearly drops, and I start rereading the same paragraph without absorbing it. A short walk or even five minutes away from my desk usually helps me come back sharper."
+        },
+        {
+          "name": "Theo",
+          "text": "I understand Leila's experience, but breaks can also be risky for certain kinds of work. When I'm deep in solving a difficult coding problem, stepping away often means I lose track of my reasoning and have to start over. For tasks that require sustained focus, I think long, uninterrupted blocks of time work better."
+        }
+      ],
+      "instructions": [
+        "Express and support your opinion.",
+        "Make a contribution to the discussion in your own words."
+      ],
+      "time_limit_minutes": 10,
+      "min_words": 100,
+      "sample_answer": null
+    }
+  ]
+}

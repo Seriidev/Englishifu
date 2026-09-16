@@ -31,7 +31,9 @@ export default function StudyPlaceLayout() {
   const student = user?.role === 'student' ? user : null
   const studentId = student?.id
   const [xp, setXp] = useState(() => student?.xp ?? 0)
+  const [boostCount, setBoostCount] = useState(0)
   const [boostedToday, setBoostedToday] = useState(false)
+  const [dailyBonusClaimedToday, setDailyBonusClaimedToday] = useState(false)
   const closeMobile = () => setMobileOpen(false)
   const sidebarWidth = collapsed ? 'lg:w-[72px]' : 'lg:w-[240px]'
   const contentPad = collapsed ? 'lg:pl-[72px]' : 'lg:pl-[240px]'
@@ -47,7 +49,9 @@ export default function StudyPlaceLayout() {
   useEffect(() => {
     if (!studentId) {
       setXp(0)
+      setBoostCount(0)
       setBoostedToday(false)
+      setDailyBonusClaimedToday(false)
       return
     }
 
@@ -66,7 +70,9 @@ export default function StudyPlaceLayout() {
         const stats = await fetchStudentXpStats()
         if (cancelled) return
         setXp(stats.xp)
+        setBoostCount(stats.boostCount)
         setBoostedToday(stats.boostedToday)
+        setDailyBonusClaimedToday(stats.dailyBonusClaimedToday)
         if ((student?.xp ?? 0) !== stats.xp) {
           void refreshUser()
         }
@@ -95,7 +101,7 @@ export default function StudyPlaceLayout() {
   }, [student, studentId, refreshUser, location.pathname])
 
   return (
-    <div className={`study-place flex min-h-svh bg-slate-50 ${theme === 'dark' ? 'dark' : ''}`}>
+    <div className={`study-place flex min-h-svh min-w-0 bg-slate-50 ${theme === 'dark' ? 'dark' : ''}`}>
       <div
         className={`hidden lg:fixed lg:inset-y-0 lg:flex lg:flex-col ${sidebarWidth}`}
       >
@@ -126,7 +132,7 @@ export default function StudyPlaceLayout() {
 
       <div className={`flex min-w-0 flex-1 flex-col ${contentPad}`}>
         <header className="study-header sticky top-0 z-30 border-b border-slate-100 bg-slate-50/95 backdrop-blur">
-          <div className="mx-auto flex w-full max-w-7xl items-center gap-3 px-4 py-3 sm:px-6">
+          <div className="mx-auto flex w-full min-w-0 max-w-7xl items-center gap-2 px-3 py-3 sm:gap-3 sm:px-6">
             <button
               type="button"
               onClick={() => setMobileOpen(true)}
@@ -143,12 +149,14 @@ export default function StudyPlaceLayout() {
               fullName={student?.fullName ?? user?.fullName ?? 'Student'}
               cefrLevel={student?.cefrLevel}
               xp={xp}
+              boostCount={boostCount}
               boostedToday={boostedToday}
+              dailyBonusClaimedToday={dailyBonusClaimedToday}
             />
           </div>
         </header>
 
-        <div className="mx-auto w-full max-w-7xl flex-1 px-4 py-6 sm:px-6 sm:py-8">
+        <div className="mx-auto w-full min-w-0 max-w-7xl flex-1 overflow-x-clip px-3 py-5 sm:px-6 sm:py-8">
           <Outlet />
         </div>
       </div>

@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { BookOpen, Ear, Mic, PenLine } from 'lucide-react'
+import { ArrowLeft, BookOpen, Ear, Mic, PenLine } from 'lucide-react'
 import FullTestCTA from './FullTestCTA'
 import { registerToeflTryOnce } from '../../utils/toeflTryCounter'
 import { useLanguage } from '../../i18n/LanguageContext'
@@ -48,8 +48,9 @@ export default function ToeflHub() {
           <button
             type="button"
             onClick={() => navigate('/')}
-            className="text-sm font-semibold text-brand hover:underline"
+            className="inline-flex items-center gap-1.5 rounded-full border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-ink hover:bg-gray-50"
           >
+            <ArrowLeft className="h-4 w-4" aria-hidden />
             {t('toefl.back')}
           </button>
           <LangSwitcher />

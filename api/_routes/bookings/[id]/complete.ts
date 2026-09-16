@@ -3,7 +3,7 @@ import { applyCors, getAuthenticatedUser } from '../../../_lib/auth.js'
 import { createNotification } from '../../../_lib/createNotification.js'
 import { dbUnavailableResponse, isDbConfigured, sql } from '../../../_lib/db.js'
 import { maybeCompleteReferralReward } from '../../../_lib/rewards.js'
-import { tryGrantLessonBoost } from '../../../_lib/studentXp.js'
+import { grantLessonXp } from '../../../_lib/studentXp.js'
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   applyCors(res)
@@ -46,7 +46,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       subject: string | null
     }
 
-    await tryGrantLessonBoost({
+    await grantLessonXp({
       tutorId: user.id,
       studentId: booking.student_id,
       bookingId: Number(booking.id),

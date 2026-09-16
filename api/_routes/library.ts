@@ -15,7 +15,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const { rows } = await sql`
       SELECT
         id, title, author, category, level, rating, minutes,
-        description, cover_image_url, cover_headline, pdf_url, pdf_file_name
+        description, cover_image_url, cover_headline,
+        CASE
+          WHEN pdf_url IS NULL OR pdf_url = '' THEN NULL
+          WHEN pdf_url LIKE 'data:%' THEN NULL
+          ELSE pdf_url
+        END AS pdf_url
       FROM library_books
       WHERE is_published = true
       ORDER BY display_order ASC, id ASC

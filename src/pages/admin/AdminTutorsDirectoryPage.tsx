@@ -3,10 +3,12 @@ import { Link } from 'react-router-dom'
 import {
   fetchAdminTutorsDirectory,
   patchAdminTutor,
+  deleteAdminUser,
   type AdminTutorDirRow,
 } from '../../utils/adminPanelApi'
-import { AdminMessageLink, AdminUserId } from './AdminUserId'
+import { AdminAvatar, AdminMessageLink, AdminUserId } from './AdminUserId'
 import { StatusBadge } from '../../components/shared/StatusBadge'
+import { adminPageTitle } from './adminUi'
 
 export default function AdminTutorsDirectoryPage() {
   const [q, setQ] = useState('')
@@ -18,6 +20,7 @@ export default function AdminTutorsDirectoryPage() {
   const [rows, setRows] = useState<AdminTutorDirRow[]>([])
   const [openId, setOpenId] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [deletingId, setDeletingId] = useState<string | null>(null)
 
   const load = async () => {
     setError(null)
@@ -44,7 +47,7 @@ export default function AdminTutorsDirectoryPage() {
 
   return (
     <div>
-      <h1 className="font-serif text-3xl font-semibold tracking-tight text-zinc-900">Tutors</h1>
+      <h1 className={adminPageTitle}>Tutors</h1>
       <p className="mt-1 text-sm text-slate-500">
         Approved tutors for internal control. Pause an account without deleting
         data.
@@ -54,9 +57,9 @@ export default function AdminTutorsDirectoryPage() {
           {error}
         </p>
       ) : null}
-      <div className="mt-4 grid gap-2 sm:grid-cols-6">
+      <div className="mt-4 grid gap-2 sm:grid-cols-2 xl:grid-cols-6">
         <input
-          className="rounded-xl border border-slate-200 px-3 py-2 text-sm sm:col-span-2"
+          className="min-w-0 rounded-xl border border-slate-200 px-3 py-2 text-sm xl:col-span-2"
           placeholder="Search name / email / username / user ID"
           value={q}
           onChange={(e) => setQ(e.target.value)}
@@ -135,8 +138,15 @@ export default function AdminTutorsDirectoryPage() {
                   onClick={() => setOpenId(openId === row.id ? null : row.id)}
                 >
                   <td className="px-4 py-3">
-                    <p className="font-semibold">{row.full_name}</p>
-                    <p className="text-xs text-slate-400">{row.email}</p>
+                    <div className="flex items-center gap-3">
+                      <AdminAvatar src={row.avatar_url} name={row.full_name} />
+                      <div className="min-w-0">
+                        <p className="font-semibold">{row.full_name}</p>
+                        <p className="truncate text-xs text-slate-400">
+                          {row.email}
+                        </p>
+                      </div>
+                    </div>
                   </td>
                   <td className="px-4 py-3 text-slate-600">
                     {row.handle ? `@${row.handle}` : '—'}
@@ -196,6 +206,33 @@ export default function AdminTutorsDirectoryPage() {
                           }}
                         >
                           {row.is_suspended ? 'Unsuspend' : 'Suspend account'}
+                        </button>
+                        <button
+                          type="button"
+                          disabled={deletingId === row.id}
+                          className="rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-sm font-semibold text-red-700 disabled:opacity-50"
+                          onClick={() => {
+                            const ok = window.confirm(
+                              `Delete ${row.full_name}'s tutor account (@${row.handle}) from the database? This cannot be undone.`,
+                            )
+                            if (!ok) return
+                            setDeletingId(row.id)
+                            void deleteAdminUser(row.id)
+                              .then(() => {
+                                setOpenId(null)
+                                return load()
+                              })
+                              .catch((err) =>
+                                setError(
+                                  err instanceof Error
+                                    ? err.message
+                                    : 'Failed to delete',
+                                ),
+                              )
+                              .finally(() => setDeletingId(null))
+                          }}
+                        >
+                          {deletingId === row.id ? 'Deleting…' : 'Delete account'}
                         </button>
                       </div>
                     </td>

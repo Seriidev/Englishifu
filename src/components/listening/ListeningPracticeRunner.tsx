@@ -35,7 +35,7 @@ export default function ListeningPracticeRunner() {
           <p className="text-lg font-semibold text-ink">Practice not found</p>
           <button
             type="button"
-            onClick={() => navigate('/listening')}
+            onClick={() => navigate('/listening/library')}
             className="mt-4 text-sm font-semibold text-brand hover:underline"
           >
             Back to library
@@ -86,7 +86,7 @@ export default function ListeningPracticeRunner() {
         subtitle={taskTypeLabel(practice.taskType)}
         progressLabel="Complete"
         progressPercent={100}
-        onExit={() => navigate('/listening')}
+        onExit={() => navigate('/listening/library')}
       >
         <div className="mx-auto max-w-md rounded-3xl border bg-white p-8 text-center shadow-sm">
           <h2 className="text-2xl font-bold text-ink">
@@ -109,7 +109,7 @@ export default function ListeningPracticeRunner() {
           </div>
           <button
             type="button"
-            onClick={() => navigate('/listening')}
+            onClick={() => navigate('/listening/library')}
             className="mt-8 rounded-full bg-brand px-6 py-3 text-sm font-semibold text-white"
           >
             {t('listening.backLibrary')}
@@ -127,7 +127,7 @@ export default function ListeningPracticeRunner() {
       subtitle={practice.title}
       progressLabel={`Question ${qIndex + 1} of ${items.length}`}
       progressPercent={(qIndex / Math.max(items.length, 1)) * 100}
-      onExit={() => navigate('/listening')}
+      onExit={() => navigate('/listening/library')}
     >
       <ListeningItemView
         key={current.id}

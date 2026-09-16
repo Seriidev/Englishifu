@@ -1,4 +1,5 @@
 import { useState, type FormEvent } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Check, Copy, Eye, EyeOff, Lock, Mail, UserRound } from 'lucide-react'
 import { useAuth } from '../../auth/AuthContext'
 import type { PublicUser } from '../../types/user'
@@ -99,13 +100,17 @@ function CopyableValue({
 }
 
 export default function AccountPanel({ user }: { user: PublicUser }) {
-  const { changePassword } = useAuth()
+  const navigate = useNavigate()
+  const { changePassword, deleteAccount } = useAuth()
   const [currentPassword, setCurrentPassword] = useState('')
   const [newPassword, setNewPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState<string | null>(null)
   const [saving, setSaving] = useState(false)
+  const [deletePassword, setDeletePassword] = useState('')
+  const [deleteError, setDeleteError] = useState<string | null>(null)
+  const [deleting, setDeleting] = useState(false)
 
   const roleLabel = user.role === 'tutor' ? 'Teacher' : 'Student'
   const memberSince = new Date(user.createdAt).toLocaleDateString(undefined, {
@@ -147,8 +152,31 @@ export default function AccountPanel({ user }: { user: PublicUser }) {
     setSuccess('Password updated')
   }
 
+  const onDelete = async (e: FormEvent) => {
+    e.preventDefault()
+    setDeleteError(null)
+    if (!deletePassword) {
+      setDeleteError('Enter your password to delete this account')
+      return
+    }
+    const ok = window.confirm(
+      'Delete this account permanently? Profile, bookings, and progress cannot be recovered.',
+    )
+    if (!ok) return
+
+    setDeleting(true)
+    const result = await deleteAccount(deletePassword)
+    setDeleting(false)
+    if (!result.ok) {
+      setDeleteError(result.error)
+      return
+    }
+    navigate('/', { replace: true })
+  }
+
   return (
-    <div className="grid gap-6 lg:grid-cols-2">
+    <div className="space-y-6">
+      <div className="grid gap-6 lg:grid-cols-2">
       <div className="space-y-3">
         <h3 className="text-base font-bold text-ink">Login details</h3>
         <p className="text-sm text-muted">
@@ -227,6 +255,40 @@ export default function AccountPanel({ user }: { user: PublicUser }) {
           className="inline-flex rounded-lg bg-brand px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-dark disabled:cursor-not-allowed disabled:opacity-60"
         >
           {saving ? 'Saving…' : 'Update password'}
+        </button>
+      </form>
+    </div>
+
+      <form
+        className="rounded-xl border border-red-100 bg-red-50/40 p-4 sm:p-5"
+        onSubmit={(e) => {
+          e.preventDefault()
+          e.stopPropagation()
+          void onDelete(e)
+        }}
+        noValidate
+      >
+        <h3 className="text-base font-bold text-ink">Delete account</h3>
+        <p className="mt-1 text-sm text-muted">
+          This permanently removes your profile, bookings, and progress. It
+          cannot be undone.
+        </p>
+        <div className="mt-4 max-w-sm">
+          <PasswordField
+            id="account-delete-password"
+            label="Password"
+            value={deletePassword}
+            onChange={setDeletePassword}
+            autoComplete="current-password"
+          />
+        </div>
+        {deleteError ? <p className={errorClass}>{deleteError}</p> : null}
+        <button
+          type="submit"
+          disabled={deleting}
+          className="mt-4 inline-flex rounded-lg border border-red-200 bg-white px-5 py-2.5 text-sm font-semibold text-red-700 transition hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-60"
+        >
+          {deleting ? 'Deleting…' : 'Delete account'}
         </button>
       </form>
     </div>

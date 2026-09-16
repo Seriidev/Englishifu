@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import {
-  GraduationCap,
   LogOut,
   Pencil,
   Briefcase,
@@ -16,7 +15,8 @@ import type {
 } from '../../types/tutorStudent'
 import type { TutorReview } from '../../types/notifications'
 import type { TutorPublicProfile } from '../../types/tutorProfile'
-import { tutorProfilePath } from '../../utils/authStorage'
+import { dashboardPathForRole, tutorProfilePath } from '../../utils/authStorage'
+import BrandMark from '../shared/BrandMark'
 import SendResumeButton from '../tutor/SendResumeButton'
 import { sendMeetInviteToMany } from '../../utils/meetLinks'
 import { normalizeCertifications } from '../../utils/certifications'
@@ -120,7 +120,8 @@ export default function TutorProfilePage() {
             handle: r.handle,
             cefrLevel: r.cefrLevel as TutorStudent['cefrLevel'],
             xp: r.xp ?? 0,
-            canDailyBoost: Boolean(r.canDailyBoost),
+            canBoost: Boolean(r.canBoost ?? r.canDailyBoost),
+            canDailyBoost: Boolean(r.canBoost ?? r.canDailyBoost),
             lessonsCompleted: r.lessonsCompleted,
             nextLessonDate: r.nextLessonDate,
             status: r.status,
@@ -168,7 +169,13 @@ export default function TutorProfilePage() {
           We couldn&apos;t find a profile for @{routeHandle}.
         </p>
         <Link
-          to={sessionTutor ? tutorProfilePath(sessionTutor.handle) : '/'}
+          to={
+            sessionTutor
+              ? tutorProfilePath(sessionTutor.handle)
+              : user
+                ? dashboardPathForRole(user.role, user)
+                : '/'
+          }
           className="mt-6 rounded-full bg-brand px-5 py-2.5 text-sm font-semibold text-white"
         >
           {sessionTutor ? 'Go to my profile' : 'Back home'}
@@ -195,6 +202,7 @@ export default function TutorProfilePage() {
     liveOwner?.certifications ?? profile.certifications,
   )
   const tutorId = liveOwner?.id ?? profile.id
+  const homePath = user ? dashboardPathForRole(user.role, user) : '/'
 
   if (!isPublic && !isOwnProfile) {
     return (
@@ -204,7 +212,7 @@ export default function TutorProfilePage() {
           The owner has turned off public visibility.
         </p>
         <Link
-          to="/"
+          to={homePath}
           className="mt-6 rounded-full bg-brand px-5 py-2.5 text-sm font-semibold text-white"
         >
           Back home
@@ -243,16 +251,13 @@ export default function TutorProfilePage() {
     <div className="landing-shell min-h-svh">
       <header className="border-b border-[#c7d7f5]/60 bg-white/70 backdrop-blur-xl">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 sm:px-6">
-          <Link to="/" className="inline-flex items-center gap-2.5">
-            <span className="flex h-9 w-9 items-center justify-center rounded-full bg-brand text-white">
-              <GraduationCap className="h-4 w-4" aria-hidden />
-            </span>
-            <span className="font-bold text-ink">Englishcore</span>
+          <Link to={homePath} className="text-ink">
+            <BrandMark />
           </Link>
           <div className="flex items-center gap-2">
             {isOwnProfile ? <NotificationBell /> : null}
             <Link
-              to="/"
+              to={homePath}
               className="rounded-full border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-ink transition hover:bg-gray-50"
             >
               Back home

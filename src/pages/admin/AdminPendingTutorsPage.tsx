@@ -4,6 +4,7 @@ import {
   type PendingTutorRow,
 } from '../../utils/adminApi'
 import TutorApplicationCard from '../../components/admin/TutorApplicationCard'
+import { adminPageTitle } from './adminUi'
 
 type StatusFilter = 'pending' | 'rejected' | 'all'
 
@@ -40,9 +41,7 @@ export default function AdminPendingTutorsPage() {
     <div>
       <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="font-serif text-3xl font-semibold tracking-tight text-zinc-900">
-            Tutor applications
-          </h1>
+          <h1 className={adminPageTitle}>Tutor applications</h1>
           <p className="mt-1 text-sm text-slate-500">
             Approve, reject, and open submitted resumes.
           </p>

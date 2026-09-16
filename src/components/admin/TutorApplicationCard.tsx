@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import type { PendingTutorRow } from '../../utils/adminApi'
 import { decideTutorApplication } from '../../utils/adminApi'
+import { deleteAdminUser } from '../../utils/adminPanelApi'
 import type { TutorCertification } from '../../types/user'
 
 interface TutorApplicationCardProps {
@@ -156,6 +157,27 @@ export default function TutorApplicationCard({
             className="rounded-xl border border-red-200 bg-red-50 px-4 py-2.5 text-sm font-semibold text-red-700 hover:bg-red-100 disabled:opacity-60"
           >
             Reject
+          </button>
+          <button
+            type="button"
+            disabled={busy}
+            onClick={() => {
+              const ok = window.confirm(
+                `Delete ${tutor.full_name}'s account (@${tutor.handle}) from the database? This cannot be undone.`,
+              )
+              if (!ok) return
+              setBusy(true)
+              setError(null)
+              void deleteAdminUser(tutor.id)
+                .then(() => onDecision(tutor.id))
+                .catch((err) =>
+                  setError(err instanceof Error ? err.message : 'Failed to delete'),
+                )
+                .finally(() => setBusy(false))
+            }}
+            className="rounded-xl border border-red-300 bg-white px-4 py-2.5 text-sm font-semibold text-red-700 hover:bg-red-50 disabled:opacity-60"
+          >
+            Delete
           </button>
         </div>
       ) : (

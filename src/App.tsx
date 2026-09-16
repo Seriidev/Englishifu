@@ -23,6 +23,7 @@ import WritingSection from './components/writing/WritingSection'
 import PlacementTestFlow from './components/placement/PlacementTestFlow'
 import RoleSelector from './components/auth/RoleSelector'
 import LoginForm from './components/auth/LoginForm'
+import ForgotPasswordForm from './components/auth/ForgotPasswordForm'
 import SignupForm from './components/auth/SignupForm'
 import StudentHomeRedirect from './routes/StudentHomeRedirect'
 import TutorDashboardRedirect from './components/dashboard/TutorDashboardRedirect'
@@ -40,6 +41,7 @@ import FindTutorPage from './pages/FindTutorPage'
 import StudyTutorDetailPage from './pages/StudyTutorDetailPage'
 import SpeakingClubPage from './pages/SpeakingClubPage'
 import StudySettingsPage from './pages/StudySettingsPage'
+import StudyHelpPage from './pages/StudyHelpPage'
 import StudyBookingsPage from './pages/StudyBookingsPage'
 import StudyLevelTestPage from './pages/StudyLevelTestPage'
 import StudyLeaderboardPage from './pages/StudyLeaderboardPage'
@@ -47,6 +49,7 @@ import StudyVocabularyPage from './pages/StudyVocabularyPage'
 import StudyLibraryPage from './pages/StudyLibraryPage'
 import LibraryReaderPage from './pages/LibraryReaderPage'
 import AdminLayout from './pages/admin/AdminLayout'
+import AdminAnalyticsPage from './pages/admin/AdminAnalyticsPage'
 import AdminOverviewPage from './pages/admin/AdminOverviewPage'
 import AdminPendingTutorsPage from './pages/admin/AdminPendingTutorsPage'
 import AdminTutorsDirectoryPage from './pages/admin/AdminTutorsDirectoryPage'
@@ -66,9 +69,6 @@ import TutorCertificatesPage from './pages/tutor/TutorCertificatesPage'
 import TutorWorkspaceProfilePage from './pages/tutor/TutorWorkspaceProfilePage'
 import TutorBookingsInbox from './pages/tutor/TutorBookingsInbox'
 import TutorCreateMeetingPage from './pages/tutor/TutorCreateMeetingPage'
-import { readingMockConfig } from './mocks/readingMock'
-import { listeningMockConfig } from './mocks/listeningMock'
-import { writingMockConfig } from './mocks/writingMock'
 
 function LandingPage() {
   return (
@@ -119,30 +119,19 @@ function SpeakingPage() {
 function ReadingPage() {
   const navigate = useNavigate()
   return (
-    <ReadingSection
-      config={readingMockConfig}
-      onExit={() => navigate('/toefl')}
-    />
+    <ReadingSection onExit={() => navigate('/toefl')} />
   )
 }
 
-function ListeningAdaptivePage() {
+function ListeningPage() {
   const navigate = useNavigate()
-  return (
-    <ListeningSection
-      config={listeningMockConfig}
-      onExit={() => navigate('/listening')}
-    />
-  )
+  return <ListeningSection onExit={() => navigate('/toefl')} />
 }
 
 function WritingPage() {
   const navigate = useNavigate()
   return (
-    <WritingSection
-      config={writingMockConfig}
-      onExit={() => navigate('/toefl')}
-    />
+    <WritingSection onExit={() => navigate('/toefl')} />
   )
 }
 
@@ -178,8 +167,9 @@ export default function App() {
         <Route path="/full-test" element={<FullTestOrchestrator />} />
         <Route path="/results" element={<ResultsScreen />} />
         <Route path="/reading" element={<ReadingPage />} />
-        <Route path="/listening" element={<ListeningLibrary />} />
-        <Route path="/listening/adaptive" element={<ListeningAdaptivePage />} />
+        <Route path="/listening" element={<ListeningPage />} />
+        <Route path="/listening/adaptive" element={<Navigate to="/listening" replace />} />
+        <Route path="/listening/library" element={<ListeningLibrary />} />
         <Route
           path="/listening/practice/:practiceId"
           element={<ListeningPracticeRunner />}
@@ -189,6 +179,7 @@ export default function App() {
         <Route path="/start" element={<RoleSelector />} />
         <Route path="/signup" element={<SignupToStartRedirect />} />
         <Route path="/login" element={<LoginForm />} />
+        <Route path="/forgot-password" element={<ForgotPasswordForm />} />
         <Route path="/signup/student" element={<SignupForm role="student" />} />
         <Route path="/signup/tutor" element={<SignupForm role="tutor" />} />
         <Route
@@ -222,6 +213,7 @@ export default function App() {
           <Route path="library/:bookId" element={<LibraryReaderPage />} />
           <Route path="bookings" element={<StudyBookingsPage />} />
           <Route path="settings" element={<StudySettingsPage />} />
+          <Route path="help" element={<StudyHelpPage />} />
         </Route>
         <Route
           path="/profile/edit"
@@ -251,6 +243,7 @@ export default function App() {
           <Route path="create-meeting" element={<TutorCreateMeetingPage />} />
           <Route path="profile" element={<TutorWorkspaceProfilePage />} />
           <Route path="settings" element={<StudySettingsPage />} />
+          <Route path="help" element={<StudyHelpPage />} />
         </Route>
         <Route
           path="/tutor/dashboard"
@@ -276,6 +269,7 @@ export default function App() {
         <Route path="/tutors/:handle" element={<LegacyTutorProfileRedirect />} />
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<AdminOverviewPage />} />
+          <Route path="analytics" element={<AdminAnalyticsPage />} />
           <Route path="tutors" element={<AdminPendingTutorsPage />} />
           <Route path="tutors/directory" element={<AdminTutorsDirectoryPage />} />
           <Route path="students" element={<AdminStudentsPage />} />

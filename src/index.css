@@ -69,6 +69,8 @@ input[type='number'] {
   --sp-muted: #64748b;
   background-color: var(--sp-bg);
   color: var(--sp-text);
+  max-width: 100%;
+  overflow-x: clip;
 }
 
 .study-place.dark {

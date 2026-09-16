@@ -6,7 +6,7 @@ import SessionFiltersBar from '../components/study/speaking-club/SessionFiltersB
 import SessionRow from '../components/study/speaking-club/SessionRow'
 import HowItWorksCard from '../components/study/speaking-club/HowItWorksCard'
 import MyBookedSessionsWidget from '../components/study/speaking-club/MyBookedSessionsWidget'
-import { mockSpeakingClubSessions } from '../mocks/speakingClubMock'
+import RequestSpeakingClubForm from '../components/study/speaking-club/RequestSpeakingClubForm'
 import type { SpeakingClubSession } from '../types/speakingClubSession'
 import {
   ensureApiSession,
@@ -58,7 +58,6 @@ export default function SpeakingClubPage() {
   const [params, setParams] = useSearchParams()
   const [sessions, setSessions] = useState<SpeakingClubSession[]>([])
   const [loading, setLoading] = useState(true)
-  const [usingMock, setUsingMock] = useState(false)
   const [showAll, setShowAll] = useState(false)
   const [joinError, setJoinError] = useState<string | null>(null)
   const [joiningId, setJoiningId] = useState<string | null>(null)
@@ -79,15 +78,8 @@ export default function SpeakingClubPage() {
       const rows = await fetchSpeakingClubSessions()
       const mapped = rows.map((r) => mapApiSessionToUi(r, savedIds))
       setSessions(mapped)
-      setUsingMock(false)
     } catch {
-      setSessions(
-        mockSpeakingClubSessions.map((s) => ({
-          ...s,
-          isSaved: savedIds.has(s.id),
-        })),
-      )
-      setUsingMock(true)
+      setSessions([])
     } finally {
       setLoading(false)
     }
@@ -157,10 +149,6 @@ export default function SpeakingClubPage() {
 
   const handleJoin = async (session: SpeakingClubSession) => {
     setJoinError(null)
-    if (usingMock) {
-      setJoinError('Speaking Club API is offline — deploy with Postgres to join live sessions.')
-      return
-    }
     if (!user || user.role !== 'student') {
       setJoinError('Sign in as a student to join a session.')
       return
@@ -211,87 +199,82 @@ export default function SpeakingClubPage() {
           {joinError}
         </p>
       ) : null}
-      {usingMock ? (
-        <p className="rounded-xl bg-slate-100 px-3 py-2 text-xs text-slate-600">
-          Showing demo sessions — live join needs Postgres + vercel API. Tutors
-          create real sessions from Edit Profile.
-        </p>
-      ) : null}
 
-      <div className="grid gap-5 lg:grid-cols-[1fr_280px]">
-        <div className="space-y-4">
-          <div className="rounded-2xl border border-slate-100 bg-white p-4 shadow-sm sm:p-5">
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-              <div>
-                <h3 className="text-base font-bold text-slate-900">
-                  <span aria-hidden>📅 </span>Upcoming Sessions
-                </h3>
-                <p className="mt-0.5 text-xs text-slate-400">
-                  All times shown in your local timezone
-                </p>
-              </div>
-              <div className="flex flex-wrap gap-1.5">
-                {DAY_CHIPS.map((chip) => (
-                  <button
-                    key={chip.id}
-                    type="button"
-                    onClick={() => setDay(chip.id)}
-                    className={`rounded-full px-3 py-1.5 text-xs font-semibold transition ${
-                      dayChip === chip.id
-                        ? 'bg-indigo-600 text-white'
-                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                    }`}
-                  >
-                    {chip.label}
-                  </button>
-                ))}
-              </div>
+      <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_22rem]">
+        <div className="rounded-2xl border border-slate-100 bg-white p-4 shadow-sm sm:p-5">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <h3 className="text-base font-bold text-slate-900">
+                <span aria-hidden>📅 </span>Upcoming Sessions
+              </h3>
+              <p className="mt-0.5 text-xs text-slate-400">
+                All times shown in your local timezone
+              </p>
             </div>
-
-            <div className="mt-2">
-              {loading ? (
-                <div className="flex justify-center py-12">
-                  <div
-                    className="h-8 w-8 animate-spin rounded-full border-2 border-indigo-500 border-t-transparent"
-                    aria-hidden
-                  />
-                </div>
-              ) : visible.length === 0 ? (
-                <p className="py-10 text-center text-sm text-slate-500">
-                  No sessions match your filters.
-                </p>
-              ) : (
-                visible.map((session) => (
-                  <SessionRow
-                    key={session.id}
-                    session={session}
-                    joining={joiningId === session.id}
-                    onJoin={() => void handleJoin(session)}
-                    onSave={() => handleSave(session.id)}
-                  />
-                ))
-              )}
-            </div>
-
-            {filtered.length > 5 ? (
-              <div className="mt-2 flex justify-center border-t border-slate-100 pt-4">
+            <div className="flex flex-wrap gap-1.5">
+              {DAY_CHIPS.map((chip) => (
                 <button
+                  key={chip.id}
                   type="button"
-                  onClick={() => setShowAll((v) => !v)}
-                  className="inline-flex items-center gap-1 text-sm font-semibold text-indigo-600 hover:text-indigo-600"
+                  onClick={() => setDay(chip.id)}
+                  className={`rounded-full px-3 py-1.5 text-xs font-semibold transition ${
+                    dayChip === chip.id
+                      ? 'bg-indigo-600 text-white'
+                      : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                  }`}
                 >
-                  {showAll ? 'Show fewer sessions' : 'View all sessions'}
-                  <ChevronDown
-                    className={`h-4 w-4 transition ${showAll ? 'rotate-180' : ''}`}
-                    aria-hidden
-                  />
+                  {chip.label}
                 </button>
-              </div>
-            ) : null}
+              ))}
+            </div>
           </div>
+
+          <div className="mt-2">
+            {loading ? (
+              <div className="flex justify-center py-12">
+                <div
+                  className="h-8 w-8 animate-spin rounded-full border-2 border-indigo-500 border-t-transparent"
+                  aria-hidden
+                />
+              </div>
+            ) : visible.length === 0 ? (
+              <p className="py-10 text-center text-sm text-slate-500">
+                {sessions.length === 0
+                  ? 'No speaking clubs yet.'
+                  : 'No sessions match your filters.'}
+              </p>
+            ) : (
+              visible.map((session) => (
+                <SessionRow
+                  key={session.id}
+                  session={session}
+                  joining={joiningId === session.id}
+                  onJoin={() => void handleJoin(session)}
+                  onSave={() => handleSave(session.id)}
+                />
+              ))
+            )}
+          </div>
+
+          {filtered.length > 5 ? (
+            <div className="mt-2 flex justify-center border-t border-slate-100 pt-4">
+              <button
+                type="button"
+                onClick={() => setShowAll((v) => !v)}
+                className="inline-flex items-center gap-1 text-sm font-semibold text-indigo-600 hover:text-indigo-600"
+              >
+                {showAll ? 'Show fewer sessions' : 'View all sessions'}
+                <ChevronDown
+                  className={`h-4 w-4 transition ${showAll ? 'rotate-180' : ''}`}
+                  aria-hidden
+                />
+              </button>
+            </div>
+          ) : null}
         </div>
 
         <div className="space-y-4">
+          <RequestSpeakingClubForm />
           <HowItWorksCard />
           <MyBookedSessionsWidget />
         </div>

@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs'
 import {
   applyCors,
   authUserFromRow,
+  clearSessionCookie,
   fetchAppUserByHandle,
   fetchAppUserById,
   getAuthenticatedUser,
@@ -10,6 +11,7 @@ import {
   signToken,
 } from '../../_lib/auth.js'
 import { dbUnavailableResponse, isDbConfigured, sql } from '../../_lib/db.js'
+import { deleteAppUserAccount } from '../../_lib/deleteAppUser.js'
 import {
   isTutorProfileComplete,
   rowToPublicUser,
@@ -35,7 +37,7 @@ function parseCerts(raw: unknown): TutorCertification[] {
 
 /**
  * GET  — current user from cookie/Bearer (+ token for dual-auth clients)
- * PATCH — update profile / complete tutor / save placement / change password
+ * PATCH — update profile / complete tutor / save placement / change password / delete account
  */
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   applyCors(res)
@@ -72,6 +74,23 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
     const existing = await fetchAppUserById(auth.id)
     if (!existing) return res.status(404).json({ error: 'User not found' })
+
+    if (action === 'deleteAccount') {
+      const password = typeof body.password === 'string' ? body.password : ''
+      if (existing.password_hash) {
+        if (!password) {
+          return res.status(400).json({ error: 'Password is required' })
+        }
+        const matches = await bcrypt.compare(password, existing.password_hash)
+        if (!matches) {
+          return res.status(401).json({ error: 'Password is incorrect' })
+        }
+      }
+      const deleted = await deleteAppUserAccount(auth.id)
+      if (!deleted) return res.status(404).json({ error: 'User not found' })
+      clearSessionCookie(res)
+      return res.status(200).json({ ok: true })
+    }
 
     if (action === 'changePassword') {
       const currentPassword =

@@ -11,7 +11,7 @@ import DashboardTutors from '../components/study/home/DashboardTutors'
 import ToeflNewsCard from '../components/study/home/ToeflNewsCard'
 import DashboardSpeakingClubs from '../components/study/home/DashboardSpeakingClubs'
 import DashboardProgressCard from '../components/study/home/DashboardProgressCard'
-import { mockSpeakingClubSessions } from '../mocks/speakingClubMock'
+import SkillRadarChart from '../components/study/home/SkillRadarChart'
 import {
   mockPracticeExercises,
   mockSkillResults,
@@ -33,7 +33,6 @@ export default function StudyPlaceHome() {
   const studentId = user?.role === 'student' ? user.id : null
   const firstName = firstNameFromFullName(user?.fullName ?? 'Student')
   const [tutors, setTutors] = useState<TutorListingCard[]>([])
-  const clubs = mockSpeakingClubSessions.slice(0, 3)
   const fullResult = useMemo(() => loadFullTestResult(), [])
   const analysis = useMemo(() => buildTestAnalysis(fullResult), [fullResult])
   const skillResults = fullResult
@@ -99,23 +98,24 @@ export default function StudyPlaceHome() {
   }, [])
 
   return (
-    <div className="space-y-6">
+    <div className="min-w-0 space-y-6">
       {studentId ? <MeetInvitesBanner studentId={studentId} /> : null}
 
-      <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_18.5rem] xl:grid-cols-[minmax(0,1fr)_20rem]">
-        <div className="space-y-5">
+      <div className="grid min-w-0 gap-6 lg:grid-cols-[minmax(0,1fr)_18.5rem] xl:grid-cols-[minmax(0,1fr)_20rem]">
+        <div className="min-w-0 space-y-5">
           <WelcomeBanner firstName={firstName} slides={bannerSlides} />
           <FullTestSimulationCard />
           <SkillResultsRow results={skillResults} />
           <PracticeExercisesList items={mockPracticeExercises} />
+          <TestWeaknessCard analysis={analysis} />
         </div>
 
-        <div className="space-y-5">
+        <div className="min-w-0 space-y-5">
           <DashboardTutors tutors={tutors} />
           <ToeflNewsCard news={newsItems} />
-          <DashboardSpeakingClubs sessions={clubs} />
+          <DashboardSpeakingClubs />
           <DashboardProgressCard stats={mockStudyStats} />
-          <TestWeaknessCard analysis={analysis} />
+          <SkillRadarChart axes={analysis.axes} />
         </div>
       </div>
     </div>

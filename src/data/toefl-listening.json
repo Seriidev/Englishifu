@@ -1,0 +1,1534 @@
+{
+  "meta": {
+    "title": "TOEFL-Style Listening Practice",
+    "sections": [
+      "listen_and_choose",
+      "listen_to_a_conversation",
+      "listen_to_an_announcement",
+      "listen_to_an_academic_talk"
+    ],
+    "counts": {
+      "listen_and_choose": 10,
+      "listen_to_a_conversation": 5,
+      "listen_to_an_announcement": 5,
+      "listen_to_an_academic_talk": 4,
+      "total_questions": 42
+    },
+    "speaker_label_policy": "The 'speaker' field on every line is metadata for choosing a TTS voice only. It must never be spoken aloud, printed as a prefix, or otherwise revealed to the listener before or during playback. Real conversations do not announce who is about to talk.",
+    "notice": "All prompts, dialogue, announcements, lectures and questions are original content written for this project. TOEFL is a registered trademark of ETS; this material is not produced, endorsed or approved by ETS."
+  },
+  "listen_and_choose": [
+    {
+      "id": "lac-01",
+      "number": 1,
+      "heard_line": "Do you know if the writing center is open on Saturdays?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Yes, but only until noon."
+        },
+        {
+          "id": "b",
+          "text": "It's on the second floor of the library."
+        },
+        {
+          "id": "c",
+          "text": "I usually go there for math help."
+        },
+        {
+          "id": "d",
+          "text": "The tutors are very friendly."
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "The question asks about Saturday hours, so a direct answer about whether it's open — and when — is what's expected. The other options describe location, a different subject, or a general opinion instead of answering the yes/no + detail question."
+    },
+    {
+      "id": "lac-02",
+      "number": 2,
+      "heard_line": "I can't believe how long the line for registration is this year.",
+      "options": [
+        {
+          "id": "a",
+          "text": "The line moves faster after lunch, from what I heard."
+        },
+        {
+          "id": "b",
+          "text": "Registration closes at five today."
+        },
+        {
+          "id": "c",
+          "text": "I already picked my classes online."
+        },
+        {
+          "id": "d",
+          "text": "The building has two entrances."
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "The comment is about a long line, so a natural reply offers relevant information about the wait. The other choices change the subject to a deadline, an unrelated personal fact, or the building layout."
+    },
+    {
+      "id": "lac-03",
+      "number": 3,
+      "heard_line": "Would you mind switching seats with me? I can't see the board from here.",
+      "options": [
+        {
+          "id": "a",
+          "text": "Sure, no problem at all."
+        },
+        {
+          "id": "b",
+          "text": "The board was replaced last semester."
+        },
+        {
+          "id": "c",
+          "text": "I usually sit near the window."
+        },
+        {
+          "id": "d",
+          "text": "Class starts in five minutes."
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "This is a request, so the expected response is an agreement or refusal. Only the first option directly answers the request; the others describe the board, a personal habit, or the time, none of which responds to being asked a favor."
+    },
+    {
+      "id": "lac-04",
+      "number": 4,
+      "heard_line": "Has the package I ordered arrived at the front desk yet?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Not that I've seen, but I can check again this afternoon."
+        },
+        {
+          "id": "b",
+          "text": "The front desk closes at nine."
+        },
+        {
+          "id": "c",
+          "text": "I ordered mine two weeks ago."
+        },
+        {
+          "id": "d",
+          "text": "Packages are usually left outside apartment doors."
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "The question asks whether a specific package has arrived, so a direct answer with a plan to check again fits best. The distractors mention hours, a different order, or a general policy instead."
+    },
+    {
+      "id": "lac-05",
+      "number": 5,
+      "heard_line": "I think I left my umbrella in your car yesterday.",
+      "options": [
+        {
+          "id": "a",
+          "text": "I'll take a look next time I'm out there."
+        },
+        {
+          "id": "b",
+          "text": "It's supposed to rain again tomorrow."
+        },
+        {
+          "id": "c",
+          "text": "My car is in the shop this week."
+        },
+        {
+          "id": "d",
+          "text": "I bought a new umbrella last month."
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "The speaker is pointing out a lost item, so the natural reply offers to check for it. The other answers talk about the weather, an unrelated car problem, or a new purchase rather than addressing the missing umbrella."
+    },
+    {
+      "id": "lac-06",
+      "number": 6,
+      "heard_line": "Do you think the professor will accept a late submission?",
+      "options": [
+        {
+          "id": "a",
+          "text": "It depends on the reason, I think."
+        },
+        {
+          "id": "b",
+          "text": "The assignment covers three chapters."
+        },
+        {
+          "id": "c",
+          "text": "She teaches two sections this term."
+        },
+        {
+          "id": "d",
+          "text": "The deadline was extended for everyone."
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "The question asks for an opinion about whether a late submission might be accepted, so a hedge based on circumstances directly answers it. The others describe assignment content, the professor's schedule, or misstate the situation."
+    },
+    {
+      "id": "lac-07",
+      "number": 7,
+      "heard_line": "This soup tastes like it's missing something.",
+      "options": [
+        {
+          "id": "a",
+          "text": "Maybe it just needs a little more salt."
+        },
+        {
+          "id": "b",
+          "text": "The recipe came from my grandmother."
+        },
+        {
+          "id": "c",
+          "text": "I usually prefer sandwiches for lunch."
+        },
+        {
+          "id": "d",
+          "text": "The kitchen closes at eight tonight."
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "The comment invites a suggestion about what the dish needs, and the first option responds naturally with a fix. The rest shift to the recipe's origin, an unrelated preference, or closing hours."
+    },
+    {
+      "id": "lac-08",
+      "number": 8,
+      "heard_line": "Do you happen to know when the next campus shuttle leaves?",
+      "options": [
+        {
+          "id": "a",
+          "text": "I think there's one in about ten minutes."
+        },
+        {
+          "id": "b",
+          "text": "The shuttle used to be free for students."
+        },
+        {
+          "id": "c",
+          "text": "It stops right outside the library."
+        },
+        {
+          "id": "d",
+          "text": "I usually just walk to class instead."
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "The question asks for a time, so an estimate directly answers it. The other choices discuss past pricing, the stop location, or an unrelated habit rather than answering when the shuttle leaves."
+    },
+    {
+      "id": "lac-09",
+      "number": 9,
+      "heard_line": "I'm worried this printer is going to run out of ink before I finish.",
+      "options": [
+        {
+          "id": "a",
+          "text": "There's a spare cartridge in the top drawer."
+        },
+        {
+          "id": "b",
+          "text": "The printer was installed last year."
+        },
+        {
+          "id": "c",
+          "text": "I usually print in black and white."
+        },
+        {
+          "id": "d",
+          "text": "This model can scan documents too."
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "The concern is about running out of ink, so a helpful reply offers a solution. The distractors describe the printer's history, a habit, or an unrelated feature."
+    },
+    {
+      "id": "lac-10",
+      "number": 10,
+      "heard_line": "Do you know if this bus goes all the way downtown?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Yes, it's the last stop on this route."
+        },
+        {
+          "id": "b",
+          "text": "The fare went up last month."
+        },
+        {
+          "id": "c",
+          "text": "I usually take the train instead."
+        },
+        {
+          "id": "d",
+          "text": "This bus comes every fifteen minutes."
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "The question asks whether the bus reaches downtown, so confirming the final stop answers it directly. The other options discuss price, a personal preference, or frequency instead of the destination."
+    }
+  ],
+  "listen_to_a_conversation": [
+    {
+      "id": "conv-01",
+      "setting": "A student and a university advisor talk in the advising office.",
+      "speakers": [
+        {
+          "id": "a",
+          "role": "student",
+          "voice": "female_young"
+        },
+        {
+          "id": "b",
+          "role": "advisor",
+          "voice": "male_adult"
+        }
+      ],
+      "lines": [
+        {
+          "speaker": "a",
+          "text": "Thanks for fitting me in today. I wanted to ask about switching my minor before the deadline next week."
+        },
+        {
+          "speaker": "b",
+          "text": "Of course. What are you thinking of switching to?"
+        },
+        {
+          "speaker": "a",
+          "text": "I was in the business minor, but I've taken so many linguistics electives that I think it makes more sense to switch to that instead."
+        },
+        {
+          "speaker": "b",
+          "text": "That's a reasonable move. Let's check how many linguistics credits you already have on file."
+        },
+        {
+          "speaker": "a",
+          "text": "I counted four classes, but two of them were taken pass-fail, so I wasn't sure if those would count."
+        },
+        {
+          "speaker": "b",
+          "text": "Pass-fail courses can count toward a minor as long as they weren't required to be graded, so that shouldn't be a problem here."
+        },
+        {
+          "speaker": "a",
+          "text": "That's a relief. So if I submit the form today, will it be processed before the deadline?"
+        },
+        {
+          "speaker": "b",
+          "text": "It should be, but I'd still recommend submitting it by Thursday rather than waiting until the very last day, just in case there's a backlog."
+        },
+        {
+          "speaker": "a",
+          "text": "Okay, I'll go fill it out right after this. Thank you for checking all that for me."
+        },
+        {
+          "speaker": "b",
+          "text": "No problem at all. Come back if anything on the form is unclear."
+        }
+      ],
+      "questions": [
+        {
+          "id": "q-11",
+          "number": 11,
+          "prompt": "Why does the student want to meet with the advisor?",
+          "options": [
+            {
+              "id": "a",
+              "text": "To ask about switching her minor"
+            },
+            {
+              "id": "b",
+              "text": "To report a problem with a grade"
+            },
+            {
+              "id": "c",
+              "text": "To request an extension on an assignment"
+            },
+            {
+              "id": "d",
+              "text": "To ask about study abroad programs"
+            }
+          ],
+          "correct_option_id": "a",
+          "explanation": "A is correct because the student opens by explaining she wants to switch her minor before the deadline. B, C and D introduce topics that never come up in the conversation."
+        },
+        {
+          "id": "q-12",
+          "number": 12,
+          "prompt": "What does the advisor say about the pass-fail courses?",
+          "options": [
+            {
+              "id": "a",
+              "text": "They cannot count toward the minor."
+            },
+            {
+              "id": "b",
+              "text": "They will count as long as grading wasn't required."
+            },
+            {
+              "id": "c",
+              "text": "They must be retaken for a letter grade."
+            },
+            {
+              "id": "d",
+              "text": "They only count if approved by a committee."
+            }
+          ],
+          "correct_option_id": "b",
+          "explanation": "B is correct because the advisor explicitly says pass-fail courses can count as long as they weren't required to be graded. A contradicts this. C and D invent requirements that are never mentioned."
+        }
+      ]
+    },
+    {
+      "id": "conv-02",
+      "setting": "Two coworkers talk near the break room before a meeting.",
+      "speakers": [
+        {
+          "id": "a",
+          "role": "coworker_1",
+          "voice": "male_adult"
+        },
+        {
+          "id": "b",
+          "role": "coworker_2",
+          "voice": "female_adult"
+        }
+      ],
+      "lines": [
+        {
+          "speaker": "a",
+          "text": "Did you get a chance to look over the budget numbers before the meeting?"
+        },
+        {
+          "speaker": "b",
+          "text": "I did, and I think there's an error in the marketing line. The total doesn't match what we discussed last month."
+        },
+        {
+          "speaker": "a",
+          "text": "Really? Do you think it's worth bringing up in front of the whole team, or should we mention it privately first?"
+        },
+        {
+          "speaker": "b",
+          "text": "I'd rather flag it with our manager beforehand. If it turns out to be a simple typo, there's no reason to make it a bigger issue than it needs to be."
+        },
+        {
+          "speaker": "a",
+          "text": "That makes sense. Do you have five minutes before the meeting starts?"
+        },
+        {
+          "speaker": "b",
+          "text": "I do, actually. Let's catch her in her office right now, since the meeting's in twenty minutes."
+        },
+        {
+          "speaker": "a",
+          "text": "Good idea. I'll grab the spreadsheet so we can show her exactly which line looks off."
+        }
+      ],
+      "questions": [
+        {
+          "id": "q-13",
+          "number": 13,
+          "prompt": "What problem does the woman notice?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A missing agenda item"
+            },
+            {
+              "id": "b",
+              "text": "An error in the marketing budget"
+            },
+            {
+              "id": "c",
+              "text": "A scheduling conflict for the meeting"
+            },
+            {
+              "id": "d",
+              "text": "A mistake in the meeting location"
+            }
+          ],
+          "correct_option_id": "b",
+          "explanation": "B is correct because she says the total for the marketing line doesn't match last month's discussion. A, C and D are not mentioned at all."
+        },
+        {
+          "id": "q-14",
+          "number": 14,
+          "prompt": "What do the coworkers decide to do?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Ignore the issue until next month"
+            },
+            {
+              "id": "b",
+              "text": "Bring it up in front of the whole team first"
+            },
+            {
+              "id": "c",
+              "text": "Speak with their manager privately before the meeting"
+            },
+            {
+              "id": "d",
+              "text": "Fix the spreadsheet themselves without telling anyone"
+            }
+          ],
+          "correct_option_id": "c",
+          "explanation": "C is correct because the woman suggests flagging it with the manager first, and they agree to do so before the meeting starts. A contradicts their plan, B is what they choose not to do, and D is never suggested."
+        }
+      ]
+    },
+    {
+      "id": "conv-03",
+      "setting": "A student talks to a librarian at the reference desk.",
+      "speakers": [
+        {
+          "id": "a",
+          "role": "student",
+          "voice": "male_young"
+        },
+        {
+          "id": "b",
+          "role": "librarian",
+          "voice": "female_adult"
+        }
+      ],
+      "lines": [
+        {
+          "speaker": "a",
+          "text": "Excuse me, I'm trying to find sources for a paper on urban farming, but I'm not sure where to start."
+        },
+        {
+          "speaker": "b",
+          "text": "Sure, have you already searched the main database, or is this your first stop?"
+        },
+        {
+          "speaker": "a",
+          "text": "I tried a general search, but I got thousands of results and most of them didn't seem relevant."
+        },
+        {
+          "speaker": "b",
+          "text": "That's common with broad topics. Try narrowing your search with more specific terms, like 'urban agriculture policy' or 'community gardens sustainability.'"
+        },
+        {
+          "speaker": "a",
+          "text": "That's helpful. Is there a particular database that's better for this kind of environmental topic?"
+        },
+        {
+          "speaker": "b",
+          "text": "I'd recommend the environmental studies database on the library website. It's more specialized, so the results should be much more focused."
+        },
+        {
+          "speaker": "a",
+          "text": "Great, I'll try that. One more thing - can I check out books for longer than two weeks if I need them for a whole semester?"
+        },
+        {
+          "speaker": "b",
+          "text": "You can request a renewal online as long as no one else has placed a hold on the book."
+        }
+      ],
+      "questions": [
+        {
+          "id": "q-15",
+          "number": 15,
+          "prompt": "Why does the student visit the reference desk?",
+          "options": [
+            {
+              "id": "a",
+              "text": "To renew an overdue book"
+            },
+            {
+              "id": "b",
+              "text": "To ask for help finding sources for a paper"
+            },
+            {
+              "id": "c",
+              "text": "To report a problem with the printer"
+            },
+            {
+              "id": "d",
+              "text": "To ask about study room reservations"
+            }
+          ],
+          "correct_option_id": "b",
+          "explanation": "B is correct because the student explains he's looking for sources for a paper on urban farming. A comes up later as a separate question, and C and D are never mentioned."
+        },
+        {
+          "id": "q-16",
+          "number": 16,
+          "prompt": "What does the librarian suggest to improve the student's search?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Using a more specialized database"
+            },
+            {
+              "id": "b",
+              "text": "Asking a professor for a reading list"
+            },
+            {
+              "id": "c",
+              "text": "Searching for the topic in a different language"
+            },
+            {
+              "id": "d",
+              "text": "Checking newspaper archives instead"
+            }
+          ],
+          "correct_option_id": "a",
+          "explanation": "A is correct because she recommends the environmental studies database as more specialized and focused. B, C and D are not suggested in the conversation."
+        }
+      ]
+    },
+    {
+      "id": "conv-04",
+      "setting": "A tenant calls the apartment building's maintenance office.",
+      "speakers": [
+        {
+          "id": "a",
+          "role": "tenant",
+          "voice": "female_adult"
+        },
+        {
+          "id": "b",
+          "role": "maintenance_staff",
+          "voice": "male_adult"
+        }
+      ],
+      "lines": [
+        {
+          "speaker": "a",
+          "text": "Hi, I'm calling about the heater in my apartment. It's been making a loud clicking noise since yesterday."
+        },
+        {
+          "speaker": "b",
+          "text": "I'm sorry to hear that. Is it still providing heat, or has it stopped working completely?"
+        },
+        {
+          "speaker": "a",
+          "text": "It's still working, but the noise is getting louder, and I'm worried it might break down soon."
+        },
+        {
+          "speaker": "b",
+          "text": "That's good that it's still running. I can send someone over tomorrow morning, unless you'd prefer we come today as an emergency visit."
+        },
+        {
+          "speaker": "a",
+          "text": "Tomorrow morning should be fine, since it's not an emergency yet. What time should I expect the technician?"
+        },
+        {
+          "speaker": "b",
+          "text": "Usually between nine and eleven. I'll have the front desk call you thirty minutes before he arrives."
+        },
+        {
+          "speaker": "a",
+          "text": "That works for me. Should I turn the heater off in the meantime, just to be safe?"
+        },
+        {
+          "speaker": "b",
+          "text": "That's not necessary, but if the noise gets significantly worse overnight, go ahead and turn it off and call our emergency line."
+        }
+      ],
+      "questions": [
+        {
+          "id": "q-17",
+          "number": 17,
+          "prompt": "What is the tenant's main concern?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The heater has stopped providing heat."
+            },
+            {
+              "id": "b",
+              "text": "The heater is making a loud noise."
+            },
+            {
+              "id": "c",
+              "text": "The apartment has no hot water."
+            },
+            {
+              "id": "d",
+              "text": "The rent payment did not go through."
+            }
+          ],
+          "correct_option_id": "b",
+          "explanation": "B is correct because she calls specifically about a loud clicking noise from the heater. A is wrong since she confirms it's still working, and C and D are never mentioned."
+        },
+        {
+          "id": "q-18",
+          "number": 18,
+          "prompt": "What does the staff member recommend if the noise gets much worse overnight?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Wait until the scheduled visit regardless"
+            },
+            {
+              "id": "b",
+              "text": "Turn off the heater and call the emergency line"
+            },
+            {
+              "id": "c",
+              "text": "Open a window to reduce the sound"
+            },
+            {
+              "id": "d",
+              "text": "Move to a different apartment temporarily"
+            }
+          ],
+          "correct_option_id": "b",
+          "explanation": "B is correct because he tells her to turn it off and call the emergency line if the noise worsens significantly. A contradicts his advice, and C and D are not mentioned."
+        }
+      ]
+    },
+    {
+      "id": "conv-05",
+      "setting": "Two classmates talk before a group project meeting.",
+      "speakers": [
+        {
+          "id": "a",
+          "role": "classmate_1",
+          "voice": "male_young"
+        },
+        {
+          "id": "b",
+          "role": "classmate_2",
+          "voice": "female_young"
+        }
+      ],
+      "lines": [
+        {
+          "speaker": "a",
+          "text": "Did you finish the section on data collection for our project? It's due to the professor tomorrow."
+        },
+        {
+          "speaker": "b",
+          "text": "Almost. I ran into a problem with the survey results - some of the responses seem to be duplicates."
+        },
+        {
+          "speaker": "a",
+          "text": "That's strange. Do you know how many were affected?"
+        },
+        {
+          "speaker": "b",
+          "text": "Maybe fifteen or twenty out of two hundred. I think the survey link got shared twice by accident."
+        },
+        {
+          "speaker": "a",
+          "text": "We should probably remove the duplicates before we calculate the averages, or the numbers will be skewed."
+        },
+        {
+          "speaker": "b",
+          "text": "Agreed. I can clean up the data tonight if you're able to finish the summary paragraph instead."
+        },
+        {
+          "speaker": "a",
+          "text": "That works. I'll also double check the charts once you send me the corrected numbers."
+        },
+        {
+          "speaker": "b",
+          "text": "Perfect. I should have it to you by nine, so we'll have plenty of time before the deadline."
+        }
+      ],
+      "questions": [
+        {
+          "id": "q-19",
+          "number": 19,
+          "prompt": "What problem does the woman describe?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The survey link stopped working."
+            },
+            {
+              "id": "b",
+              "text": "Some survey responses appear to be duplicates."
+            },
+            {
+              "id": "c",
+              "text": "The professor extended the deadline."
+            },
+            {
+              "id": "d",
+              "text": "The data was accidentally deleted."
+            }
+          ],
+          "correct_option_id": "b",
+          "explanation": "B is correct because she explains that some responses seem duplicated after the link was shared twice. A, C and D are not mentioned in the conversation."
+        },
+        {
+          "id": "q-20",
+          "number": 20,
+          "prompt": "What do the two classmates decide to do?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Ask the professor for more time"
+            },
+            {
+              "id": "b",
+              "text": "Split the remaining tasks between them"
+            },
+            {
+              "id": "c",
+              "text": "Restart the survey from the beginning"
+            },
+            {
+              "id": "d",
+              "text": "Cancel the project meeting"
+            }
+          ],
+          "correct_option_id": "b",
+          "explanation": "B is correct because she agrees to clean the data while he finishes the summary paragraph, dividing the remaining work. A, C and D do not match what they agree to do."
+        }
+      ]
+    }
+  ],
+  "listen_to_an_announcement": [
+    {
+      "id": "ann-01",
+      "setting": "A campus radio announcement about library hours.",
+      "speaker": {
+        "id": "a",
+        "role": "announcer",
+        "voice": "female_adult"
+      },
+      "text": "Attention students: starting next Monday, the main library will extend its weekday hours, staying open until 2 a.m. instead of midnight, through the end of final exams. The extended hours will not apply to the reading room on the third floor, which will continue to close at its usual time of ten p.m. due to staffing limits. Students who need a quiet place to study after ten o'clock should use the main floor or the group study rooms on the second floor, both of which will remain open under the new schedule. The library café will also stay open later, serving coffee and light snacks until 1 a.m. We wish everyone good luck on their exams.",
+      "questions": [
+        {
+          "id": "q-21",
+          "number": 21,
+          "prompt": "What is the main purpose of this announcement?",
+          "options": [
+            {
+              "id": "a",
+              "text": "To announce new library fines"
+            },
+            {
+              "id": "b",
+              "text": "To describe extended library hours during exams"
+            },
+            {
+              "id": "c",
+              "text": "To announce the library's permanent closing time"
+            },
+            {
+              "id": "d",
+              "text": "To introduce a new café menu"
+            }
+          ],
+          "correct_option_id": "b",
+          "explanation": "B is correct because the announcement centers on extended hours through finals. A, C and D are not the focus, though the café is mentioned briefly as a detail."
+        },
+        {
+          "id": "q-22",
+          "number": 22,
+          "prompt": "Which part of the library will NOT follow the extended hours?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The main floor"
+            },
+            {
+              "id": "b",
+              "text": "The group study rooms"
+            },
+            {
+              "id": "c",
+              "text": "The third-floor reading room"
+            },
+            {
+              "id": "d",
+              "text": "The café"
+            }
+          ],
+          "correct_option_id": "c",
+          "explanation": "C is correct because the reading room on the third floor keeps closing at ten p.m. due to staffing. The main floor, group study rooms, and café are all described as staying open later."
+        }
+      ]
+    },
+    {
+      "id": "ann-02",
+      "setting": "An announcement in an office building lobby.",
+      "speaker": {
+        "id": "a",
+        "role": "announcer",
+        "voice": "male_adult"
+      },
+      "text": "Good morning. This is a reminder that the elevators on the north side of the building will be out of service today between ten a.m. and two p.m. for a scheduled inspection. During this time, please use the south elevators or the stairwell near the main entrance. Employees who need to move heavy equipment or deliveries during the inspection window should contact building security in advance, since the freight elevator will also be affected. We apologize for the inconvenience and expect all elevators to return to normal service by the end of the day.",
+      "questions": [
+        {
+          "id": "q-23",
+          "number": 23,
+          "prompt": "Why are the north elevators out of service?",
+          "options": [
+            {
+              "id": "a",
+              "text": "They broke down unexpectedly."
+            },
+            {
+              "id": "b",
+              "text": "A scheduled inspection is taking place."
+            },
+            {
+              "id": "c",
+              "text": "The building lost power."
+            },
+            {
+              "id": "d",
+              "text": "New elevators are being installed."
+            }
+          ],
+          "correct_option_id": "b",
+          "explanation": "B is correct because the announcement explicitly calls it a scheduled inspection. A, C and D are never mentioned."
+        },
+        {
+          "id": "q-24",
+          "number": 24,
+          "prompt": "What should employees moving heavy equipment do?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Wait until after two p.m."
+            },
+            {
+              "id": "b",
+              "text": "Use the stairwell instead"
+            },
+            {
+              "id": "c",
+              "text": "Contact building security in advance"
+            },
+            {
+              "id": "d",
+              "text": "Use the south elevators without informing anyone"
+            }
+          ],
+          "correct_option_id": "c",
+          "explanation": "C is correct because the announcement specifically instructs them to contact security in advance since the freight elevator is affected too. The other options are reasonable-sounding but not what is actually said."
+        }
+      ]
+    },
+    {
+      "id": "ann-03",
+      "setting": "An announcement at a community swimming pool.",
+      "speaker": {
+        "id": "a",
+        "role": "announcer",
+        "voice": "female_adult"
+      },
+      "text": "Attention swimmers: due to a mechanical issue with the filtration system, the deep end of the pool will be closed for the rest of the afternoon. The shallow end and the lap lanes will remain open as usual. Lifeguards ask that swimmers avoid crossing the rope marking the closed section, even if the water looks clear. Maintenance staff expect repairs to be finished by tomorrow morning, and the pool will reopen fully at its regular six a.m. opening time. We appreciate your patience while we resolve this issue.",
+      "questions": [
+        {
+          "id": "q-25",
+          "number": 25,
+          "prompt": "Why is the deep end of the pool closed?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A swimming lesson is taking place there."
+            },
+            {
+              "id": "b",
+              "text": "There is a mechanical issue with the filtration system."
+            },
+            {
+              "id": "c",
+              "text": "The water temperature is too cold."
+            },
+            {
+              "id": "d",
+              "text": "It is being repainted."
+            }
+          ],
+          "correct_option_id": "b",
+          "explanation": "B is correct because the announcement names a mechanical filtration problem as the reason. A, C and D are not mentioned."
+        },
+        {
+          "id": "q-26",
+          "number": 26,
+          "prompt": "When does the pool expect to reopen fully?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Later this afternoon"
+            },
+            {
+              "id": "b",
+              "text": "Tomorrow morning at six"
+            },
+            {
+              "id": "c",
+              "text": "In one week"
+            },
+            {
+              "id": "d",
+              "text": "It has already reopened"
+            }
+          ],
+          "correct_option_id": "b",
+          "explanation": "B is correct because the announcement states repairs should be done by tomorrow morning and the pool reopens at its usual six a.m. time. The other options misstate the timeline."
+        }
+      ]
+    },
+    {
+      "id": "ann-04",
+      "setting": "An announcement on a train before departure.",
+      "speaker": {
+        "id": "a",
+        "role": "announcer",
+        "voice": "male_adult"
+      },
+      "text": "Good afternoon, passengers. This train will make an additional stop today at Riverside Station due to a signal issue further down the line. Passengers traveling to Lakeview or Union Terminal should remain on board, as the train will continue to those stops after a short delay of approximately ten minutes at Riverside. Passengers connecting to the express bus service should note that the bus schedule has not changed, so please allow extra time if your connection is tight. We apologize for any inconvenience and appreciate your understanding.",
+      "questions": [
+        {
+          "id": "q-27",
+          "number": 27,
+          "prompt": "Why is the train making an additional stop?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A passenger requested it."
+            },
+            {
+              "id": "b",
+              "text": "There is a signal issue further down the line."
+            },
+            {
+              "id": "c",
+              "text": "The train is ahead of schedule."
+            },
+            {
+              "id": "d",
+              "text": "Riverside Station is the final stop today."
+            }
+          ],
+          "correct_option_id": "b",
+          "explanation": "B is correct because the announcement names a signal issue as the cause. A, C and D are not supported by the text."
+        },
+        {
+          "id": "q-28",
+          "number": 28,
+          "prompt": "What should passengers connecting to the express bus do?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Get off immediately at Riverside"
+            },
+            {
+              "id": "b",
+              "text": "Allow extra time in case their connection is tight"
+            },
+            {
+              "id": "c",
+              "text": "Request a refund for their ticket"
+            },
+            {
+              "id": "d",
+              "text": "Switch to a different train"
+            }
+          ],
+          "correct_option_id": "b",
+          "explanation": "B is correct because the announcement specifically advises allowing extra time since the bus schedule hasn't changed. The other options are not suggested."
+        }
+      ]
+    },
+    {
+      "id": "ann-05",
+      "setting": "An announcement before a university career fair.",
+      "speaker": {
+        "id": "a",
+        "role": "announcer",
+        "voice": "female_adult"
+      },
+      "text": "Welcome to this year's career fair. Before we open the doors, a few reminders. Employer booths are organized by industry, and a full map is available at the registration table if you did not receive one by email. Students who submitted a resume in advance through the online portal do not need to bring a printed copy, though many employers still appreciate having one on hand. The fair will run until four p.m., and the career services table near the entrance will remain staffed the entire time if you have questions about interview preparation. We hope you have a productive day.",
+      "questions": [
+        {
+          "id": "q-29",
+          "number": 29,
+          "prompt": "Where can students get a map of the employer booths?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Only by email beforehand"
+            },
+            {
+              "id": "b",
+              "text": "At the registration table"
+            },
+            {
+              "id": "c",
+              "text": "From any employer booth"
+            },
+            {
+              "id": "d",
+              "text": "On the university's main website"
+            }
+          ],
+          "correct_option_id": "b",
+          "explanation": "B is correct because the announcement says a map is available at the registration table for anyone who didn't receive one by email. The other options are not described as sources for the map."
+        },
+        {
+          "id": "q-30",
+          "number": 30,
+          "prompt": "What does the announcement say about printed resumes?",
+          "options": [
+            {
+              "id": "a",
+              "text": "They are required for everyone."
+            },
+            {
+              "id": "b",
+              "text": "They are not needed if a resume was submitted online, though some employers still like one."
+            },
+            {
+              "id": "c",
+              "text": "They will not be accepted by any employer."
+            },
+            {
+              "id": "d",
+              "text": "They must be submitted before the fair begins."
+            }
+          ],
+          "correct_option_id": "b",
+          "explanation": "B is correct because the announcement says students who submitted online don't need a printed copy, but many employers still appreciate having one. A, C and D misstate this."
+        }
+      ]
+    }
+  ],
+  "listen_to_an_academic_talk": [
+    {
+      "id": "talk-01",
+      "course": "introductory biology",
+      "setting": "A professor lectures about coral reefs.",
+      "lines": [
+        {
+          "speaker": "professor",
+          "text": "Today we're looking at coral reefs, which are often called the rainforests of the ocean because of how much biodiversity they support despite covering a relatively small area of the seafloor."
+        },
+        {
+          "speaker": "professor",
+          "text": "Coral itself is actually an animal, not a plant, though many people assume otherwise because of its colorful, plant-like appearance. Each coral structure is made up of thousands of tiny organisms called polyps, which build a hard skeleton out of calcium carbonate."
+        },
+        {
+          "speaker": "student",
+          "text": "If coral is an animal, why does it look green or brown sometimes instead of just white?"
+        },
+        {
+          "speaker": "professor",
+          "text": "Good question. That color actually comes from algae living inside the coral's tissue, in a relationship called symbiosis. The algae produce food through photosynthesis and share it with the coral, and in exchange, the coral provides the algae with a protected place to live."
+        },
+        {
+          "speaker": "professor",
+          "text": "This relationship is essential, because it's also the reason coral reefs are so sensitive to rising ocean temperatures. When water gets too warm, the coral expels the algae, a process known as bleaching, and without the algae, the coral loses both its color and its main food source."
+        },
+        {
+          "speaker": "professor",
+          "text": "If temperatures return to normal quickly, some coral can recover the algae and survive. But if the stress continues too long, the coral eventually dies, and the reef structure it built over decades or centuries begins to break down."
+        }
+      ],
+      "questions": [
+        {
+          "id": "q-31",
+          "number": 31,
+          "prompt": "According to the professor, what is coral?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A type of algae"
+            },
+            {
+              "id": "b",
+              "text": "An animal made up of tiny polyps"
+            },
+            {
+              "id": "c",
+              "text": "A rock formation"
+            },
+            {
+              "id": "d",
+              "text": "A species of fish"
+            }
+          ],
+          "correct_option_id": "b",
+          "explanation": "B is correct because the professor explicitly states coral is an animal built from thousands of tiny polyps. A, C and D contradict this directly."
+        },
+        {
+          "id": "q-32",
+          "number": 32,
+          "prompt": "Why does the professor mention symbiosis?",
+          "options": [
+            {
+              "id": "a",
+              "text": "To explain where coral's color comes from and why it matters for survival"
+            },
+            {
+              "id": "b",
+              "text": "To describe how coral reproduces"
+            },
+            {
+              "id": "c",
+              "text": "To compare coral to rainforest plants"
+            },
+            {
+              "id": "d",
+              "text": "To explain how coral is harvested"
+            }
+          ],
+          "correct_option_id": "a",
+          "explanation": "A is correct because the professor introduces symbiosis specifically to explain coral's color and links it directly to the coral's vulnerability to bleaching. B, C and D are not the purpose of mentioning it."
+        },
+        {
+          "id": "q-33",
+          "number": 33,
+          "prompt": "What happens during coral bleaching?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The coral grows a hard new skeleton."
+            },
+            {
+              "id": "b",
+              "text": "The coral expels its algae and loses color and food."
+            },
+            {
+              "id": "c",
+              "text": "The coral moves to cooler water."
+            },
+            {
+              "id": "d",
+              "text": "The coral reproduces more quickly."
+            }
+          ],
+          "correct_option_id": "b",
+          "explanation": "B is correct because the professor describes bleaching as the coral expelling its algae, which causes loss of color and food source. A, C and D are not described as part of this process."
+        }
+      ]
+    },
+    {
+      "id": "talk-02",
+      "course": "introductory economics",
+      "setting": "A professor lectures about opportunity cost.",
+      "lines": [
+        {
+          "speaker": "professor",
+          "text": "Let's talk about opportunity cost, one of the most fundamental ideas in economics. Opportunity cost is the value of the next best alternative you give up when you make a choice."
+        },
+        {
+          "speaker": "professor",
+          "text": "It's important to understand that opportunity cost isn't only about money. If you spend an evening studying for an exam, the opportunity cost might be the time you could have spent with friends, or the sleep you gave up instead."
+        },
+        {
+          "speaker": "student",
+          "text": "So does that mean every decision has an opportunity cost, even small ones?"
+        },
+        {
+          "speaker": "professor",
+          "text": "Exactly. Even choosing what to eat for lunch involves an opportunity cost, though we rarely think about it consciously, since the alternatives are usually similar in value."
+        },
+        {
+          "speaker": "professor",
+          "text": "Where this concept becomes especially useful is in business decisions. Imagine a company decides to use a warehouse to store its own inventory instead of renting it out to another business. The opportunity cost isn't the cost of the warehouse itself - it's the rental income the company gives up by using the space that way."
+        },
+        {
+          "speaker": "professor",
+          "text": "Economists use this idea to explain why people and companies make certain choices, even choices that don't obviously involve spending money. Once you start thinking in terms of opportunity cost, you begin to see it everywhere, from how governments allocate budgets to how students choose their class schedules."
+        }
+      ],
+      "questions": [
+        {
+          "id": "q-34",
+          "number": 34,
+          "prompt": "How does the professor define opportunity cost?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The total amount of money spent on a decision"
+            },
+            {
+              "id": "b",
+              "text": "The value of the next best alternative given up"
+            },
+            {
+              "id": "c",
+              "text": "The time it takes to make a decision"
+            },
+            {
+              "id": "d",
+              "text": "The profit earned from a business choice"
+            }
+          ],
+          "correct_option_id": "b",
+          "explanation": "B is correct because the professor gives this exact definition at the start of the lecture. A, C and D describe related but different concepts."
+        },
+        {
+          "id": "q-35",
+          "number": 35,
+          "prompt": "In the warehouse example, what is the opportunity cost for the company?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The cost of building the warehouse"
+            },
+            {
+              "id": "b",
+              "text": "The rental income given up by using the space themselves"
+            },
+            {
+              "id": "c",
+              "text": "The cost of the inventory stored inside"
+            },
+            {
+              "id": "d",
+              "text": "The salary of the warehouse staff"
+            }
+          ],
+          "correct_option_id": "b",
+          "explanation": "B is correct because the professor explains the opportunity cost is the rental income the company forgoes, not the warehouse's cost or inventory. A, C and D are not what the example describes."
+        },
+        {
+          "id": "q-36",
+          "number": 36,
+          "prompt": "Why does the professor say opportunity cost is useful for understanding business decisions?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It only applies to large purchases."
+            },
+            {
+              "id": "b",
+              "text": "It explains choices even when no money changes hands directly."
+            },
+            {
+              "id": "c",
+              "text": "It replaces the need for financial accounting."
+            },
+            {
+              "id": "d",
+              "text": "It only applies to decisions involving real estate."
+            }
+          ],
+          "correct_option_id": "b",
+          "explanation": "B is correct because the professor emphasizes that opportunity cost explains choices that don't obviously involve spending money, using it broadly across budgets and schedules. A, C and D misrepresent this point."
+        }
+      ]
+    },
+    {
+      "id": "talk-03",
+      "course": "introductory psychology",
+      "setting": "A professor lectures about memory and sleep.",
+      "lines": [
+        {
+          "speaker": "professor",
+          "text": "Today we're discussing the relationship between sleep and memory consolidation - in other words, how sleep helps turn short-term memories into long-term ones."
+        },
+        {
+          "speaker": "professor",
+          "text": "During deep sleep stages, the brain replays patterns of activity that occurred while we were learning something earlier in the day. Researchers believe this replay strengthens the neural connections associated with that information, making it more likely to be remembered later."
+        },
+        {
+          "speaker": "student",
+          "text": "Does that mean studying right before bed is actually more effective than studying earlier in the day?"
+        },
+        {
+          "speaker": "professor",
+          "text": "It can be, particularly if you sleep soon afterward, since there's less time for the information to be disrupted by other activities before consolidation begins. That said, studying too close to bedtime and then struggling to fall asleep would likely cancel out any benefit."
+        },
+        {
+          "speaker": "professor",
+          "text": "One study that illustrates this involved two groups learning a list of word pairs. One group slept for eight hours immediately after learning, while the other group stayed awake for the same eight hours. The group that slept remembered significantly more word pairs the next day."
+        },
+        {
+          "speaker": "professor",
+          "text": "This research has practical implications beyond studying for exams. It also suggests why sleep deprivation is linked to poorer performance in jobs that require retaining new information quickly, such as training for a new skill or learning new safety procedures."
+        }
+      ],
+      "questions": [
+        {
+          "id": "q-37",
+          "number": 37,
+          "prompt": "What is memory consolidation, according to the professor?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The process of forgetting unimportant information"
+            },
+            {
+              "id": "b",
+              "text": "The process of turning short-term memories into long-term ones"
+            },
+            {
+              "id": "c",
+              "text": "A technique for studying faster"
+            },
+            {
+              "id": "d",
+              "text": "A type of sleep disorder"
+            }
+          ],
+          "correct_option_id": "b",
+          "explanation": "B is correct because the professor defines consolidation this way at the start of the lecture. A, C and D are not accurate descriptions."
+        },
+        {
+          "id": "q-38",
+          "number": 38,
+          "prompt": "What did the word-pair study find?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Both groups remembered the same number of word pairs."
+            },
+            {
+              "id": "b",
+              "text": "The group that slept remembered significantly more word pairs."
+            },
+            {
+              "id": "c",
+              "text": "The group that stayed awake performed better overall."
+            },
+            {
+              "id": "d",
+              "text": "Neither group could remember the word pairs the next day."
+            }
+          ],
+          "correct_option_id": "b",
+          "explanation": "B is correct because the professor states the group that slept remembered significantly more. A, C and D contradict the described result."
+        },
+        {
+          "id": "q-39",
+          "number": 39,
+          "prompt": "Why does the professor mention job training near the end of the talk?",
+          "options": [
+            {
+              "id": "a",
+              "text": "To argue that job training should happen only at night"
+            },
+            {
+              "id": "b",
+              "text": "To connect the sleep and memory research to a practical, real-world example"
+            },
+            {
+              "id": "c",
+              "text": "To criticize how companies train new employees"
+            },
+            {
+              "id": "d",
+              "text": "To explain a different, unrelated study"
+            }
+          ],
+          "correct_option_id": "b",
+          "explanation": "B is correct because the professor extends the research to explain why sleep deprivation affects learning new job skills, connecting theory to a practical example. A, C and D misread the purpose."
+        }
+      ]
+    },
+    {
+      "id": "talk-04",
+      "course": "introductory geology",
+      "setting": "A professor lectures about groundwater and aquifers.",
+      "lines": [
+        {
+          "speaker": "professor",
+          "text": "Today we're covering aquifers, which are underground layers of rock or sediment that can hold and transmit water. They're a major source of drinking water in many parts of the world, often more important than rivers or lakes in dry regions."
+        },
+        {
+          "speaker": "professor",
+          "text": "Not all underground rock can store water well. Aquifers are typically made of porous materials like sand or gravel, which have small spaces between particles where water can collect. Solid rock with very few spaces, like dense granite, generally makes a poor aquifer."
+        },
+        {
+          "speaker": "student",
+          "text": "How do aquifers actually get refilled with water in the first place?"
+        },
+        {
+          "speaker": "professor",
+          "text": "Through a process called recharge, which happens when rainfall or melting snow slowly seeps down through the soil and rock layers above the aquifer. This process can take anywhere from days to thousands of years, depending on the depth and type of rock involved."
+        },
+        {
+          "speaker": "professor",
+          "text": "This is part of why aquifer depletion is such a serious issue in some regions. If water is pumped out faster than it can be naturally recharged, the water table drops, wells can run dry, and in extreme cases, the ground above the aquifer can actually sink, a phenomenon called subsidence."
+        },
+        {
+          "speaker": "professor",
+          "text": "Some areas have started managing this more carefully through a practice called managed recharge, where excess surface water is deliberately directed into the ground during wet seasons to help refill aquifers before the dry season begins."
+        }
+      ],
+      "questions": [
+        {
+          "id": "q-40",
+          "number": 40,
+          "prompt": "What makes a good aquifer, according to the professor?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Dense rock with very few spaces"
+            },
+            {
+              "id": "b",
+              "text": "Porous material like sand or gravel"
+            },
+            {
+              "id": "c",
+              "text": "A layer of solid granite"
+            },
+            {
+              "id": "d",
+              "text": "Rock located near the surface only"
+            }
+          ],
+          "correct_option_id": "b",
+          "explanation": "B is correct because the professor explains porous materials like sand or gravel store water well, while dense rock does not. A and C describe poor aquifer material, and D is not mentioned."
+        },
+        {
+          "id": "q-41",
+          "number": 41,
+          "prompt": "What is subsidence, as described in the lecture?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The refilling of an aquifer with rainwater"
+            },
+            {
+              "id": "b",
+              "text": "The sinking of the ground when water is pumped out too quickly"
+            },
+            {
+              "id": "c",
+              "text": "A method for measuring water quality"
+            },
+            {
+              "id": "d",
+              "text": "The process of water evaporating from the surface"
+            }
+          ],
+          "correct_option_id": "b",
+          "explanation": "B is correct because the professor defines subsidence as the ground sinking when an aquifer is depleted faster than it recharges. A, C and D describe different concepts."
+        },
+        {
+          "id": "q-42",
+          "number": 42,
+          "prompt": "Why does the professor describe managed recharge?",
+          "options": [
+            {
+              "id": "a",
+              "text": "To criticize the practice as ineffective"
+            },
+            {
+              "id": "b",
+              "text": "To give an example of how some regions address aquifer depletion"
+            },
+            {
+              "id": "c",
+              "text": "To explain how aquifers were first discovered"
+            },
+            {
+              "id": "d",
+              "text": "To describe a natural process with no human involvement"
+            }
+          ],
+          "correct_option_id": "b",
+          "explanation": "B is correct because managed recharge is introduced as a deliberate human practice that helps address the depletion problem discussed earlier. A, C and D misrepresent its purpose."
+        }
+      ]
+    }
+  ]
+}

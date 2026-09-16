@@ -26,6 +26,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         u.full_name,
         u.email,
         u.handle,
+        u.avatar_url,
         u.cefr_level,
         u.xp,
         u.daily_streak,
@@ -33,7 +34,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         u.marketing_opt_in,
         u.email_unsubscribed,
         u.created_at,
-        MAX(tr.overall_band_score) AS best_toefl_score
+        MAX(tr.overall_band_score) AS best_toefl_score,
+        NOT EXISTS (
+          SELECT 1
+          FROM student_boosts sb
+          WHERE sb.student_id = u.id
+            AND sb.kind = 'admin'
+            AND sb.boost_day = (CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Ashgabat')::date
+        ) AS can_admin_boost
       FROM app_users u
       LEFT JOIN test_results tr ON tr.student_id = u.id
       WHERE u.role = 'student'
@@ -54,6 +62,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(200).json({ students: rows })
   } catch (err) {
     console.error('GET admin/students:', err)
+    const msg = err instanceof Error ? err.message : ''
+    if (msg.includes('timeout')) {
+      return res.status(503).json({
+        error: 'Database is waking up. Wait a few seconds and try again.',
+      })
+    }
     return res.status(500).json({ error: 'Failed to load students' })
   }
 }

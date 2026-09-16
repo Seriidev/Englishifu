@@ -9,7 +9,6 @@ import {
   formatDateTimeRange,
   syncApiSession,
 } from '../../utils/bookingApi'
-import { sendStudentBoost } from '../../utils/studentXp'
 
 type Filter = 'upcoming' | 'past' | 'cancelled'
 
@@ -65,29 +64,10 @@ export default function TutorBookingsInbox() {
     try {
       await syncApiSession(user)
       await completeBooking(id)
-      setFlash('Lesson completed — student received +30 XP.')
+      setFlash('Lesson completed. Student received +10 XP.')
       await load()
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to complete')
-    } finally {
-      setBusyId(null)
-    }
-  }
-
-  const onLessonBoost = async (booking: BookingRow) => {
-    setBusyId(booking.id)
-    setError(null)
-    try {
-      await syncApiSession(user)
-      await sendStudentBoost({
-        studentId: booking.student_id,
-        kind: 'lesson',
-        bookingId: booking.id,
-      })
-      setFlash('Lesson boost sent — student received +30 XP.')
-      await load()
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to send boost')
     } finally {
       setBusyId(null)
     }
@@ -114,7 +94,9 @@ export default function TutorBookingsInbox() {
           Bookings
         </h2>
         <p className="mt-1 text-sm text-slate-500">
-          Manage upcoming lessons. Completing a lesson gives the student +30 XP.
+          Manage upcoming lessons. Completing a lesson gives the student +10
+          XP automatically. Boost lives on the Students page — once a day, no
+          XP.
         </p>
       </div>
 
@@ -209,19 +191,9 @@ export default function TutorBookingsInbox() {
                         </button>
                       </>
                     ) : null}
-                    {b.status === 'completed' && !b.lesson_boosted ? (
-                      <button
-                        type="button"
-                        disabled={busyId === b.id}
-                        onClick={() => void onLessonBoost(b)}
-                        className="rounded-xl bg-indigo-500 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-600 disabled:opacity-50"
-                      >
-                        {busyId === b.id ? 'Sending…' : 'Boost +30 XP'}
-                      </button>
-                    ) : null}
-                    {b.status === 'completed' && b.lesson_boosted ? (
-                      <span className="rounded-xl bg-slate-100 px-3 py-2 text-sm font-semibold text-slate-400">
-                        Lesson boosted
+                    {b.status === 'completed' ? (
+                      <span className="rounded-xl bg-slate-100 px-3 py-2 text-sm font-semibold text-slate-500">
+                        +10 XP
                       </span>
                     ) : null}
                   </div>

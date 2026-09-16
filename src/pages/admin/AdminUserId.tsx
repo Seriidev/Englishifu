@@ -1,5 +1,29 @@
 import { Link } from 'react-router-dom'
 
+export function AdminAvatar({
+  src,
+  name,
+}: {
+  src?: string | null
+  name?: string | null
+}) {
+  const initial = (name || '?').trim().slice(0, 1).toUpperCase()
+  if (src) {
+    return (
+      <img
+        src={src}
+        alt=""
+        className="h-10 w-10 shrink-0 rounded-full object-cover"
+      />
+    )
+  }
+  return (
+    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-indigo-50 text-sm font-bold text-indigo-600">
+      {initial}
+    </span>
+  )
+}
+
 export function AdminUserId({ id }: { id: string | null | undefined }) {
   const value = (id ?? '').trim()
   if (!value) return <span className="text-zinc-400">—</span>

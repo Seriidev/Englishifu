@@ -1,12 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { applyCors } from '../../_lib/auth.js'
+import { applyCors, getAuthenticatedUser } from '../../_lib/auth.js'
 import { dbUnavailableResponse, isDbConfigured, sql } from '../../_lib/db.js'
 import { loadLibraryPdf } from '../../_lib/saveLibraryPdf.js'
-
-function fileName(raw: unknown) {
-  const name = String(raw || 'book.pdf').replace(/[^\w.\- ()]+/g, '_')
-  return name.toLowerCase().endsWith('.pdf') ? name : `${name}.pdf`
-}
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   applyCors(res)
@@ -16,6 +11,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(503).json(dbUnavailableResponse())
   }
 
+  const user = await getAuthenticatedUser(req)
+  if (!user) {
+    return res.status(401).json({ error: 'Sign in to read this book' })
+  }
+
   const id = Number(Array.isArray(req.query.id) ? req.query.id[0] : req.query.id)
   if (!Number.isInteger(id) || id <= 0) {
     return res.status(400).json({ error: 'Invalid id' })
@@ -23,31 +23,29 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   try {
     const { rows } = await sql`
-      SELECT pdf_url, pdf_file_name, title
+      SELECT pdf_url
       FROM library_books
       WHERE id = ${id} AND is_published = true
       LIMIT 1
     `
-    const row = rows[0] as
-      | { pdf_url?: string | null; pdf_file_name?: string | null; title?: string }
-      | undefined
+    const row = rows[0] as { pdf_url?: string | null } | undefined
     if (!row?.pdf_url) {
       return res.status(404).json({ error: 'This book has no PDF yet' })
     }
 
     const loaded = await loadLibraryPdf(String(row.pdf_url))
     if ('redirect' in loaded) {
-      res.statusCode = 302
-      res.setHeader('Location', loaded.redirect)
-      return res.end()
+      // Never send readers to an external downloadable URL.
+      return res.status(403).json({ error: 'This book cannot be opened here' })
     }
 
     res.setHeader('Content-Type', 'application/pdf')
-    res.setHeader(
-      'Content-Disposition',
-      `inline; filename="${fileName(row.pdf_file_name || row.title)}"`,
-    )
-    res.setHeader('Cache-Control', 'private, max-age=3600')
+    // Inline + generic name — discourage Save As / download naming.
+    res.setHeader('Content-Disposition', 'inline; filename="document.pdf"')
+    res.setHeader('Cache-Control', 'private, no-store')
+    res.setHeader('X-Content-Type-Options', 'nosniff')
+    res.setHeader('X-Frame-Options', 'SAMEORIGIN')
+    res.setHeader('Content-Security-Policy', "frame-ancestors 'self'")
     res.setHeader('Content-Length', String(loaded.buffer.length))
     return res.end(loaded.buffer)
   } catch (err) {

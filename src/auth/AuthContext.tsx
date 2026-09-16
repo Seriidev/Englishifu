@@ -11,6 +11,7 @@ import type { PublicUser } from '../types/user'
 import {
   applyTutorServerStatus,
   changePassword as changePasswordRequest,
+  deleteOwnAccount,
   completeTutorProfile,
   fetchSessionUser,
   loginUser,
@@ -78,6 +79,9 @@ interface AuthContextValue {
     currentPassword: string,
     newPassword: string,
   ) => Promise<{ ok: true; user: PublicUser } | { ok: false; error: string }>
+  deleteAccount: (
+    password: string,
+  ) => Promise<{ ok: true } | { ok: false; error: string }>
   refreshUser: () => Promise<PublicUser | null>
   logout: () => Promise<void>
 }
@@ -115,13 +119,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const login = useCallback(async (email: string, password: string) => {
     const result = await loginUser(email, password)
     if ('error' in result) return { ok: false as const, error: result.error }
-    await syncApiSession(result.user)
-    const next =
-      result.user.role === 'tutor'
-        ? await syncTutorModeration(result.user)
-        : result.user
-    setUser(next)
-    return { ok: true as const, user: next }
+    void syncApiSession(result.user)
+    setUser(result.user)
+    if (result.user.role === 'tutor') {
+      void syncTutorModeration(result.user).then((next) => {
+        setUser(next)
+      })
+    }
+    return { ok: true as const, user: result.user }
   }, [])
 
   const registerAsStudent = useCallback(async (input: CreateStudentInput) => {
@@ -212,6 +217,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     [user],
   )
 
+  const deleteAccount = useCallback(
+    async (password: string) => {
+      if (!user) {
+        return { ok: false as const, error: 'Not signed in' }
+      }
+      const result = await deleteOwnAccount(password)
+      if ('error' in result) return { ok: false as const, error: result.error }
+      clearApiToken()
+      setApiToken(null)
+      setUser(null)
+      return { ok: true as const }
+    },
+    [user],
+  )
+
   const refreshUser = useCallback(async () => {
     const session = await fetchSessionUser()
     if (!session) return null
@@ -242,6 +262,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       updateTutor,
       savePlacementResult,
       changePassword,
+      deleteAccount,
       refreshUser,
       logout,
     }),
@@ -256,6 +277,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       updateTutor,
       savePlacementResult,
       changePassword,
+      deleteAccount,
       refreshUser,
       logout,
     ],

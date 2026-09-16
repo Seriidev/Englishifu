@@ -9,6 +9,15 @@ import {
 import type { CefrLevel } from '../types/cefr'
 import { setApiToken } from './bookingApi'
 
+const AUTH_TIMEOUT_MS = 25_000
+
+function authFetch(input: RequestInfo | URL, init?: RequestInit) {
+  return fetch(input, {
+    ...init,
+    signal: AbortSignal.timeout(AUTH_TIMEOUT_MS),
+  })
+}
+
 async function parseError(res: Response): Promise<string> {
   try {
     const data = (await res.json()) as { error?: string }
@@ -40,7 +49,7 @@ async function readAuthResponse(res: Response): Promise<AuthOk | AuthErr> {
 /** Hydrate session from httpOnly cookie (and refresh Bearer token). */
 export async function fetchSessionUser(): Promise<PublicUser | null> {
   try {
-    const res = await fetch('/api/auth/me', {
+    const res = await authFetch('/api/auth/me', {
       method: 'GET',
       credentials: 'include',
     })
@@ -72,6 +81,12 @@ export function tutorProfilePath(handle: string): string {
 
 export function studentPublicProfilePath(handle: string): string {
   return `/profile/${handle.replace(/^@/, '')}`
+}
+
+export function forgotPasswordPath(email?: string): string {
+  const trimmed = email?.trim() ?? ''
+  if (!trimmed) return '/forgot-password'
+  return `/forgot-password?email=${encodeURIComponent(trimmed)}`
 }
 
 export async function findTutorByHandle(
@@ -286,6 +301,56 @@ export async function updateTutorProfile(
     return readAuthResponse(res)
   } catch {
     return { error: 'Could not update tutor profile' }
+  }
+}
+
+export async function resetPassword(
+  email: string,
+  password: string,
+  confirmPassword: string,
+): Promise<{ ok: true } | { error: string }> {
+  try {
+    const res = await fetch('/api/auth/reset-password', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ email, password, confirmPassword }),
+    })
+    const data = (await res.json().catch(() => ({}))) as {
+      ok?: boolean
+      error?: string
+    }
+    if (!res.ok) {
+      return { error: data.error || (await parseError(res)) }
+    }
+    return { ok: true }
+  } catch {
+    return { error: 'Could not update password' }
+  }
+}
+
+export async function deleteOwnAccount(
+  password: string,
+): Promise<{ ok: true } | { error: string }> {
+  try {
+    const res = await fetch('/api/auth/me', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ action: 'deleteAccount', password }),
+    })
+    let data: { ok?: boolean; error?: string } = {}
+    try {
+      data = (await res.json()) as typeof data
+    } catch {
+      /* ignore */
+    }
+    if (!res.ok) {
+      return { error: data.error || (await parseError(res)) }
+    }
+    return { ok: true }
+  } catch {
+    return { error: 'Could not delete account' }
   }
 }
 

@@ -84,7 +84,7 @@ export function toPublicBook(row: Record<string, unknown>) {
     coverImageUrl: row.cover_image_url ? String(row.cover_image_url) : undefined,
     coverHeadline: row.cover_headline ? String(row.cover_headline) : undefined,
     coverBrand: String(row.author ?? ''),
-    pdfUrl: row.pdf_url ? `/api/library-pdf/${row.id}` : undefined,
-    pdfFileName: row.pdf_file_name ? String(row.pdf_file_name) : undefined,
+    // Do not expose a direct PDF URL — reader loads via authenticated API.
+    hasPdf: Boolean(row.pdf_url),
   }
 }

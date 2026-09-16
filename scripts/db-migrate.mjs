@@ -50,6 +50,8 @@ const files = [
   'sql/admin_panel.sql',
   'sql/library_books.sql',
   'sql/student_boosts.sql',
+  'sql/teacher_messages.sql',
+  'sql/speaking_club_requests.sql',
 ]
 
 function sleep(ms) {

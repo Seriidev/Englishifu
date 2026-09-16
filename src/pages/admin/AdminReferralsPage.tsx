@@ -21,7 +21,7 @@ export default function AdminReferralsPage() {
 
   return (
     <div>
-      <h1 className="font-serif text-3xl font-semibold tracking-tight text-zinc-900">Referrals</h1>
+      <h1 className="font-serif text-2xl font-semibold tracking-tight text-zinc-900 sm:text-3xl">Referrals</h1>
       <p className="mt-1 text-sm text-slate-500">
         Rewards are XP + discount credits in the shared ledger — granted after
         the invited student completes a first lesson.

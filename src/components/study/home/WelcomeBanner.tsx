@@ -99,7 +99,7 @@ export default function WelcomeBanner({ firstName, slides }: WelcomeBannerProps)
 
   return (
     <section
-      className={`relative overflow-hidden rounded-[22px] shadow-sm ${
+      className={`relative min-w-0 overflow-hidden rounded-[22px] shadow-sm ${
         slides[realIndex]?.imageUrl
           ? 'bg-slate-200'
           : 'bg-indigo-50 text-slate-900 dark:bg-indigo-500/20 dark:text-slate-100'
@@ -120,9 +120,9 @@ export default function WelcomeBanner({ firstName, slides }: WelcomeBannerProps)
     >
       {slides[realIndex]?.imageUrl ? null : <BannerDecor />}
 
-      <div className="overflow-hidden">
+      <div className="min-w-0 overflow-hidden">
         <div
-          className={`flex ${animate ? 'transition-transform duration-500 ease-out' : ''}`}
+          className={`flex w-full ${animate ? 'transition-transform duration-500 ease-out' : ''}`}
           style={{ transform: `translateX(-${index * 100}%)` }}
           onTransitionEnd={onTransitionEnd}
         >
@@ -132,23 +132,23 @@ export default function WelcomeBanner({ firstName, slides }: WelcomeBannerProps)
             return (
               <div
                 key={`${slide.id}-${i}`}
-                className="relative w-full shrink-0"
+                className="relative w-full min-w-full max-w-full shrink-0 basis-full"
               >
                 {isPoster ? (
                   <img
                     src={slide.imageUrl}
                     alt=""
-                    className="aspect-[3/1] w-full object-cover"
+                    className="aspect-[16/9] w-full object-cover sm:aspect-[3/1]"
                   />
                 ) : (
-                  <div className="px-5 py-6 sm:min-h-[200px] sm:px-7 sm:py-7">
-                    <p className="text-sm font-medium text-slate-500">
+                  <div className="px-4 py-5 pb-14 sm:min-h-[200px] sm:px-7 sm:py-7 sm:pb-16">
+                    <p className="text-xs font-medium text-slate-500 sm:text-sm">
                       {dateLabel}
                     </p>
-                    <h2 className="mt-2 max-w-lg text-2xl font-bold tracking-tight sm:text-3xl">
+                    <h2 className="mt-2 max-w-lg text-xl font-bold tracking-tight break-words text-pretty sm:text-3xl">
                       {title}
                     </h2>
-                    <p className="mt-2 max-w-md text-sm text-slate-600 sm:text-base">
+                    <p className="mt-2 max-w-md text-sm leading-relaxed text-slate-600 break-words sm:text-base">
                       {slide.body}
                     </p>
                     {slide.ctaLabel && slide.ctaLink ? (
@@ -159,7 +159,7 @@ export default function WelcomeBanner({ firstName, slides }: WelcomeBannerProps)
                         {slide.ctaLabel}
                       </a>
                     ) : (
-                      <div className="h-10 sm:h-12" />
+                      <div className="h-8 sm:h-12" />
                     )}
                   </div>
                 )}

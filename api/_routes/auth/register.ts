@@ -4,10 +4,12 @@ import {
   allocateUniqueHandle,
   applyCors,
   fetchAppUserByEmail,
+  fetchAppUserById,
   issueSession,
   newUserId,
 } from '../../_lib/auth.js'
 import { dbUnavailableResponse, isDbConfigured, sql } from '../../_lib/db.js'
+import { claimDailyLoginXp } from '../../_lib/dailyBonus.js'
 import { allocateReferralCode } from '../../_lib/rewards.js'
 
 /**
@@ -83,7 +85,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         RETURNING *
       `
       await attachReferral(id, email, referralCode)
-      const session = issueSession(res, rows[0])
+      await claimDailyLoginXp(id)
+      const fresh = (await fetchAppUserById(id)) ?? rows[0]
+      const session = issueSession(res, fresh)
       return res.status(201).json(session)
     }
 

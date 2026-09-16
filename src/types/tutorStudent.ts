@@ -7,6 +7,7 @@ export interface TutorStudent {
   handle: string
   cefrLevel?: CefrLevel
   xp: number
+  canBoost: boolean
   canDailyBoost: boolean
   lessonsCompleted: number
   nextLessonDate?: string

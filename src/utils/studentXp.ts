@@ -1,5 +1,6 @@
 import { getApiToken } from './bookingApi'
 import { XP_REWARDS } from './xpCalculation'
+import type { LeaderboardEntry } from '../types/studyContent'
 
 export const TUTOR_BOOST_XP = XP_REWARDS.tutorDailyBoost
 const XP_EVENT = 'englishcore-student-xp'
@@ -7,7 +8,10 @@ const XP_CHANNEL = 'englishcore-student-xp-channel'
 
 export type StudentXpStats = {
   xp: number
+  boostCount: number
   boostedToday: boolean
+  dailyBonusClaimedToday: boolean
+  dailyBonusAwarded: number
 }
 
 function authHeaders(): HeadersInit {
@@ -71,6 +75,25 @@ export function subscribeStudentXp(
   }
 }
 
+export async function fetchStudentLeaderboard(): Promise<{
+  entries: LeaderboardEntry[]
+  total: number
+}> {
+  const res = await fetch('/api/students/leaderboard', {
+    headers: authHeaders(),
+    credentials: 'include',
+  })
+  if (!res.ok) throw new Error(await parseError(res))
+  const data = (await res.json()) as {
+    entries?: LeaderboardEntry[]
+    total?: number
+  }
+  return {
+    entries: Array.isArray(data.entries) ? data.entries : [],
+    total: Number(data.total) || 0,
+  }
+}
+
 export async function fetchStudentXpStats(): Promise<StudentXpStats> {
   const res = await fetch('/api/students/xp', {
     headers: authHeaders(),
@@ -79,18 +102,22 @@ export async function fetchStudentXpStats(): Promise<StudentXpStats> {
   if (!res.ok) throw new Error(await parseError(res))
   const data = (await res.json()) as {
     xp?: number
+    boostCount?: number
     boostedToday?: boolean
+    dailyBonusClaimedToday?: boolean
+    dailyBonusAwarded?: number
   }
   return {
     xp: Number(data.xp) || 0,
+    boostCount: Number(data.boostCount) || 0,
     boostedToday: Boolean(data.boostedToday),
+    dailyBonusClaimedToday: Boolean(data.dailyBonusClaimedToday),
+    dailyBonusAwarded: Number(data.dailyBonusAwarded) || 0,
   }
 }
 
 export async function sendStudentBoost(input: {
   studentId: string
-  kind?: 'daily' | 'lesson'
-  bookingId?: number
 }): Promise<{ xp: number; awarded: number }> {
   const res = await fetch('/api/student-boosts', {
     method: 'POST',
@@ -101,8 +128,6 @@ export async function sendStudentBoost(input: {
     credentials: 'include',
     body: JSON.stringify({
       studentId: input.studentId,
-      kind: input.kind ?? 'daily',
-      bookingId: input.bookingId,
     }),
   })
   if (!res.ok) throw new Error(await parseError(res))

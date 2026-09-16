@@ -15,6 +15,7 @@ async function adminFetch(path: string, init?: RequestInit) {
   const res = await fetch(path, {
     credentials: 'include',
     ...init,
+    signal: init?.signal ?? AbortSignal.timeout(20_000),
     headers: {
       'Content-Type': 'application/json',
       ...(init?.headers ?? {}),
@@ -53,10 +54,12 @@ export interface AdminStudentRow {
   full_name: string
   email: string
   handle: string
+  avatar_url?: string | null
   cefr_level?: string | null
   xp: number
   daily_streak: number
   is_suspended?: boolean
+  can_admin_boost?: boolean
   marketing_opt_in?: boolean
   best_toefl_score?: number | string | null
   created_at?: string
@@ -189,6 +192,20 @@ export async function suspendAdminUser(id: string, isSuspended: boolean) {
     method: 'PATCH',
     body: JSON.stringify({ isSuspended }),
   })
+}
+
+export async function deleteAdminUser(id: string) {
+  await adminFetch(`/api/admin/users/${encodeURIComponent(id)}`, {
+    method: 'DELETE',
+  })
+}
+
+export async function sendAdminStudentBoost(studentId: string) {
+  const data = await adminFetch('/api/admin/student-boosts', {
+    method: 'POST',
+    body: JSON.stringify({ studentId }),
+  })
+  return data as { xp: number; awarded: number }
 }
 
 export async function fetchAdminNews(): Promise<AdminNewsPost[]> {
@@ -333,7 +350,20 @@ export async function fetchAdminSentMessages(): Promise<AdminSentMessage[]> {
 
 export async function fetchAdminSpeakingClub() {
   const data = await adminFetch('/api/admin/speaking-club')
-  return (data.sessions as Array<Record<string, unknown>>) || []
+  return {
+    sessions: (data.sessions as Array<Record<string, unknown>>) || [],
+    requests: (data.requests as Array<Record<string, unknown>>) || [],
+  }
+}
+
+export async function patchSpeakingClubRequestStatus(
+  requestId: number,
+  status: string,
+) {
+  await adminFetch('/api/admin/speaking-club', {
+    method: 'PATCH',
+    body: JSON.stringify({ requestId, status }),
+  })
 }
 
 export async function fetchAdminConsultations() {
@@ -363,7 +393,10 @@ export async function fetchPublicNews(): Promise<AdminNewsPost[]> {
 }
 
 export async function fetchMyReferral() {
-  const res = await fetch('/api/referrals/me', { credentials: 'include' })
+  const res = await fetch('/api/referrals/me', {
+    credentials: 'include',
+    signal: AbortSignal.timeout(15_000),
+  })
   if (!res.ok) throw new Error(await parseError(res))
   return res.json() as Promise<{
     referralCode: string
@@ -427,6 +460,48 @@ export async function uploadTutorResume(file: File) {
     body: JSON.stringify({ resumeUrl }),
   })
   if (!res.ok) throw new Error(await parseError(res))
+}
+
+export interface AdminAnalytics {
+  range: {
+    days: number
+    from: string
+    to: string
+    homeCountry: string
+    inactiveAfterDays: number
+  }
+  overview: {
+    users: number
+    active: number
+    inactive: number
+    left: number
+    joinedPeriod: number
+    leftPeriod: number
+    joinedDelta: number
+    joinedGrowthPct: number
+  }
+  growth: Array<{ day: string; users: number }>
+  usersFlow: Array<{ day: string; joined: number; left: number }>
+  activityByHour: Array<{ hour: number; count: number }>
+  sources: {
+    totals: { referral: number; link: number }
+    series: Array<{ day: string; referral: number; link: number }>
+  }
+  countries: {
+    home: number
+    foreigners: number
+    unknown: number
+    top: Array<{
+      country: string
+      count: number
+      isHome: boolean
+      isForeign: boolean
+    }>
+  }
+}
+
+export async function fetchAdminAnalytics(days = 30): Promise<AdminAnalytics> {
+  return adminFetch(`/api/admin/analytics?days=${days}`) as unknown as Promise<AdminAnalytics>
 }
 
 export function fileToDataUrl(file: File): Promise<string> {

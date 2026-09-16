@@ -1,9 +1,6 @@
-import { useAuth } from '../auth/AuthContext'
-import ReferralWidget from '../components/study/ReferralWidget'
 import { useTheme } from '../theme/ThemeContext'
 
 export default function StudySettingsPage() {
-  const { user } = useAuth()
   const { theme, setTheme } = useTheme()
 
   return (
@@ -13,7 +10,8 @@ export default function StudySettingsPage() {
           Settings
         </h2>
         <p className="mt-1 text-sm text-slate-500">
-          Preferences for your account.
+          Preferences for your account. Your referral link lives on your
+          profile.
         </p>
       </div>
 
@@ -48,14 +46,6 @@ export default function StudySettingsPage() {
           </button>
         </div>
       </section>
-
-      {user?.role === 'student' ? <ReferralWidget /> : (
-        <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
-          <p className="text-sm text-slate-500">
-            Account details and password can be changed on your profile.
-          </p>
-        </section>
-      )}
     </div>
   )
 }

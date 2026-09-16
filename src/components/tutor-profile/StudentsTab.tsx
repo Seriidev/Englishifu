@@ -35,7 +35,8 @@ export default function StudentsTab({ tutorId }: StudentsTabProps) {
           handle: r.handle,
           cefrLevel: r.cefrLevel as CefrLevel | undefined,
           xp: r.xp ?? 0,
-          canDailyBoost: Boolean(r.canDailyBoost),
+          canBoost: Boolean(r.canBoost ?? r.canDailyBoost),
+          canDailyBoost: Boolean(r.canBoost ?? r.canDailyBoost),
           lessonsCompleted: r.lessonsCompleted,
           nextLessonDate: r.nextLessonDate,
           status: r.status,
@@ -54,18 +55,18 @@ export default function StudentsTab({ tutorId }: StudentsTabProps) {
   }, [load])
 
   const onBoost = async (student: TutorStudent) => {
-    if (!user || !student.canDailyBoost) return
+    if (!user || !student.canBoost) return
     setBoostingId(student.id)
     setError(null)
     try {
       await syncApiSession(user)
-      await sendStudentBoost({ studentId: student.id, kind: 'daily' })
+      await sendStudentBoost({ studentId: student.id })
       setStudents((prev) =>
         prev.map((row) =>
           row.id === student.id
             ? {
                 ...row,
-                xp: row.xp + 30,
+                canBoost: false,
                 canDailyBoost: false,
               }
             : row,
@@ -110,8 +111,7 @@ export default function StudentsTab({ tutorId }: StudentsTabProps) {
   return (
     <div className="space-y-2">
       <p className="text-sm text-slate-500">
-        Send a daily boost (+30 XP) once per student per day. After each
-        completed lesson they also get +30 XP automatically.
+        Boost once a day, whenever you want. Boost does not add XP.
       </p>
       {error ? (
         <div className="rounded-xl bg-amber-50 px-4 py-3 text-sm text-amber-800">
@@ -166,28 +166,28 @@ export default function StudentsTab({ tutorId }: StudentsTabProps) {
             )}
             <button
               type="button"
-              disabled={!student.canDailyBoost || boostingId === student.id}
+              disabled={!student.canBoost || boostingId === student.id}
               onClick={() => void onBoost(student)}
               className={`inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-sm font-semibold transition disabled:cursor-not-allowed ${
-                student.canDailyBoost
+                student.canBoost
                   ? 'bg-indigo-500 text-white hover:bg-indigo-600'
                   : 'bg-slate-100 text-slate-400'
               }`}
               title={
-                student.canDailyBoost
-                  ? 'Send a daily +30 XP boost'
-                  : 'Already boosted today — you can boost again tomorrow'
+                student.canBoost
+                  ? 'Send a boost today'
+                  : 'Already boosted today'
               }
             >
               <Zap
-                className={`h-3.5 w-3.5 ${student.canDailyBoost ? 'fill-current' : ''}`}
+                className={`h-3.5 w-3.5 ${student.canBoost ? 'fill-current' : ''}`}
                 aria-hidden
               />
               {boostingId === student.id
                 ? 'Sending…'
-                : student.canDailyBoost
-                  ? 'Boost +30'
-                  : 'Boosted today'}
+                : student.canBoost
+                  ? 'Boost'
+                  : 'Boosted'}
             </button>
           </div>
         </div>

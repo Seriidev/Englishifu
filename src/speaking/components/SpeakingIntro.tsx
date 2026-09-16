@@ -64,23 +64,14 @@ export default function SpeakingIntro({
         <p className="mt-4 text-sm font-medium text-red-600">{shownError}</p>
       )}
 
-      <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-        <button
-          type="button"
-          onClick={onBack}
-          className="rounded-full border border-gray-200 px-6 py-3 text-sm font-semibold text-ink transition hover:bg-gray-50"
-        >
-          Back
-        </button>
-        <button
-          type="button"
-          disabled={preparing || micBlocked}
-          onClick={onStart}
-          className="rounded-full bg-brand px-8 py-3 text-sm font-semibold text-white shadow-md shadow-brand/25 transition hover:bg-brand-dark disabled:opacity-60"
-        >
-          {preparing ? 'Requesting microphone…' : 'Begin Speaking Section'}
-        </button>
-      </div>
+      <button
+        type="button"
+        disabled={preparing || micBlocked}
+        onClick={onStart}
+        className="mt-8 rounded-full bg-brand px-8 py-3 text-sm font-semibold text-white shadow-md shadow-brand/25 transition hover:bg-brand-dark disabled:opacity-60"
+      >
+        {preparing ? 'Requesting microphone…' : 'Begin Speaking Section'}
+      </button>
     </div>
   )
 }

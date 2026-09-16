@@ -18,7 +18,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method === 'GET') {
     try {
       const { rows } = await sql`
-        SELECT * FROM library_books
+        SELECT
+          id, title, author, category, level, rating, minutes, description,
+          cover_image_url, cover_headline, pdf_file_name, is_published, display_order,
+          CASE
+            WHEN pdf_url IS NULL OR pdf_url = '' THEN NULL
+            WHEN pdf_url LIKE 'data:%' THEN 'uploaded'
+            ELSE pdf_url
+          END AS pdf_url
+        FROM library_books
         ORDER BY display_order ASC, id DESC
       `
       return res.status(200).json({ books: rows })

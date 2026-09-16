@@ -1,0 +1,3472 @@
+{
+  "meta": {
+    "title": "TOEFL-Style Reading Practice",
+    "sections": [
+      "complete_the_words",
+      "read_in_daily_life"
+    ],
+    "blank_total": 100,
+    "question_total": 39,
+    "notice": "All passages, emails, announcements, messages and questions are original content written for this project. TOEFL is a registered trademark of ETS; this material is not produced, endorsed or approved by ETS."
+  },
+  "complete_the_words": [
+    {
+      "id": "ctw-01",
+      "number": 1,
+      "title": "The Work of Bees",
+      "instructions": "Fill in the missing letters in the paragraph.",
+      "tokens": [
+        {
+          "type": "text",
+          "value": "Bees play a quiet but essential role in growing our food. "
+        },
+        {
+          "type": "blank",
+          "id": 1,
+          "stem": "Wh",
+          "length": 2,
+          "global_id": 1,
+          "answer": "en"
+        },
+        {
+          "type": "text",
+          "value": " they move "
+        },
+        {
+          "type": "blank",
+          "id": 2,
+          "stem": "fr",
+          "length": 2,
+          "global_id": 2,
+          "answer": "om"
+        },
+        {
+          "type": "text",
+          "value": " flower to "
+        },
+        {
+          "type": "blank",
+          "id": 3,
+          "stem": "fl",
+          "length": 4,
+          "global_id": 3,
+          "answer": "ower"
+        },
+        {
+          "type": "text",
+          "value": ", they carry pollen "
+        },
+        {
+          "type": "blank",
+          "id": 4,
+          "stem": "th",
+          "length": 2,
+          "global_id": 4,
+          "answer": "at"
+        },
+        {
+          "type": "text",
+          "value": " helps "
+        },
+        {
+          "type": "blank",
+          "id": 5,
+          "stem": "pl",
+          "length": 4,
+          "global_id": 5,
+          "answer": "ants"
+        },
+        {
+          "type": "text",
+          "value": " produce "
+        },
+        {
+          "type": "blank",
+          "id": 6,
+          "stem": "fru",
+          "length": 2,
+          "global_id": 6,
+          "answer": "it"
+        },
+        {
+          "type": "text",
+          "value": " and "
+        },
+        {
+          "type": "blank",
+          "id": 7,
+          "stem": "see",
+          "length": 2,
+          "global_id": 7,
+          "answer": "ds"
+        },
+        {
+          "type": "text",
+          "value": ". "
+        },
+        {
+          "type": "blank",
+          "id": 8,
+          "stem": "Wit",
+          "length": 4,
+          "global_id": 8,
+          "answer": "hout"
+        },
+        {
+          "type": "text",
+          "value": " this "
+        },
+        {
+          "type": "blank",
+          "id": 9,
+          "stem": "pro",
+          "length": 4,
+          "global_id": 9,
+          "answer": "cess"
+        },
+        {
+          "type": "text",
+          "value": ", many "
+        },
+        {
+          "type": "blank",
+          "id": 10,
+          "stem": "cr",
+          "length": 3,
+          "global_id": 10,
+          "answer": "ops"
+        },
+        {
+          "type": "text",
+          "value": " would fail. Farmers around the world now watch bee populations closely, because a drop in their numbers can affect entire harvests. Protecting wild spaces near farms is one simple way to keep these insects healthy."
+        }
+      ],
+      "paragraph_with_blanks": "Bees play a quiet but essential role in growing our food. Wh _ _ they move fr _ _ flower to fl _ _ _ _, they carry pollen th _ _ helps pl _ _ _ _ produce fru _ _ and see _ _. Wit _ _ _ _ this pro _ _ _ _, many cr _ _ _ would fail. Farmers around the world now watch bee populations closely, because a drop in their numbers can affect entire harvests. Protecting wild spaces near farms is one simple way to keep these insects healthy.",
+      "paragraph_with_answers": "Bees play a quiet but essential role in growing our food. Wh{en} they move fr{om} flower to fl{ower}, they carry pollen th{at} helps pl{ants} produce fru{it} and see{ds}. Wit{hout} this pro{cess}, many cr{ops} would fail. Farmers around the world now watch bee populations closely, because a drop in their numbers can affect entire harvests. Protecting wild spaces near farms is one simple way to keep these insects healthy.",
+      "paragraph_solved": "Bees play a quiet but essential role in growing our food. When they move from flower to flower, they carry pollen that helps plants produce fruit and seeds. Without this process, many crops would fail. Farmers around the world now watch bee populations closely, because a drop in their numbers can affect entire harvests. Protecting wild spaces near farms is one simple way to keep these insects healthy.",
+      "blank_count": 10,
+      "global_range": [
+        1,
+        10
+      ],
+      "blanks": [
+        {
+          "id": 1,
+          "stem": "Wh",
+          "answer": "en",
+          "full_word": "When",
+          "length": 2,
+          "global_id": 1
+        },
+        {
+          "id": 2,
+          "stem": "fr",
+          "answer": "om",
+          "full_word": "from",
+          "length": 2,
+          "global_id": 2
+        },
+        {
+          "id": 3,
+          "stem": "fl",
+          "answer": "ower",
+          "full_word": "flower",
+          "length": 4,
+          "global_id": 3
+        },
+        {
+          "id": 4,
+          "stem": "th",
+          "answer": "at",
+          "full_word": "that",
+          "length": 2,
+          "global_id": 4
+        },
+        {
+          "id": 5,
+          "stem": "pl",
+          "answer": "ants",
+          "full_word": "plants",
+          "length": 4,
+          "global_id": 5
+        },
+        {
+          "id": 6,
+          "stem": "fru",
+          "answer": "it",
+          "full_word": "fruit",
+          "length": 2,
+          "global_id": 6
+        },
+        {
+          "id": 7,
+          "stem": "see",
+          "answer": "ds",
+          "full_word": "seeds",
+          "length": 2,
+          "global_id": 7
+        },
+        {
+          "id": 8,
+          "stem": "Wit",
+          "answer": "hout",
+          "full_word": "Without",
+          "length": 4,
+          "global_id": 8
+        },
+        {
+          "id": 9,
+          "stem": "pro",
+          "answer": "cess",
+          "full_word": "process",
+          "length": 4,
+          "global_id": 9
+        },
+        {
+          "id": 10,
+          "stem": "cr",
+          "answer": "ops",
+          "full_word": "crops",
+          "length": 3,
+          "global_id": 10
+        }
+      ]
+    },
+    {
+      "id": "ctw-02",
+      "number": 2,
+      "title": "Living Near Volcanoes",
+      "instructions": "Fill in the missing letters in the paragraph.",
+      "tokens": [
+        {
+          "type": "text",
+          "value": "A volcano forms "
+        },
+        {
+          "type": "blank",
+          "id": 1,
+          "stem": "wh",
+          "length": 3,
+          "global_id": 11,
+          "answer": "ere"
+        },
+        {
+          "type": "text",
+          "value": " melted rock "
+        },
+        {
+          "type": "blank",
+          "id": 2,
+          "stem": "fr",
+          "length": 2,
+          "global_id": 12,
+          "answer": "om"
+        },
+        {
+          "type": "text",
+          "value": " deep "
+        },
+        {
+          "type": "blank",
+          "id": 3,
+          "stem": "ins",
+          "length": 3,
+          "global_id": 13,
+          "answer": "ide"
+        },
+        {
+          "type": "text",
+          "value": " the Earth "
+        },
+        {
+          "type": "blank",
+          "id": 4,
+          "stem": "fin",
+          "length": 2,
+          "global_id": 14,
+          "answer": "ds"
+        },
+        {
+          "type": "text",
+          "value": " a way to the "
+        },
+        {
+          "type": "blank",
+          "id": 5,
+          "stem": "sur",
+          "length": 4,
+          "global_id": 15,
+          "answer": "face"
+        },
+        {
+          "type": "text",
+          "value": ". "
+        },
+        {
+          "type": "blank",
+          "id": 6,
+          "stem": "So",
+          "length": 2,
+          "global_id": 16,
+          "answer": "me"
+        },
+        {
+          "type": "text",
+          "value": " eruptions are "
+        },
+        {
+          "type": "blank",
+          "id": 7,
+          "stem": "slo",
+          "length": 1,
+          "global_id": 17,
+          "answer": "w"
+        },
+        {
+          "type": "text",
+          "value": " and "
+        },
+        {
+          "type": "blank",
+          "id": 8,
+          "stem": "qui",
+          "length": 2,
+          "global_id": 18,
+          "answer": "et"
+        },
+        {
+          "type": "text",
+          "value": ", while "
+        },
+        {
+          "type": "blank",
+          "id": 9,
+          "stem": "oth",
+          "length": 3,
+          "global_id": 19,
+          "answer": "ers"
+        },
+        {
+          "type": "text",
+          "value": " send ash "
+        },
+        {
+          "type": "blank",
+          "id": 10,
+          "stem": "hig",
+          "length": 1,
+          "global_id": 20,
+          "answer": "h"
+        },
+        {
+          "type": "text",
+          "value": " into the sky. Villages built on volcanic slopes often have rich soil for farming, which is why people continue to live near them. Scientists now use sensors to watch for small earthquakes that may signal an eruption."
+        }
+      ],
+      "paragraph_with_blanks": "A volcano forms wh _ _ _ melted rock fr _ _ deep ins _ _ _ the Earth fin _ _ a way to the sur _ _ _ _. So _ _ eruptions are slo _ and qui _ _, while oth _ _ _ send ash hig _ into the sky. Villages built on volcanic slopes often have rich soil for farming, which is why people continue to live near them. Scientists now use sensors to watch for small earthquakes that may signal an eruption.",
+      "paragraph_with_answers": "A volcano forms wh{ere} melted rock fr{om} deep ins{ide} the Earth fin{ds} a way to the sur{face}. So{me} eruptions are slo{w} and qui{et}, while oth{ers} send ash hig{h} into the sky. Villages built on volcanic slopes often have rich soil for farming, which is why people continue to live near them. Scientists now use sensors to watch for small earthquakes that may signal an eruption.",
+      "paragraph_solved": "A volcano forms where melted rock from deep inside the Earth finds a way to the surface. Some eruptions are slow and quiet, while others send ash high into the sky. Villages built on volcanic slopes often have rich soil for farming, which is why people continue to live near them. Scientists now use sensors to watch for small earthquakes that may signal an eruption.",
+      "blank_count": 10,
+      "global_range": [
+        11,
+        20
+      ],
+      "blanks": [
+        {
+          "id": 1,
+          "stem": "wh",
+          "answer": "ere",
+          "full_word": "where",
+          "length": 3,
+          "global_id": 11
+        },
+        {
+          "id": 2,
+          "stem": "fr",
+          "answer": "om",
+          "full_word": "from",
+          "length": 2,
+          "global_id": 12
+        },
+        {
+          "id": 3,
+          "stem": "ins",
+          "answer": "ide",
+          "full_word": "inside",
+          "length": 3,
+          "global_id": 13
+        },
+        {
+          "id": 4,
+          "stem": "fin",
+          "answer": "ds",
+          "full_word": "finds",
+          "length": 2,
+          "global_id": 14
+        },
+        {
+          "id": 5,
+          "stem": "sur",
+          "answer": "face",
+          "full_word": "surface",
+          "length": 4,
+          "global_id": 15
+        },
+        {
+          "id": 6,
+          "stem": "So",
+          "answer": "me",
+          "full_word": "Some",
+          "length": 2,
+          "global_id": 16
+        },
+        {
+          "id": 7,
+          "stem": "slo",
+          "answer": "w",
+          "full_word": "slow",
+          "length": 1,
+          "global_id": 17
+        },
+        {
+          "id": 8,
+          "stem": "qui",
+          "answer": "et",
+          "full_word": "quiet",
+          "length": 2,
+          "global_id": 18
+        },
+        {
+          "id": 9,
+          "stem": "oth",
+          "answer": "ers",
+          "full_word": "others",
+          "length": 3,
+          "global_id": 19
+        },
+        {
+          "id": 10,
+          "stem": "hig",
+          "answer": "h",
+          "full_word": "high",
+          "length": 1,
+          "global_id": 20
+        }
+      ]
+    },
+    {
+      "id": "ctw-03",
+      "number": 3,
+      "title": "Why We Sleep",
+      "instructions": "Fill in the missing letters in the paragraph.",
+      "tokens": [
+        {
+          "type": "text",
+          "value": "Sleep does much more than rest the body. "
+        },
+        {
+          "type": "blank",
+          "id": 1,
+          "stem": "Wh",
+          "length": 3,
+          "global_id": 21,
+          "answer": "ile"
+        },
+        {
+          "type": "text",
+          "value": " we "
+        },
+        {
+          "type": "blank",
+          "id": 2,
+          "stem": "sle",
+          "length": 2,
+          "global_id": 22,
+          "answer": "ep"
+        },
+        {
+          "type": "text",
+          "value": ", the "
+        },
+        {
+          "type": "blank",
+          "id": 3,
+          "stem": "bra",
+          "length": 2,
+          "global_id": 23,
+          "answer": "in"
+        },
+        {
+          "type": "text",
+          "value": " sorts "
+        },
+        {
+          "type": "blank",
+          "id": 4,
+          "stem": "thr",
+          "length": 4,
+          "global_id": 24,
+          "answer": "ough"
+        },
+        {
+          "type": "text",
+          "value": " the day and "
+        },
+        {
+          "type": "blank",
+          "id": 5,
+          "stem": "sto",
+          "length": 3,
+          "global_id": 25,
+          "answer": "res"
+        },
+        {
+          "type": "text",
+          "value": " what it "
+        },
+        {
+          "type": "blank",
+          "id": 6,
+          "stem": "lea",
+          "length": 4,
+          "global_id": 26,
+          "answer": "rned"
+        },
+        {
+          "type": "text",
+          "value": ". "
+        },
+        {
+          "type": "blank",
+          "id": 7,
+          "stem": "Peo",
+          "length": 3,
+          "global_id": 27,
+          "answer": "ple"
+        },
+        {
+          "type": "text",
+          "value": " who "
+        },
+        {
+          "type": "blank",
+          "id": 8,
+          "stem": "sle",
+          "length": 2,
+          "global_id": 28,
+          "answer": "ep"
+        },
+        {
+          "type": "text",
+          "value": " too "
+        },
+        {
+          "type": "blank",
+          "id": 9,
+          "stem": "lit",
+          "length": 3,
+          "global_id": 29,
+          "answer": "tle"
+        },
+        {
+          "type": "text",
+          "value": " often find it "
+        },
+        {
+          "type": "blank",
+          "id": 10,
+          "stem": "har",
+          "length": 3,
+          "global_id": 30,
+          "answer": "der"
+        },
+        {
+          "type": "text",
+          "value": " to concentrate or remember details. Regular hours, a dark room, and less screen time in the evening all support deeper rest. Good sleep is not a luxury but a basic part of staying healthy."
+        }
+      ],
+      "paragraph_with_blanks": "Sleep does much more than rest the body. Wh _ _ _ we sle _ _, the bra _ _ sorts thr _ _ _ _ the day and sto _ _ _ what it lea _ _ _ _. Peo _ _ _ who sle _ _ too lit _ _ _ often find it har _ _ _ to concentrate or remember details. Regular hours, a dark room, and less screen time in the evening all support deeper rest. Good sleep is not a luxury but a basic part of staying healthy.",
+      "paragraph_with_answers": "Sleep does much more than rest the body. Wh{ile} we sle{ep}, the bra{in} sorts thr{ough} the day and sto{res} what it lea{rned}. Peo{ple} who sle{ep} too lit{tle} often find it har{der} to concentrate or remember details. Regular hours, a dark room, and less screen time in the evening all support deeper rest. Good sleep is not a luxury but a basic part of staying healthy.",
+      "paragraph_solved": "Sleep does much more than rest the body. While we sleep, the brain sorts through the day and stores what it learned. People who sleep too little often find it harder to concentrate or remember details. Regular hours, a dark room, and less screen time in the evening all support deeper rest. Good sleep is not a luxury but a basic part of staying healthy.",
+      "blank_count": 10,
+      "global_range": [
+        21,
+        30
+      ],
+      "blanks": [
+        {
+          "id": 1,
+          "stem": "Wh",
+          "answer": "ile",
+          "full_word": "While",
+          "length": 3,
+          "global_id": 21
+        },
+        {
+          "id": 2,
+          "stem": "sle",
+          "answer": "ep",
+          "full_word": "sleep",
+          "length": 2,
+          "global_id": 22
+        },
+        {
+          "id": 3,
+          "stem": "bra",
+          "answer": "in",
+          "full_word": "brain",
+          "length": 2,
+          "global_id": 23
+        },
+        {
+          "id": 4,
+          "stem": "thr",
+          "answer": "ough",
+          "full_word": "through",
+          "length": 4,
+          "global_id": 24
+        },
+        {
+          "id": 5,
+          "stem": "sto",
+          "answer": "res",
+          "full_word": "stores",
+          "length": 3,
+          "global_id": 25
+        },
+        {
+          "id": 6,
+          "stem": "lea",
+          "answer": "rned",
+          "full_word": "learned",
+          "length": 4,
+          "global_id": 26
+        },
+        {
+          "id": 7,
+          "stem": "Peo",
+          "answer": "ple",
+          "full_word": "People",
+          "length": 3,
+          "global_id": 27
+        },
+        {
+          "id": 8,
+          "stem": "sle",
+          "answer": "ep",
+          "full_word": "sleep",
+          "length": 2,
+          "global_id": 28
+        },
+        {
+          "id": 9,
+          "stem": "lit",
+          "answer": "tle",
+          "full_word": "little",
+          "length": 3,
+          "global_id": 29
+        },
+        {
+          "id": 10,
+          "stem": "har",
+          "answer": "der",
+          "full_word": "harder",
+          "length": 3,
+          "global_id": 30
+        }
+      ]
+    },
+    {
+      "id": "ctw-04",
+      "number": 4,
+      "title": "Life in the Desert",
+      "instructions": "Fill in the missing letters in the paragraph.",
+      "tokens": [
+        {
+          "type": "text",
+          "value": "Deserts are far from empty, even though they receive very little rain. "
+        },
+        {
+          "type": "blank",
+          "id": 1,
+          "stem": "Ma",
+          "length": 2,
+          "global_id": 31,
+          "answer": "ny"
+        },
+        {
+          "type": "text",
+          "value": " plants "
+        },
+        {
+          "type": "blank",
+          "id": 2,
+          "stem": "sto",
+          "length": 2,
+          "global_id": 32,
+          "answer": "re"
+        },
+        {
+          "type": "text",
+          "value": " water in "
+        },
+        {
+          "type": "blank",
+          "id": 3,
+          "stem": "thi",
+          "length": 2,
+          "global_id": 33,
+          "answer": "ck"
+        },
+        {
+          "type": "text",
+          "value": " stems "
+        },
+        {
+          "type": "blank",
+          "id": 4,
+          "stem": "a",
+          "length": 2,
+          "global_id": 34,
+          "answer": "nd"
+        },
+        {
+          "type": "text",
+          "value": " wait "
+        },
+        {
+          "type": "blank",
+          "id": 5,
+          "stem": "mon",
+          "length": 3,
+          "global_id": 35,
+          "answer": "ths"
+        },
+        {
+          "type": "text",
+          "value": " for a "
+        },
+        {
+          "type": "blank",
+          "id": 6,
+          "stem": "sin",
+          "length": 3,
+          "global_id": 36,
+          "answer": "gle"
+        },
+        {
+          "type": "text",
+          "value": " storm. "
+        },
+        {
+          "type": "blank",
+          "id": 7,
+          "stem": "Ani",
+          "length": 4,
+          "global_id": 37,
+          "answer": "mals"
+        },
+        {
+          "type": "text",
+          "value": " hunt at "
+        },
+        {
+          "type": "blank",
+          "id": 8,
+          "stem": "nig",
+          "length": 2,
+          "global_id": 38,
+          "answer": "ht"
+        },
+        {
+          "type": "text",
+          "value": ", "
+        },
+        {
+          "type": "blank",
+          "id": 9,
+          "stem": "wh",
+          "length": 2,
+          "global_id": 39,
+          "answer": "en"
+        },
+        {
+          "type": "text",
+          "value": " the air is "
+        },
+        {
+          "type": "blank",
+          "id": 10,
+          "stem": "coo",
+          "length": 3,
+          "global_id": 40,
+          "answer": "ler"
+        },
+        {
+          "type": "text",
+          "value": ". Some seeds stay in the ground for years and bloom only after heavy rainfall. Life in these regions survives through patience rather than abundance."
+        }
+      ],
+      "paragraph_with_blanks": "Deserts are far from empty, even though they receive very little rain. Ma _ _ plants sto _ _ water in thi _ _ stems a _ _ wait mon _ _ _ for a sin _ _ _ storm. Ani _ _ _ _ hunt at nig _ _, wh _ _ the air is coo _ _ _. Some seeds stay in the ground for years and bloom only after heavy rainfall. Life in these regions survives through patience rather than abundance.",
+      "paragraph_with_answers": "Deserts are far from empty, even though they receive very little rain. Ma{ny} plants sto{re} water in thi{ck} stems a{nd} wait mon{ths} for a sin{gle} storm. Ani{mals} hunt at nig{ht}, wh{en} the air is coo{ler}. Some seeds stay in the ground for years and bloom only after heavy rainfall. Life in these regions survives through patience rather than abundance.",
+      "paragraph_solved": "Deserts are far from empty, even though they receive very little rain. Many plants store water in thick stems and wait months for a single storm. Animals hunt at night, when the air is cooler. Some seeds stay in the ground for years and bloom only after heavy rainfall. Life in these regions survives through patience rather than abundance.",
+      "blank_count": 10,
+      "global_range": [
+        31,
+        40
+      ],
+      "blanks": [
+        {
+          "id": 1,
+          "stem": "Ma",
+          "answer": "ny",
+          "full_word": "Many",
+          "length": 2,
+          "global_id": 31
+        },
+        {
+          "id": 2,
+          "stem": "sto",
+          "answer": "re",
+          "full_word": "store",
+          "length": 2,
+          "global_id": 32
+        },
+        {
+          "id": 3,
+          "stem": "thi",
+          "answer": "ck",
+          "full_word": "thick",
+          "length": 2,
+          "global_id": 33
+        },
+        {
+          "id": 4,
+          "stem": "a",
+          "answer": "nd",
+          "full_word": "and",
+          "length": 2,
+          "global_id": 34
+        },
+        {
+          "id": 5,
+          "stem": "mon",
+          "answer": "ths",
+          "full_word": "months",
+          "length": 3,
+          "global_id": 35
+        },
+        {
+          "id": 6,
+          "stem": "sin",
+          "answer": "gle",
+          "full_word": "single",
+          "length": 3,
+          "global_id": 36
+        },
+        {
+          "id": 7,
+          "stem": "Ani",
+          "answer": "mals",
+          "full_word": "Animals",
+          "length": 4,
+          "global_id": 37
+        },
+        {
+          "id": 8,
+          "stem": "nig",
+          "answer": "ht",
+          "full_word": "night",
+          "length": 2,
+          "global_id": 38
+        },
+        {
+          "id": 9,
+          "stem": "wh",
+          "answer": "en",
+          "full_word": "when",
+          "length": 2,
+          "global_id": 39
+        },
+        {
+          "id": 10,
+          "stem": "coo",
+          "answer": "ler",
+          "full_word": "cooler",
+          "length": 3,
+          "global_id": 40
+        }
+      ]
+    },
+    {
+      "id": "ctw-05",
+      "number": 5,
+      "title": "The Modern Library",
+      "instructions": "Fill in the missing letters in the paragraph.",
+      "tokens": [
+        {
+          "type": "text",
+          "value": "Public libraries have changed a great deal over the past century. "
+        },
+        {
+          "type": "blank",
+          "id": 1,
+          "stem": "The",
+          "length": 1,
+          "global_id": 41,
+          "answer": "y"
+        },
+        {
+          "type": "text",
+          "value": " still lend "
+        },
+        {
+          "type": "blank",
+          "id": 2,
+          "stem": "bo",
+          "length": 3,
+          "global_id": 42,
+          "answer": "oks"
+        },
+        {
+          "type": "text",
+          "value": ", "
+        },
+        {
+          "type": "blank",
+          "id": 3,
+          "stem": "b",
+          "length": 2,
+          "global_id": 43,
+          "answer": "ut"
+        },
+        {
+          "type": "text",
+          "value": " they "
+        },
+        {
+          "type": "blank",
+          "id": 4,
+          "stem": "al",
+          "length": 2,
+          "global_id": 44,
+          "answer": "so"
+        },
+        {
+          "type": "text",
+          "value": " offer "
+        },
+        {
+          "type": "blank",
+          "id": 5,
+          "stem": "com",
+          "length": 6,
+          "global_id": 45,
+          "answer": "puters"
+        },
+        {
+          "type": "text",
+          "value": ", quiet "
+        },
+        {
+          "type": "blank",
+          "id": 6,
+          "stem": "stu",
+          "length": 2,
+          "global_id": 46,
+          "answer": "dy"
+        },
+        {
+          "type": "text",
+          "value": " rooms, "
+        },
+        {
+          "type": "blank",
+          "id": 7,
+          "stem": "a",
+          "length": 2,
+          "global_id": 47,
+          "answer": "nd"
+        },
+        {
+          "type": "text",
+          "value": " free "
+        },
+        {
+          "type": "blank",
+          "id": 8,
+          "stem": "clas",
+          "length": 3,
+          "global_id": 48,
+          "answer": "ses"
+        },
+        {
+          "type": "text",
+          "value": " for the "
+        },
+        {
+          "type": "blank",
+          "id": 9,
+          "stem": "com",
+          "length": 6,
+          "global_id": 49,
+          "answer": "munity"
+        },
+        {
+          "type": "text",
+          "value": ". For "
+        },
+        {
+          "type": "blank",
+          "id": 10,
+          "stem": "ma",
+          "length": 2,
+          "global_id": 50,
+          "answer": "ny"
+        },
+        {
+          "type": "text",
+          "value": " families, a library is the only place where the internet costs nothing. These services make libraries centers of learning rather than simple storage rooms for paper."
+        }
+      ],
+      "paragraph_with_blanks": "Public libraries have changed a great deal over the past century. The _ still lend bo _ _ _, b _ _ they al _ _ offer com _ _ _ _ _ _, quiet stu _ _ rooms, a _ _ free clas _ _ _ for the com _ _ _ _ _ _. For ma _ _ families, a library is the only place where the internet costs nothing. These services make libraries centers of learning rather than simple storage rooms for paper.",
+      "paragraph_with_answers": "Public libraries have changed a great deal over the past century. The{y} still lend bo{oks}, b{ut} they al{so} offer com{puters}, quiet stu{dy} rooms, a{nd} free clas{ses} for the com{munity}. For ma{ny} families, a library is the only place where the internet costs nothing. These services make libraries centers of learning rather than simple storage rooms for paper.",
+      "paragraph_solved": "Public libraries have changed a great deal over the past century. They still lend books, but they also offer computers, quiet study rooms, and free classes for the community. For many families, a library is the only place where the internet costs nothing. These services make libraries centers of learning rather than simple storage rooms for paper.",
+      "blank_count": 10,
+      "global_range": [
+        41,
+        50
+      ],
+      "blanks": [
+        {
+          "id": 1,
+          "stem": "The",
+          "answer": "y",
+          "full_word": "They",
+          "length": 1,
+          "global_id": 41
+        },
+        {
+          "id": 2,
+          "stem": "bo",
+          "answer": "oks",
+          "full_word": "books",
+          "length": 3,
+          "global_id": 42
+        },
+        {
+          "id": 3,
+          "stem": "b",
+          "answer": "ut",
+          "full_word": "but",
+          "length": 2,
+          "global_id": 43
+        },
+        {
+          "id": 4,
+          "stem": "al",
+          "answer": "so",
+          "full_word": "also",
+          "length": 2,
+          "global_id": 44
+        },
+        {
+          "id": 5,
+          "stem": "com",
+          "answer": "puters",
+          "full_word": "computers",
+          "length": 6,
+          "global_id": 45
+        },
+        {
+          "id": 6,
+          "stem": "stu",
+          "answer": "dy",
+          "full_word": "study",
+          "length": 2,
+          "global_id": 46
+        },
+        {
+          "id": 7,
+          "stem": "a",
+          "answer": "nd",
+          "full_word": "and",
+          "length": 2,
+          "global_id": 47
+        },
+        {
+          "id": 8,
+          "stem": "clas",
+          "answer": "ses",
+          "full_word": "classes",
+          "length": 3,
+          "global_id": 48
+        },
+        {
+          "id": 9,
+          "stem": "com",
+          "answer": "munity",
+          "full_word": "community",
+          "length": 6,
+          "global_id": 49
+        },
+        {
+          "id": 10,
+          "stem": "ma",
+          "answer": "ny",
+          "full_word": "many",
+          "length": 2,
+          "global_id": 50
+        }
+      ]
+    },
+    {
+      "id": "ctw-06",
+      "number": 6,
+      "title": "Ocean Currents",
+      "instructions": "Fill in the missing letters in the paragraph.",
+      "tokens": [
+        {
+          "type": "text",
+          "value": "Ocean currents move enormous amounts of water around the planet. "
+        },
+        {
+          "type": "blank",
+          "id": 1,
+          "stem": "War",
+          "length": 1,
+          "global_id": 51,
+          "answer": "m"
+        },
+        {
+          "type": "text",
+          "value": " water "
+        },
+        {
+          "type": "blank",
+          "id": 2,
+          "stem": "tra",
+          "length": 4,
+          "global_id": 52,
+          "answer": "vels"
+        },
+        {
+          "type": "text",
+          "value": " away "
+        },
+        {
+          "type": "blank",
+          "id": 3,
+          "stem": "fr",
+          "length": 2,
+          "global_id": 53,
+          "answer": "om"
+        },
+        {
+          "type": "text",
+          "value": " the equator, "
+        },
+        {
+          "type": "blank",
+          "id": 4,
+          "stem": "wh",
+          "length": 3,
+          "global_id": 54,
+          "answer": "ile"
+        },
+        {
+          "type": "text",
+          "value": " "
+        },
+        {
+          "type": "blank",
+          "id": 5,
+          "stem": "col",
+          "length": 1,
+          "global_id": 55,
+          "answer": "d"
+        },
+        {
+          "type": "text",
+          "value": " water "
+        },
+        {
+          "type": "blank",
+          "id": 6,
+          "stem": "sin",
+          "length": 2,
+          "global_id": 56,
+          "answer": "ks"
+        },
+        {
+          "type": "text",
+          "value": " and "
+        },
+        {
+          "type": "blank",
+          "id": 7,
+          "stem": "ret",
+          "length": 4,
+          "global_id": 57,
+          "answer": "urns"
+        },
+        {
+          "type": "text",
+          "value": " along the sea "
+        },
+        {
+          "type": "blank",
+          "id": 8,
+          "stem": "flo",
+          "length": 2,
+          "global_id": 58,
+          "answer": "or"
+        },
+        {
+          "type": "text",
+          "value": ". "
+        },
+        {
+          "type": "blank",
+          "id": 9,
+          "stem": "The",
+          "length": 2,
+          "global_id": 59,
+          "answer": "se"
+        },
+        {
+          "type": "text",
+          "value": " flows shape the weather of entire continents. "
+        },
+        {
+          "type": "blank",
+          "id": 10,
+          "stem": "E",
+          "length": 3,
+          "global_id": 60,
+          "answer": "ven"
+        },
+        {
+          "type": "text",
+          "value": " small changes in temperature can shift a current and alter rainfall thousands of kilometers away."
+        }
+      ],
+      "paragraph_with_blanks": "Ocean currents move enormous amounts of water around the planet. War _ water tra _ _ _ _ away fr _ _ the equator, wh _ _ _ col _ water sin _ _ and ret _ _ _ _ along the sea flo _ _. The _ _ flows shape the weather of entire continents. E _ _ _ small changes in temperature can shift a current and alter rainfall thousands of kilometers away.",
+      "paragraph_with_answers": "Ocean currents move enormous amounts of water around the planet. War{m} water tra{vels} away fr{om} the equator, wh{ile} col{d} water sin{ks} and ret{urns} along the sea flo{or}. The{se} flows shape the weather of entire continents. E{ven} small changes in temperature can shift a current and alter rainfall thousands of kilometers away.",
+      "paragraph_solved": "Ocean currents move enormous amounts of water around the planet. Warm water travels away from the equator, while cold water sinks and returns along the sea floor. These flows shape the weather of entire continents. Even small changes in temperature can shift a current and alter rainfall thousands of kilometers away.",
+      "blank_count": 10,
+      "global_range": [
+        51,
+        60
+      ],
+      "blanks": [
+        {
+          "id": 1,
+          "stem": "War",
+          "answer": "m",
+          "full_word": "Warm",
+          "length": 1,
+          "global_id": 51
+        },
+        {
+          "id": 2,
+          "stem": "tra",
+          "answer": "vels",
+          "full_word": "travels",
+          "length": 4,
+          "global_id": 52
+        },
+        {
+          "id": 3,
+          "stem": "fr",
+          "answer": "om",
+          "full_word": "from",
+          "length": 2,
+          "global_id": 53
+        },
+        {
+          "id": 4,
+          "stem": "wh",
+          "answer": "ile",
+          "full_word": "while",
+          "length": 3,
+          "global_id": 54
+        },
+        {
+          "id": 5,
+          "stem": "col",
+          "answer": "d",
+          "full_word": "cold",
+          "length": 1,
+          "global_id": 55
+        },
+        {
+          "id": 6,
+          "stem": "sin",
+          "answer": "ks",
+          "full_word": "sinks",
+          "length": 2,
+          "global_id": 56
+        },
+        {
+          "id": 7,
+          "stem": "ret",
+          "answer": "urns",
+          "full_word": "returns",
+          "length": 4,
+          "global_id": 57
+        },
+        {
+          "id": 8,
+          "stem": "flo",
+          "answer": "or",
+          "full_word": "floor",
+          "length": 2,
+          "global_id": 58
+        },
+        {
+          "id": 9,
+          "stem": "The",
+          "answer": "se",
+          "full_word": "These",
+          "length": 2,
+          "global_id": 59
+        },
+        {
+          "id": 10,
+          "stem": "E",
+          "answer": "ven",
+          "full_word": "Even",
+          "length": 3,
+          "global_id": 60
+        }
+      ]
+    },
+    {
+      "id": "ctw-07",
+      "number": 7,
+      "title": "Learning a Language",
+      "instructions": "Fill in the missing letters in the paragraph.",
+      "tokens": [
+        {
+          "type": "text",
+          "value": "Learning a new language takes patience more than talent. At "
+        },
+        {
+          "type": "blank",
+          "id": 1,
+          "stem": "fir",
+          "length": 2,
+          "global_id": 61,
+          "answer": "st"
+        },
+        {
+          "type": "text",
+          "value": ", progress "
+        },
+        {
+          "type": "blank",
+          "id": 2,
+          "stem": "fee",
+          "length": 2,
+          "global_id": 62,
+          "answer": "ls"
+        },
+        {
+          "type": "text",
+          "value": " "
+        },
+        {
+          "type": "blank",
+          "id": 3,
+          "stem": "slo",
+          "length": 1,
+          "global_id": 63,
+          "answer": "w"
+        },
+        {
+          "type": "text",
+          "value": ", "
+        },
+        {
+          "type": "blank",
+          "id": 4,
+          "stem": "a",
+          "length": 2,
+          "global_id": 64,
+          "answer": "nd"
+        },
+        {
+          "type": "text",
+          "value": " simple sentences "
+        },
+        {
+          "type": "blank",
+          "id": 5,
+          "stem": "req",
+          "length": 4,
+          "global_id": 65,
+          "answer": "uire"
+        },
+        {
+          "type": "text",
+          "value": " effort. "
+        },
+        {
+          "type": "blank",
+          "id": 6,
+          "stem": "B",
+          "length": 2,
+          "global_id": 66,
+          "answer": "ut"
+        },
+        {
+          "type": "text",
+          "value": " with "
+        },
+        {
+          "type": "blank",
+          "id": 7,
+          "stem": "dai",
+          "length": 2,
+          "global_id": 67,
+          "answer": "ly"
+        },
+        {
+          "type": "text",
+          "value": " practice, "
+        },
+        {
+          "type": "blank",
+          "id": 8,
+          "stem": "wo",
+          "length": 3,
+          "global_id": 68,
+          "answer": "rds"
+        },
+        {
+          "type": "text",
+          "value": " "
+        },
+        {
+          "type": "blank",
+          "id": 9,
+          "stem": "beg",
+          "length": 2,
+          "global_id": 69,
+          "answer": "in"
+        },
+        {
+          "type": "text",
+          "value": " to arrive without "
+        },
+        {
+          "type": "blank",
+          "id": 10,
+          "stem": "trans",
+          "length": 6,
+          "global_id": 70,
+          "answer": "lation"
+        },
+        {
+          "type": "text",
+          "value": ". Mistakes are part of the process, not a sign of failure. Most learners improve fastest when they speak with real people instead of only studying rules."
+        }
+      ],
+      "paragraph_with_blanks": "Learning a new language takes patience more than talent. At fir _ _, progress fee _ _ slo _, a _ _ simple sentences req _ _ _ _ effort. B _ _ with dai _ _ practice, wo _ _ _ beg _ _ to arrive without trans _ _ _ _ _ _. Mistakes are part of the process, not a sign of failure. Most learners improve fastest when they speak with real people instead of only studying rules.",
+      "paragraph_with_answers": "Learning a new language takes patience more than talent. At fir{st}, progress fee{ls} slo{w}, a{nd} simple sentences req{uire} effort. B{ut} with dai{ly} practice, wo{rds} beg{in} to arrive without trans{lation}. Mistakes are part of the process, not a sign of failure. Most learners improve fastest when they speak with real people instead of only studying rules.",
+      "paragraph_solved": "Learning a new language takes patience more than talent. At first, progress feels slow, and simple sentences require effort. But with daily practice, words begin to arrive without translation. Mistakes are part of the process, not a sign of failure. Most learners improve fastest when they speak with real people instead of only studying rules.",
+      "blank_count": 10,
+      "global_range": [
+        61,
+        70
+      ],
+      "blanks": [
+        {
+          "id": 1,
+          "stem": "fir",
+          "answer": "st",
+          "full_word": "first",
+          "length": 2,
+          "global_id": 61
+        },
+        {
+          "id": 2,
+          "stem": "fee",
+          "answer": "ls",
+          "full_word": "feels",
+          "length": 2,
+          "global_id": 62
+        },
+        {
+          "id": 3,
+          "stem": "slo",
+          "answer": "w",
+          "full_word": "slow",
+          "length": 1,
+          "global_id": 63
+        },
+        {
+          "id": 4,
+          "stem": "a",
+          "answer": "nd",
+          "full_word": "and",
+          "length": 2,
+          "global_id": 64
+        },
+        {
+          "id": 5,
+          "stem": "req",
+          "answer": "uire",
+          "full_word": "require",
+          "length": 4,
+          "global_id": 65
+        },
+        {
+          "id": 6,
+          "stem": "B",
+          "answer": "ut",
+          "full_word": "But",
+          "length": 2,
+          "global_id": 66
+        },
+        {
+          "id": 7,
+          "stem": "dai",
+          "answer": "ly",
+          "full_word": "daily",
+          "length": 2,
+          "global_id": 67
+        },
+        {
+          "id": 8,
+          "stem": "wo",
+          "answer": "rds",
+          "full_word": "words",
+          "length": 3,
+          "global_id": 68
+        },
+        {
+          "id": 9,
+          "stem": "beg",
+          "answer": "in",
+          "full_word": "begin",
+          "length": 2,
+          "global_id": 69
+        },
+        {
+          "id": 10,
+          "stem": "trans",
+          "answer": "lation",
+          "full_word": "translation",
+          "length": 6,
+          "global_id": 70
+        }
+      ]
+    },
+    {
+      "id": "ctw-08",
+      "number": 8,
+      "title": "Moving Every Day",
+      "instructions": "Fill in the missing letters in the paragraph.",
+      "tokens": [
+        {
+          "type": "text",
+          "value": "Moving your body regularly protects both health and mood. "
+        },
+        {
+          "type": "blank",
+          "id": 1,
+          "stem": "Ev",
+          "length": 2,
+          "global_id": 71,
+          "answer": "en"
+        },
+        {
+          "type": "text",
+          "value": " a short "
+        },
+        {
+          "type": "blank",
+          "id": 2,
+          "stem": "wa",
+          "length": 2,
+          "global_id": 72,
+          "answer": "lk"
+        },
+        {
+          "type": "text",
+          "value": " each "
+        },
+        {
+          "type": "blank",
+          "id": 3,
+          "stem": "d",
+          "length": 2,
+          "global_id": 73,
+          "answer": "ay"
+        },
+        {
+          "type": "text",
+          "value": " can "
+        },
+        {
+          "type": "blank",
+          "id": 4,
+          "stem": "low",
+          "length": 2,
+          "global_id": 74,
+          "answer": "er"
+        },
+        {
+          "type": "text",
+          "value": " stress "
+        },
+        {
+          "type": "blank",
+          "id": 5,
+          "stem": "a",
+          "length": 2,
+          "global_id": 75,
+          "answer": "nd"
+        },
+        {
+          "type": "text",
+          "value": " "
+        },
+        {
+          "type": "blank",
+          "id": 6,
+          "stem": "imp",
+          "length": 4,
+          "global_id": 76,
+          "answer": "rove"
+        },
+        {
+          "type": "text",
+          "value": " sleep. "
+        },
+        {
+          "type": "blank",
+          "id": 7,
+          "stem": "Peo",
+          "length": 3,
+          "global_id": 77,
+          "answer": "ple"
+        },
+        {
+          "type": "text",
+          "value": " who exercise in "
+        },
+        {
+          "type": "blank",
+          "id": 8,
+          "stem": "gro",
+          "length": 3,
+          "global_id": 78,
+          "answer": "ups"
+        },
+        {
+          "type": "text",
+          "value": " "
+        },
+        {
+          "type": "blank",
+          "id": 9,
+          "stem": "of",
+          "length": 3,
+          "global_id": 79,
+          "answer": "ten"
+        },
+        {
+          "type": "text",
+          "value": " continue "
+        },
+        {
+          "type": "blank",
+          "id": 10,
+          "stem": "lon",
+          "length": 3,
+          "global_id": 80,
+          "answer": "ger"
+        },
+        {
+          "type": "text",
+          "value": " because the habit becomes social as well as physical. The best routine is not the hardest one, but the one a person can repeat for years."
+        }
+      ],
+      "paragraph_with_blanks": "Moving your body regularly protects both health and mood. Ev _ _ a short wa _ _ each d _ _ can low _ _ stress a _ _ imp _ _ _ _ sleep. Peo _ _ _ who exercise in gro _ _ _ of _ _ _ continue lon _ _ _ because the habit becomes social as well as physical. The best routine is not the hardest one, but the one a person can repeat for years.",
+      "paragraph_with_answers": "Moving your body regularly protects both health and mood. Ev{en} a short wa{lk} each d{ay} can low{er} stress a{nd} imp{rove} sleep. Peo{ple} who exercise in gro{ups} of{ten} continue lon{ger} because the habit becomes social as well as physical. The best routine is not the hardest one, but the one a person can repeat for years.",
+      "paragraph_solved": "Moving your body regularly protects both health and mood. Even a short walk each day can lower stress and improve sleep. People who exercise in groups often continue longer because the habit becomes social as well as physical. The best routine is not the hardest one, but the one a person can repeat for years.",
+      "blank_count": 10,
+      "global_range": [
+        71,
+        80
+      ],
+      "blanks": [
+        {
+          "id": 1,
+          "stem": "Ev",
+          "answer": "en",
+          "full_word": "Even",
+          "length": 2,
+          "global_id": 71
+        },
+        {
+          "id": 2,
+          "stem": "wa",
+          "answer": "lk",
+          "full_word": "walk",
+          "length": 2,
+          "global_id": 72
+        },
+        {
+          "id": 3,
+          "stem": "d",
+          "answer": "ay",
+          "full_word": "day",
+          "length": 2,
+          "global_id": 73
+        },
+        {
+          "id": 4,
+          "stem": "low",
+          "answer": "er",
+          "full_word": "lower",
+          "length": 2,
+          "global_id": 74
+        },
+        {
+          "id": 5,
+          "stem": "a",
+          "answer": "nd",
+          "full_word": "and",
+          "length": 2,
+          "global_id": 75
+        },
+        {
+          "id": 6,
+          "stem": "imp",
+          "answer": "rove",
+          "full_word": "improve",
+          "length": 4,
+          "global_id": 76
+        },
+        {
+          "id": 7,
+          "stem": "Peo",
+          "answer": "ple",
+          "full_word": "People",
+          "length": 3,
+          "global_id": 77
+        },
+        {
+          "id": 8,
+          "stem": "gro",
+          "answer": "ups",
+          "full_word": "groups",
+          "length": 3,
+          "global_id": 78
+        },
+        {
+          "id": 9,
+          "stem": "of",
+          "answer": "ten",
+          "full_word": "often",
+          "length": 3,
+          "global_id": 79
+        },
+        {
+          "id": 10,
+          "stem": "lon",
+          "answer": "ger",
+          "full_word": "longer",
+          "length": 3,
+          "global_id": 80
+        }
+      ]
+    },
+    {
+      "id": "ctw-09",
+      "number": 9,
+      "title": "The Story of Photography",
+      "instructions": "Fill in the missing letters in the paragraph.",
+      "tokens": [
+        {
+          "type": "text",
+          "value": "Photography began as a slow and difficult craft. "
+        },
+        {
+          "type": "blank",
+          "id": 1,
+          "stem": "Ear",
+          "length": 2,
+          "global_id": 81,
+          "answer": "ly"
+        },
+        {
+          "type": "text",
+          "value": " cameras "
+        },
+        {
+          "type": "blank",
+          "id": 2,
+          "stem": "nee",
+          "length": 3,
+          "global_id": 82,
+          "answer": "ded"
+        },
+        {
+          "type": "text",
+          "value": " bright "
+        },
+        {
+          "type": "blank",
+          "id": 3,
+          "stem": "ligh",
+          "length": 1,
+          "global_id": 83,
+          "answer": "t"
+        },
+        {
+          "type": "text",
+          "value": " "
+        },
+        {
+          "type": "blank",
+          "id": 4,
+          "stem": "a",
+          "length": 2,
+          "global_id": 84,
+          "answer": "nd"
+        },
+        {
+          "type": "text",
+          "value": " long "
+        },
+        {
+          "type": "blank",
+          "id": 5,
+          "stem": "wai",
+          "length": 4,
+          "global_id": 85,
+          "answer": "ting"
+        },
+        {
+          "type": "text",
+          "value": " times, "
+        },
+        {
+          "type": "blank",
+          "id": 6,
+          "stem": "s",
+          "length": 1,
+          "global_id": 86,
+          "answer": "o"
+        },
+        {
+          "type": "text",
+          "value": " portraits "
+        },
+        {
+          "type": "blank",
+          "id": 7,
+          "stem": "sho",
+          "length": 3,
+          "global_id": 87,
+          "answer": "wed"
+        },
+        {
+          "type": "text",
+          "value": " stiff faces. "
+        },
+        {
+          "type": "blank",
+          "id": 8,
+          "stem": "Tod",
+          "length": 2,
+          "global_id": 88,
+          "answer": "ay"
+        },
+        {
+          "type": "text",
+          "value": " "
+        },
+        {
+          "type": "blank",
+          "id": 9,
+          "stem": "near",
+          "length": 2,
+          "global_id": 89,
+          "answer": "ly"
+        },
+        {
+          "type": "text",
+          "value": " everyone "
+        },
+        {
+          "type": "blank",
+          "id": 10,
+          "stem": "car",
+          "length": 4,
+          "global_id": 90,
+          "answer": "ries"
+        },
+        {
+          "type": "text",
+          "value": " a camera in a pocket. The tools have become simple, yet a good photograph still depends on attention, timing, and a choice about what to leave out."
+        }
+      ],
+      "paragraph_with_blanks": "Photography began as a slow and difficult craft. Ear _ _ cameras nee _ _ _ bright ligh _ a _ _ long wai _ _ _ _ times, s _ portraits sho _ _ _ stiff faces. Tod _ _ near _ _ everyone car _ _ _ _ a camera in a pocket. The tools have become simple, yet a good photograph still depends on attention, timing, and a choice about what to leave out.",
+      "paragraph_with_answers": "Photography began as a slow and difficult craft. Ear{ly} cameras nee{ded} bright ligh{t} a{nd} long wai{ting} times, s{o} portraits sho{wed} stiff faces. Tod{ay} near{ly} everyone car{ries} a camera in a pocket. The tools have become simple, yet a good photograph still depends on attention, timing, and a choice about what to leave out.",
+      "paragraph_solved": "Photography began as a slow and difficult craft. Early cameras needed bright light and long waiting times, so portraits showed stiff faces. Today nearly everyone carries a camera in a pocket. The tools have become simple, yet a good photograph still depends on attention, timing, and a choice about what to leave out.",
+      "blank_count": 10,
+      "global_range": [
+        81,
+        90
+      ],
+      "blanks": [
+        {
+          "id": 1,
+          "stem": "Ear",
+          "answer": "ly",
+          "full_word": "Early",
+          "length": 2,
+          "global_id": 81
+        },
+        {
+          "id": 2,
+          "stem": "nee",
+          "answer": "ded",
+          "full_word": "needed",
+          "length": 3,
+          "global_id": 82
+        },
+        {
+          "id": 3,
+          "stem": "ligh",
+          "answer": "t",
+          "full_word": "light",
+          "length": 1,
+          "global_id": 83
+        },
+        {
+          "id": 4,
+          "stem": "a",
+          "answer": "nd",
+          "full_word": "and",
+          "length": 2,
+          "global_id": 84
+        },
+        {
+          "id": 5,
+          "stem": "wai",
+          "answer": "ting",
+          "full_word": "waiting",
+          "length": 4,
+          "global_id": 85
+        },
+        {
+          "id": 6,
+          "stem": "s",
+          "answer": "o",
+          "full_word": "so",
+          "length": 1,
+          "global_id": 86
+        },
+        {
+          "id": 7,
+          "stem": "sho",
+          "answer": "wed",
+          "full_word": "showed",
+          "length": 3,
+          "global_id": 87
+        },
+        {
+          "id": 8,
+          "stem": "Tod",
+          "answer": "ay",
+          "full_word": "Today",
+          "length": 2,
+          "global_id": 88
+        },
+        {
+          "id": 9,
+          "stem": "near",
+          "answer": "ly",
+          "full_word": "nearly",
+          "length": 2,
+          "global_id": 89
+        },
+        {
+          "id": 10,
+          "stem": "car",
+          "answer": "ries",
+          "full_word": "carries",
+          "length": 4,
+          "global_id": 90
+        }
+      ]
+    },
+    {
+      "id": "ctw-10",
+      "number": 10,
+      "title": "The Problem with Plastic",
+      "instructions": "Fill in the missing letters in the paragraph.",
+      "tokens": [
+        {
+          "type": "text",
+          "value": "Plastic is useful precisely because it lasts, and that is also the problem. A "
+        },
+        {
+          "type": "blank",
+          "id": 1,
+          "stem": "bot",
+          "length": 3,
+          "global_id": 91,
+          "answer": "tle"
+        },
+        {
+          "type": "text",
+          "value": " thrown "
+        },
+        {
+          "type": "blank",
+          "id": 2,
+          "stem": "aw",
+          "length": 2,
+          "global_id": 92,
+          "answer": "ay"
+        },
+        {
+          "type": "text",
+          "value": " today "
+        },
+        {
+          "type": "blank",
+          "id": 3,
+          "stem": "m",
+          "length": 2,
+          "global_id": 93,
+          "answer": "ay"
+        },
+        {
+          "type": "text",
+          "value": " remain in the environment for "
+        },
+        {
+          "type": "blank",
+          "id": 4,
+          "stem": "gene",
+          "length": 7,
+          "global_id": 94,
+          "answer": "rations"
+        },
+        {
+          "type": "text",
+          "value": ". "
+        },
+        {
+          "type": "blank",
+          "id": 5,
+          "stem": "Recy",
+          "length": 5,
+          "global_id": 95,
+          "answer": "cling"
+        },
+        {
+          "type": "text",
+          "value": " "
+        },
+        {
+          "type": "blank",
+          "id": 6,
+          "stem": "hel",
+          "length": 2,
+          "global_id": 96,
+          "answer": "ps"
+        },
+        {
+          "type": "text",
+          "value": ", "
+        },
+        {
+          "type": "blank",
+          "id": 7,
+          "stem": "b",
+          "length": 2,
+          "global_id": 97,
+          "answer": "ut"
+        },
+        {
+          "type": "text",
+          "value": " "
+        },
+        {
+          "type": "blank",
+          "id": 8,
+          "stem": "on",
+          "length": 2,
+          "global_id": 98,
+          "answer": "ly"
+        },
+        {
+          "type": "text",
+          "value": " part of what we "
+        },
+        {
+          "type": "blank",
+          "id": 9,
+          "stem": "col",
+          "length": 4,
+          "global_id": 99,
+          "answer": "lect"
+        },
+        {
+          "type": "text",
+          "value": " is "
+        },
+        {
+          "type": "blank",
+          "id": 10,
+          "stem": "act",
+          "length": 5,
+          "global_id": 100,
+          "answer": "ually"
+        },
+        {
+          "type": "text",
+          "value": " reused. Choosing durable items and refusing packaging we do not need reduces waste before it is created."
+        }
+      ],
+      "paragraph_with_blanks": "Plastic is useful precisely because it lasts, and that is also the problem. A bot _ _ _ thrown aw _ _ today m _ _ remain in the environment for gene _ _ _ _ _ _ _. Recy _ _ _ _ _ hel _ _, b _ _ on _ _ part of what we col _ _ _ _ is act _ _ _ _ _ reused. Choosing durable items and refusing packaging we do not need reduces waste before it is created.",
+      "paragraph_with_answers": "Plastic is useful precisely because it lasts, and that is also the problem. A bot{tle} thrown aw{ay} today m{ay} remain in the environment for gene{rations}. Recy{cling} hel{ps}, b{ut} on{ly} part of what we col{lect} is act{ually} reused. Choosing durable items and refusing packaging we do not need reduces waste before it is created.",
+      "paragraph_solved": "Plastic is useful precisely because it lasts, and that is also the problem. A bottle thrown away today may remain in the environment for generations. Recycling helps, but only part of what we collect is actually reused. Choosing durable items and refusing packaging we do not need reduces waste before it is created.",
+      "blank_count": 10,
+      "global_range": [
+        91,
+        100
+      ],
+      "blanks": [
+        {
+          "id": 1,
+          "stem": "bot",
+          "answer": "tle",
+          "full_word": "bottle",
+          "length": 3,
+          "global_id": 91
+        },
+        {
+          "id": 2,
+          "stem": "aw",
+          "answer": "ay",
+          "full_word": "away",
+          "length": 2,
+          "global_id": 92
+        },
+        {
+          "id": 3,
+          "stem": "m",
+          "answer": "ay",
+          "full_word": "may",
+          "length": 2,
+          "global_id": 93
+        },
+        {
+          "id": 4,
+          "stem": "gene",
+          "answer": "rations",
+          "full_word": "generations",
+          "length": 7,
+          "global_id": 94
+        },
+        {
+          "id": 5,
+          "stem": "Recy",
+          "answer": "cling",
+          "full_word": "Recycling",
+          "length": 5,
+          "global_id": 95
+        },
+        {
+          "id": 6,
+          "stem": "hel",
+          "answer": "ps",
+          "full_word": "helps",
+          "length": 2,
+          "global_id": 96
+        },
+        {
+          "id": 7,
+          "stem": "b",
+          "answer": "ut",
+          "full_word": "but",
+          "length": 2,
+          "global_id": 97
+        },
+        {
+          "id": 8,
+          "stem": "on",
+          "answer": "ly",
+          "full_word": "only",
+          "length": 2,
+          "global_id": 98
+        },
+        {
+          "id": 9,
+          "stem": "col",
+          "answer": "lect",
+          "full_word": "collect",
+          "length": 4,
+          "global_id": 99
+        },
+        {
+          "id": 10,
+          "stem": "act",
+          "answer": "ually",
+          "full_word": "actually",
+          "length": 5,
+          "global_id": 100
+        }
+      ]
+    }
+  ],
+  "read_in_daily_life": [
+    {
+      "id": "rdl-01",
+      "number": 1,
+      "type": "email",
+      "instructions": "Read an email.",
+      "questions": [
+        {
+          "id": "q-101",
+          "number": 101,
+          "prompt": "What will happen if the book is not collected within five days?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The student will be charged a late fee."
+            },
+            {
+              "id": "b",
+              "text": "It will be offered to another reader."
+            },
+            {
+              "id": "c",
+              "text": "The request will be repeated automatically."
+            },
+            {
+              "id": "d",
+              "text": "It will be delivered to the student's department."
+            }
+          ],
+          "correct_option_id": "b",
+          "explanation": "B is correct because the email says uncollected holds go back to the shelves and are offered to the next reader in line. A is wrong: no fee is mentioned anywhere. C is unsupported; nothing suggests the request repeats. D introduces a delivery service the message never describes."
+        },
+        {
+          "id": "q-102",
+          "number": 102,
+          "prompt": "In which situation can the loan NOT be renewed?",
+          "options": [
+            {
+              "id": "a",
+              "text": "When the borrower has already renewed it once"
+            },
+            {
+              "id": "b",
+              "text": "When the book belongs to a different library"
+            },
+            {
+              "id": "c",
+              "text": "When the borrower collects it late"
+            },
+            {
+              "id": "d",
+              "text": "When the renewal is made online"
+            }
+          ],
+          "correct_option_id": "a",
+          "explanation": "A is correct because the email allows one online renewal only. B is not mentioned. C confuses the pickup rule with the renewal rule. D reverses the message, since online renewal is exactly what is offered."
+        },
+        {
+          "id": "q-103",
+          "number": 103,
+          "prompt": "What can be inferred about popular titles at this library?",
+          "options": [
+            {
+              "id": "a",
+              "text": "They are usually kept behind the desk permanently."
+            },
+            {
+              "id": "b",
+              "text": "They cannot be requested in advance."
+            },
+            {
+              "id": "c",
+              "text": "Several readers may be waiting for the same book."
+            },
+            {
+              "id": "d",
+              "text": "They are only available to graduate students."
+            }
+          ],
+          "correct_option_id": "c",
+          "explanation": "C is correct because the email refers to the next reader in line and to another student requesting the same title, which implies waiting lists. A and D add rules the message never states. B is contradicted by the fact that the book was requested in advance."
+        }
+      ],
+      "subject": "Book Hold Ready for Pickup",
+      "body": [
+        "Dear Ms. Ortega,",
+        "The book you requested, Introduction to Urban Design, is now available at the main circulation desk. Please collect it within five days. Holds that are not picked up in time are returned to the shelves and offered to the next reader in line.",
+        "You may renew the loan online once, unless another student has requested the same title.",
+        "Regards,",
+        "David Ruiz, Circulation Services"
+      ]
+    },
+    {
+      "id": "rdl-02",
+      "number": 2,
+      "type": "email",
+      "instructions": "Read an email.",
+      "questions": [
+        {
+          "id": "q-104",
+          "number": 104,
+          "prompt": "What is the main purpose of this email?",
+          "options": [
+            {
+              "id": "a",
+              "text": "To announce a rise in laundry prices"
+            },
+            {
+              "id": "b",
+              "text": "To explain a change in how residents pay"
+            },
+            {
+              "id": "c",
+              "text": "To ask residents for feedback on the machines"
+            },
+            {
+              "id": "d",
+              "text": "To remind residents to clean the laundry room"
+            }
+          ],
+          "correct_option_id": "b",
+          "explanation": "B is correct because the whole message describes the move from coins to app payment. A is wrong since no price is mentioned. C is unsupported; no feedback is requested. D introduces cleaning, which never appears."
+        },
+        {
+          "id": "q-105",
+          "number": 105,
+          "prompt": "What should a resident without a smartphone do?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Continue using coins in the older machines"
+            },
+            {
+              "id": "b",
+              "text": "Ask a neighbour to pay through the app"
+            },
+            {
+              "id": "c",
+              "text": "Request a prepaid card at the front office"
+            },
+            {
+              "id": "d",
+              "text": "Use the laundry room in another building"
+            }
+          ],
+          "correct_option_id": "c",
+          "explanation": "C is correct because the email offers a prepaid card from the front office. A is impossible, since coin slots are being removed. B and D are reasonable ideas but neither is mentioned in the text."
+        },
+        {
+          "id": "q-106",
+          "number": 106,
+          "prompt": "What can be inferred about March 3?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Residents will not be able to do laundry that day."
+            },
+            {
+              "id": "b",
+              "text": "The app will be unavailable for the whole day."
+            },
+            {
+              "id": "c",
+              "text": "The front office will be closed."
+            },
+            {
+              "id": "d",
+              "text": "Prepaid cards will be given out for free."
+            }
+          ],
+          "correct_option_id": "a",
+          "explanation": "A is correct because the room is closed for installation on that date. B refers to the app, which is never said to be down. C and D are details the message does not provide."
+        }
+      ],
+      "subject": "New Laundry Machines in Building 2",
+      "body": [
+        "Dear Residents,",
+        "Beginning Monday, March 4, the laundry room on the ground floor of Building 2 will accept payment only through the housing app. Coin slots will be removed from all machines.",
+        "Residents who do not use a smartphone may request a prepaid card at the front office. The room will stay closed on March 3 while the new machines are installed.",
+        "Housing Office"
+      ]
+    },
+    {
+      "id": "rdl-03",
+      "number": 3,
+      "type": "email",
+      "instructions": "Read an email.",
+      "questions": [
+        {
+          "id": "q-107",
+          "number": 107,
+          "prompt": "What is the main purpose of this email?",
+          "options": [
+            {
+              "id": "a",
+              "text": "To offer the applicant a position"
+            },
+            {
+              "id": "b",
+              "text": "To request additional application documents"
+            },
+            {
+              "id": "c",
+              "text": "To confirm the details of an interview"
+            },
+            {
+              "id": "d",
+              "text": "To explain why an interview was cancelled"
+            }
+          ],
+          "correct_option_id": "c",
+          "explanation": "C is correct because the message gives the date, time, room and instructions for an arranged interview. A is wrong, as no job offer is made. B is only partly related: the portfolio is brought to the interview, not sent in. D contradicts the email entirely."
+        },
+        {
+          "id": "q-108",
+          "number": 108,
+          "prompt": "Which of the following is NOT true according to the email?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Applicants should arrive before the scheduled time."
+            },
+            {
+              "id": "b",
+              "text": "Applicants may bring a laptop into the room."
+            },
+            {
+              "id": "c",
+              "text": "The portfolio must be printed."
+            },
+            {
+              "id": "d",
+              "text": "Rescheduling requires advance notice."
+            }
+          ],
+          "correct_option_id": "b",
+          "explanation": "B is correct because laptops are explicitly not permitted. A is true, since applicants sign in fifteen minutes early. C is stated directly. D matches the two-day notice rule."
+        },
+        {
+          "id": "q-109",
+          "number": 109,
+          "prompt": "What should Mr. Adeyemi do if he cannot attend on May 9?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Call reception on the morning of the interview"
+            },
+            {
+              "id": "b",
+              "text": "Send a new application form"
+            },
+            {
+              "id": "c",
+              "text": "Reply to the email at least two days beforehand"
+            },
+            {
+              "id": "d",
+              "text": "Ask another candidate to take his place"
+            }
+          ],
+          "correct_option_id": "c",
+          "explanation": "C is correct because the email asks for a reply at least two days in advance. A is too late and uses a channel never mentioned. B and D describe actions the message does not allow for."
+        }
+      ],
+      "subject": "Interview Confirmation - Marketing Internship",
+      "body": [
+        "Dear Mr. Adeyemi,",
+        "Thank you for applying. Your interview is scheduled for Thursday, May 9, at 2:30 p.m. in Room 118 of the Harper Building. Please arrive fifteen minutes early to sign in at reception.",
+        "Bring a printed copy of your portfolio; laptops are not permitted in the interview room. If you need to reschedule, reply to this message at least two days in advance.",
+        "Sincerely,",
+        "Karen Blythe"
+      ]
+    },
+    {
+      "id": "rdl-04",
+      "number": 4,
+      "type": "announcement",
+      "instructions": "Read an announcement.",
+      "questions": [
+        {
+          "id": "q-110",
+          "number": 110,
+          "prompt": "Why is the shuttle route being changed?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Too few riders used the East Gate stop."
+            },
+            {
+              "id": "b",
+              "text": "Construction vehicles will block the road."
+            },
+            {
+              "id": "c",
+              "text": "The Library stop is closer to the science buildings."
+            },
+            {
+              "id": "d",
+              "text": "A new shuttle vehicle has been purchased."
+            }
+          ],
+          "correct_option_id": "b",
+          "explanation": "B is correct because the announcement names construction trucks on the East Gate road as the reason. A is never suggested. C reverses the facts, since the Library stop adds walking time. D introduces a new vehicle that is not mentioned."
+        },
+        {
+          "id": "q-111",
+          "number": 111,
+          "prompt": "What should riders going to the science buildings do?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Wait at the East Gate for a later shuttle"
+            },
+            {
+              "id": "b",
+              "text": "Get off at the Library stop and walk"
+            },
+            {
+              "id": "c",
+              "text": "Take a different bus line to campus"
+            },
+            {
+              "id": "d",
+              "text": "Ask the driver to stop near the construction area"
+            }
+          ],
+          "correct_option_id": "b",
+          "explanation": "B is correct because the Library stop is offered as the replacement. A is impossible, as the stop is cancelled. C and D describe options the announcement does not give."
+        },
+        {
+          "id": "q-112",
+          "number": 112,
+          "prompt": "What can be inferred about the East Gate stop?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It may be used again after the construction ends."
+            },
+            {
+              "id": "b",
+              "text": "It has been permanently removed from all maps."
+            },
+            {
+              "id": "c",
+              "text": "It was rarely served by the shuttle before."
+            },
+            {
+              "id": "d",
+              "text": "It will be replaced by a new station building."
+            }
+          ],
+          "correct_option_id": "a",
+          "explanation": "A is correct because the construction is described as lasting until December, which suggests a temporary change. B contradicts that time limit. C and D add information the text does not contain."
+        }
+      ],
+      "body": [
+        "Starting Monday, September 22, the campus shuttle will no longer stop at the East Gate. Riders heading to the science buildings should use the Library stop instead, which adds about four minutes of walking.",
+        "The change is being made because construction trucks will occupy the East Gate road until December. Updated route maps are posted at every shelter and inside each vehicle."
+      ]
+    },
+    {
+      "id": "rdl-05",
+      "number": 5,
+      "type": "announcement",
+      "instructions": "Read an announcement.",
+      "questions": [
+        {
+          "id": "q-113",
+          "number": 113,
+          "prompt": "What change will take place during the exam period?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The fitness center will close earlier than usual."
+            },
+            {
+              "id": "b",
+              "text": "Group classes will be held in a different hall."
+            },
+            {
+              "id": "c",
+              "text": "Group classes will not take place."
+            },
+            {
+              "id": "d",
+              "text": "Only students with exams may enter the center."
+            }
+          ],
+          "correct_option_id": "c",
+          "explanation": "C is correct because classes are cancelled for the two weeks. A reverses the facts, since the hours are longer. B is wrong: the hall is used for individual training, not for relocated classes. D adds a restriction the notice never mentions."
+        },
+        {
+          "id": "q-114",
+          "number": 114,
+          "prompt": "What happens to belongings left in a locker overnight?",
+          "options": [
+            {
+              "id": "a",
+              "text": "They are taken to lost and found."
+            },
+            {
+              "id": "b",
+              "text": "They are thrown away immediately."
+            },
+            {
+              "id": "c",
+              "text": "They are returned to the owner by email."
+            },
+            {
+              "id": "d",
+              "text": "They stay in the locker until June 15."
+            }
+          ],
+          "correct_option_id": "a",
+          "explanation": "A is stated directly in the notice. B is harsher than what the text says. C and D describe procedures that are not mentioned at all."
+        },
+        {
+          "id": "q-115",
+          "number": 115,
+          "prompt": "What can be inferred about the reason for the longer hours?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The center expects fewer visitors during exams."
+            },
+            {
+              "id": "b",
+              "text": "The center wants students to train at flexible times."
+            },
+            {
+              "id": "c",
+              "text": "The staff asked for additional working hours."
+            },
+            {
+              "id": "d",
+              "text": "The building will be renovated after June 15."
+            }
+          ],
+          "correct_option_id": "b",
+          "explanation": "B is correct because opening earlier and closing later during a busy academic period points to flexibility for students. A contradicts the purpose of extending hours. C and D introduce staffing and renovation issues that are never raised."
+        }
+      ],
+      "body": [
+        "During the final exam period, from June 3 to June 14, the university fitness center will open at 6:00 a.m. and close at midnight. Group classes are cancelled for these two weeks so that the main hall can be used for individual training.",
+        "Lockers must be emptied each night; items left behind will be moved to lost and found. Normal hours and class schedules return on June 15."
+      ]
+    },
+    {
+      "id": "rdl-06",
+      "number": 6,
+      "type": "text_chain",
+      "instructions": "Read a text chain.",
+      "questions": [
+        {
+          "id": "q-116",
+          "number": 116,
+          "prompt": "What is the main purpose of the messages?",
+          "options": [
+            {
+              "id": "a",
+              "text": "To choose a topic for a class project"
+            },
+            {
+              "id": "b",
+              "text": "To divide and check work on a presentation"
+            },
+            {
+              "id": "c",
+              "text": "To ask the professor for more time"
+            },
+            {
+              "id": "d",
+              "text": "To complain about the number of slides"
+            }
+          ],
+          "correct_option_id": "b",
+          "explanation": "B is correct because each member reports on a task and a remaining task is assigned. A is wrong, as the topic already exists. C is unsupported; no one contacts the professor. D misreads Tomas, who simply reports a limit."
+        },
+        {
+          "id": "q-117",
+          "number": 117,
+          "prompt": "According to the messages, who will check the sources page?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Nadia"
+            },
+            {
+              "id": "b",
+              "text": "Tomas"
+            },
+            {
+              "id": "c",
+              "text": "Ivy"
+            },
+            {
+              "id": "d",
+              "text": "The professor"
+            }
+          ],
+          "correct_option_id": "c",
+          "explanation": "C is correct because Ivy offers to do it after her lab. Nadia is writing the conclusion, Tomas prepared the introduction and graphs, and the professor is only mentioned as the source of the slide limit."
+        },
+        {
+          "id": "q-118",
+          "number": 118,
+          "prompt": "What can be inferred about the group's previous presentation?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It received a low grade."
+            },
+            {
+              "id": "b",
+              "text": "It was longer than the time allowed."
+            },
+            {
+              "id": "c",
+              "text": "It contained too few sources."
+            },
+            {
+              "id": "d",
+              "text": "It was presented by only one member."
+            }
+          ],
+          "correct_option_id": "b",
+          "explanation": "B is correct because Nadia says they ran over time last time. A, C and D describe problems the conversation never mentions."
+        }
+      ],
+      "messages": [
+        {
+          "sender": "Nadia Rahman",
+          "time": "4:02 P.M.",
+          "text": "Has anyone started the slides for Friday's presentation?"
+        },
+        {
+          "sender": "Tomas Vega",
+          "time": "4:05 P.M.",
+          "text": "I finished the introduction and the two graphs from the survey."
+        },
+        {
+          "sender": "Nadia Rahman",
+          "time": "4:07 P.M.",
+          "text": "Great. I'll write the conclusion tonight. Can someone check the sources page?"
+        },
+        {
+          "sender": "Ivy Chan",
+          "time": "4:09 P.M.",
+          "text": "I can do that after my lab, around seven."
+        },
+        {
+          "sender": "Tomas Vega",
+          "time": "4:11 P.M.",
+          "text": "One thing - the professor said eight slides maximum, so we may need to cut the second graph."
+        },
+        {
+          "sender": "Nadia Rahman",
+          "time": "4:13 P.M.",
+          "text": "Let's decide tomorrow when we see the full deck. Last time we ran over time."
+        }
+      ]
+    },
+    {
+      "id": "rdl-07",
+      "number": 7,
+      "type": "text_chain",
+      "instructions": "Read a text chain.",
+      "questions": [
+        {
+          "id": "q-119",
+          "number": 119,
+          "prompt": "What problem are the writers discussing?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A supplier has raised its prices."
+            },
+            {
+              "id": "b",
+              "text": "A delivery has not arrived."
+            },
+            {
+              "id": "c",
+              "text": "The coffee machine has stopped working."
+            },
+            {
+              "id": "d",
+              "text": "Too few staff are working this morning."
+            }
+          ],
+          "correct_option_id": "b",
+          "explanation": "B is correct because Omar opens by reporting the missing milk delivery. A, C and D are plausible café problems but none of them appears in the messages."
+        },
+        {
+          "id": "q-120",
+          "number": 120,
+          "prompt": "What will Peter do?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Call the supplier again"
+            },
+            {
+              "id": "b",
+              "text": "Buy milk from a local shop"
+            },
+            {
+              "id": "c",
+              "text": "Put up a sign for customers"
+            },
+            {
+              "id": "d",
+              "text": "Change the menu for the day"
+            }
+          ],
+          "correct_option_id": "b",
+          "explanation": "B is correct because Peter offers to drive to the shop on Ninth Street. Grace is calling the supplier and preparing the sign, and no one rewrites the menu."
+        },
+        {
+          "id": "q-121",
+          "number": 121,
+          "prompt": "What can be inferred about a similar situation in the past?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The café was not repaid for an emergency purchase."
+            },
+            {
+              "id": "b",
+              "text": "The supplier refused to deliver again."
+            },
+            {
+              "id": "c",
+              "text": "Customers complained about black coffee."
+            },
+            {
+              "id": "d",
+              "text": "The café closed early that day."
+            }
+          ],
+          "correct_option_id": "a",
+          "explanation": "A is correct because Grace asks Peter to keep the receipt, since last time the cost could not be claimed back. B, C and D go beyond what the messages support."
+        }
+      ],
+      "messages": [
+        {
+          "sender": "Omar Haddad",
+          "time": "7:40 A.M.",
+          "text": "The milk delivery didn't arrive this morning."
+        },
+        {
+          "sender": "Grace Lim",
+          "time": "7:43 A.M.",
+          "text": "I'll call the supplier. Do we have enough for the morning rush?"
+        },
+        {
+          "sender": "Omar Haddad",
+          "time": "7:45 A.M.",
+          "text": "Maybe two hours. After that we can only serve black coffee and tea."
+        },
+        {
+          "sender": "Grace Lim",
+          "time": "7:48 A.M.",
+          "text": "I'll put a small sign near the register so customers know before they order."
+        },
+        {
+          "sender": "Peter Novak",
+          "time": "7:50 A.M.",
+          "text": "I can drive to the shop on Ninth Street and buy some as a backup."
+        },
+        {
+          "sender": "Grace Lim",
+          "time": "7:52 A.M.",
+          "text": "Do that, but keep the receipt. Last time we couldn't claim the cost back."
+        }
+      ]
+    },
+    {
+      "id": "rdl-08",
+      "number": 8,
+      "type": "email",
+      "instructions": "Read an email.",
+      "questions": [
+        {
+          "id": "q-122",
+          "number": 122,
+          "prompt": "What makes an application incomplete?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Submitting the essay before the form"
+            },
+            {
+              "id": "b",
+              "text": "Missing any of the three required items"
+            },
+            {
+              "id": "c",
+              "text": "Applying in the final week before the deadline"
+            },
+            {
+              "id": "d",
+              "text": "Writing the essay about future employment"
+            }
+          ],
+          "correct_option_id": "b",
+          "explanation": "B is correct because the email lists three required parts and says incomplete files are not reviewed. A concerns order, which is never restricted. C is allowed, as the deadline is April 30. D misstates the essay topic without making the file incomplete."
+        },
+        {
+          "id": "q-123",
+          "number": 123,
+          "prompt": "When will applicants learn the result?",
+          "options": [
+            {
+              "id": "a",
+              "text": "On April 30"
+            },
+            {
+              "id": "b",
+              "text": "In mid-May"
+            },
+            {
+              "id": "c",
+              "text": "In early June"
+            },
+            {
+              "id": "d",
+              "text": "At the end of the academic year"
+            }
+          ],
+          "correct_option_id": "c",
+          "explanation": "C is correct because decisions are announced in the first week of June. A is the application deadline, not the result date. B and D do not appear in the message."
+        },
+        {
+          "id": "q-124",
+          "number": 124,
+          "prompt": "What can be inferred from the message?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Students should request their recommendation letter early."
+            },
+            {
+              "id": "b",
+              "text": "Most applicants are rejected for weak essays."
+            },
+            {
+              "id": "c",
+              "text": "The scholarship is offered twice each year."
+            },
+            {
+              "id": "d",
+              "text": "Letters may be sent by the student rather than the writer."
+            }
+          ],
+          "correct_option_id": "a",
+          "explanation": "A is correct because late letters cannot be added after the deadline, so asking early is the safe course. B, C and D state facts about rejection rates, frequency and procedure that the email does not provide."
+        }
+      ],
+      "subject": "Reminder - Merit Scholarship Applications Close Soon",
+      "body": [
+        "Dear Students,",
+        "Applications for the Faculty Merit Scholarship close on April 30. A complete application includes the online form, one letter of recommendation, and a short essay describing your academic goals.",
+        "Incomplete files will not be reviewed, and late letters cannot be added after the deadline. Award decisions will be announced in the first week of June.",
+        "Student Financial Services"
+      ]
+    },
+    {
+      "id": "rdl-09",
+      "number": 9,
+      "type": "email",
+      "instructions": "Read an email.",
+      "questions": [
+        {
+          "id": "q-125",
+          "number": 125,
+          "prompt": "What must residents arrange for the inspection?",
+          "options": [
+            {
+              "id": "a",
+              "text": "A written request for a specific time"
+            },
+            {
+              "id": "b",
+              "text": "An adult at home or a key left at the office"
+            },
+            {
+              "id": "c",
+              "text": "A payment before the technician arrives"
+            },
+            {
+              "id": "d",
+              "text": "A signed form returned to management"
+            }
+          ],
+          "correct_option_id": "b",
+          "explanation": "B is correct because those are the two options the email gives. A is wrong: residents cannot choose the time. C reverses the fee rule, which applies only to missed visits. D introduces a form that is never mentioned."
+        },
+        {
+          "id": "q-126",
+          "number": 126,
+          "prompt": "What happens to residents who are unavailable on all three days?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Their apartment is skipped entirely."
+            },
+            {
+              "id": "b",
+              "text": "The technician enters without permission."
+            },
+            {
+              "id": "c",
+              "text": "A later visit is arranged and may cost money."
+            },
+            {
+              "id": "d",
+              "text": "They must repair the system themselves."
+            }
+          ],
+          "correct_option_id": "c",
+          "explanation": "C is correct because the email promises a December appointment with a possible fee. A contradicts the plan to inspect every apartment. B and D describe actions the message never permits."
+        },
+        {
+          "id": "q-127",
+          "number": 127,
+          "prompt": "What can be inferred about the inspection?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It is required in every apartment, not optional."
+            },
+            {
+              "id": "b",
+              "text": "It is being carried out because of a recent breakdown."
+            },
+            {
+              "id": "c",
+              "text": "It will take most of the day in each apartment."
+            },
+            {
+              "id": "d",
+              "text": "It applies only to apartments on lower floors."
+            }
+          ],
+          "correct_option_id": "a",
+          "explanation": "A is correct because every apartment is included and missed visits are rescheduled rather than cancelled. B invents a cause. C contradicts the twenty-minute estimate. D adds a limit that is not stated."
+        }
+      ],
+      "subject": "Heating System Inspection",
+      "body": [
+        "Dear Residents,",
+        "A technician will inspect the heating system in every apartment between Tuesday, November 5, and Thursday, November 7. Visits will take place between 9:00 a.m. and 4:00 p.m., and each inspection takes about twenty minutes.",
+        "An adult must be present, or you may leave a key at the office. Residents who miss all three days will be scheduled in December, and a fee may apply.",
+        "Building Management"
+      ]
+    },
+    {
+      "id": "rdl-10",
+      "number": 10,
+      "type": "announcement",
+      "instructions": "Read an announcement.",
+      "questions": [
+        {
+          "id": "q-128",
+          "number": 128,
+          "prompt": "What is NOT included in the free evening?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Entry to the main collection"
+            },
+            {
+              "id": "b",
+              "text": "The exhibition on the third floor"
+            },
+            {
+              "id": "c",
+              "text": "Access to the building after 6:00 p.m."
+            },
+            {
+              "id": "d",
+              "text": "Tickets given at the door"
+            }
+          ],
+          "correct_option_id": "b",
+          "explanation": "B is correct because the third-floor exhibition requires a separate ticket. A is exactly what the free evening covers. C misreads the note about lines, which is advice rather than a restriction. D describes how free tickets are distributed."
+        },
+        {
+          "id": "q-129",
+          "number": 129,
+          "prompt": "How can a visitor obtain a free ticket?",
+          "options": [
+            {
+              "id": "a",
+              "text": "By booking online in advance"
+            },
+            {
+              "id": "b",
+              "text": "By joining a membership programme"
+            },
+            {
+              "id": "c",
+              "text": "By collecting one at the door on the evening"
+            },
+            {
+              "id": "d",
+              "text": "By showing a ticket from the special exhibition"
+            }
+          ],
+          "correct_option_id": "c",
+          "explanation": "C is correct because tickets are given at the door. A is directly ruled out by the announcement. B and D describe routes the museum does not offer here."
+        },
+        {
+          "id": "q-130",
+          "number": 130,
+          "prompt": "What can be inferred about these evenings?",
+          "options": [
+            {
+              "id": "a",
+              "text": "They are popular enough that some visitors may be turned away."
+            },
+            {
+              "id": "b",
+              "text": "They attract mainly school groups."
+            },
+            {
+              "id": "c",
+              "text": "They replace the museum's daytime opening hours."
+            },
+            {
+              "id": "d",
+              "text": "They were introduced because attendance was falling."
+            }
+          ],
+          "correct_option_id": "a",
+          "explanation": "A is correct because tickets stop when the building reaches capacity and lines form quickly. B, C and D add explanations about visitors, hours and motives that the text does not supply."
+        }
+      ],
+      "body": [
+        "The Riverside Museum now offers free entry on the first Thursday evening of each month, from 5:00 p.m. to 9:00 p.m. Tickets cannot be reserved in advance and are given at the door until the building reaches capacity.",
+        "The special exhibition on the third floor is not included and still requires a separate ticket. Visitors are encouraged to arrive early, as lines form quickly after six o'clock."
+      ]
+    },
+    {
+      "id": "rdl-11",
+      "number": 11,
+      "type": "text_chain",
+      "instructions": "Read a text chain.",
+      "questions": [
+        {
+          "id": "q-131",
+          "number": 131,
+          "prompt": "What is the main purpose of the messages?",
+          "options": [
+            {
+              "id": "a",
+              "text": "To choose which students to hire"
+            },
+            {
+              "id": "b",
+              "text": "To prepare materials for a job fair"
+            },
+            {
+              "id": "c",
+              "text": "To request a better booth location"
+            },
+            {
+              "id": "d",
+              "text": "To design a new company banner"
+            }
+          ],
+          "correct_option_id": "b",
+          "explanation": "B is correct because the group discusses brochures, a banner, a tablet and sign-up sheets for the event. A is not discussed. C is wrong, since Sofia is satisfied with booth 47. D confuses bringing the banner with designing one."
+        },
+        {
+          "id": "q-132",
+          "number": 132,
+          "prompt": "Why will the team also bring paper sign-up sheets?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Students prefer writing by hand."
+            },
+            {
+              "id": "b",
+              "text": "The tablet battery is too weak."
+            },
+            {
+              "id": "c",
+              "text": "The internet connection may fail."
+            },
+            {
+              "id": "d",
+              "text": "The company must keep printed records."
+            }
+          ],
+          "correct_option_id": "c",
+          "explanation": "C is correct because Sofia mentions unreliable wifi in the hall. A, B and D offer reasonable-sounding causes that the conversation never gives."
+        },
+        {
+          "id": "q-133",
+          "number": 133,
+          "prompt": "What can be inferred about last year's job fair?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The team brought fewer brochures than needed."
+            },
+            {
+              "id": "b",
+              "text": "The booth was placed far from the entrance."
+            },
+            {
+              "id": "c",
+              "text": "Few students visited the booth."
+            },
+            {
+              "id": "d",
+              "text": "The banner was damaged during the event."
+            }
+          ],
+          "correct_option_id": "a",
+          "explanation": "A is correct because the brochures ran out before lunch. B, C and D are contradicted or simply absent: the location is praised this year, demand was clearly high, and no damage is mentioned."
+        }
+      ],
+      "messages": [
+        {
+          "sender": "Sofia Marin",
+          "time": "10:02 A.M.",
+          "text": "Our booth number for the job fair is 47, near the main entrance."
+        },
+        {
+          "sender": "Daniel Osei",
+          "time": "10:04 A.M.",
+          "text": "Good spot. Should I print more brochures? We have about sixty."
+        },
+        {
+          "sender": "Sofia Marin",
+          "time": "10:06 A.M.",
+          "text": "Print another hundred. Last year we ran out before lunch."
+        },
+        {
+          "sender": "Lena Fischer",
+          "time": "10:08 A.M.",
+          "text": "I'll bring the banner and the tablet for collecting student emails."
+        },
+        {
+          "sender": "Daniel Osei",
+          "time": "10:10 A.M.",
+          "text": "Do we still need paper sign-up sheets as well?"
+        },
+        {
+          "sender": "Sofia Marin",
+          "time": "10:12 A.M.",
+          "text": "Yes, as a backup. The wifi in that hall is not reliable."
+        }
+      ]
+    },
+    {
+      "id": "rdl-12",
+      "number": 12,
+      "type": "email",
+      "instructions": "Read an email.",
+      "questions": [
+        {
+          "id": "q-134",
+          "number": 134,
+          "prompt": "What has changed about registration?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It must now be completed a week in advance."
+            },
+            {
+              "id": "b",
+              "text": "It is no longer required."
+            },
+            {
+              "id": "c",
+              "text": "It is limited to beginners."
+            },
+            {
+              "id": "d",
+              "text": "It has moved to a different website."
+            }
+          ],
+          "correct_option_id": "b",
+          "explanation": "B is correct because members no longer need to register. A reverses the change. C confuses registration with the beginner hour. D mentions a website the email never discusses."
+        },
+        {
+          "id": "q-135",
+          "number": 135,
+          "prompt": "Who will provide snacks under the new format?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The club budget"
+            },
+            {
+              "id": "b",
+              "text": "The university café"
+            },
+            {
+              "id": "c",
+              "text": "Members who volunteer"
+            },
+            {
+              "id": "d",
+              "text": "The committee only"
+            }
+          ],
+          "correct_option_id": "c",
+          "explanation": "C is correct because snacks now come from volunteers instead of the budget. A describes the old arrangement. B and D name providers that do not appear in the message."
+        },
+        {
+          "id": "q-136",
+          "number": 136,
+          "prompt": "What can be inferred about attending the meetings?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Arriving early may be wise because space is limited."
+            },
+            {
+              "id": "b",
+              "text": "Beginners are no longer welcome after October."
+            },
+            {
+              "id": "c",
+              "text": "The meetings will move to a larger room."
+            },
+            {
+              "id": "d",
+              "text": "Members must attend both hours."
+            }
+          ],
+          "correct_option_id": "a",
+          "explanation": "A is correct because registration has ended while the room still holds only thirty people. B contradicts the beginner hour. C and D describe arrangements the email does not mention."
+        }
+      ],
+      "subject": "Weekly Language Exchange - New Format",
+      "body": [
+        "Dear Members,",
+        "From October, our Wednesday meetings will follow a new format. The first hour will be reserved for beginners, and the second hour will be open to conversation at any level.",
+        "Members no longer need to register in advance, but the room holds only thirty people. Snacks will be provided by volunteers rather than the club budget, so please bring something to share when you can.",
+        "Warm regards,",
+        "The Club Committee"
+      ]
+    },
+    {
+      "id": "rdl-13",
+      "number": 13,
+      "type": "announcement",
+      "instructions": "Read an announcement.",
+      "questions": [
+        {
+          "id": "q-137",
+          "number": 137,
+          "prompt": "What will NOT change on January 1?",
+          "options": [
+            {
+              "id": "a",
+              "text": "The price of monthly passes"
+            },
+            {
+              "id": "b",
+              "text": "The price of single-ride tickets"
+            },
+            {
+              "id": "c",
+              "text": "The reduced rate for students"
+            },
+            {
+              "id": "d",
+              "text": "Both B and C"
+            }
+          ],
+          "correct_option_id": "d",
+          "explanation": "D is correct because single-ride tickets stay the same and the reduced rate continues. A is the one item that does change. B and C are each true but incomplete on their own."
+        },
+        {
+          "id": "q-138",
+          "number": 138,
+          "prompt": "What is true about a pass bought in December?",
+          "options": [
+            {
+              "id": "a",
+              "text": "It must be exchanged in January."
+            },
+            {
+              "id": "b",
+              "text": "It stays valid until it expires."
+            },
+            {
+              "id": "c",
+              "text": "It costs the new, higher price."
+            },
+            {
+              "id": "d",
+              "text": "It can only be used on weekdays."
+            }
+          ],
+          "correct_option_id": "b",
+          "explanation": "B is stated directly in the announcement. A contradicts that statement. C reverses the timing of the price change. D adds a restriction that never appears."
+        },
+        {
+          "id": "q-139",
+          "number": 139,
+          "prompt": "What can be inferred from the announcement?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Riders can save money by buying a pass in December."
+            },
+            {
+              "id": "b",
+              "text": "The transit app will stop working in January."
+            },
+            {
+              "id": "c",
+              "text": "Single-ride tickets will soon be removed."
+            },
+            {
+              "id": "d",
+              "text": "Station machines will be replaced."
+            }
+          ],
+          "correct_option_id": "a",
+          "explanation": "A is correct because December passes keep the current price and stay valid afterwards. B misreads the planned update as a shutdown. C and D predict changes the text does not announce."
+        }
+      ],
+      "body": [
+        "Beginning January 1, the price of a monthly transit pass will increase, while single-ride tickets will stay the same. Students and seniors will continue to receive a reduced rate.",
+        "Passes bought in December at the current price will remain valid until they expire. Riders can load passes at any station machine or through the transit app, which will be updated at the end of December."
+      ]
+    }
+  ]
+}

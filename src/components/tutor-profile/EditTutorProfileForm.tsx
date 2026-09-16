@@ -1,7 +1,7 @@
 import { useMemo, useState, type ChangeEvent, type FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { GraduationCap } from 'lucide-react'
 import { useAuth } from '../../auth/AuthContext'
+import BrandMark from '../shared/BrandMark'
 import { TUTOR_POSITIONS, type TutorPosition } from '../../types/tutorProfile'
 import { normalizeCertifications } from '../../utils/certifications'
 import {
@@ -9,6 +9,7 @@ import {
   type TutorEditProfileFormData,
 } from '../../utils/validation'
 import { errorClass, fieldClass, labelClass } from '../auth/formStyles'
+import { dashboardPathForRole } from '../../utils/authStorage'
 import CertificationUploadInput from '../tutor/CertificationUploadInput'
 import AvailabilitySettings from './AvailabilitySettings'
 import CreateSpeakingClubSessionForm from './CreateSpeakingClubSessionForm'
@@ -91,11 +92,11 @@ export default function EditTutorProfileForm() {
     <div className="landing-shell min-h-svh">
       <header className="border-b border-[#c7d7f5]/60 bg-white/70 backdrop-blur-xl">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 sm:px-6">
-          <Link to="/" className="inline-flex items-center gap-2.5">
-            <span className="flex h-9 w-9 items-center justify-center rounded-full bg-brand text-white">
-              <GraduationCap className="h-4 w-4" aria-hidden />
-            </span>
-            <span className="font-bold text-ink">Englishcore</span>
+          <Link
+            to={user ? dashboardPathForRole(user.role, user) : '/'}
+            className="text-ink"
+          >
+            <BrandMark />
           </Link>
         </div>
       </header>

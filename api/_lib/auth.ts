@@ -190,9 +190,16 @@ export async function getAuthenticatedUser(
   }
 }
 
+/** Skip data-URL avatars/certs — they can be megabytes and stall login. */
 export async function fetchAppUserById(id: string): Promise<AppUserRow | null> {
   const { rows } = await sql`
-    SELECT *
+    SELECT
+      id, email, password_hash, full_name, handle, role,
+      CASE WHEN avatar_url LIKE 'data:%' THEN NULL ELSE avatar_url END AS avatar_url,
+      is_public_profile, created_at, cefr_level, city, headline, summary,
+      xp, daily_streak, last_activity_date, placement_completed_at,
+      status, position, years_of_experience, about_me, hourly_rate_usd,
+      updated_at, referral_code, marketing_opt_in, is_suspended, email_unsubscribed
     FROM app_users
     WHERE id = ${id}
     LIMIT 1
@@ -205,7 +212,13 @@ export async function fetchAppUserByEmail(
 ): Promise<AppUserRow | null> {
   const normalized = email.trim().toLowerCase()
   const { rows } = await sql`
-    SELECT *
+    SELECT
+      id, email, password_hash, full_name, handle, role,
+      CASE WHEN avatar_url LIKE 'data:%' THEN NULL ELSE avatar_url END AS avatar_url,
+      is_public_profile, created_at, cefr_level, city, headline, summary,
+      xp, daily_streak, last_activity_date, placement_completed_at,
+      status, position, years_of_experience, about_me, hourly_rate_usd,
+      updated_at, referral_code, marketing_opt_in, is_suspended, email_unsubscribed
     FROM app_users
     WHERE lower(email) = ${normalized}
     LIMIT 1

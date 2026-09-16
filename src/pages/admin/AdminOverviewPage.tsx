@@ -99,9 +99,9 @@ export default function AdminOverviewPage() {
   return (
     <div>
       <h1 className={adminPageTitle}>Dashboard</h1>
-      <p className={`mt-1.5 ${adminMuted}`}>
-        Welcome back, admin@englishcore.com
-        <span className="ml-2 inline-flex rounded-full bg-zinc-100 px-2 py-0.5 text-[10px] font-semibold tracking-wide text-zinc-500 uppercase">
+      <p className={`mt-1.5 flex flex-wrap items-center gap-2 ${adminMuted}`}>
+        <span className="break-all">Welcome back, admin@englishcore.com</span>
+        <span className="inline-flex rounded-full bg-zinc-100 px-2 py-0.5 text-[10px] font-semibold tracking-wide text-zinc-500 uppercase">
           Super admin
         </span>
       </p>

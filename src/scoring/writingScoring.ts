@@ -1,4 +1,5 @@
-import type { WritingRubricScores, WritingTask } from '../components/writing/types'
+import type { WritingRubricScores } from '../components/writing/types'
+import { normalizeWritingAnswer } from '../components/writing/getRandomWritingSession'
 import type {
   WritingAiTaskType,
   WritingRubricScore,
@@ -17,7 +18,7 @@ Return JSON: { grammar, vocabulary, organization, coherence, feedback }
 `.trim()
 
 /**
- * Calls Vercel `/api/score-writing` (Claude). Requires ANTHROPIC_API_KEY on the server.
+ * Calls `/api/score-writing` (Gemini). Requires GEMINI_WRITING_API_KEY on the server.
  */
 export async function scoreWritingWithAI(
   taskType: WritingAiTaskType | string,
@@ -60,8 +61,8 @@ export function scoreBuildSentence(
   assembled: string[],
   correctSentence: string,
 ): number {
-  const user = assembled.join(' ').trim().toLowerCase().replace(/\s+/g, ' ')
-  const correct = correctSentence.trim().toLowerCase().replace(/\s+/g, ' ')
+  const user = normalizeWritingAnswer(assembled.join(' '))
+  const correct = normalizeWritingAnswer(correctSentence)
   if (!user) return 0
   if (user === correct) return 5
   // Partial credit: token overlap
@@ -112,14 +113,3 @@ export function wordCount(text: string): number {
   return text.trim() === '' ? 0 : text.trim().split(/\s+/).length
 }
 
-export function taskLabel(task: WritingTask): string {
-  if (task.type === 'build-sentence') return 'Build a Sentence'
-  if (task.type === 'write-email') return 'Write an Email'
-  const map: Record<string, string> = {
-    'opinion-essay': 'Academic Discussion · Opinion',
-    'two-views': 'Academic Discussion · Two Views',
-    'advantages-disadvantages': 'Academic Discussion · Pros & Cons',
-    'two-direct-questions': 'Academic Discussion · Two Questions',
-  }
-  return map[task.subtype ?? ''] ?? 'Academic Discussion'
-}

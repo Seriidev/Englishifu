@@ -98,7 +98,7 @@ export default function AdminSendMessagePage() {
 
   return (
     <div>
-      <h1 className="font-serif text-3xl font-semibold tracking-tight text-zinc-900">Send message</h1>
+      <h1 className="font-serif text-2xl font-semibold tracking-tight text-zinc-900 sm:text-3xl">Send message</h1>
       <p className="mt-1 text-sm text-slate-500">
         In-app notifications always go out. Emails (Resend) only go to users
         who opted in to marketing mail, and include an unsubscribe link.

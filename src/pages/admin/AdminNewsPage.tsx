@@ -58,7 +58,7 @@ export default function AdminNewsPage() {
 
   return (
     <div>
-      <h1 className="font-serif text-3xl font-semibold tracking-tight text-zinc-900">News</h1>
+      <h1 className="font-serif text-2xl font-semibold tracking-tight text-zinc-900 sm:text-3xl">News</h1>
       <p className="mt-1 text-sm text-slate-500">
         Markdown-friendly textarea. Published posts appear on the student
         dashboard.

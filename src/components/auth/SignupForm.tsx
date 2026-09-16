@@ -71,14 +71,6 @@ export default function SignupForm({ role }: SignupFormProps) {
           : 'Teach students and grow your tutoring presence.'
       }
     >
-      <button
-        type="button"
-        onClick={() => navigate('/start')}
-        className="mb-4 inline-flex items-center rounded-full border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-ink shadow-sm transition hover:bg-gray-50"
-      >
-        Back
-      </button>
-
       <form className="space-y-4" onSubmit={(e) => void onSubmit(e)} noValidate>
         <div>
           <label className={labelClass} htmlFor="signup-fullname">

@@ -4,9 +4,6 @@ import ReadingSection from '../reading/ReadingSection'
 import ListeningSection from '../listening/ListeningSection'
 import WritingSection from '../writing/WritingSection'
 import { SpeakingSection, mockSpeakingConfig } from '../../speaking'
-import { readingMockConfig } from '../../mocks/readingMock'
-import { listeningMockConfig } from '../../mocks/listeningMock'
-import { writingMockConfig } from '../../mocks/writingMock'
 import {
   buildFullTestResult,
   FULL_TEST_ORDER,
@@ -153,7 +150,6 @@ export default function FullTestOrchestrator() {
     return (
       <ReadingSection
         key="full-reading"
-        config={readingMockConfig}
         onExit={exitToHub}
         onComplete={handleSectionComplete}
       />
@@ -164,7 +160,6 @@ export default function FullTestOrchestrator() {
     return (
       <ListeningSection
         key="full-listening"
-        config={listeningMockConfig}
         onExit={exitToHub}
         onComplete={handleSectionComplete}
       />
@@ -185,7 +180,6 @@ export default function FullTestOrchestrator() {
   return (
     <WritingSection
       key="full-writing"
-      config={writingMockConfig}
       onExit={exitToHub}
       onComplete={handleSectionComplete}
     />

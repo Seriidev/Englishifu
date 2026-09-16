@@ -1,11 +1,12 @@
 import { useState, type MouseEvent } from 'react'
-import { GraduationCap, Menu, User, X } from 'lucide-react'
+import { Menu, User, X } from 'lucide-react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../auth/AuthContext'
 import { smoothScrollTo } from '../utils/scroll'
 import { useLanguage } from '../i18n/LanguageContext'
 import { LANG_OPTIONS, type LangCode } from '../i18n/dictionaries'
 import { dashboardPathForRole } from '../utils/authStorage'
+import BrandMark from './shared/BrandMark'
 
 const navKeys = [
   { key: 'nav.home', href: '#home', label: 'Home' },
@@ -142,13 +143,10 @@ export default function Navbar() {
           <a
             href="#home"
             onClick={(e) => handleNavClick(e, 'Home', '#home')}
-            className="flex shrink-0 items-center gap-2.5 pl-1"
+            className="flex shrink-0 items-center pl-1"
           >
-            <span className="flex h-9 w-9 items-center justify-center rounded-full bg-brand text-white sm:h-10 sm:w-10">
-              <GraduationCap className="h-5 w-5" aria-hidden />
-            </span>
-            <span className="text-base font-bold tracking-tight text-ink sm:text-lg">
-              Englishcore
+            <span className="text-base tracking-tight sm:text-lg">
+              <BrandMark />
             </span>
           </a>
 

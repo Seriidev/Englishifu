@@ -1,8 +1,8 @@
 import { useMemo, useState, type FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { GraduationCap } from 'lucide-react'
 import { useAuth } from '../../auth/AuthContext'
-import { studentPublicProfilePath } from '../../utils/authStorage'
+import { dashboardPathForRole, studentPublicProfilePath } from '../../utils/authStorage'
+import BrandMark from '../shared/BrandMark'
 import { listCountryNames, matchStoredCountry } from '../../utils/countries'
 import {
   hasEditProfileErrors,
@@ -14,8 +14,6 @@ import {
   fieldClass,
   labelClass,
 } from '../auth/formStyles'
-import ReferralWidget from '../study/ReferralWidget'
-
 export default function EditProfileForm() {
   const { user, updateStudent } = useAuth()
   const navigate = useNavigate()
@@ -92,11 +90,11 @@ export default function EditProfileForm() {
     <div className="landing-shell min-h-svh">
       <header className="border-b border-[#c7d7f5]/60 bg-white/70 backdrop-blur-xl">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 sm:px-6">
-          <Link to="/" className="inline-flex items-center gap-2.5">
-            <span className="flex h-9 w-9 items-center justify-center rounded-full bg-brand text-white">
-              <GraduationCap className="h-4 w-4" aria-hidden />
-            </span>
-            <span className="font-bold text-ink">Englishcore</span>
+          <Link
+            to={user ? dashboardPathForRole(user.role, user) : '/'}
+            className="text-ink"
+          >
+            <BrandMark />
           </Link>
         </div>
       </header>
@@ -230,9 +228,6 @@ export default function EditProfileForm() {
             {submitError ? <p className={errorClass}>{submitError}</p> : null}
           </div>
         </form>
-        <div className="mt-6">
-          <ReferralWidget />
-        </div>
       </main>
     </div>
   )

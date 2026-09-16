@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 import { applyCors, getAuthenticatedUser } from '../_lib/auth.js'
-import { grantTutorBoost } from '../_lib/studentXp.js'
+import { grantDailyBoost } from '../_lib/studentXp.js'
 import { dbUnavailableResponse, isDbConfigured } from '../_lib/db.js'
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -16,28 +16,16 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(401).json({ error: 'Unauthorized' })
   }
 
-  const body = (req.body ?? {}) as {
-    studentId?: string
-    kind?: string
-    bookingId?: number
-  }
+  const body = (req.body ?? {}) as { studentId?: string }
   const studentId = String(body.studentId ?? '').trim()
-  const kind = body.kind === 'lesson' ? 'lesson' : 'daily'
-  const bookingId =
-    kind === 'lesson' && Number.isInteger(Number(body.bookingId))
-      ? Number(body.bookingId)
-      : null
-
   if (!studentId) {
     return res.status(400).json({ error: 'studentId is required' })
   }
 
   try {
-    const result = await grantTutorBoost({
+    const result = await grantDailyBoost({
       tutorId: user.id,
       studentId,
-      kind,
-      bookingId,
     })
     if (!result.ok) {
       return res.status(409).json({ error: result.error })

@@ -76,6 +76,11 @@ const UTILITY: SidebarItem[] = [
     label: 'Settings',
     path: '/tutor/settings',
   },
+  {
+    icon: HiOutlineQuestionMarkCircle,
+    label: 'Help',
+    path: '/tutor/help',
+  },
 ]
 
 function isItemActive(item: SidebarItem, pathname: string) {
@@ -162,25 +167,12 @@ export default function TutorSidebar({
         />
 
         {renderGroup(UTILITY)}
-
-        <button
-          type="button"
-          title={collapsed ? 'Help' : undefined}
-          onClick={() => {
-            onNavigate?.()
-            window.open('mailto:support@englishcore.com', '_blank')
-          }}
-          className={itemClass(false, collapsed)}
-        >
-          <HiOutlineQuestionMarkCircle className="h-[22px] w-[22px] shrink-0" aria-hidden />
-          <span className={collapsed ? 'sr-only' : 'truncate'}>Help</span>
-        </button>
+        <ThemeToggle collapsed={collapsed} />
       </nav>
 
       <div
-        className={`shrink-0 pb-3 ${collapsed ? 'flex flex-col items-center gap-3 px-2' : 'space-y-3 px-4'}`}
+        className={`shrink-0 pb-3 ${collapsed ? 'flex flex-col items-center px-2' : 'px-4'}`}
       >
-        <ThemeToggle collapsed={collapsed} />
         <button
           type="button"
           title={collapsed ? 'Log out' : undefined}

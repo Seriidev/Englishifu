@@ -1,10 +1,5 @@
 import { Link, useLocation } from 'react-router-dom'
-import {
-  HiBookmark,
-  HiOutlineAcademicCap,
-  HiOutlineBookmark,
-  HiStar,
-} from 'react-icons/hi2'
+import { HiBookmark, HiOutlineBookmark, HiStar } from 'react-icons/hi2'
 import type { LibraryItem } from '../../../types/studyContent'
 import { libraryLevelLabel, libraryTopicLabel } from '../../../data/libraryMeta'
 
@@ -16,13 +11,23 @@ interface LibraryBookCardProps {
   onToggleSave: (id: string) => void
 }
 
-function coverUrl(item: LibraryItem) {
-  return item.coverImageUrl || ''
-}
-
 function readerPath(pathname: string, id: string) {
   const base = pathname.startsWith('/tutor') ? '/tutor' : '/study'
   return `${base}/library/${id}`
+}
+
+/** Stable display count until real reader analytics exist. */
+function displayReaders(id: string, rating: number) {
+  let hash = 0
+  for (let i = 0; i < id.length; i += 1) {
+    hash = (hash * 31 + id.charCodeAt(i)) >>> 0
+  }
+  return 40 + (hash % 260) + Math.round(rating * 18)
+}
+
+function truncateTitle(title: string, max = 22) {
+  if (title.length <= max) return title
+  return `${title.slice(0, max).trimEnd()}..`
 }
 
 export default function LibraryBookCard({
@@ -31,69 +36,84 @@ export default function LibraryBookCard({
   onToggleSave,
 }: LibraryBookCardProps) {
   const location = useLocation()
-  const headline = item.coverHeadline ?? item.title
-  const brand = item.coverBrand ?? item.author
   const rating = Number(item.rating || 0)
-  const href = item.pdfUrl ? readerPath(location.pathname, item.id) : undefined
+  const readers = displayReaders(item.id, rating)
+  const category = libraryTopicLabel(item.category)
+  const href =
+    item.hasPdf || item.pdfUrl
+      ? readerPath(location.pathname, item.id)
+      : undefined
+  const cover = item.coverImageUrl || ''
+  const coverHeadline = item.coverHeadline || item.title
 
   const body = (
     <>
-      <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-[12px] bg-white px-2.5 pt-2 pb-2">
-        <span className="mx-auto mb-1.5 flex h-7 w-7 items-center justify-center rounded-full bg-slate-100 text-[#0B151F]">
-          <HiOutlineAcademicCap className="h-4 w-4" aria-hidden />
-        </span>
-
-        <p className="line-clamp-2 bg-[#0B151F] px-2 py-1.5 text-center text-[10px] font-semibold leading-snug text-white">
-          {headline}
-        </p>
-
-        {item.coverSeries ? (
-          <p className="mt-1.5 text-center text-[10px] leading-tight text-slate-800">
-            {item.coverSeries}
-          </p>
-        ) : null}
-        {item.coverByline ? (
-          <p className="text-center text-[10px] font-bold text-[#0B151F]">
-            {item.coverByline}
-          </p>
-        ) : null}
-        <p className="mb-1.5 text-center text-[9px] text-slate-500">
-          By {brand}
-        </p>
-
-        {coverUrl(item) ? (
+      <div className="relative aspect-[3/4] w-full overflow-hidden rounded-2xl bg-slate-200 dark:bg-slate-700">
+        {cover ? (
           <img
-            src={coverUrl(item)}
+            src={cover}
             alt=""
-            className="h-24 w-full rounded-sm object-cover sm:h-28"
+            className="absolute inset-0 h-full w-full object-cover"
           />
         ) : (
-          <div className="flex h-24 items-center justify-center rounded-sm bg-slate-100 text-[10px] text-slate-400 sm:h-28">
-            No cover
+          <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-slate-300 to-slate-400 px-4 text-center text-sm font-medium text-white dark:from-slate-600 dark:to-slate-800">
+            {item.title}
           </div>
         )}
 
-        <p className="mt-1.5 flex items-center justify-center gap-1 text-[9px] font-semibold tracking-wide text-[#0B151F]">
-          <HiOutlineAcademicCap className="h-3 w-3" aria-hidden />
-          {brand}
-        </p>
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/55 via-black/20 to-transparent px-3 pb-4 pt-12">
+          <p className="text-center font-serif text-[15px] leading-snug text-white drop-shadow-sm sm:text-base">
+            {coverHeadline}
+          </p>
+        </div>
+
+        {rating >= 4.5 ? (
+          <span className="absolute left-0 top-3 rounded-r-full bg-[#F97316] px-2.5 py-1 text-[10px] font-semibold tracking-wide text-white shadow-sm">
+            Best Seller
+          </span>
+        ) : null}
       </div>
 
-      <h3 className="mt-3 line-clamp-2 min-h-[2.5rem] text-sm font-semibold leading-snug text-white">
-        {item.title}
-      </h3>
+      <div className="mt-3 space-y-1 px-0.5">
+        {rating > 0 ? (
+          <p className="flex items-center gap-1.5 text-[12px] text-slate-600 dark:text-slate-300">
+            <HiStar className="h-3.5 w-3.5 shrink-0 text-[#F97316]" aria-hidden />
+            <span className="font-medium text-slate-800 dark:text-slate-100">
+              {rating.toFixed(1)}
+            </span>
+            <span className="text-slate-400" aria-hidden>
+              •
+            </span>
+            <span className="text-slate-500 dark:text-slate-400">
+              {readers} readers
+            </span>
+          </p>
+        ) : (
+          <p className="text-[12px] text-slate-500 dark:text-slate-400">
+            {readers} readers
+          </p>
+        )}
 
-      {rating > 0 ? (
-        <p className="mt-1.5 flex items-center gap-1 text-[11px] font-medium text-amber-300">
-          <HiStar className="h-3.5 w-3.5" aria-hidden />
-          {rating.toFixed(1)}
+        <p className="text-[13px] font-bold text-[#7C3AED] dark:text-[#A78BFA]">
+          {category}
         </p>
-      ) : null}
+
+        <h3
+          className="line-clamp-2 text-[17px] font-bold leading-snug text-slate-900 dark:text-white"
+          title={item.title}
+        >
+          {truncateTitle(item.title)}
+        </h3>
+
+        <p className="text-[13px] text-slate-500 dark:text-slate-400">
+          {item.author}
+        </p>
+      </div>
     </>
   )
 
   return (
-    <article className="flex h-full flex-col rounded-[18px] bg-[#24476B] p-3">
+    <article className="group relative flex h-full flex-col rounded-[20px] bg-white p-2.5 shadow-sm ring-1 ring-slate-200/80 transition hover:shadow-md dark:bg-[#13293d] dark:ring-white/10">
       {href ? (
         <Link to={href} className="flex min-h-0 flex-1 flex-col">
           {body}
@@ -102,44 +122,25 @@ export default function LibraryBookCard({
         <div className="flex min-h-0 flex-1 flex-col">{body}</div>
       )}
 
-      <div className="mt-3 flex items-end justify-between gap-2">
-        <div className="flex min-w-0 flex-wrap gap-1.5">
-          <span className="rounded-full border border-white/90 px-2.5 py-0.5 text-[11px] font-medium text-white">
-            {libraryLevelLabel(item.level)}
-          </span>
-          <span className="rounded-full border border-white/90 px-2.5 py-0.5 text-[11px] font-medium text-white">
-            {libraryTopicLabel(item.category)}
-          </span>
-        </div>
-        <div className="flex items-center gap-1">
-          {href ? (
-            <Link
-              to={href}
-              className="rounded-full border border-white/80 px-2 py-0.5 text-[11px] font-semibold text-white hover:bg-white/10"
-            >
-              PDF
-            </Link>
+      <div className="mt-2 flex items-center justify-between gap-2 px-0.5">
+        <span className="rounded-full bg-slate-100 px-2.5 py-0.5 text-[11px] font-medium text-slate-600 dark:bg-white/10 dark:text-slate-300">
+          {libraryLevelLabel(item.level)}
+        </span>
+        <button
+          type="button"
+          onClick={() => onToggleSave(item.id)}
+          className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-slate-500 transition hover:bg-slate-100 hover:text-indigo-600 dark:text-slate-300 dark:hover:bg-white/10 dark:hover:text-indigo-300"
+          aria-label={
+            saved ? `Remove ${item.title} from My books` : `Save ${item.title}`
+          }
+          aria-pressed={saved}
+        >
+          {saved ? (
+            <HiBookmark className="h-5 w-5 text-indigo-600 dark:text-indigo-300" aria-hidden />
           ) : (
-            <span className="rounded-full border border-white/30 px-2 py-0.5 text-[11px] font-semibold text-white/40">
-              PDF
-            </span>
+            <HiOutlineBookmark className="h-5 w-5" aria-hidden />
           )}
-          <button
-            type="button"
-            onClick={() => onToggleSave(item.id)}
-            className="inline-flex h-8 w-8 shrink-0 items-center justify-center text-white transition hover:opacity-80"
-            aria-label={
-              saved ? `Remove ${item.title} from My books` : `Save ${item.title}`
-            }
-            aria-pressed={saved}
-          >
-            {saved ? (
-              <HiBookmark className="h-5 w-5" aria-hidden />
-            ) : (
-              <HiOutlineBookmark className="h-5 w-5" aria-hidden />
-            )}
-          </button>
-        </div>
+        </button>
       </div>
     </article>
   )

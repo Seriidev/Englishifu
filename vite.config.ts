@@ -4,9 +4,15 @@ import tailwindcss from '@tailwindcss/vite'
 import { vercelApiPlugin } from './vite-plugin-api.ts'
 
 export default defineConfig(({ mode }) => {
+  // loadEnv('', ...) copies all of process.env over .env files. A previous
+  // Neon URL then sticks across Vite restarts even after .env is edited.
+  delete process.env.POSTGRES_URL
+  delete process.env.POSTGRES_PRISMA_URL
+  delete process.env.DATABASE_URL
+
   const env = loadEnv(mode, process.cwd(), '')
   for (const [key, value] of Object.entries(env)) {
-    if (process.env[key] === undefined) process.env[key] = value
+    process.env[key] = value
   }
 
   return {
