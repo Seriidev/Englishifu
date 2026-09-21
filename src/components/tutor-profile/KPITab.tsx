@@ -13,7 +13,9 @@ const H = 320
 const PAD = { top: 24, right: 16, bottom: 36, left: 48 }
 
 function formatDayLabel(iso: string): string {
-  const d = new Date(`${iso}T12:00:00`)
+  const key = toDayKey(iso)
+  if (!key) return ''
+  const d = new Date(`${key}T12:00:00`)
   return d.toLocaleDateString('en-US', {
     month: 'short',
     day: '2-digit',
@@ -22,8 +24,17 @@ function formatDayLabel(iso: string): string {
 }
 
 function formatShort(iso: string): string {
-  const d = new Date(`${iso}T12:00:00`)
+  const key = toDayKey(iso)
+  if (!key) return ''
+  const d = new Date(`${key}T12:00:00`)
   return d.toLocaleDateString('en-US', { month: 'short', day: '2-digit' })
+}
+
+function toDayKey(iso: string): string {
+  if (/^\d{4}-\d{2}-\d{2}/.test(iso)) return iso.slice(0, 10)
+  const d = new Date(iso)
+  if (Number.isNaN(d.getTime())) return ''
+  return d.toISOString().slice(0, 10)
 }
 
 function formatValue(n: number): string {
@@ -154,7 +165,7 @@ export default function KPITab({
         {kpis.map((kpi) => (
           <div
             key={kpi.id}
-            className="rounded-2xl border border-gray-100 bg-white p-4 shadow-sm"
+            className="rounded-2xl bg-white p-4 shadow-sm"
           >
             <p className="text-xs font-semibold tracking-wide text-muted uppercase">
               {kpi.label}
@@ -171,7 +182,7 @@ export default function KPITab({
         ))}
       </div>
 
-      <div className="rounded-2xl border border-gray-100 bg-white p-4 shadow-sm sm:p-5">
+      <div className="rounded-2xl bg-white p-4 shadow-sm sm:p-5">
         <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
           <h3 className="text-sm font-bold text-ink">{chart.title}</h3>
           <div className="flex gap-3 text-xs text-muted">
@@ -217,14 +228,15 @@ export default function KPITab({
                     x2={W - PAD.right}
                     y1={y}
                     y2={y}
-                    stroke="#e2e8f0"
+                    stroke="currentColor"
                     strokeWidth={1}
+                    className="text-slate-200 dark:text-slate-600"
                   />
                   <text
                     x={PAD.left - 8}
                     y={y + 4}
                     textAnchor="end"
-                    className="fill-slate-400"
+                    className="fill-slate-400 dark:fill-slate-300"
                     fontSize={11}
                   >
                     {formatValue(tick)}
@@ -261,7 +273,7 @@ export default function KPITab({
                   x={primaryPts[i]?.x}
                   y={H - 12}
                   textAnchor="middle"
-                  className="fill-slate-400"
+                  className="fill-slate-400 dark:fill-slate-300"
                   fontSize={10}
                 >
                   {formatShort(p.date)}

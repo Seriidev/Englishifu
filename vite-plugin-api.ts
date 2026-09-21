@@ -62,6 +62,40 @@ function pathnameOf(url: string) {
   return q >= 0 ? url.slice(0, q) : url
 }
 
+const UPLOAD_TYPES: Record<string, string> = {
+  '.jpg': 'image/jpeg',
+  '.jpeg': 'image/jpeg',
+  '.png': 'image/png',
+  '.webp': 'image/webp',
+  '.gif': 'image/gif',
+  '.pdf': 'application/pdf',
+}
+
+function servePublicUpload(
+  pathname: string,
+  res: ServerResponse,
+): boolean {
+  if (!pathname.startsWith('/uploads/')) return false
+  const rel = decodeURIComponent(pathname.slice('/uploads/'.length))
+  if (!rel || rel.includes('..')) return false
+  const root = path.resolve(process.cwd(), 'public', 'uploads')
+  const file = path.resolve(root, rel)
+  const nested = path.relative(root, file)
+  if (!nested || nested.startsWith('..') || path.isAbsolute(nested)) return false
+  if (!fs.existsSync(file) || !fs.statSync(file).isFile()) {
+    res.statusCode = 404
+    res.setHeader('Content-Type', 'text/plain; charset=utf-8')
+    res.end('Not found')
+    return true
+  }
+  const ext = path.extname(file).toLowerCase()
+  res.statusCode = 200
+  res.setHeader('Content-Type', UPLOAD_TYPES[ext] || 'application/octet-stream')
+  res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate')
+  fs.createReadStream(file).pipe(res)
+  return true
+}
+
 function parseCookies(header: string | undefined): Record<string, string> {
   const out: Record<string, string> = {}
   if (!header) return out
@@ -219,7 +253,9 @@ export function vercelApiPlugin(): Plugin {
   ): Connect.NextHandleFunction => {
     return (req, res, next) => {
       const url = req.url || ''
-      if (!pathnameOf(url).startsWith('/api/')) {
+      const pathname = pathnameOf(url)
+      if (servePublicUpload(pathname, res)) return
+      if (!pathname.startsWith('/api/')) {
         next()
         return
       }

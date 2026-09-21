@@ -1,7 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 import { applyCors, getAuthenticatedUser } from '../../_lib/auth.js'
 import { dbUnavailableResponse, isDbConfigured, sql } from '../../_lib/db.js'
-import { loadLibraryPdf } from '../../_lib/saveLibraryPdf.js'
+import { loadLibraryPdf, persistLibraryPdfUrl } from '../../_lib/saveLibraryPdf.js'
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   applyCors(res)
@@ -33,9 +33,21 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(404).json({ error: 'This book has no PDF yet' })
     }
 
-    const loaded = await loadLibraryPdf(String(row.pdf_url))
+    let pdfUrl = String(row.pdf_url)
+    if (pdfUrl.startsWith('data:')) {
+      try {
+        pdfUrl = await persistLibraryPdfUrl(pdfUrl)
+        await sql`
+          UPDATE library_books SET pdf_url = ${pdfUrl}, updated_at = NOW()
+          WHERE id = ${id}
+        `
+      } catch (err) {
+        console.error('library-pdf persist:', err)
+      }
+    }
+
+    const loaded = await loadLibraryPdf(pdfUrl)
     if ('redirect' in loaded) {
-      // Never send readers to an external downloadable URL.
       return res.status(403).json({ error: 'This book cannot be opened here' })
     }
 

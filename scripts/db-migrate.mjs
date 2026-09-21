@@ -52,6 +52,9 @@ const files = [
   'sql/student_boosts.sql',
   'sql/teacher_messages.sql',
   'sql/speaking_club_requests.sql',
+  'sql/tutor_follows.sql',
+  'sql/assignments.sql',
+  'sql/transfer_indexes.sql',
 ]
 
 function sleep(ms) {

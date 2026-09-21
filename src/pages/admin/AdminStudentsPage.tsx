@@ -12,6 +12,8 @@ import { adminPageTitle } from './adminUi'
 
 export default function AdminStudentsPage() {
   const navigate = useNavigate()
+  const [page, setPage] = useState(1)
+  const [total, setTotal] = useState(0)
   const [q, setQ] = useState('')
   const [sort, setSort] = useState('xp')
   const [rows, setRows] = useState<AdminStudentRow[]>([])
@@ -23,7 +25,9 @@ export default function AdminStudentsPage() {
   const load = async () => {
     setError(null)
     try {
-      setRows(await fetchAdminStudents({ q, sort }))
+      const data = await fetchAdminStudents({ q, sort, page, limit: 20 })
+      setRows(data.students)
+      setTotal(data.total)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load')
     }
@@ -32,7 +36,7 @@ export default function AdminStudentsPage() {
   useEffect(() => {
     void load()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sort])
+  }, [sort, page])
 
   const chosen = useMemo(
     () => rows.filter((r) => selected[r.id]),
@@ -71,7 +75,10 @@ export default function AdminStudentsPage() {
         />
         <button
           type="button"
-          onClick={() => void load()}
+          onClick={() => {
+            setPage(1)
+            void load()
+          }}
           className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-semibold"
         >
           Search
@@ -252,6 +259,31 @@ export default function AdminStudentsPage() {
           </tbody>
         </table>
       </div>
+      {total > 20 ? (
+        <div className="mt-3 flex items-center justify-between text-sm text-slate-500">
+          <span>
+            Page {page} of {Math.max(1, Math.ceil(total / 20))} · {total} students
+          </span>
+          <div className="flex gap-2">
+            <button
+              type="button"
+              className="rounded-lg border border-slate-200 px-3 py-1 disabled:opacity-40"
+              disabled={page <= 1}
+              onClick={() => setPage((p) => Math.max(1, p - 1))}
+            >
+              Previous
+            </button>
+            <button
+              type="button"
+              className="rounded-lg border border-slate-200 px-3 py-1 disabled:opacity-40"
+              disabled={page >= Math.ceil(total / 20)}
+              onClick={() => setPage((p) => p + 1)}
+            >
+              Next
+            </button>
+          </div>
+        </div>
+      ) : null}
     </div>
   )
 }

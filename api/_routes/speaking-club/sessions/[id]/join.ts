@@ -32,7 +32,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     `
 
     const sessionResult = await sql`
-      SELECT * FROM speaking_club_sessions WHERE id = ${id} LIMIT 1
+      SELECT id, title, starts_at, max_participants, meeting_link
+      FROM speaking_club_sessions WHERE id = ${id} LIMIT 1
     `
     const session = sessionResult.rows[0] as
       | {

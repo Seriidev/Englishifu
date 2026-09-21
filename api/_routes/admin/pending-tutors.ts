@@ -1,7 +1,10 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 import { applyCors } from '../../_lib/auth.js'
 import { verifyAdminSession } from '../../_lib/adminAuth.js'
+import { persistUserRowMedia } from '../../_lib/persistMedia.js'
+import { persistIfDataUrl, publicMediaUrl } from '../../_lib/saveMedia.js'
 import { dbUnavailableResponse, isDbConfigured, sql } from '../../_lib/db.js'
+import type { AppUserRow } from '../../_lib/userMapper.js'
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   applyCors(res)
@@ -72,8 +75,32 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           OR (${status} = 'all')
         )
       ORDER BY u.updated_at ASC NULLS LAST, u.created_at ASC
+      LIMIT 20
     `
-    return res.status(200).json({ tutors: rows })
+    const tutors = []
+    for (const row of rows) {
+      const persisted = await persistUserRowMedia(row as AppUserRow)
+      let resumeUrl = persisted.resume_url ?? (row.resume_url as string | null)
+      if (typeof resumeUrl === 'string' && resumeUrl.startsWith('data:')) {
+        try {
+          resumeUrl = await persistIfDataUrl(resumeUrl, 'resumes')
+          await sql`
+            UPDATE app_users SET resume_url = ${resumeUrl}, updated_at = NOW()
+            WHERE id = ${persisted.id}
+          `
+        } catch (err) {
+          console.error('pending resume persist:', err)
+        }
+      }
+      tutors.push({
+        ...row,
+        ...persisted,
+        avatar_url: publicMediaUrl(persisted.avatar_url),
+        resume_url: publicMediaUrl(resumeUrl),
+        certifications: persisted.certifications,
+      })
+    }
+    return res.status(200).json({ tutors })
   } catch (err) {
     console.error('pending-tutors:', err)
     return res.status(500).json({ error: 'Failed to load pending tutors' })

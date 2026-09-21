@@ -8,7 +8,7 @@ interface StatCardProps {
 
 export default function StatCard({ icon: Icon, value, label }: StatCardProps) {
   return (
-    <div className="rounded-2xl border border-gray-100 bg-white p-4 shadow-sm">
+    <div className="rounded-2xl bg-white p-4 shadow-sm">
       <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-light text-brand">
         <Icon className="h-5 w-5" aria-hidden />
       </div>

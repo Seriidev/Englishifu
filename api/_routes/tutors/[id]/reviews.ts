@@ -1,6 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 import { applyCors } from '../../../_lib/auth.js'
 import { dbUnavailableResponse, isDbConfigured, sql } from '../../../_lib/db.js'
+import { publicMediaUrl } from '../../../_lib/saveMedia.js'
 
 function pathSegment(req: VercelRequest): string {
   const raw = req.query.id ?? req.query.handle
@@ -52,7 +53,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       JOIN app_users u ON u.id = r.student_id
       WHERE r.tutor_id = ${tutorId}
       ORDER BY r.created_at DESC
+      LIMIT 20
     `
+
+    for (const row of rows) {
+      row.student_avatar = publicMediaUrl(row.student_avatar)
+    }
 
     const avgRating =
       rows.length > 0

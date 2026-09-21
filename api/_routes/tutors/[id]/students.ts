@@ -1,6 +1,8 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 import { applyCors, getAuthenticatedUser } from '../../../_lib/auth.js'
 import { dbUnavailableResponse, isDbConfigured, sql } from '../../../_lib/db.js'
+import { persistAvatarOnRows } from '../../../_lib/persistMedia.js'
+import { publicMediaUrl } from '../../../_lib/saveMedia.js'
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   applyCors(res)
@@ -73,12 +75,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           )
         )
       ORDER BY u.full_name ASC
+      LIMIT 20
     `
 
+    await persistAvatarOnRows(rows)
     const students = rows.map((r) => ({
       id: String(r.id),
       fullName: String(r.full_name),
-      avatarUrl: r.avatar_url ? String(r.avatar_url) : undefined,
+      avatarUrl: publicMediaUrl(r.avatar_url) ?? undefined,
       handle: String(r.handle),
       cefrLevel: r.cefr_level ? String(r.cefr_level) : undefined,
       xp: Number(r.xp) || 0,

@@ -7,8 +7,8 @@ import {
   HiOutlineBookOpen,
   HiOutlineChartBarSquare,
   HiOutlineCheckBadge,
+  HiOutlineClipboardDocumentCheck,
   HiOutlineClipboardDocumentList,
-  HiOutlineCog6Tooth,
   HiOutlineEllipsisHorizontal,
   HiOutlineHome,
   HiOutlineLanguage,
@@ -64,6 +64,12 @@ const PRIMARY: SidebarItem[] = [
     label: 'Essay',
     path: '/study/essay',
     match: (p) => p.startsWith('/study/essay'),
+  },
+  {
+    icon: HiOutlineClipboardDocumentCheck,
+    label: 'Homework',
+    path: '/study/homework',
+    match: (p) => p.startsWith('/study/homework'),
   },
   {
     icon: HiOutlineLanguage,
@@ -284,15 +290,6 @@ export default function StudySidebar({
               >
                 <HiOutlineUser className="h-4 w-4 shrink-0" aria-hidden />
                 View profile
-              </button>
-              <button
-                type="button"
-                role="menuitem"
-                onClick={() => go('/study/settings')}
-                className="flex w-full items-center gap-3 px-3 py-2 text-left text-sm hover:bg-slate-50"
-              >
-                <HiOutlineCog6Tooth className="h-4 w-4 shrink-0" aria-hidden />
-                Settings
               </button>
               <button
                 type="button"

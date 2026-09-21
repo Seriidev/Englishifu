@@ -8,6 +8,8 @@ export type NotificationType =
   | 'speaking_club_reminder'
   | 'booking_reminder'
   | 'xp_boost'
+  | 'homework'
+  | 'admin_task'
 
 export async function createNotification(params: {
   userId: string

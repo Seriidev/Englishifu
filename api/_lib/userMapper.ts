@@ -1,3 +1,5 @@
+import { publicMediaUrl } from './saveMedia.js'
+
 export type CefrLevel = 'A1' | 'A2' | 'B1' | 'B2' | 'C1' | 'C2'
 export const TUTOR_POSITIONS = [
   'Teacher',
@@ -113,11 +115,13 @@ function parseCertifications(raw: unknown): TutorCertification[] {
       id: typeof c.id === 'string' ? c.id : `cert-${index}`,
       name: typeof c.name === 'string' ? c.name : 'Certificate',
       imageUrl:
-        typeof c.imageUrl === 'string'
-          ? c.imageUrl
-          : typeof c.image_url === 'string'
-            ? c.image_url
-            : undefined,
+        publicMediaUrl(
+          typeof c.imageUrl === 'string'
+            ? c.imageUrl
+            : typeof c.image_url === 'string'
+              ? c.image_url
+              : undefined,
+        ) ?? undefined,
       uploadedAt:
         typeof c.uploadedAt === 'string'
           ? c.uploadedAt
@@ -139,7 +143,7 @@ export function rowToPublicUser(row: AppUserRow): PublicUserDto {
     email: row.email,
     handle: row.handle,
     createdAt,
-    avatarUrl: row.avatar_url || undefined,
+    avatarUrl: publicMediaUrl(row.avatar_url) || undefined,
     isPublicProfile: row.is_public_profile !== false,
   }
 

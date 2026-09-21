@@ -14,35 +14,6 @@ interface WelcomeBannerProps {
   slides: WelcomeBannerSlide[]
 }
 
-function BannerDecor() {
-  return (
-    <div
-      className="pointer-events-none absolute inset-y-0 right-0 hidden w-[46%] overflow-hidden sm:block"
-      aria-hidden
-    >
-      <span className="absolute top-8 right-28 h-11 w-11 rounded-full bg-indigo-500 shadow-[0_8px_20px_rgba(99,102,241,0.35)]" />
-      <span className="absolute top-20 right-10 h-16 w-12 rotate-[18deg] rounded-lg bg-white/95 shadow-lg">
-        <span className="absolute top-3 left-2 right-2 h-1 rounded-full bg-indigo-950/30" />
-        <span className="absolute top-6 left-2 right-3 h-1 rounded-full bg-indigo-950/20" />
-        <span className="absolute top-9 left-2 right-4 h-1 rounded-full bg-indigo-950/20" />
-      </span>
-      <svg
-        viewBox="0 0 120 90"
-        className="absolute right-8 bottom-8 h-28 w-36 drop-shadow-xl"
-      >
-        <path
-          d="M8 38 L60 14 L112 38 L60 62 Z"
-          fill="#f8fafc"
-        />
-        <rect x="52" y="38" width="16" height="28" rx="2" fill="#e2e8f0" />
-        <path d="M68 66 Q92 58 96 40" fill="none" stroke="#facc15" strokeWidth="5" strokeLinecap="round" />
-        <circle cx="96" cy="38" r="5" fill="#facc15" />
-        <path d="M8 38 L60 50 L112 38 L60 62 Z" fill="#e2e8f0" />
-      </svg>
-    </div>
-  )
-}
-
 export default function WelcomeBanner({ firstName, slides }: WelcomeBannerProps) {
   const count = slides.length
   const [index, setIndex] = useState(1)
@@ -118,8 +89,6 @@ export default function WelcomeBanner({ firstName, slides }: WelcomeBannerProps)
         hovering.current = false
       }}
     >
-      {slides[realIndex]?.imageUrl ? null : <BannerDecor />}
-
       <div className="min-w-0 overflow-hidden">
         <div
           className={`flex w-full ${animate ? 'transition-transform duration-500 ease-out' : ''}`}

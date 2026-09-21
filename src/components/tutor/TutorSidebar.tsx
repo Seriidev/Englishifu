@@ -7,8 +7,8 @@ import {
   HiOutlineBookOpen,
   HiOutlineCalendarDays,
   HiOutlineChartBarSquare,
+  HiOutlineClipboardDocumentList,
   HiOutlineCheckBadge,
-  HiOutlineCog6Tooth,
   HiOutlineLanguage,
   HiOutlineQuestionMarkCircle,
   HiOutlineUser,
@@ -55,6 +55,11 @@ const PRIMARY: SidebarItem[] = [
     label: 'Bookings',
     path: '/tutor/bookings',
   },
+  {
+    icon: HiOutlineClipboardDocumentList,
+    label: 'Tasks',
+    path: '/tutor/tasks',
+  },
   { icon: HiOutlineChartBarSquare, label: 'KPI', path: '/tutor/kpi' },
   {
     icon: HiOutlineCheckBadge,
@@ -71,11 +76,6 @@ const PRIMARY: SidebarItem[] = [
 ]
 
 const UTILITY: SidebarItem[] = [
-  {
-    icon: HiOutlineCog6Tooth,
-    label: 'Settings',
-    path: '/tutor/settings',
-  },
   {
     icon: HiOutlineQuestionMarkCircle,
     label: 'Help',

@@ -166,3 +166,56 @@ export async function grantLessonXp(input: {
     WHERE id = ${input.studentId} AND role = 'student'
   `
 }
+
+export async function grantDueLessonXp(filter: {
+  tutorId?: string
+  studentId?: string
+}): Promise<void> {
+  const tutorId = filter.tutorId ?? null
+  const studentId = filter.studentId ?? null
+  await sql`
+    UPDATE bookings
+    SET status = 'completed'
+    WHERE status = 'confirmed'
+      AND end_at < NOW()
+      AND (
+        (${tutorId}::text IS NOT NULL AND tutor_id = ${tutorId})
+        OR (${studentId}::text IS NOT NULL AND student_id = ${studentId})
+      )
+  `
+  const inserted = await sql`
+    INSERT INTO student_boosts (
+      tutor_id, student_id, kind, booking_id, xp_awarded, boost_day
+    )
+    SELECT
+      b.tutor_id,
+      b.student_id,
+      ${'lesson'},
+      b.id,
+      ${LESSON_XP},
+      (CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Ashgabat')::date
+    FROM bookings b
+    WHERE b.status = 'completed'
+      AND (
+        (${tutorId}::text IS NOT NULL AND b.tutor_id = ${tutorId})
+        OR (${studentId}::text IS NOT NULL AND b.student_id = ${studentId})
+      )
+      AND NOT EXISTS (
+        SELECT 1 FROM student_boosts sb
+        WHERE sb.booking_id = b.id AND sb.kind = 'lesson'
+      )
+    RETURNING student_id
+  `
+  const counts = new Map<string, number>()
+  for (const row of inserted.rows) {
+    const id = String(row.student_id)
+    counts.set(id, (counts.get(id) || 0) + 1)
+  }
+  for (const [id, n] of counts) {
+    await sql`
+      UPDATE app_users
+      SET xp = COALESCE(xp, 0) + ${n * LESSON_XP}, updated_at = NOW()
+      WHERE id = ${id} AND role = 'student'
+    `
+  }
+}

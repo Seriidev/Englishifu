@@ -16,8 +16,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method === 'GET') {
     try {
       const { rows } = await sql`
-        SELECT * FROM news_posts
+        SELECT
+          id, title, body, cover_image_url, is_published, published_at, created_at
+        FROM news_posts
         ORDER BY created_at DESC
+        LIMIT 50
       `
       return res.status(200).json({ posts: rows })
     } catch (err) {

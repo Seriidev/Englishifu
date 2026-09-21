@@ -26,6 +26,8 @@ function authHeaders(): HeadersInit {
 }
 
 export async function ensureApiSession(user: PublicUser) {
+  const existing = getApiToken()
+  if (existing) return existing
   const res = await fetch('/api/auth/session', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -36,7 +38,6 @@ export async function ensureApiSession(user: PublicUser) {
       handle: user.handle,
       fullName: user.fullName,
       email: user.email,
-      avatarUrl: user.avatarUrl ?? null,
     }),
   })
   if (!res.ok) {
@@ -83,8 +84,50 @@ export async function fetchTutorReviews(
   return res.json() as Promise<TutorReviewsResponse>
 }
 
-export async function fetchApprovedTutors(): Promise<TutorListingCard[]> {
-  const res = await fetch('/api/tutors')
+export interface TutorProfileStats {
+  classesCount: number
+  studentsCount: number
+  speakingClubSessions: number
+  followersCount: number
+  kpi: string
+  following: boolean
+}
+
+export async function fetchTutorProfileStats(
+  tutorId: string,
+): Promise<TutorProfileStats> {
+  const res = await fetch(
+    `/api/tutors/${encodeURIComponent(tutorId)}/stats`,
+    { headers: authHeaders() },
+  )
+  if (!res.ok) throw new Error(await parseError(res))
+  return res.json() as Promise<TutorProfileStats>
+}
+
+export async function setTutorFollow(
+  tutorId: string,
+  follow: boolean,
+): Promise<TutorProfileStats> {
+  const res = await fetch(
+    `/api/tutors/${encodeURIComponent(tutorId)}/follow`,
+    {
+      method: follow ? 'POST' : 'DELETE',
+      headers: authHeaders(),
+    },
+  )
+  if (!res.ok) throw new Error(await parseError(res))
+  return res.json() as Promise<TutorProfileStats>
+}
+
+export async function fetchApprovedTutors(opts?: {
+  limit?: number
+  handle?: string
+}): Promise<TutorListingCard[]> {
+  const qs = new URLSearchParams()
+  if (opts?.limit) qs.set('limit', String(opts.limit))
+  if (opts?.handle) qs.set('handle', opts.handle)
+  const suffix = qs.toString() ? `?${qs}` : ''
+  const res = await fetch(`/api/tutors${suffix}`)
   if (!res.ok) throw new Error(await parseError(res))
   const data = (await res.json()) as { tutors?: TutorListingCard[] }
   return Array.isArray(data.tutors) ? data.tutors : []

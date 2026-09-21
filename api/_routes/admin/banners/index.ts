@@ -16,8 +16,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method === 'GET') {
     try {
       const { rows } = await sql`
-        SELECT * FROM marketing_banners
+        SELECT
+          id, title, subtitle, image_url, cta_label, cta_link,
+          background_color, is_active, display_order, starts_at, ends_at, created_at
+        FROM marketing_banners
         ORDER BY display_order ASC, id ASC
+        LIMIT 50
       `
       return res.status(200).json({ banners: rows })
     } catch (err) {

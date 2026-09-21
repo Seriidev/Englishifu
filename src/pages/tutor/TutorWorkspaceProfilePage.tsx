@@ -30,9 +30,10 @@ function RequiredMark() {
 }
 
 export default function TutorWorkspaceProfilePage() {
-  const { user, updateTutor, refreshUser } = useAuth()
+  const { user, updateTutor, updateAvatar, refreshUser } = useAuth()
   const { tutor, profile } = useOwnTutorProfile()
   const [avatarError, setAvatarError] = useState<string | null>(null)
+  const [avatarSaving, setAvatarSaving] = useState(false)
   const [avgRating, setAvgRating] = useState(profile?.averageRating ?? 0)
   const [totalReviews, setTotalReviews] = useState(profile?.reviewsCount ?? 0)
 
@@ -113,22 +114,15 @@ export default function TutorWorkspaceProfilePage() {
 
   const onAvatarChange = async (file: File) => {
     setAvatarError(null)
+    setAvatarSaving(true)
     try {
       const nextAvatar = await fileToAvatarDataUrl(file)
-      const result = await updateTutor({
-        fullName: tutor.fullName,
-        handle: tutor.handle,
-        position: tutor.position ?? 'Teacher',
-        aboutMe: tutor.aboutMe,
-        yearsOfExperience: tutor.yearsOfExperience,
-        hourlyRateUsd: tutor.hourlyRateUsd,
-        avatarUrl: nextAvatar,
-        isPublicProfile: tutor.isPublicProfile,
-        certifications: tutor.certifications,
-      })
+      const result = await updateAvatar(nextAvatar)
       if (!result.ok) setAvatarError(result.error)
     } catch (err) {
       setAvatarError(err instanceof Error ? err.message : 'Upload failed')
+    } finally {
+      setAvatarSaving(false)
     }
   }
 
@@ -150,7 +144,6 @@ export default function TutorWorkspaceProfilePage() {
       yearsOfExperience: Number(form.yearsOfExperience),
       hourlyRateUsd: Number(form.hourlyRateUsd),
       aboutMe: form.aboutMe?.trim(),
-      avatarUrl: tutor.avatarUrl,
       isPublicProfile: tutor.isPublicProfile,
       certifications: form.certifications,
     })
@@ -178,9 +171,10 @@ export default function TutorWorkspaceProfilePage() {
         <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
           <div className="flex min-w-0 flex-1 gap-4 sm:gap-5">
             <AvatarUpload
-              currentAvatarUrl={tutor.avatarUrl ?? profile?.avatarUrl}
+              currentAvatarUrl={tutor.avatarUrl}
               onAvatarChange={(file) => void onAvatarChange(file)}
               editable
+              uploading={avatarSaving}
               displayName={form.fullName || tutor.fullName}
               size="lg"
             />
@@ -223,7 +217,11 @@ export default function TutorWorkspaceProfilePage() {
                 <p className="mt-2 text-xs font-medium text-red-600">
                   {avatarError}
                 </p>
-              ) : null}
+              ) : (
+                <p className="mt-2 text-xs text-slate-400">
+                  Click the photo to upload a profile picture
+                </p>
+              )}
               {tutor.status === 'pending' ? (
                 <p className="mt-2 text-xs font-medium text-amber-600">
                   Resume sent — waiting for admin approval.
@@ -250,7 +248,7 @@ export default function TutorWorkspaceProfilePage() {
         </div>
       </section>
 
-      <section className="rounded-2xl border border-gray-200 bg-white p-5 sm:p-6">
+      <section className="rounded-2xl border border-slate-200 bg-white p-5 sm:p-6">
         <div className="grid gap-8 lg:grid-cols-2">
           <form
             id="tutor-profile-form"

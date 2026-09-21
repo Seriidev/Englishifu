@@ -75,11 +75,11 @@ export default function CreateSpeakingClubSessionForm({
   }
 
   return (
-    <div className="rounded-2xl border border-indigo-100 bg-indigo-50/50 p-4">
+    <div className="h-full rounded-2xl border border-slate-200 bg-white p-4 sm:p-5">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div>
-          <p className="text-sm font-bold text-indigo-900">Host a session</p>
-          <p className="text-xs text-indigo-700/80">
+          <p className="text-sm font-bold text-slate-900">Host a session</p>
+          <p className="text-xs text-slate-500">
             Add a Meet link once — students join and get the link instantly.
           </p>
         </div>

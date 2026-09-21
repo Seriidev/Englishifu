@@ -1,6 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { applyCors, getAuthenticatedUser } from '../../_lib/auth.js'
-import { dbUnavailableResponse, isDbConfigured, sql } from '../../_lib/db.js'
+import { applyCors, fetchAppUserById, getAuthenticatedUser } from '../../_lib/auth.js'
+import { dbUnavailableResponse, isDbConfigured } from '../../_lib/db.js'
+import { publicMediaUrl } from '../../_lib/saveMedia.js'
 
 /** Current tutor row from Postgres (status sync for localStorage clients). */
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -18,17 +19,24 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    const { rows } = await sql`
-      SELECT id, handle, status, full_name, position, years_of_experience,
-             about_me, hourly_rate_usd, avatar_url, certifications
-      FROM app_users
-      WHERE id = ${user.id} AND role = 'tutor'
-      LIMIT 1
-    `
-    if (rows.length === 0) {
+    const row = await fetchAppUserById(user.id)
+    if (!row || row.role !== 'tutor') {
       return res.status(404).json({ error: 'Tutor not synced yet' })
     }
-    return res.status(200).json({ tutor: rows[0] })
+    return res.status(200).json({
+      tutor: {
+        id: row.id,
+        handle: row.handle,
+        status: row.status,
+        full_name: row.full_name,
+        position: row.position,
+        years_of_experience: row.years_of_experience,
+        about_me: row.about_me,
+        hourly_rate_usd: row.hourly_rate_usd,
+        avatar_url: publicMediaUrl(row.avatar_url),
+        certifications: row.certifications,
+      },
+    })
   } catch (err) {
     console.error('GET tutors/me:', err)
     return res.status(500).json({ error: 'Failed to load tutor' })

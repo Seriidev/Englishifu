@@ -304,6 +304,22 @@ export async function updateTutorProfile(
   }
 }
 
+export async function updateOwnAvatar(
+  avatarUrl: string,
+): Promise<{ user: PublicUser } | { error: string }> {
+  try {
+    const res = await authFetch('/api/auth/me', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ action: 'updateAvatar', avatarUrl }),
+    })
+    return readAuthResponse(res)
+  } catch {
+    return { error: 'Could not save profile photo' }
+  }
+}
+
 export async function resetPassword(
   email: string,
   password: string,

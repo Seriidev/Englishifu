@@ -2,6 +2,8 @@ import { createHmac, randomUUID, timingSafeEqual } from 'crypto'
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 import jwt from 'jsonwebtoken'
 import { sql } from './db.js'
+import { persistUserRowMedia } from './persistMedia.js'
+import { isDataUrl } from './saveMedia.js'
 import {
   rowToPublicUser,
   type AppUserRow,
@@ -172,71 +174,112 @@ export function clearSessionCookie(res: VercelResponse) {
   res.setHeader('Set-Cookie', parts.join('; '))
 }
 
+export function readUserIdFromRequest(req: VercelRequest): string | null {
+  const token = getSessionCookie(req) || getBearerToken(req)
+  if (!token) return null
+  return readUserIdFromToken(token) || readUserIdFromLegacyHmac(token)
+}
+
 export async function getAuthenticatedUser(
   req: VercelRequest,
 ): Promise<AuthUser | null> {
-  const token = getSessionCookie(req) || getBearerToken(req)
-  if (!token) return null
-  const userId =
-    readUserIdFromToken(token) || readUserIdFromLegacyHmac(token)
+  const userId = readUserIdFromRequest(req)
   if (!userId) return null
   try {
-    const row = await fetchAppUserById(userId)
-    if (!row) return null
-    if (row.is_suspended) return null
-    return authUserFromRow(row)
+    const { rows } = await sql`
+      SELECT id, email, full_name, handle, role, is_suspended
+      FROM app_users
+      WHERE id = ${userId}
+      LIMIT 1
+    `
+    const row = rows[0] as
+      | {
+          id: string
+          email: string
+          full_name: string
+          handle: string
+          role: AppRole
+          is_suspended?: boolean | null
+        }
+      | undefined
+    if (!row || row.is_suspended) return null
+    return {
+      id: row.id,
+      role: row.role,
+      handle: row.handle,
+      fullName: row.full_name,
+      email: row.email,
+    }
   } catch {
     return null
   }
 }
 
-/** Skip data-URL avatars/certs — they can be megabytes and stall login. */
+async function selectAppUser(
+  where: 'id' | 'email' | 'handle',
+  value: string,
+): Promise<AppUserRow | null> {
+  const { rows } =
+    where === 'id'
+      ? await sql`
+          SELECT
+            id, email, password_hash, full_name, handle, role, avatar_url,
+            is_public_profile, created_at, cefr_level, city, headline, summary,
+            xp, daily_streak, last_activity_date, placement_completed_at,
+            status, position, years_of_experience, about_me, hourly_rate_usd,
+            certifications, updated_at, referral_code, marketing_opt_in,
+            is_suspended, email_unsubscribed
+          FROM app_users
+          WHERE id = ${value}
+          LIMIT 1
+        `
+      : where === 'email'
+        ? await sql`
+            SELECT
+              id, email, password_hash, full_name, handle, role, avatar_url,
+              is_public_profile, created_at, cefr_level, city, headline, summary,
+              xp, daily_streak, last_activity_date, placement_completed_at,
+              status, position, years_of_experience, about_me, hourly_rate_usd,
+              certifications, updated_at, referral_code, marketing_opt_in,
+              is_suspended, email_unsubscribed
+            FROM app_users
+            WHERE lower(email) = ${value}
+            LIMIT 1
+          `
+        : await sql`
+            SELECT
+              id, email, password_hash, full_name, handle, role, avatar_url,
+              is_public_profile, created_at, cefr_level, city, headline, summary,
+              xp, daily_streak, last_activity_date, placement_completed_at,
+              status, position, years_of_experience, about_me, hourly_rate_usd,
+              certifications, updated_at, referral_code, marketing_opt_in,
+              is_suspended, email_unsubscribed
+            FROM app_users
+            WHERE lower(handle) = ${value}
+            LIMIT 1
+          `
+  const row = (rows[0] as AppUserRow) || null
+  if (!row) return null
+  return persistUserRowMedia(row)
+}
+
 export async function fetchAppUserById(id: string): Promise<AppUserRow | null> {
-  const { rows } = await sql`
-    SELECT
-      id, email, password_hash, full_name, handle, role,
-      CASE WHEN avatar_url LIKE 'data:%' THEN NULL ELSE avatar_url END AS avatar_url,
-      is_public_profile, created_at, cefr_level, city, headline, summary,
-      xp, daily_streak, last_activity_date, placement_completed_at,
-      status, position, years_of_experience, about_me, hourly_rate_usd,
-      updated_at, referral_code, marketing_opt_in, is_suspended, email_unsubscribed
-    FROM app_users
-    WHERE id = ${id}
-    LIMIT 1
-  `
-  return (rows[0] as AppUserRow) || null
+  return selectAppUser('id', id)
 }
 
 export async function fetchAppUserByEmail(
   email: string,
 ): Promise<AppUserRow | null> {
-  const normalized = email.trim().toLowerCase()
-  const { rows } = await sql`
-    SELECT
-      id, email, password_hash, full_name, handle, role,
-      CASE WHEN avatar_url LIKE 'data:%' THEN NULL ELSE avatar_url END AS avatar_url,
-      is_public_profile, created_at, cefr_level, city, headline, summary,
-      xp, daily_streak, last_activity_date, placement_completed_at,
-      status, position, years_of_experience, about_me, hourly_rate_usd,
-      updated_at, referral_code, marketing_opt_in, is_suspended, email_unsubscribed
-    FROM app_users
-    WHERE lower(email) = ${normalized}
-    LIMIT 1
-  `
-  return (rows[0] as AppUserRow) || null
+  return selectAppUser('email', email.trim().toLowerCase())
 }
 
 export async function fetchAppUserByHandle(
   handle: string,
 ): Promise<AppUserRow | null> {
-  const normalized = handle.replace(/^@/, '').trim().toLowerCase()
-  const { rows } = await sql`
-    SELECT *
-    FROM app_users
-    WHERE lower(handle) = ${normalized}
-    LIMIT 1
-  `
-  return (rows[0] as AppUserRow) || null
+  return selectAppUser(
+    'handle',
+    handle.replace(/^@/, '').trim().toLowerCase(),
+  )
 }
 
 export function authUserFromRow(row: AppUserRow): AuthUser {
@@ -261,6 +304,8 @@ export function issueSession(
 }
 
 export async function upsertAppUser(user: AuthUser): Promise<void> {
+  const avatarUrl =
+    user.avatarUrl && !isDataUrl(user.avatarUrl) ? user.avatarUrl : null
   await sql`
     INSERT INTO app_users (id, handle, role, full_name, email, avatar_url, updated_at)
     VALUES (
@@ -269,7 +314,7 @@ export async function upsertAppUser(user: AuthUser): Promise<void> {
       ${user.role},
       ${user.fullName},
       ${user.email.toLowerCase()},
-      ${user.avatarUrl ?? null},
+      ${avatarUrl},
       NOW()
     )
     ON CONFLICT (id) DO UPDATE SET
@@ -302,8 +347,10 @@ export async function allocateUniqueHandle(
     'user'
 
   const tryHandle = async (candidate: string) => {
-    const existing = await fetchAppUserByHandle(candidate)
-    return !existing
+    const { rows } = await sql`
+      SELECT 1 FROM app_users WHERE lower(handle) = ${candidate} LIMIT 1
+    `
+    return rows.length === 0
   }
 
   if (base.length >= 3 && (await tryHandle(base))) return base

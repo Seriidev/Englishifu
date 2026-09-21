@@ -1,6 +1,8 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 import { applyCors, getAuthenticatedUser } from '../../_lib/auth.js'
 import { dbUnavailableResponse, isDbConfigured, sql } from '../../_lib/db.js'
+import { persistAvatarOnRows } from '../../_lib/persistMedia.js'
+import { publicMediaUrl } from '../../_lib/saveMedia.js'
 
 const TOP_LIMIT = 100
 const CEFR = new Set(['A1', 'A2', 'B1', 'B2', 'C1', 'C2'])
@@ -50,6 +52,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       ORDER BY ranked.rank ASC
     `
 
+    await persistAvatarOnRows(rows)
+
     const { rows: countRows } = await sql`
       SELECT COUNT(*)::int AS total
       FROM app_users u
@@ -70,9 +74,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           (isPublic || isCurrentUser) && row.handle
             ? String(row.handle)
             : undefined,
-        avatarUrl: typeof row.avatar_url === 'string' && row.avatar_url
-          ? row.avatar_url
-          : undefined,
+        avatarUrl: publicMediaUrl(row.avatar_url) ?? undefined,
         xp: Number(row.xp) || 0,
         cefrLevel: CEFR.has(cefr) ? cefr : undefined,
         isCurrentUser,

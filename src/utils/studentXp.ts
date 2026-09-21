@@ -94,8 +94,11 @@ export async function fetchStudentLeaderboard(): Promise<{
   }
 }
 
-export async function fetchStudentXpStats(): Promise<StudentXpStats> {
-  const res = await fetch('/api/students/xp', {
+export async function fetchStudentXpStats(opts?: {
+  claim?: boolean
+}): Promise<StudentXpStats> {
+  const qs = opts?.claim ? '?claim=1' : ''
+  const res = await fetch(`/api/students/xp${qs}`, {
     headers: authHeaders(),
     credentials: 'include',
   })

@@ -6,6 +6,7 @@ import StudyPlaceHeader from './StudyPlaceHeader'
 import { useAuth } from '../../auth/AuthContext'
 import { useTheme } from '../../theme/ThemeContext'
 import { syncApiSession } from '../../utils/bookingApi'
+import { pollWhenVisible } from '../../utils/pollWhenVisible'
 import {
   fetchStudentXpStats,
   subscribeStudentXp,
@@ -57,7 +58,8 @@ export default function StudyPlaceLayout() {
 
     let cancelled = false
     let synced = false
-    const load = async () => {
+    let claimed = false
+    const load = async (claim = false) => {
       try {
         if (!synced && student) {
           try {
@@ -67,7 +69,7 @@ export default function StudyPlaceLayout() {
             /* cookie session may still work */
           }
         }
-        const stats = await fetchStudentXpStats()
+        const stats = await fetchStudentXpStats({ claim })
         if (cancelled) return
         setXp(stats.xp)
         setBoostCount(stats.boostCount)
@@ -81,24 +83,17 @@ export default function StudyPlaceLayout() {
       }
     }
 
-    void load()
-    const interval = window.setInterval(() => void load(), 4000)
-    const onFocus = () => void load()
-    window.addEventListener('focus', onFocus)
-    const onVisible = () => {
-      if (document.visibilityState === 'visible') void load()
-    }
-    document.addEventListener('visibilitychange', onVisible)
-    const unsubscribe = subscribeStudentXp(() => void load(), studentId)
+    void load(!claimed)
+    claimed = true
+    const stopPoll = pollWhenVisible(() => void load(false), 60_000)
+    const unsubscribe = subscribeStudentXp(() => void load(false), studentId)
 
     return () => {
       cancelled = true
-      window.clearInterval(interval)
-      window.removeEventListener('focus', onFocus)
-      document.removeEventListener('visibilitychange', onVisible)
+      stopPoll()
       unsubscribe()
     }
-  }, [student, studentId, refreshUser, location.pathname])
+  }, [student, studentId, refreshUser])
 
   return (
     <div className={`study-place flex min-h-svh min-w-0 bg-slate-50 ${theme === 'dark' ? 'dark' : ''}`}>

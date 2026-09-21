@@ -66,7 +66,7 @@ export default function StudyPlaceHome() {
   )
 
   useEffect(() => {
-    void fetchApprovedTutors()
+    void fetchApprovedTutors({ limit: 8 })
       .then((rows) => setTutors(rows.slice(0, 4)))
       .catch(() => setTutors([]))
     void fetchPublicBanners().then((banners) => {

@@ -4,6 +4,7 @@ import { verifyAdminSession } from '../../../_lib/adminAuth.js'
 import { dbUnavailableResponse, isDbConfigured, sql } from '../../../_lib/db.js'
 import { parseBookInput } from '../../../_lib/libraryBook.js'
 import { saveLibraryPdf } from '../../../_lib/saveLibraryPdf.js'
+import { persistIfDataUrl, publicMediaUrl } from '../../../_lib/saveMedia.js'
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   applyCors(res)
@@ -21,15 +22,17 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         SELECT
           id, title, author, category, level, rating, minutes, description,
           cover_image_url, cover_headline, pdf_file_name, is_published, display_order,
-          CASE
-            WHEN pdf_url IS NULL OR pdf_url = '' THEN NULL
-            WHEN pdf_url LIKE 'data:%' THEN 'uploaded'
-            ELSE pdf_url
-          END AS pdf_url
+          (pdf_url IS NOT NULL) AS has_pdf
         FROM library_books
         ORDER BY display_order ASC, id DESC
+        LIMIT 100
       `
-      return res.status(200).json({ books: rows })
+      const books = rows.map((row) => ({
+        ...row,
+        pdf_url: row.has_pdf ? 'uploaded' : null,
+        cover_image_url: publicMediaUrl(row.cover_image_url),
+      }))
+      return res.status(200).json({ books })
     } catch (err) {
       console.error('GET admin/library:', err)
       return res.status(500).json({ error: 'Failed to load books' })
@@ -55,6 +58,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   try {
     const pdfUrl = await saveLibraryPdf(parsed.pdfUrl)
+    const coverImageUrl = await persistIfDataUrl(parsed.coverImageUrl, 'covers')
     const { rows } = await sql`
       INSERT INTO library_books (
         title, author, category, level, rating, minutes, description,
@@ -69,16 +73,21 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         ${parsed.rating},
         ${parsed.minutes},
         ${parsed.description},
-        ${parsed.coverImageUrl},
+        ${coverImageUrl},
         ${parsed.coverHeadline},
         ${pdfUrl},
         ${parsed.pdfFileName},
         ${parsed.isPublished},
         ${parsed.displayOrder}
       )
-      RETURNING *
+      RETURNING
+        id, title, author, category, level, rating, minutes, description,
+        cover_image_url, cover_headline, pdf_file_name, is_published, display_order
     `
-    return res.status(201).json({ book: rows[0] })
+    const book = rows[0] as Record<string, unknown>
+    return res.status(201).json({
+      book: { ...book, pdf_url: 'uploaded', has_pdf: true },
+    })
   } catch (err) {
     const msg = err instanceof Error ? err.message : ''
     if (msg.toLowerCase().includes('pdf')) {

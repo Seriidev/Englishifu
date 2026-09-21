@@ -1,8 +1,6 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
-import crypto from 'node:crypto'
-
-const MAX_BYTES = 15 * 1024 * 1024
+import { persistIfDataUrl, parseDataUrl, saveDataUrl } from './saveMedia.js'
 
 function uploadsDir() {
   return path.join(process.cwd(), 'public', 'uploads', 'library')
@@ -16,31 +14,21 @@ export async function saveLibraryPdf(dataUrl: string): Promise<string> {
   if (!dataUrl.startsWith('data:application/pdf')) {
     throw new Error('Please upload a PDF file')
   }
-  const comma = dataUrl.indexOf(',')
-  const base64 = comma >= 0 ? dataUrl.slice(comma + 1) : ''
-  if (!base64) throw new Error('Invalid PDF')
-  const buf = Buffer.from(base64, 'base64')
-  if (buf.length > MAX_BYTES) {
-    throw new Error('PDF must be under 15MB')
-  }
-  const dir = uploadsDir()
-  await fs.mkdir(dir, { recursive: true })
-  const name = `${Date.now()}-${crypto.randomBytes(4).toString('hex')}.pdf`
-  await fs.writeFile(path.join(dir, name), buf)
-  return `/uploads/library/${name}`
+  return saveDataUrl(dataUrl, 'library')
 }
 
 export async function loadLibraryPdf(
   pdfUrl: string,
 ): Promise<{ buffer: Buffer } | { redirect: string }> {
   if (pdfUrl.startsWith('http://') || pdfUrl.startsWith('https://')) {
-    return { redirect: pdfUrl }
+    const res = await fetch(pdfUrl)
+    if (!res.ok) throw new Error('PDF is not available')
+    const buf = Buffer.from(await res.arrayBuffer())
+    return { buffer: buf }
   }
   if (pdfUrl.startsWith('data:application/pdf')) {
-    const comma = pdfUrl.indexOf(',')
-    const base64 = comma >= 0 ? pdfUrl.slice(comma + 1) : ''
-    if (!base64) throw new Error('Invalid PDF')
-    return { buffer: Buffer.from(base64, 'base64') }
+    const { buffer } = parseDataUrl(pdfUrl)
+    return { buffer }
   }
   if (pdfUrl.startsWith('/uploads/library/')) {
     const name = path.basename(pdfUrl)
@@ -51,4 +39,8 @@ export async function loadLibraryPdf(
     return { buffer: await fs.readFile(file) }
   }
   throw new Error('PDF is not available')
+}
+
+export async function persistLibraryPdfUrl(pdfUrl: string): Promise<string> {
+  return persistIfDataUrl(pdfUrl, 'library') ?? pdfUrl
 }

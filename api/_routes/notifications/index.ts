@@ -16,11 +16,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   try {
     const { rows } = await sql`
-      SELECT *
+      SELECT id, type, title, message, link_path, is_read, created_at
       FROM notifications
       WHERE user_id = ${user.id}
       ORDER BY created_at DESC
-      LIMIT 30
+      LIMIT 20
     `
     const unreadCount = rows.filter((n) => !n.is_read).length
     return res.status(200).json({ notifications: rows, unreadCount })

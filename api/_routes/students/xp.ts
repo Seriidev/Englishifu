@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 import { applyCors, getAuthenticatedUser } from '../../_lib/auth.js'
-import { claimDailyLoginXp } from '../../_lib/dailyBonus.js'
+import { claimDailyLoginXp, readStudentXp } from '../../_lib/dailyBonus.js'
 import { dbUnavailableResponse, isDbConfigured, sql } from '../../_lib/db.js'
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -16,8 +16,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(401).json({ error: 'Unauthorized' })
   }
 
+  const claimRaw = Array.isArray(req.query.claim) ? req.query.claim[0] : req.query.claim
+  const shouldClaim = claimRaw === '1' || claimRaw === 'true'
+
   try {
-    const bonus = await claimDailyLoginXp(user.id)
+    const bonus = shouldClaim
+      ? await claimDailyLoginXp(user.id)
+      : await readStudentXp(user.id)
     const { rows } = await sql`
       SELECT
         COUNT(*)::int AS boost_count,

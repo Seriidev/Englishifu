@@ -90,7 +90,7 @@ export default function TutorWorkspaceLayout() {
             <h1 className="min-w-0 flex-1 truncate text-base font-semibold tracking-tight text-slate-900 sm:text-lg">
               {tutor?.fullName ?? 'Teacher'}
             </h1>
-            <NotificationBell buttonClassName="border-0 bg-transparent text-slate-800 hover:bg-slate-100" />
+            <NotificationBell />
           </div>
         </header>
 

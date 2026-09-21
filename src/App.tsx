@@ -69,6 +69,9 @@ import TutorCertificatesPage from './pages/tutor/TutorCertificatesPage'
 import TutorWorkspaceProfilePage from './pages/tutor/TutorWorkspaceProfilePage'
 import TutorBookingsInbox from './pages/tutor/TutorBookingsInbox'
 import TutorCreateMeetingPage from './pages/tutor/TutorCreateMeetingPage'
+import TutorTasksPage from './pages/tutor/TutorTasksPage'
+import StudyHomeworkPage from './pages/StudyHomeworkPage'
+import AdminTasksPage from './pages/admin/AdminTasksPage'
 
 function LandingPage() {
   return (
@@ -203,6 +206,7 @@ export default function App() {
           <Route path="tutors/:handle" element={<StudyTutorDetailPage />} />
           <Route path="speaking-club" element={<SpeakingClubPage />} />
           <Route path="essay" element={<StudyEssayPage />} />
+          <Route path="homework" element={<StudyHomeworkPage />} />
           <Route path="progress" element={<Navigate to="/study/essay" replace />} />
           <Route path="badges" element={<StudyBadgesPage />} />
           <Route path="certificates" element={<StudyCertificatesPage />} />
@@ -235,6 +239,7 @@ export default function App() {
           <Route index element={<TutorClassesPage />} />
           <Route path="students" element={<TutorStudentsPage />} />
           <Route path="bookings" element={<TutorBookingsInbox />} />
+          <Route path="tasks" element={<TutorTasksPage />} />
           <Route path="kpi" element={<TutorKpiPage />} />
           <Route path="certificates" element={<TutorCertificatesPage />} />
           <Route path="library" element={<StudyLibraryPage />} />
@@ -273,6 +278,7 @@ export default function App() {
           <Route path="tutors" element={<AdminPendingTutorsPage />} />
           <Route path="tutors/directory" element={<AdminTutorsDirectoryPage />} />
           <Route path="students" element={<AdminStudentsPage />} />
+          <Route path="tasks" element={<AdminTasksPage />} />
           <Route path="banners" element={<AdminBannersPage />} />
           <Route path="books" element={<AdminBooksPage />} />
           <Route path="referrals" element={<AdminReferralsPage />} />

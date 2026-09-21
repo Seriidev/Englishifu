@@ -5,11 +5,14 @@ const MAX_EDGE = 512
 const JPEG_QUALITY = 0.82
 
 function isAllowedImage(file: File) {
-  if (['image/png', 'image/jpeg', 'image/webp', 'image/jpg'].includes(file.type)) {
+  if (
+    file.type.startsWith('image/') &&
+    file.type !== 'image/svg+xml' &&
+    file.type !== 'image/gif'
+  ) {
     return true
   }
-  // Some OS pickers leave type empty — fall back to extension.
-  return /\.(png|jpe?g|webp)$/i.test(file.name)
+  return /\.(png|jpe?g|webp|heic|heif|bmp)$/i.test(file.name)
 }
 
 function loadImage(file: File): Promise<HTMLImageElement> {

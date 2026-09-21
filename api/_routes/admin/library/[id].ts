@@ -4,6 +4,7 @@ import { verifyAdminSession } from '../../../_lib/adminAuth.js'
 import { dbUnavailableResponse, isDbConfigured, sql } from '../../../_lib/db.js'
 import { parseBookInput } from '../../../_lib/libraryBook.js'
 import { saveLibraryPdf } from '../../../_lib/saveLibraryPdf.js'
+import { persistIfDataUrl, publicMediaUrl } from '../../../_lib/saveMedia.js'
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   applyCors(res)
@@ -42,7 +43,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    const pdfUrl = parsed.pdfUrl ? await saveLibraryPdf(parsed.pdfUrl) : null
+    const pdfUrl =
+      parsed.pdfUrl && parsed.pdfUrl !== 'uploaded'
+        ? await saveLibraryPdf(parsed.pdfUrl)
+        : null
+    const coverImageUrl = parsed.coverImageUrl
+      ? await persistIfDataUrl(parsed.coverImageUrl, 'covers')
+      : null
     const { rows } = await sql`
       UPDATE library_books SET
         title = ${parsed.title},
@@ -52,7 +59,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         rating = ${parsed.rating},
         minutes = ${parsed.minutes},
         description = ${parsed.description},
-        cover_image_url = COALESCE(${parsed.coverImageUrl}, cover_image_url),
+        cover_image_url = COALESCE(${coverImageUrl}, cover_image_url),
         cover_headline = ${parsed.coverHeadline},
         pdf_url = COALESCE(${pdfUrl}, pdf_url),
         pdf_file_name = COALESCE(${parsed.pdfFileName}, pdf_file_name),
@@ -60,10 +67,20 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         display_order = ${parsed.displayOrder},
         updated_at = NOW()
       WHERE id = ${id}
-      RETURNING *
+      RETURNING
+        id, title, author, category, level, rating, minutes, description,
+        cover_image_url, cover_headline, pdf_file_name, is_published, display_order,
+        (pdf_url IS NOT NULL) AS has_pdf
     `
     if (rows.length === 0) return res.status(404).json({ error: 'Not found' })
-    return res.status(200).json({ book: rows[0] })
+    const book = rows[0] as Record<string, unknown>
+    return res.status(200).json({
+      book: {
+        ...book,
+        cover_image_url: publicMediaUrl(book.cover_image_url),
+        pdf_url: book.has_pdf ? 'uploaded' : null,
+      },
+    })
   } catch (err) {
     const msg = err instanceof Error ? err.message : ''
     if (msg.toLowerCase().includes('pdf')) {

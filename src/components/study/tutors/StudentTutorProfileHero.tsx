@@ -14,7 +14,7 @@ export interface StudentTutorProfileHeroProps {
   pricePerHour?: number
   aboutMe: string
   classesCount: number
-  studentsCount: number
+  followersCount: number
   kpi: string
   following: boolean
   onFollow: () => void
@@ -42,7 +42,7 @@ export default function StudentTutorProfileHero({
   pricePerHour,
   aboutMe,
   classesCount,
-  studentsCount,
+  followersCount,
   kpi,
   following,
   onFollow,
@@ -88,7 +88,7 @@ export default function StudentTutorProfileHero({
 
           <div className="mt-4 flex flex-wrap gap-x-8 gap-y-3">
             <Stat value={classesCount} label="Classes" />
-            <Stat value={studentsCount} label="Students" />
+            <Stat value={followersCount} label="Followers" />
             <Stat value={kpi} label="KPI" />
           </div>
         </div>
@@ -117,15 +117,6 @@ export default function StudentTutorProfileHero({
             ? `${rating.toFixed(1)} (${reviewsCount} reviews)`
             : 'No reviews yet'}
         </span>
-        {onWriteReview ? (
-          <button
-            type="button"
-            onClick={onWriteReview}
-            className="text-sm font-semibold text-indigo-600 hover:underline"
-          >
-            Write a review
-          </button>
-        ) : null}
         {typeof pricePerHour === 'number' ? (
           <span className="font-medium text-slate-900">
             $ {pricePerHour}/hour
@@ -138,19 +129,30 @@ export default function StudentTutorProfileHero({
         <p className="mt-2 text-sm leading-relaxed text-slate-400">{aboutMe}</p>
       </div>
 
-      <div className="mt-6 grid grid-cols-2 gap-3">
+      <div
+        className={`mt-6 grid gap-3 ${onWriteReview ? 'grid-cols-1 sm:grid-cols-3' : 'grid-cols-2'}`}
+      >
         <button
           type="button"
           onClick={onFollow}
           className={`rounded-xl py-2.5 text-sm font-semibold transition ${
             following
-              ? 'border border-slate-900 bg-slate-900 text-white'
-              : 'border border-slate-900 bg-white text-slate-900 hover:bg-slate-50'
+              ? 'border border-slate-900 bg-slate-900 text-white dark:border-white/20 dark:bg-white/10'
+              : 'border border-slate-900 bg-white text-slate-900 hover:bg-slate-50 dark:border-white/25 dark:bg-transparent dark:text-white dark:hover:bg-white/10'
           }`}
           aria-pressed={following}
         >
           {following ? 'Following' : 'Follow'}
         </button>
+        {onWriteReview ? (
+          <button
+            type="button"
+            onClick={onWriteReview}
+            className="rounded-xl border border-indigo-500 bg-white py-2.5 text-sm font-semibold text-indigo-600 transition hover:bg-indigo-50 dark:bg-transparent dark:text-indigo-300 dark:hover:bg-indigo-500/15"
+          >
+            Write a review
+          </button>
+        ) : null}
         <button
           type="button"
           onClick={onBook}

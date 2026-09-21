@@ -35,15 +35,15 @@ export default function SkillRadarChart({ axes }: SkillRadarChartProps) {
     vertex(i, n, (Math.max(0, Math.min(MAX_BAND, axis.value)) / MAX_BAND) * RADIUS),
   )
   const labels = axes.map((axis, i) => {
-    const p = vertex(i, n, RADIUS + 26)
+    const p = vertex(i, n, RADIUS + 22)
     return { ...p, label: axis.label }
   })
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-slate-100 bg-[#ffffff] px-2 py-3 shadow-sm">
+    <div className="overflow-hidden rounded-2xl border border-slate-100 bg-white px-1 py-3 shadow-sm sm:px-2">
       <svg
-        viewBox="0 0 320 304"
-        className="mx-auto h-auto w-full max-w-[320px]"
+        viewBox="-16 -8 352 328"
+        className="mx-auto h-auto w-full max-w-[320px] text-slate-900"
         role="img"
         aria-label="Skill pentagram"
       >
@@ -51,8 +51,7 @@ export default function SkillRadarChart({ axes }: SkillRadarChartProps) {
           <polygon
             key={`grid-${i}`}
             points={polygon(pts)}
-            fill="none"
-            stroke="#e2e8f0"
+            className="skill-radar-grid fill-none stroke-slate-200"
             strokeWidth={i === LEVELS - 1 ? 1.25 : 1}
           />
         ))}
@@ -63,7 +62,7 @@ export default function SkillRadarChart({ axes }: SkillRadarChartProps) {
             y1={CY}
             x2={p.x}
             y2={p.y}
-            stroke="#e2e8f0"
+            className="skill-radar-grid stroke-slate-200"
             strokeWidth={1}
           />
         ))}
@@ -77,7 +76,13 @@ export default function SkillRadarChart({ axes }: SkillRadarChartProps) {
               strokeLinejoin="round"
             />
             {data.map((p, i) => (
-              <circle key={`dot-${i}`} cx={p.x} cy={p.y} r={3.2} fill="#24476B" />
+              <circle
+                key={`dot-${i}`}
+                cx={p.x}
+                cy={p.y}
+                r={3.2}
+                fill="#55D8FC"
+              />
             ))}
           </>
         ) : null}
@@ -88,7 +93,8 @@ export default function SkillRadarChart({ axes }: SkillRadarChartProps) {
             y={item.y}
             textAnchor="middle"
             dominantBaseline="middle"
-            fill="#0B151F"
+            className="skill-radar-label"
+            fill="currentColor"
             fontSize="12"
             fontWeight="600"
           >

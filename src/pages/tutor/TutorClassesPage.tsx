@@ -1,17 +1,47 @@
+import { useEffect, useState } from 'react'
 import ClassesTab from '../../components/tutor-profile/ClassesTab'
 import { useOwnTutorProfile } from '../../hooks/useOwnTutorProfile'
+import { fetchTutorProfileStats } from '../../utils/platformApi'
+import { syncApiSession } from '../../utils/bookingApi'
 
 export default function TutorClassesPage() {
-  const { profile, loading } = useOwnTutorProfile()
-
-  if (loading) {
-    return <p className="text-sm text-slate-500">Loading…</p>
-  }
-
-  const stats = profile?.classesStats ?? {
+  const { tutor, loading } = useOwnTutorProfile()
+  const [stats, setStats] = useState({
     totalStudents: 0,
     totalClasses: 0,
     speakingClubSessions: 0,
+  })
+
+  useEffect(() => {
+    if (!tutor?.id) return
+    let cancelled = false
+    void (async () => {
+      try {
+        await syncApiSession(tutor)
+        const data = await fetchTutorProfileStats(tutor.id)
+        if (cancelled) return
+        setStats({
+          totalStudents: data.studentsCount,
+          totalClasses: data.classesCount,
+          speakingClubSessions: data.speakingClubSessions,
+        })
+      } catch {
+        if (!cancelled) {
+          setStats({
+            totalStudents: 0,
+            totalClasses: 0,
+            speakingClubSessions: 0,
+          })
+        }
+      }
+    })()
+    return () => {
+      cancelled = true
+    }
+  }, [tutor?.id])
+
+  if (loading) {
+    return <p className="text-sm text-slate-500">Loading…</p>
   }
 
   return (

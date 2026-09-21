@@ -2,6 +2,9 @@ import type { VercelRequest, VercelResponse } from '@vercel/node'
 import { applyCors } from '../../_lib/auth.js'
 import { verifyAdminSession } from '../../_lib/adminAuth.js'
 import { dbUnavailableResponse, isDbConfigured, sql } from '../../_lib/db.js'
+import { parsePage } from '../../_lib/paging.js'
+import { persistAvatarOnRows } from '../../_lib/persistMedia.js'
+import { publicMediaUrl } from '../../_lib/saveMedia.js'
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   applyCors(res)
@@ -19,7 +22,21 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const sort =
     typeof req.query.sort === 'string' ? req.query.sort : 'xp'
 
+  const { limit, offset } = parsePage(req.query as Record<string, unknown>)
+
   try {
+    const countResult = await sql`
+      SELECT COUNT(*)::int AS total
+      FROM app_users u
+      WHERE u.role = 'student'
+        AND (
+          ${q} = ''
+          OR lower(u.full_name) LIKE ${like}
+          OR lower(u.email) LIKE ${like}
+          OR lower(u.handle) LIKE ${like}
+          OR u.id::text = ${q}
+        )
+    `
     const { rows } = await sql`
       SELECT
         u.id,
@@ -34,7 +51,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         u.marketing_opt_in,
         u.email_unsubscribed,
         u.created_at,
-        MAX(tr.overall_band_score) AS best_toefl_score,
+        (
+          SELECT MAX(tr.overall_band_score)
+          FROM test_results tr
+          WHERE tr.student_id = u.id
+        ) AS best_toefl_score,
         NOT EXISTS (
           SELECT 1
           FROM student_boosts sb
@@ -43,7 +64,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             AND sb.boost_day = (CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Ashgabat')::date
         ) AS can_admin_boost
       FROM app_users u
-      LEFT JOIN test_results tr ON tr.student_id = u.id
       WHERE u.role = 'student'
         AND (
           ${q} = ''
@@ -52,14 +72,25 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           OR lower(u.handle) LIKE ${like}
           OR u.id::text = ${q}
         )
-      GROUP BY u.id
       ORDER BY
-        CASE WHEN ${sort} = 'score' THEN MAX(tr.overall_band_score) END DESC NULLS LAST,
+        CASE WHEN ${sort} = 'score' THEN (
+          SELECT MAX(tr.overall_band_score) FROM test_results tr WHERE tr.student_id = u.id
+        ) END DESC NULLS LAST,
         CASE WHEN ${sort} = 'streak' THEN u.daily_streak END DESC,
         CASE WHEN ${sort} = 'name' THEN u.full_name END ASC,
         u.xp DESC
+      LIMIT ${limit} OFFSET ${offset}
     `
-    return res.status(200).json({ students: rows })
+    await persistAvatarOnRows(rows)
+    for (const row of rows) {
+      row.avatar_url = publicMediaUrl(row.avatar_url)
+    }
+    return res.status(200).json({
+      students: rows,
+      total: Number(countResult.rows[0]?.total) || rows.length,
+      page: Math.floor(offset / limit) + 1,
+      limit,
+    })
   } catch (err) {
     console.error('GET admin/students:', err)
     const msg = err instanceof Error ? err.message : ''

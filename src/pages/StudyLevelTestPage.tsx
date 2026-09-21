@@ -52,14 +52,14 @@ export default function StudyLevelTestPage() {
         </div>
       ) : null}
 
-      <p className="mt-5 text-sm leading-relaxed text-slate-600">
+      <p className="mt-5 text-sm leading-relaxed text-slate-600 dark:text-slate-300">
         {t('placement.introBody')}
       </p>
       <p className="mt-2 text-xs font-medium text-indigo-600">
         {t('placement.introNote')}
       </p>
 
-      <ul className="mt-5 space-y-2 rounded-2xl bg-indigo-50 p-5 text-sm text-slate-800">
+      <ul className="mt-5 space-y-2 rounded-2xl bg-indigo-50 p-5 text-sm text-slate-800 dark:bg-indigo-500/15 dark:text-slate-200">
         <li>• {t('placement.bullet1')}</li>
         <li>• {t('placement.bullet2')}</li>
         <li>• {t('placement.bullet3')}</li>

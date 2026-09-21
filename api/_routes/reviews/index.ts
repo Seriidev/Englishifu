@@ -94,7 +94,7 @@ async function createBookingReview(
   `
 
   const bookingResult = await sql`
-    SELECT * FROM bookings
+    SELECT id, tutor_id, student_id, status FROM bookings
     WHERE id = ${bookingId} AND student_id = ${studentId}
     LIMIT 1
   `

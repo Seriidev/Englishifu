@@ -1,5 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 import { applyCors, getAuthenticatedUser } from '../../_lib/auth.js'
+import { persistIfDataUrl } from '../../_lib/saveMedia.js'
 import { dbUnavailableResponse, isDbConfigured, sql } from '../../_lib/db.js'
 
 const MAX_DATA_URL = 6 * 1024 * 1024
@@ -34,10 +35,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
+    const stored = await persistIfDataUrl(resumeUrl, 'resumes')
     await sql`
       UPDATE app_users
       SET
-        resume_url = ${resumeUrl},
+        resume_url = ${stored},
         status = CASE WHEN status = 'approved' THEN status ELSE 'pending' END,
         updated_at = NOW()
       WHERE id = ${user.id} AND role = 'tutor'

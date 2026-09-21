@@ -84,7 +84,8 @@ export default function TutorCreateMeetingPage() {
         </p>
       </div>
 
-      <section className="rounded-2xl border border-slate-200 bg-white p-5">
+      <div className="grid min-w-0 items-start gap-5 lg:grid-cols-2">
+        <section className="rounded-2xl border border-slate-200 bg-white p-5">
         <h3 className="text-base font-bold text-slate-900">
           Google Meet
         </h3>
@@ -199,7 +200,7 @@ export default function TutorCreateMeetingPage() {
         )}
       </section>
 
-      <section>
+        <section className="min-w-0">
         {clubCreated ? (
           <p className="mb-3 rounded-xl bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-700">
             Speaking club session published.
@@ -209,7 +210,8 @@ export default function TutorCreateMeetingPage() {
           defaultOpen
           onCreated={() => setClubCreated(true)}
         />
-      </section>
+        </section>
+      </div>
     </div>
   )
 }

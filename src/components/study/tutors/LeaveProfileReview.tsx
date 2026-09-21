@@ -35,8 +35,8 @@ export default function LeaveProfileReview({
         id="leave-review"
         className="rounded-[24px] bg-white p-5 shadow-[0_10px_28px_rgba(0,0,0,0.08)] sm:p-6"
       >
-        <h3 className="text-base font-bold text-slate-900">Your review</h3>
-        <p className="mt-1 text-sm text-slate-500">
+        <h3 className="text-base font-bold text-slate-900 dark:text-white">Your review</h3>
+        <p className="mt-1 text-sm text-slate-500 dark:text-slate-300">
           You rated {tutorName}
         </p>
         <div className="mt-3 flex items-center gap-1">
@@ -46,7 +46,7 @@ export default function LeaveProfileReview({
               className={`h-6 w-6 ${
                 i < (existingRating ?? 0)
                   ? 'fill-amber-400 text-amber-400'
-                  : 'text-slate-200'
+                  : 'text-slate-300 dark:text-slate-500'
               }`}
               aria-hidden
             />
@@ -83,8 +83,8 @@ export default function LeaveProfileReview({
       id="leave-review"
       className="rounded-[24px] bg-white p-5 shadow-[0_10px_28px_rgba(0,0,0,0.08)] sm:p-6"
     >
-      <h3 className="text-base font-bold text-slate-900">Leave a review</h3>
-      <p className="mt-1 text-sm text-slate-500">
+      <h3 className="text-base font-bold text-slate-900 dark:text-white">Leave a review</h3>
+      <p className="mt-1 text-sm text-slate-500 dark:text-slate-300">
         Rate {tutorName} with stars — 1 is poor, 5 is excellent.
       </p>
 
@@ -103,7 +103,7 @@ export default function LeaveProfileReview({
               className={`h-8 w-8 ${
                 n <= shown
                   ? 'fill-amber-400 text-amber-400'
-                  : 'text-slate-200'
+                  : 'text-slate-300 dark:text-slate-500'
               }`}
             />
           </button>

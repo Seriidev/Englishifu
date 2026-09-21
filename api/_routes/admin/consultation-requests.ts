@@ -16,10 +16,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method === 'GET') {
     try {
       const { rows } = await sql`
-        SELECT *
+        SELECT
+          id, full_name, email, phone, toefl_score, learning_goal,
+          message, status, created_at
         FROM consultation_requests
         ORDER BY created_at DESC
-        LIMIT 300
+        LIMIT 20
       `
       return res.status(200).json({ requests: rows })
     } catch (err) {

@@ -44,10 +44,11 @@ function normalizeHandle(h: string) {
 
 export default function TutorProfilePage() {
   const { handle = '' } = useParams()
-  const { user, logout, updateTutor, refreshUser } = useAuth()
+  const { user, logout, updateAvatar, refreshUser } = useAuth()
   const navigate = useNavigate()
   const [tab, setTab] = useState<TutorTabId>('classes')
   const [avatarError, setAvatarError] = useState<string | null>(null)
+  const [avatarSaving, setAvatarSaving] = useState(false)
   const [meetModal, setMeetModal] = useState<{
     open: boolean
     student?: TutorStudent
@@ -231,19 +232,15 @@ export default function TutorProfilePage() {
   const onAvatarChange = async (file: File) => {
     if (!liveOwner) return
     setAvatarError(null)
+    setAvatarSaving(true)
     try {
       const nextAvatar = await fileToAvatarDataUrl(file)
-      const result = await updateTutor({
-        fullName: liveOwner.fullName,
-        handle: liveOwner.handle,
-        position: liveOwner.position ?? 'Teacher',
-        aboutMe: liveOwner.aboutMe,
-        avatarUrl: nextAvatar,
-        isPublicProfile: liveOwner.isPublicProfile,
-      })
+      const result = await updateAvatar(nextAvatar)
       if (!result.ok) setAvatarError(result.error)
     } catch (err) {
       setAvatarError(err instanceof Error ? err.message : 'Upload failed')
+    } finally {
+      setAvatarSaving(false)
     }
   }
 
@@ -288,6 +285,7 @@ export default function TutorProfilePage() {
                 currentAvatarUrl={avatarUrl}
                 onAvatarChange={(file) => void onAvatarChange(file)}
                 editable={isOwnProfile}
+                uploading={avatarSaving}
                 displayName={fullName}
                 size="lg"
               />

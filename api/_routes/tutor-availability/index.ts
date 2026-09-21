@@ -26,7 +26,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method === 'GET') {
     try {
       const { rows } = await sql`
-        SELECT *
+        SELECT
+          id, tutor_id, day_of_week, start_time, end_time,
+          slot_duration_minutes, timezone, is_active, created_at
         FROM tutor_availability
         WHERE tutor_id = ${user.id} AND is_active = true
         ORDER BY day_of_week, start_time

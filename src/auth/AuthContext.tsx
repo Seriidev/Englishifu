@@ -21,6 +21,7 @@ import {
   saveStudentPlacementResult,
   updateStudentProfile,
   updateTutorProfile,
+  updateOwnAvatar,
   type CompleteTutorProfileInput,
   type CreateStudentInput,
   type CreateTutorInput,
@@ -71,6 +72,9 @@ interface AuthContextValue {
   ) => Promise<{ ok: true; user: PublicUser } | { ok: false; error: string }>
   updateTutor: (
     input: UpdateTutorProfileInput,
+  ) => Promise<{ ok: true; user: PublicUser } | { ok: false; error: string }>
+  updateAvatar: (
+    avatarUrl: string,
   ) => Promise<{ ok: true; user: PublicUser } | { ok: false; error: string }>
   savePlacementResult: (
     input: SaveStudentPlacementInput,
@@ -191,6 +195,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     [user],
   )
 
+  const updateAvatar = useCallback(
+    async (avatarUrl: string) => {
+      if (!user) {
+        return { ok: false as const, error: 'Not signed in' }
+      }
+      const result = await updateOwnAvatar(avatarUrl)
+      if ('error' in result) return { ok: false as const, error: result.error }
+      setUser(result.user)
+      return { ok: true as const, user: result.user }
+    },
+    [user],
+  )
+
   const savePlacementResult = useCallback(
     async (input: SaveStudentPlacementInput) => {
       if (!user || user.role !== 'student') {
@@ -260,6 +277,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       completeProfile,
       updateStudent,
       updateTutor,
+      updateAvatar,
       savePlacementResult,
       changePassword,
       deleteAccount,
@@ -275,6 +293,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       completeProfile,
       updateStudent,
       updateTutor,
+      updateAvatar,
       savePlacementResult,
       changePassword,
       deleteAccount,

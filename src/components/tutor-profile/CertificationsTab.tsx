@@ -22,7 +22,7 @@ export default function CertificationsTab({
       {certifications.map((cert) => (
         <div
           key={cert.id}
-          className="flex items-center gap-3 rounded-xl border border-gray-200 bg-white p-3 pr-4 shadow-sm"
+          className="flex items-center gap-3 rounded-xl bg-white p-3 pr-4 shadow-sm"
         >
           {cert.imageUrl ? (
             <img
@@ -35,7 +35,7 @@ export default function CertificationsTab({
               <GraduationCap className="h-5 w-5 text-brand" aria-hidden />
             </span>
           )}
-          <span className="text-sm font-semibold text-ink">{cert.name}</span>
+          <span className="text-sm font-semibold text-slate-900">{cert.name}</span>
         </div>
       ))}
     </div>

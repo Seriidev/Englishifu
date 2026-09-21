@@ -30,6 +30,22 @@ export async function claimDailyLoginXp(userId: string): Promise<{
     }
   }
 
+  return readXpRow(userId)
+}
+
+export async function readStudentXp(userId: string): Promise<{
+  xp: number
+  awarded: number
+  claimedToday: boolean
+}> {
+  return readXpRow(userId)
+}
+
+async function readXpRow(userId: string): Promise<{
+  xp: number
+  awarded: number
+  claimedToday: boolean
+}> {
   const { rows } = await sql`
     SELECT
       COALESCE(xp, 0)::int AS xp,

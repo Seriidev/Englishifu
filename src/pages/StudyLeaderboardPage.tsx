@@ -6,6 +6,7 @@ import {
   fetchStudentLeaderboard,
   subscribeStudentXp,
 } from '../utils/studentXp'
+import { pollWhenVisible } from '../utils/pollWhenVisible'
 import { isCefrLevel } from '../types/cefr'
 import CefrLevelBadge from '../components/profile/CefrLevelBadge'
 import type { LeaderboardEntry } from '../types/studyContent'
@@ -43,12 +44,12 @@ export default function StudyLeaderboardPage() {
     const unsubscribe = subscribeStudentXp(() => {
       void load()
     }, studentId)
-    const interval = window.setInterval(() => {
+    const stopPoll = pollWhenVisible(() => {
       void load()
-    }, 15000)
+    }, 60_000)
     return () => {
       unsubscribe()
-      window.clearInterval(interval)
+      stopPoll()
     }
   }, [load, user])
 

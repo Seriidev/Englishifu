@@ -74,7 +74,7 @@ export default function StudyPlaceHeader({
             Boost {boostCount}
           </span>
         </span>
-        <NotificationBell buttonClassName="border-0 bg-transparent text-slate-800 hover:bg-slate-100" />
+        <NotificationBell />
       </div>
     </div>
   )

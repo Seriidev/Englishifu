@@ -26,7 +26,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   try {
     const existing = await sql`
-      SELECT * FROM bookings WHERE id = ${id} LIMIT 1
+      SELECT id, tutor_id, student_id, start_at, end_at, status, subject
+      FROM bookings WHERE id = ${id} LIMIT 1
     `
     if (existing.rows.length === 0) {
       return res.status(404).json({ error: 'Booking not found' })

@@ -13,12 +13,17 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   try {
     const { rows } = await sql`
-      SELECT id, title, body, cover_image_url, published_at, created_at
+      SELECT
+        id, title, body, cover_image_url, published_at, created_at
       FROM news_posts
       WHERE is_published = true
       ORDER BY COALESCE(published_at, created_at) DESC
       LIMIT 20
     `
+    res.setHeader(
+      'Cache-Control',
+      'public, max-age=0, s-maxage=60, stale-while-revalidate=300',
+    )
     return res.status(200).json({ posts: rows })
   } catch (err) {
     console.error('GET news:', err)

@@ -121,7 +121,7 @@ export default function StudentsTab({ tutorId }: StudentsTabProps) {
       {students.map((student, index) => (
         <div
           key={student.id}
-          className="flex flex-col gap-3 rounded-xl border border-gray-100 bg-white p-3 transition hover:bg-slate-50 sm:flex-row sm:items-center sm:gap-3"
+          className="flex flex-col gap-3 rounded-xl border border-gray-100 bg-white p-3 transition hover:bg-slate-50 sm:flex-row sm:items-center sm:gap-3 dark:border-white/10 dark:hover:bg-white/5"
         >
           <div className="flex min-w-0 flex-1 items-center gap-3">
             <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-slate-100 text-xs font-bold text-slate-600">
@@ -142,7 +142,7 @@ export default function StudentsTab({ tutorId }: StudentsTabProps) {
               <div className="flex flex-wrap items-center gap-2">
                 <Link
                   to={studentPublicProfilePath(student.handle)}
-                  className="truncate font-medium text-ink hover:text-brand"
+                  className="truncate font-medium text-slate-900 hover:text-brand dark:text-white"
                 >
                   {student.fullName}
                 </Link>

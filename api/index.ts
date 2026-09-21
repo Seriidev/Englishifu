@@ -50,6 +50,8 @@ import r_bookings_id_complete from './_routes/bookings/[id]/complete.js'
 import r_bookings_id_cancel from './_routes/bookings/[id]/cancel.js'
 import r_tutors_id_students from './_routes/tutors/[id]/students.js'
 import r_tutors_id_reviews from './_routes/tutors/[id]/reviews.js'
+import r_tutors_id_stats from './_routes/tutors/[id]/stats.js'
+import r_tutors_id_follow from './_routes/tutors/[id]/follow.js'
 import r_admin_banners_id from './_routes/admin/banners/[id].js'
 import r_admin_library_id from './_routes/admin/library/[id].js'
 import r_admin_tutors_id from './_routes/admin/tutors/[id].js'
@@ -57,7 +59,11 @@ import r_admin_users_id from './_routes/admin/users/[id].js'
 import r_library_pdf_id from './_routes/library-pdf/[id].js'
 import r_admin_news_id from './_routes/admin/news/[id].js'
 import r_tutors_id_kpi from './_routes/tutors/[id]/kpi.js'
+import r_assignments_index from './_routes/assignments/index.js'
+import r_assignments_id from './_routes/assignments/[id].js'
+import r_admin_assignments from './_routes/admin/assignments.js'
 import r_users_handle from './_routes/users/[handle].js'
+import r_media_kind_name from './_routes/media/[kind]/[name].js'
 
 type ApiHandler = (
   req: VercelRequest,
@@ -116,6 +122,11 @@ const routes: { re: RegExp; keys: string[]; handler: ApiHandler }[] = [
   { re: new RegExp("^/api/bookings/([^/]+)/cancel/?$"), keys: ["id"], handler: r_bookings_id_cancel },
   { re: new RegExp("^/api/tutors/([^/]+)/students/?$"), keys: ["id"], handler: r_tutors_id_students },
   { re: new RegExp("^/api/tutors/([^/]+)/reviews/?$"), keys: ["id"], handler: r_tutors_id_reviews },
+  { re: new RegExp("^/api/tutors/([^/]+)/stats/?$"), keys: ["id"], handler: r_tutors_id_stats },
+  { re: new RegExp("^/api/tutors/([^/]+)/follow/?$"), keys: ["id"], handler: r_tutors_id_follow },
+  { re: new RegExp("^/api/assignments/?$"), keys: [], handler: r_assignments_index },
+  { re: new RegExp("^/api/admin/assignments/?$"), keys: [], handler: r_admin_assignments },
+  { re: new RegExp("^/api/assignments/([^/]+)/?$"), keys: ["id"], handler: r_assignments_id },
   { re: new RegExp("^/api/admin/banners/([^/]+)/?$"), keys: ["id"], handler: r_admin_banners_id },
   { re: new RegExp("^/api/admin/library/([^/]+)/?$"), keys: ["id"], handler: r_admin_library_id },
   { re: new RegExp("^/api/admin/tutors/([^/]+)/?$"), keys: ["id"], handler: r_admin_tutors_id },
@@ -124,6 +135,7 @@ const routes: { re: RegExp; keys: string[]; handler: ApiHandler }[] = [
   { re: new RegExp("^/api/admin/news/([^/]+)/?$"), keys: ["id"], handler: r_admin_news_id },
   { re: new RegExp("^/api/tutors/([^/]+)/kpi/?$"), keys: ["id"], handler: r_tutors_id_kpi },
   { re: new RegExp("^/api/users/([^/]+)/?$"), keys: ["handle"], handler: r_users_handle },
+  { re: new RegExp("^/api/media/([^/]+)/([^/]+)/?$"), keys: ["kind", "name"], handler: r_media_kind_name },
 ]
 
 export const config = {

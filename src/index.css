@@ -76,7 +76,7 @@ input[type='number'] {
 .study-place.dark {
   --sp-bg: #0f172a;
   --sp-card: #1e293b;
-  --sp-border: #334155;
+  --sp-border: rgb(255 255 255 / 0.1);
   --sp-text: #f1f5f9;
   --sp-muted: #94a3b8;
   color-scheme: dark;
@@ -84,6 +84,9 @@ input[type='number'] {
   --color-slate-100: #1e293b;
   --color-slate-200: #334155;
   --color-slate-300: #475569;
+  --color-ink: #f1f5f9;
+  --color-muted: #94a3b8;
+  --color-mist: #0f172a;
 }
 
 .study-place.dark .bg-white {
@@ -95,6 +98,7 @@ input[type='number'] {
   background-color: #ffffff;
 }
 
+.study-place.dark .text-ink,
 .study-place.dark .text-slate-900,
 .study-place.dark .text-slate-800 {
   color: var(--sp-text);
@@ -104,9 +108,62 @@ input[type='number'] {
   color: #cbd5e1;
 }
 
+.study-place.dark .text-muted,
+.study-place.dark .text-slate-500,
+.study-place.dark .text-slate-400 {
+  color: #cbd5e1;
+}
+
+.study-place.dark .border-gray-100,
+.study-place.dark .border-gray-200,
+.study-place.dark .border-gray-300,
 .study-place.dark .border-slate-100,
-.study-place.dark .border-slate-200 {
+.study-place.dark .border-slate-200,
+.study-place.dark .border-indigo-100,
+.study-place.dark .border-indigo-200 {
   border-color: var(--sp-border);
+}
+
+.study-place.dark .bg-gray-50,
+.study-place.dark .bg-slate-50,
+.study-place.dark .bg-gray-50\/80,
+.study-place.dark .bg-slate-50\/80,
+.study-place.dark .bg-gray-50\/60 {
+  background-color: rgb(15 23 42 / 0.55);
+}
+
+.study-place.dark .bg-indigo-50,
+.study-place.dark .bg-indigo-50\/50,
+.study-place.dark .bg-indigo-50\/80,
+.study-place.dark .from-indigo-50\/80 {
+  background-color: var(--sp-card);
+  background-image: none;
+}
+
+.study-place.dark .bg-red-50,
+.study-place.dark .bg-red-50\/40 {
+  background-color: rgb(127 29 29 / 0.25);
+}
+
+.study-place.dark input:not([type='checkbox']):not([type='radio']):not([type='range']),
+.study-place.dark textarea,
+.study-place.dark select {
+  background-color: #0f172a;
+  color: var(--sp-text);
+  border-color: rgb(255 255 255 / 0.12);
+}
+
+.study-place.dark input::placeholder,
+.study-place.dark textarea::placeholder {
+  color: #94a3b8;
+}
+
+.study-place.dark .skill-radar-label {
+  fill: var(--sp-text);
+}
+
+.study-place.dark .skill-radar-grid {
+  stroke: #475569;
 }
 
 .pill-accent {

@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { HiOutlineBell } from 'react-icons/hi2'
+import { Bell } from 'lucide-react'
 import { useAuth } from '../../auth/AuthContext'
+import { pollWhenVisible } from '../../utils/pollWhenVisible'
 import type { AppNotification } from '../../types/notifications'
 import {
   ensureApiSession,
@@ -43,8 +44,7 @@ export default function NotificationBell({
 
   useEffect(() => {
     void load()
-    const interval = window.setInterval(() => void load(), 8_000)
-    return () => window.clearInterval(interval)
+    return pollWhenVisible(() => void load(), 60_000)
   }, [load])
 
   useEffect(() => {
@@ -75,22 +75,29 @@ export default function NotificationBell({
 
   if (!user) return null
 
+  const unreadLabel =
+    unreadCount > 9 ? '9+' : unreadCount > 0 ? String(unreadCount) : ''
+
   return (
     <div ref={rootRef} className={`relative ${className}`}>
       <button
         type="button"
         onClick={() => void handleOpen()}
-        className={`relative inline-flex h-9 w-9 items-center justify-center rounded-full transition ${
-          buttonClassName
-            ? buttonClassName
-            : 'border border-slate-200 bg-white text-slate-600 hover:bg-slate-50'
+        className={`relative inline-flex h-10 w-10 items-center justify-center rounded-full text-indigo-500 transition hover:bg-indigo-500/15 hover:text-indigo-400 ${
+          buttonClassName ?? ''
         }`}
-        aria-label="Notifications"
+        aria-label={
+          unreadCount > 0
+            ? `Notifications, ${unreadCount} unread`
+            : 'Notifications'
+        }
         aria-expanded={isOpen}
       >
-        <HiOutlineBell className="h-5 w-5" aria-hidden />
+        <Bell className="h-5 w-5" strokeWidth={2.4} aria-hidden />
         {unreadCount > 0 ? (
-          <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-blue-500 ring-2 ring-white" />
+          <span className="absolute -top-1 -right-1 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-bold leading-none text-white shadow-sm ring-2 ring-white">
+            {unreadLabel}
+          </span>
         ) : null}
       </button>
 

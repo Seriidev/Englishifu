@@ -2,7 +2,7 @@ import type { VercelRequest, VercelResponse } from '@vercel/node'
 import { applyCors, getAuthenticatedUser } from '../../_lib/auth.js'
 import { createNotification } from '../../_lib/createNotification.js'
 import { dbUnavailableResponse, isDbConfigured, sql } from '../../_lib/db.js'
-import { grantLessonXp } from '../../_lib/studentXp.js'
+import { grantDueLessonXp } from '../../_lib/studentXp.js'
 
 function formatWhen(iso: string): string {
   try {
@@ -135,74 +135,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const listAsTutor = roleParam === 'tutor' && user.role === 'tutor'
 
     try {
-      // Lazy-complete past lessons so students can leave reviews
-      if (listAsTutor) {
-        const completed = await sql`
-            UPDATE bookings
-            SET status = 'completed'
-            WHERE tutor_id = ${user.id}
-              AND status = 'confirmed'
-              AND end_at < NOW()
-            RETURNING id, tutor_id, student_id
-          `
-        for (const row of completed.rows) {
-          await grantLessonXp({
-            tutorId: String(row.tutor_id),
-            studentId: String(row.student_id),
-            bookingId: Number(row.id),
-          })
-        }
-      } else {
-        const completed = await sql`
-            UPDATE bookings
-            SET status = 'completed'
-            WHERE student_id = ${user.id}
-              AND status = 'confirmed'
-              AND end_at < NOW()
-            RETURNING id, tutor_id, student_id
-          `
-        for (const row of completed.rows) {
-          await grantLessonXp({
-            tutorId: String(row.tutor_id),
-            studentId: String(row.student_id),
-            bookingId: Number(row.id),
-          })
-        }
-      }
-
-      const missingLessonXp = listAsTutor
-        ? await sql`
-            SELECT id, tutor_id, student_id
-            FROM bookings
-            WHERE tutor_id = ${user.id}
-              AND status = 'completed'
-              AND NOT EXISTS (
-                SELECT 1 FROM student_boosts sb
-                WHERE sb.booking_id = bookings.id AND sb.kind = 'lesson'
-              )
-          `
-        : await sql`
-            SELECT id, tutor_id, student_id
-            FROM bookings
-            WHERE student_id = ${user.id}
-              AND status = 'completed'
-              AND NOT EXISTS (
-                SELECT 1 FROM student_boosts sb
-                WHERE sb.booking_id = bookings.id AND sb.kind = 'lesson'
-              )
-          `
-      for (const row of missingLessonXp.rows) {
-        await grantLessonXp({
-          tutorId: String(row.tutor_id),
-          studentId: String(row.student_id),
-          bookingId: Number(row.id),
-        })
-      }
+      await grantDueLessonXp(
+        listAsTutor ? { tutorId: user.id } : { studentId: user.id },
+      )
 
       if (listAsTutor) {
         const { rows } = await sql`
           SELECT
-            b.*,
+            b.id, b.tutor_id, b.student_id, b.start_at, b.end_at, b.status,
+            b.subject, b.meeting_link, b.created_at,
             s.full_name AS student_name,
             s.handle AS student_handle,
             t.full_name AS tutor_name,
@@ -220,13 +161,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           WHERE b.tutor_id = ${user.id}
             AND b.status IN ('confirmed', 'completed', 'cancelled')
           ORDER BY b.start_at DESC
+          LIMIT 50
         `
         return res.status(200).json({ bookings: rows })
       }
 
       const { rows } = await sql`
         SELECT
-          b.*,
+          b.id, b.tutor_id, b.student_id, b.start_at, b.end_at, b.status,
+          b.subject, b.meeting_link, b.created_at,
           s.full_name AS student_name,
           s.handle AS student_handle,
           t.full_name AS tutor_name,
@@ -240,6 +183,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         WHERE b.student_id = ${user.id}
           AND b.status IN ('confirmed', 'completed')
         ORDER BY b.start_at ASC
+        LIMIT 50
       `
       return res.status(200).json({ bookings: rows })
     } catch (err) {

@@ -50,7 +50,7 @@ export default function TutorApprovedModal() {
   useEffect(() => {
     if (!tutorId) return
     void checkApproval()
-    const id = window.setInterval(() => void checkApproval(), 15_000)
+    const id = window.setInterval(() => void checkApproval(), 60_000)
     return () => window.clearInterval(id)
   }, [checkApproval, tutorId])
 

@@ -2,6 +2,16 @@ import type { VercelRequest, VercelResponse } from '@vercel/node'
 import { applyCors, getAuthenticatedUser } from '../../../_lib/auth.js'
 import { dbUnavailableResponse, isDbConfigured, sql } from '../../../_lib/db.js'
 
+function toIsoDay(value: unknown): string {
+  if (value instanceof Date && !Number.isNaN(value.getTime())) {
+    return value.toISOString().slice(0, 10)
+  }
+  const raw = String(value ?? '')
+  if (/^\d{4}-\d{2}-\d{2}/.test(raw)) return raw.slice(0, 10)
+  const parsed = new Date(raw)
+  return Number.isNaN(parsed.getTime()) ? '' : parsed.toISOString().slice(0, 10)
+}
+
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   applyCors(res)
   if (req.method === 'OPTIONS') return res.status(204).end()
@@ -97,7 +107,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       primaryLabel: 'Completed',
       secondaryLabel: 'Booked',
       points: chartResult.rows.map((r) => ({
-        date: String(r.day).slice(0, 10),
+        date: toIsoDay(r.day),
         primary: Number(r.completed) || 0,
         secondary: Number(r.total) || 0,
       })),

@@ -8,7 +8,7 @@ import {
   TUTOR_PRICE_PRESETS,
 } from '../mocks/tutorListingsMock'
 import type { TutorListingCard, TutorSortBy, TutorViewMode } from '../types/tutorListing'
-import { fetchApprovedTutors, fetchTutorReviews } from '../utils/platformApi'
+import { fetchApprovedTutors } from '../utils/platformApi'
 
 const PAGE_SIZE = 8
 const FAV_KEY = 'englishcore_tutor_favorites_v1'
@@ -37,7 +37,7 @@ export default function FindTutorPage() {
   useEffect(() => {
     let cancelled = false
     setLoading(true)
-    void fetchApprovedTutors()
+    void fetchApprovedTutors({ limit: 100 })
       .then((rows) => {
         if (!cancelled) setTutors(rows)
       })
@@ -121,54 +121,6 @@ export default function FindTutorPage() {
     safePage * PAGE_SIZE,
   )
 
-  const [liveRatings, setLiveRatings] = useState<
-    Record<string, { rating: number; reviewsCount: number }>
-  >({})
-
-  const pageHandlesKey = pageItems.map((t) => t.handle).join(',')
-
-  useEffect(() => {
-    let cancelled = false
-    const handles = pageHandlesKey ? pageHandlesKey.split(',') : []
-    void Promise.all(
-      handles.map(async (handle) => {
-        try {
-          const data = await fetchTutorReviews(handle)
-          return [
-            handle.toLowerCase(),
-            { rating: data.averageRating, reviewsCount: data.totalReviews },
-          ] as const
-        } catch {
-          return null
-        }
-      }),
-    ).then((entries) => {
-      if (cancelled) return
-      setLiveRatings((prev) => {
-        const next = { ...prev }
-        for (const entry of entries) {
-          if (!entry) continue
-          const [handle, stats] = entry
-          if (stats.reviewsCount > 0) next[handle] = stats
-        }
-        return next
-      })
-    })
-    return () => {
-      cancelled = true
-    }
-  }, [pageHandlesKey])
-
-  const displayItems: TutorListingCard[] = pageItems.map((tutor) => {
-    const live = liveRatings[tutor.handle.toLowerCase()]
-    if (!live) return tutor
-    return {
-      ...tutor,
-      rating: live.rating,
-      reviewsCount: live.reviewsCount,
-    }
-  })
-
   const setPage = (next: number) => {
     const n = new URLSearchParams(params)
     if (next <= 1) n.delete('page')
@@ -249,7 +201,7 @@ export default function FindTutorPage() {
         </div>
       ) : viewMode === 'grid' ? (
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-          {displayItems.map((tutor) => (
+          {pageItems.map((tutor) => (
             <TutorCard
               key={tutor.id}
               tutor={tutor}
@@ -260,7 +212,7 @@ export default function FindTutorPage() {
         </div>
       ) : (
         <div className="space-y-3">
-          {displayItems.map((tutor) => (
+          {pageItems.map((tutor) => (
             <TutorCard
               key={tutor.id}
               tutor={tutor}

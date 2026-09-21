@@ -1,6 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 import { applyCors, getAuthenticatedUser } from '../../../_lib/auth.js'
 import { dbUnavailableResponse, isDbConfigured, sql } from '../../../_lib/db.js'
+import { publicMediaUrl } from '../../../_lib/saveMedia.js'
 
 function isValidMeetLink(url: string): boolean {
   try {
@@ -28,7 +29,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     try {
       const { rows } = await sql`
         SELECT
-          s.*,
+          s.id, s.host_tutor_id, s.title, s.description, s.topic_tags,
+          s.level_tag, s.starts_at, s.duration_minutes, s.max_participants,
+          s.meeting_link, s.created_at,
           u.full_name AS host_name,
           u.avatar_url AS host_avatar,
           u.handle AS host_handle,
@@ -41,7 +44,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         JOIN app_users u ON u.id = s.host_tutor_id
         WHERE s.starts_at >= NOW() - INTERVAL '2 hours'
         ORDER BY s.starts_at ASC
+        LIMIT 20
       `
+      for (const row of rows) {
+        row.host_avatar = publicMediaUrl(row.host_avatar)
+      }
       return res.status(200).json({ sessions: rows })
     } catch (err) {
       console.error('GET speaking-club sessions:', err)

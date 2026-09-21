@@ -61,7 +61,6 @@ export async function syncApiSession(
         handle: user.handle,
         fullName: user.fullName,
         email: user.email,
-        avatarUrl: user.avatarUrl ?? null,
       }),
     })
     if (!res.ok) {

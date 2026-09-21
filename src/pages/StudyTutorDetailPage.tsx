@@ -13,7 +13,12 @@ import type { TutorReview } from '../types/notifications'
 import type { TutorListingCard } from '../types/tutorListing'
 import { SKILL_LABELS, type TutorPublicProfile } from '../types/tutorProfile'
 import { syncApiSession } from '../utils/bookingApi'
-import { fetchApprovedTutors, fetchTutorReviews } from '../utils/platformApi'
+import {
+  fetchApprovedTutors,
+  fetchTutorProfileStats,
+  fetchTutorReviews,
+  setTutorFollow,
+} from '../utils/platformApi'
 import {
   readFollowedTutorIds,
   writeFollowedTutorIds,
@@ -44,17 +49,55 @@ export default function StudyTutorDetailPage() {
   const [following, setFollowing] = useState(() =>
     readFollowedTutorIds(userId).includes(followId),
   )
+  const [classesCount, setClassesCount] = useState(0)
+  const [followersCount, setFollowersCount] = useState(0)
+  const [kpi, setKpi] = useState('—')
 
   useEffect(() => {
     setFollowing(readFollowedTutorIds(userId).includes(followId))
   }, [followId, userId])
 
   useEffect(() => {
+    const tutorId = listing?.id ?? registered?.id
+    if (!tutorId) return
+    let cancelled = false
+    void (async () => {
+      try {
+        if (user) await syncApiSession(user)
+        const stats = await fetchTutorProfileStats(tutorId)
+        if (cancelled) return
+        setClassesCount(stats.classesCount)
+        setFollowersCount(stats.followersCount)
+        setKpi(stats.kpi)
+        const localFollow = readFollowedTutorIds(userId).includes(tutorId)
+        if (user?.role === 'student' && localFollow && !stats.following) {
+          const synced = await setTutorFollow(tutorId, true)
+          if (cancelled) return
+          setFollowing(true)
+          setFollowersCount(synced.followersCount)
+          return
+        }
+        setFollowing(stats.following || localFollow)
+      } catch {
+        if (cancelled) return
+        setClassesCount(0)
+        setFollowersCount(0)
+        setKpi('—')
+      }
+    })()
+    return () => {
+      cancelled = true
+    }
+  }, [listing?.id, registered?.id, user, userId, reviewsTick])
+
+  useEffect(() => {
     let cancelled = false
     setProfileLoading(true)
     void Promise.all([
       getTutorProfileByHandle(routeHandle),
-      fetchApprovedTutors().catch(() => [] as TutorListingCard[]),
+      fetchApprovedTutors({ handle: routeHandle }).catch(
+        () => [] as TutorListingCard[],
+      ),
     ]).then(([profile, tutors]) => {
       if (cancelled) return
       setRegistered(profile)
@@ -133,23 +176,31 @@ export default function StudyTutorDetailPage() {
   const aboutMe =
     registered?.aboutMe?.trim() ||
     `${fullName} is a teacher on Englishcore. Book a lesson to start preparing together.`
-  const classesCount =
-    registered?.classesStats.totalClasses ||
-    Math.max(10, Math.round((listing?.reviewsCount ?? 20) / 5))
-  const studentsCount =
-    registered?.studentsCount ||
-    registered?.classesStats.totalStudents ||
-    Math.max(20, listing?.reviewsCount ?? 20)
-  const kpi = avgRating ? avgRating.toFixed(1) : '—'
   const availabilityStatus = listing?.availabilityStatus ?? 'away'
 
   const toggleFollow = () => {
+    const tutorId = listing?.id ?? registered?.id ?? followId
     setFollowing((prev) => {
       const ids = readFollowedTutorIds(userId)
       const next = prev
-        ? ids.filter((id) => id !== followId)
-        : [...ids, followId]
+        ? ids.filter((id) => id !== tutorId)
+        : [...ids, tutorId]
       writeFollowedTutorIds(userId, next)
+      setFollowersCount((count) => Math.max(0, count + (prev ? -1 : 1)))
+      if (user?.role === 'student') {
+        void (async () => {
+          try {
+            await syncApiSession(user)
+            const stats = await setTutorFollow(tutorId, !prev)
+            setFollowing(stats.following)
+            setFollowersCount(stats.followersCount)
+            setClassesCount(stats.classesCount)
+            setKpi(stats.kpi)
+          } catch {
+            /* local follow still applied */
+          }
+        })()
+      }
       return !prev
     })
   }
@@ -186,63 +237,69 @@ export default function StudyTutorDetailPage() {
         Back to tutors
       </Link>
 
-      <StudentTutorProfileHero
-        fullName={fullName}
-        avatarUrl={avatarUrl}
-        isVerified={isVerified}
-        availabilityStatus={availabilityStatus}
-        tags={tags}
-        rating={avgRating}
-        reviewsCount={reviewsCount}
-        pricePerHour={hourlyRateUsd}
-        aboutMe={aboutMe}
-        classesCount={classesCount}
-        studentsCount={studentsCount}
-        kpi={kpi}
-        following={following}
-        onFollow={toggleFollow}
-        onBook={openBookingPanel}
-        onWriteReview={
-          user?.role === 'student'
-            ? () => {
-                const target =
-                  document.getElementById('leave-review') ??
-                  document.getElementById('tutor-reviews')
-                target?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-              }
-            : undefined
-        }
-      />
-
-      <LeaveProfileReview
-        tutorHandle={routeHandle}
-        tutorName={fullName}
-        alreadyReviewed={Boolean(
-          user &&
-            user.role === 'student' &&
-            reviews.some((r) => r.student_id === user.id),
-        )}
-        existingRating={
-          user
-            ? reviews.find((r) => r.student_id === user.id)?.rating
-            : undefined
-        }
-        onSubmitted={() => setReviewsTick((n) => n + 1)}
-      />
-
-      <section
-        id="tutor-reviews"
-        className="rounded-[24px] bg-white p-5 shadow-[0_10px_28px_rgba(0,0,0,0.08)] sm:p-6"
-      >
-        <h3 className="mb-4 text-base font-bold text-slate-900">Reviews</h3>
-        <ReviewsList
-          reviews={reviews}
-          averageRating={avgRating}
-          totalReviews={reviewsCount}
-          loading={reviewsLoading}
-          emptyHint="No student reviews yet. Be the first to rate this teacher."
+      <div className="grid min-w-0 items-start gap-5 lg:grid-cols-[minmax(0,1.2fr)_minmax(17rem,0.8fr)]">
+        <StudentTutorProfileHero
+          fullName={fullName}
+          avatarUrl={avatarUrl}
+          isVerified={isVerified}
+          availabilityStatus={availabilityStatus}
+          tags={tags}
+          rating={avgRating}
+          reviewsCount={reviewsCount}
+          pricePerHour={hourlyRateUsd}
+          aboutMe={aboutMe}
+          classesCount={classesCount}
+          followersCount={followersCount}
+          kpi={kpi}
+          following={following}
+          onFollow={toggleFollow}
+          onBook={openBookingPanel}
+          onWriteReview={
+            user?.role === 'student'
+              ? () => {
+                  const target =
+                    document.getElementById('leave-review') ??
+                    document.getElementById('tutor-reviews')
+                  target?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                }
+              : undefined
+          }
         />
-      </section>
+
+        <div className="min-w-0 space-y-5">
+          <LeaveProfileReview
+            tutorHandle={routeHandle}
+            tutorName={fullName}
+            alreadyReviewed={Boolean(
+              user &&
+                user.role === 'student' &&
+                reviews.some((r) => r.student_id === user.id),
+            )}
+            existingRating={
+              user
+                ? reviews.find((r) => r.student_id === user.id)?.rating
+                : undefined
+            }
+            onSubmitted={() => setReviewsTick((n) => n + 1)}
+          />
+
+          <section
+            id="tutor-reviews"
+            className="rounded-[24px] bg-white p-5 shadow-[0_10px_28px_rgba(0,0,0,0.08)] sm:p-6"
+          >
+            <h3 className="mb-4 text-base font-bold text-slate-900 dark:text-white">
+              Reviews
+            </h3>
+            <ReviewsList
+              reviews={reviews}
+              averageRating={avgRating}
+              totalReviews={reviewsCount}
+              loading={reviewsLoading}
+              emptyHint="No student reviews yet. Be the first to rate this teacher."
+            />
+          </section>
+        </div>
+      </div>
 
       {bookingOpen ? (
         <section className="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm sm:p-6">

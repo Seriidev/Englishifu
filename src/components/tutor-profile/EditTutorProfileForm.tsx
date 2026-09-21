@@ -74,7 +74,6 @@ export default function EditTutorProfileForm() {
       yearsOfExperience: Number(form.yearsOfExperience),
       hourlyRateUsd: Number(form.hourlyRateUsd),
       aboutMe: form.aboutMe?.trim(),
-      avatarUrl: user.avatarUrl,
       isPublicProfile: user.isPublicProfile,
       certifications: form.certifications,
     })

@@ -179,12 +179,19 @@ export async function patchAdminTutor(
 export async function fetchAdminStudents(params: {
   q?: string
   sort?: string
-}): Promise<AdminStudentRow[]> {
+  page?: number
+  limit?: number
+}): Promise<{ students: AdminStudentRow[]; total: number }> {
   const qs = new URLSearchParams()
   if (params.q) qs.set('q', params.q)
   if (params.sort) qs.set('sort', params.sort)
+  if (params.page) qs.set('page', String(params.page))
+  if (params.limit) qs.set('limit', String(params.limit))
   const data = await adminFetch(`/api/admin/students?${qs.toString()}`)
-  return (data.students as AdminStudentRow[]) || []
+  return {
+    students: (data.students as AdminStudentRow[]) || [],
+    total: Number(data.total) || 0,
+  }
 }
 
 export async function suspendAdminUser(id: string, isSuspended: boolean) {
@@ -515,3 +522,4 @@ export function fileToDataUrl(file: File): Promise<string> {
     reader.readAsDataURL(file)
   })
 }
+

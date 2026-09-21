@@ -21,7 +21,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         AND (starts_at IS NULL OR starts_at <= NOW())
         AND (ends_at IS NULL OR ends_at >= NOW())
       ORDER BY display_order ASC, id ASC
+      LIMIT 20
     `
+    res.setHeader(
+      'Cache-Control',
+      'public, max-age=0, s-maxage=60, stale-while-revalidate=300',
+    )
     return res.status(200).json({ banners: rows })
   } catch (err) {
     console.error('GET banners:', err)
