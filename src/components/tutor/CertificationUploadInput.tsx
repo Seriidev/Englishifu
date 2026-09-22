@@ -269,7 +269,7 @@ export default function CertificationUploadInput({
           type="button"
           onClick={() => void addCertification()}
           disabled={!canAdd}
-          className="shrink-0 rounded-full bg-brand px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-dark disabled:opacity-50"
+          className="shrink-0 rounded-xl bg-indigo-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-600 disabled:opacity-50"
         >
           {uploading ? 'Uploading…' : 'Add'}
         </button>

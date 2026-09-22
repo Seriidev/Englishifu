@@ -128,7 +128,7 @@ function FillInBlank({
           type="button"
           disabled={!complete}
           onClick={() => onSubmit({ type: 'fill-in-blank', blanks })}
-          className="w-full rounded-full bg-brand py-3.5 text-sm font-semibold text-white transition hover:bg-brand-dark disabled:opacity-50"
+          className="w-full rounded-xl bg-indigo-500 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-600 disabled:opacity-50"
         >
           <SubmitLabel />
         </button>
@@ -181,7 +181,7 @@ function ListeningMC({
           selected != null &&
           onSubmit({ type: 'multiple-choice', optionIndex: selected })
         }
-        className="rounded-full bg-brand py-3.5 text-sm font-semibold text-white transition hover:bg-brand-dark disabled:opacity-50"
+        className="rounded-xl bg-indigo-500 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-600 disabled:opacity-50"
       >
         <SubmitLabel />
       </button>
@@ -257,7 +257,7 @@ function MapMatching({
         type="button"
         disabled={!complete}
         onClick={() => onSubmit({ type: 'map-matching', mapping })}
-        className="rounded-full bg-brand py-3.5 text-sm font-semibold text-white transition hover:bg-brand-dark disabled:opacity-50"
+        className="rounded-xl bg-indigo-500 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-600 disabled:opacity-50"
       >
         <SubmitLabel />
       </button>

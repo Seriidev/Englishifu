@@ -100,10 +100,10 @@ export default function ListeningLibrary() {
                   key={tab.id}
                   type="button"
                   onClick={() => setFilter(tab.id)}
-                  className={`rounded-full px-3.5 py-1.5 text-xs font-semibold transition ${
+                  className={`rounded-xl px-4 py-2.5 text-sm font-semibold transition ${
                     active
-                      ? 'bg-brand text-white'
-                      : 'bg-white text-muted ring-1 ring-gray-200 hover:text-ink'
+                      ? 'bg-indigo-500 text-white hover:bg-indigo-600'
+                      : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                   }`}
                 >
                   {tab.label}
@@ -146,7 +146,7 @@ export default function ListeningLibrary() {
                 <button
                   type="button"
                   onClick={() => navigate(`/listening/practice/${practice.id}`)}
-                  className="inline-flex shrink-0 items-center justify-center gap-1.5 rounded-full bg-brand px-5 py-2.5 text-sm font-semibold text-white hover:bg-brand-dark"
+                  className="inline-flex shrink-0 items-center justify-center gap-1.5 rounded-xl bg-indigo-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-600"
                 >
                   {t('listening.start')}
                   <ArrowRight className="h-4 w-4" aria-hidden />
@@ -168,7 +168,7 @@ export default function ListeningLibrary() {
               type="button"
               disabled={safePage <= 1}
               onClick={() => setPage(safePage - 1)}
-              className="rounded-full border px-4 py-2 text-sm font-semibold disabled:opacity-40"
+              className="rounded-xl bg-slate-100 px-4 py-2.5 text-sm font-semibold text-slate-600 transition hover:bg-slate-200 disabled:opacity-40"
             >
               {t('listening.prev')}
             </button>
@@ -179,7 +179,7 @@ export default function ListeningLibrary() {
               type="button"
               disabled={safePage >= totalPages}
               onClick={() => setPage(safePage + 1)}
-              className="rounded-full border px-4 py-2 text-sm font-semibold disabled:opacity-40"
+              className="rounded-xl bg-slate-100 px-4 py-2.5 text-sm font-semibold text-slate-600 transition hover:bg-slate-200 disabled:opacity-40"
             >
               {t('listening.next')}
             </button>

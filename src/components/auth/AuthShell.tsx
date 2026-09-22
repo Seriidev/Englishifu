@@ -18,7 +18,7 @@ export default function AuthShell({ title, subtitle, children }: AuthShellProps)
           </Link>
           <Link
             to="/"
-            className="inline-flex items-center rounded-full border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-ink shadow-sm transition hover:bg-gray-50"
+            className="inline-flex items-center rounded-xl bg-slate-100 px-4 py-2.5 text-sm font-semibold text-slate-600 transition hover:bg-slate-200"
           >
             Back home
           </Link>

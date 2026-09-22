@@ -168,7 +168,7 @@ export default function StudentsTab({ tutorId }: StudentsTabProps) {
               type="button"
               disabled={!student.canBoost || boostingId === student.id}
               onClick={() => void onBoost(student)}
-              className={`inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-sm font-semibold transition disabled:cursor-not-allowed ${
+              className={`inline-flex items-center gap-1 rounded-xl px-3 py-1.5 text-sm font-semibold transition disabled:cursor-not-allowed ${
                 student.canBoost
                   ? 'bg-indigo-500 text-white hover:bg-indigo-600'
                   : 'bg-slate-100 text-slate-400'

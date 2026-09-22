@@ -234,7 +234,7 @@ export default function TutorWorkspaceProfilePage() {
             status={tutor.status}
             onBeforeSend={saveProfile}
             onSent={() => void refreshUser()}
-            className="inline-flex shrink-0 items-center justify-center gap-1.5 rounded-lg bg-brand px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-dark disabled:opacity-60"
+            className="inline-flex shrink-0 items-center justify-center gap-1.5 rounded-xl bg-indigo-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-600 disabled:opacity-60"
           />
         </div>
 
@@ -438,7 +438,7 @@ export default function TutorWorkspaceProfilePage() {
                 type="button"
                 disabled={saving}
                 onClick={() => void saveProfile()}
-                className="rounded-lg bg-brand px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-dark disabled:opacity-60"
+                className="rounded-xl bg-indigo-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-600 disabled:opacity-60"
               >
                 {saving ? 'Saving…' : 'Save changes'}
               </button>

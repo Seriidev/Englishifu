@@ -177,7 +177,7 @@ export default function TutorProfilePage() {
                 ? dashboardPathForRole(user.role, user)
                 : '/'
           }
-          className="mt-6 rounded-full bg-brand px-5 py-2.5 text-sm font-semibold text-white"
+          className="mt-6 rounded-xl bg-indigo-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-600"
         >
           {sessionTutor ? 'Go to my profile' : 'Back home'}
         </Link>
@@ -214,7 +214,7 @@ export default function TutorProfilePage() {
         </p>
         <Link
           to={homePath}
-          className="mt-6 rounded-full bg-brand px-5 py-2.5 text-sm font-semibold text-white"
+          className="mt-6 rounded-xl bg-indigo-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-600"
         >
           Back home
         </Link>
@@ -255,7 +255,7 @@ export default function TutorProfilePage() {
             {isOwnProfile ? <NotificationBell /> : null}
             <Link
               to={homePath}
-              className="rounded-full border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-ink transition hover:bg-gray-50"
+              className="rounded-xl bg-slate-100 px-4 py-2.5 text-sm font-semibold text-slate-600 transition hover:bg-slate-200"
             >
               Back home
             </Link>
@@ -265,7 +265,7 @@ export default function TutorProfilePage() {
                 onClick={() => {
                   void logout().then(() => navigate('/', { replace: true }))
                 }}
-                className="inline-flex items-center gap-1.5 rounded-full border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-muted transition hover:bg-gray-50"
+                className="inline-flex items-center gap-1.5 rounded-xl bg-slate-100 px-4 py-2.5 text-sm font-semibold text-slate-600 transition hover:bg-slate-200"
               >
                 <LogOut className="h-4 w-4" aria-hidden />
                 Log out
@@ -379,7 +379,7 @@ export default function TutorProfilePage() {
                 <button
                   type="button"
                   onClick={() => navigate('/tutor/profile')}
-                  className="inline-flex items-center gap-1.5 rounded-full border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-ink transition hover:bg-gray-50"
+                  className="inline-flex items-center gap-1.5 rounded-xl bg-slate-100 px-4 py-2.5 text-sm font-semibold text-slate-600 transition hover:bg-slate-200"
                 >
                   <Pencil className="h-3.5 w-3.5" aria-hidden />
                   Edit Profile
@@ -388,7 +388,7 @@ export default function TutorProfilePage() {
               {isOwnProfile ? (
                 <Link
                   to="/tutor/bookings"
-                  className="inline-flex items-center gap-1.5 rounded-full border border-indigo-200 bg-indigo-50 px-4 py-2 text-sm font-semibold text-indigo-700 transition hover:bg-indigo-100"
+                  className="inline-flex items-center gap-1.5 rounded-xl border border-indigo-200 bg-indigo-50 px-4 py-2 text-sm font-semibold text-indigo-700 transition hover:bg-indigo-100"
                 >
                   Bookings inbox
                 </Link>
@@ -397,7 +397,7 @@ export default function TutorProfilePage() {
                 <button
                   type="button"
                   onClick={() => setMeetModal({ open: true })}
-                  className="inline-flex items-center gap-1.5 rounded-full border border-indigo-200 bg-indigo-50 px-4 py-2 text-sm font-semibold text-indigo-700 transition hover:bg-indigo-100"
+                  className="inline-flex items-center gap-1.5 rounded-xl border border-indigo-200 bg-indigo-50 px-4 py-2 text-sm font-semibold text-indigo-700 transition hover:bg-indigo-100"
                 >
                   <Video className="h-4 w-4" aria-hidden />
                   Create Google Meet
@@ -541,7 +541,7 @@ export default function TutorProfilePage() {
             <button
               type="button"
               onClick={() => setMeetSentOpen(false)}
-              className="mt-6 w-full rounded-full bg-brand px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-dark"
+              className="mt-6 w-full rounded-xl bg-indigo-500 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-600"
             >
               OK
             </button>

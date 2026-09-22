@@ -53,7 +53,12 @@ export default function TutorTasksPage() {
   const visible = useMemo(() => {
     const q = query.trim().toLowerCase()
     return rows.filter((row) => {
-      const inMonth = !row.dueAt || row.dueAt.slice(0, 7) === month
+      const dueMonth = row.dueAt?.slice(0, 7)
+      const createdMonth = row.createdAt?.slice(0, 7)
+      const inMonth =
+        (!dueMonth && !createdMonth) ||
+        dueMonth === month ||
+        createdMonth === month
       if (!inMonth) return false
       if (!q) return true
       return `${row.title} ${row.description} ${row.assignedBy} ${row.assignedTo}`
@@ -90,7 +95,9 @@ export default function TutorTasksPage() {
             Tasks
           </h2>
           <p className="mt-1 text-sm text-slate-500">
-            Admin sends you tasks. You create homework for your students.
+            {tab === 'sent'
+              ? 'Each row is one student. The status changes when they start or finish the homework.'
+              : 'Admin sends you tasks. You create homework for your students.'}
           </p>
         </div>
         <button
@@ -107,7 +114,7 @@ export default function TutorTasksPage() {
           <button
             type="button"
             onClick={() => setTab('inbox')}
-            className={`rounded-full px-3 py-1.5 text-sm font-semibold ${
+            className={`rounded-xl px-3 py-1.5 text-sm font-semibold ${
               tab === 'inbox'
                 ? 'bg-white text-slate-900 shadow-sm'
                 : 'text-slate-500'
@@ -118,7 +125,7 @@ export default function TutorTasksPage() {
           <button
             type="button"
             onClick={() => setTab('sent')}
-            className={`rounded-full px-3 py-1.5 text-sm font-semibold ${
+            className={`rounded-xl px-3 py-1.5 text-sm font-semibold ${
               tab === 'sent'
                 ? 'bg-white text-slate-900 shadow-sm'
                 : 'text-slate-500'
@@ -155,7 +162,9 @@ export default function TutorTasksPage() {
         emptyHint={
           tab === 'inbox'
             ? 'No tasks from admin yet.'
-            : 'No homework yet. Create one for your students.'
+            : rows.length === 0
+              ? 'No homework yet. Create one for your students.'
+              : 'Nothing created or due this month. Change the month to see other homework.'
         }
         personLabel={tab === 'sent' ? 'Assigned to' : 'Assigned by'}
         onStatusChange={(row, status) => void onStatusChange(row, status)}

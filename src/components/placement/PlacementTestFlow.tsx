@@ -8,8 +8,9 @@ import {
 import { useAuth } from '../../auth/AuthContext'
 import { useLanguage } from '../../i18n/LanguageContext'
 import LangSwitcher from '../shared/LangSwitcher'
+import { stashPendingPlacement } from '../../utils/pendingPlacement'
 import PlacementTestIntro from './PlacementTestIntro'
-import PlacementResults from './PlacementResults'
+import PlacementAwardModal from './PlacementAwardModal'
 
 type Stage = 'intro' | 'questions' | 'results'
 
@@ -67,11 +68,14 @@ export default function PlacementTestFlow({ onExit }: Props) {
 
   const finish = async () => {
     const scored = scorePlacementAnswers(answers, questions)
+    const placement = {
+      cefrLevel: scored.cefrLevel,
+      completedAt: scored.completedAt,
+    }
     if (user?.role === 'student') {
-      await savePlacementResult({
-        cefrLevel: scored.cefrLevel,
-        completedAt: scored.completedAt,
-      })
+      await savePlacementResult(placement)
+    } else {
+      stashPendingPlacement(placement)
     }
     setResult(scored)
     setStage('results')
@@ -106,16 +110,13 @@ export default function PlacementTestFlow({ onExit }: Props) {
 
   if (stage === 'results' && result) {
     return (
-      <PlacementResults
-        result={result}
-        onRetake={() => {
-          setIndex(0)
-          setAnswers({})
-          setResult(null)
-          setStage('intro')
-        }}
-        onExit={handleExit}
-      />
+      <div className="min-h-svh bg-[#f7f9fc]">
+        <PlacementAwardModal
+          result={result}
+          awarded={user?.role === 'student'}
+          onClose={handleExit}
+        />
+      </div>
     )
   }
 
@@ -144,7 +145,7 @@ export default function PlacementTestFlow({ onExit }: Props) {
               <button
                 type="button"
                 onClick={handleExit}
-                className="rounded-full border border-gray-200 px-4 py-2 text-sm font-semibold text-ink hover:bg-gray-50"
+                className="rounded-xl bg-slate-100 px-4 py-2.5 text-sm font-semibold text-slate-600 transition hover:bg-slate-200"
               >
                 {t('placement.exit')}
               </button>
@@ -209,7 +210,7 @@ export default function PlacementTestFlow({ onExit }: Props) {
               type="button"
               onClick={goBack}
               disabled={index === 0}
-              className="rounded-full border border-gray-200 px-6 py-3 text-sm font-semibold text-ink hover:bg-gray-50 disabled:opacity-40"
+              className="rounded-xl bg-slate-100 px-4 py-2.5 text-sm font-semibold text-slate-600 transition hover:bg-slate-200 disabled:opacity-40"
             >
               {t('placement.back')}
             </button>
@@ -217,7 +218,7 @@ export default function PlacementTestFlow({ onExit }: Props) {
               type="button"
               disabled={selected == null}
               onClick={goNext}
-              className="rounded-full bg-brand px-8 py-3 text-sm font-semibold text-white hover:bg-brand-dark disabled:opacity-50"
+              className="rounded-xl bg-indigo-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-600 disabled:opacity-50"
             >
               {index + 1 === questions.length
                 ? t('placement.seeResults')

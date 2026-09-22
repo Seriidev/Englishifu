@@ -29,7 +29,7 @@ export default function ResultsScreen() {
           <button
             type="button"
             onClick={() => navigate('/toefl')}
-            className="mt-6 rounded-full bg-brand px-6 py-3 text-sm font-semibold text-white"
+            className="mt-6 rounded-xl bg-indigo-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-600"
           >
             Back to Hub
           </button>
@@ -105,7 +105,7 @@ export default function ResultsScreen() {
           <button
             type="button"
             onClick={() => downloadResultsPDF(result)}
-            className="inline-flex items-center gap-2 rounded-full bg-brand px-6 py-3 text-sm font-semibold text-white hover:bg-brand-dark"
+            className="inline-flex items-center gap-2 rounded-xl bg-indigo-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-600"
           >
             <Download className="h-4 w-4" aria-hidden />
             Download Results (PDF)
@@ -113,7 +113,7 @@ export default function ResultsScreen() {
           <button
             type="button"
             onClick={() => navigate('/full-test')}
-            className="inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white px-6 py-3 text-sm font-semibold text-ink hover:bg-gray-50"
+            className="inline-flex items-center gap-2 rounded-xl bg-slate-100 px-4 py-2.5 text-sm font-semibold text-slate-600 transition hover:bg-slate-200"
           >
             <RotateCcw className="h-4 w-4" aria-hidden />
             Retake Test

@@ -1,27 +1,27 @@
 import { useMemo, useState } from 'react'
-import type { DailyLifeQuestion, ReadInDailyLifeItem } from './types'
+import type { AcademicPassage, DailyLifeQuestion } from './types'
 import { useLanguage } from '../../i18n/LanguageContext'
 
-interface ReadInDailyLifeViewProps {
-  item: ReadInDailyLifeItem
+interface AcademicPassageViewProps {
+  passage: AcademicPassage
   onContinue: (correct: number, total: number) => void
 }
 
-export default function ReadInDailyLifeView({
-  item,
+export default function AcademicPassageView({
+  passage,
   onContinue,
-}: ReadInDailyLifeViewProps) {
+}: AcademicPassageViewProps) {
   const { t } = useLanguage()
   const [selected, setSelected] = useState<Record<string, string>>({})
   const [answered, setAnswered] = useState<Record<string, boolean>>({})
 
-  const allAnswered = item.questions.every((question) => answered[question.id])
+  const allAnswered = passage.questions.every((question) => answered[question.id])
   const correctCount = useMemo(
     () =>
-      item.questions.filter(
+      passage.questions.filter(
         (question) => selected[question.id] === question.correct_option_id,
       ).length,
-    [item.questions, selected],
+    [passage.questions, selected],
   )
 
   const markAnswered = (question: DailyLifeQuestion, optionId: string) => {
@@ -34,17 +34,22 @@ export default function ReadInDailyLifeView({
     <div className="grid items-start gap-6 lg:grid-cols-2">
       <div className="lg:sticky lg:top-4">
         <p className="text-xs font-semibold tracking-wide text-brand uppercase">
-          Read in daily life
+          Read an academic passage
         </p>
-        <p className="mt-1 text-sm text-muted">{item.instructions}</p>
-        <div className="mt-4">
-          <DailyLifePassage item={item} />
-        </div>
+        <p className="mt-1 text-sm text-muted">{passage.instructions}</p>
+        <article className="mt-4 rounded-2xl border border-gray-100 bg-white p-4 shadow-sm sm:p-5">
+          <h3 className="text-base font-bold text-ink">{passage.title}</h3>
+          <div className="mt-3 space-y-3 text-sm leading-relaxed text-ink/90">
+            {passage.paragraphs.map((paragraph, index) => (
+              <p key={`${passage.id}-p-${index}`}>{paragraph}</p>
+            ))}
+          </div>
+        </article>
       </div>
 
       <div className="flex flex-col gap-6">
       <div className="space-y-6">
-        {item.questions.map((question, index) => {
+        {passage.questions.map((question, index) => {
           const chosen = selected[question.id]
           const isAnswered = Boolean(answered[question.id])
           const isCorrect = chosen === question.correct_option_id
@@ -110,7 +115,7 @@ export default function ReadInDailyLifeView({
         <button
           type="button"
           disabled={!allAnswered}
-          onClick={() => onContinue(correctCount, item.questions.length)}
+          onClick={() => onContinue(correctCount, passage.questions.length)}
           className="w-full rounded-xl bg-indigo-500 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-600 disabled:cursor-not-allowed disabled:opacity-50"
         >
           {allAnswered ? 'Continue' : t('toefl.submitContinue')}
@@ -119,64 +124,5 @@ export default function ReadInDailyLifeView({
       </div>
       </div>
     </div>
-  )
-}
-
-function DailyLifePassage({ item }: { item: ReadInDailyLifeItem }) {
-  if (item.type === 'email') {
-    return (
-      <article className="rounded-2xl border border-gray-100 bg-white p-4 shadow-sm sm:p-5">
-        <p className="text-xs font-semibold tracking-wide text-muted uppercase">
-          Email
-        </p>
-        <h3 className="mt-1 text-base font-bold text-ink">
-          Subject: {item.subject}
-        </h3>
-        <div className="mt-3 space-y-3 text-sm leading-relaxed text-ink/90">
-          {item.body.map((paragraph, index) => (
-            <p key={`${item.id}-p-${index}`}>{paragraph}</p>
-          ))}
-        </div>
-      </article>
-    )
-  }
-
-  if (item.type === 'announcement') {
-    return (
-      <article className="rounded-2xl border border-gray-100 bg-white p-4 shadow-sm sm:p-5">
-        <p className="text-xs font-semibold tracking-wide text-muted uppercase">
-          Announcement
-        </p>
-        <div className="mt-3 space-y-3 text-sm leading-relaxed text-ink/90">
-          {item.body.map((paragraph, index) => (
-            <p key={`${item.id}-p-${index}`}>{paragraph}</p>
-          ))}
-        </div>
-      </article>
-    )
-  }
-
-  return (
-    <article className="rounded-2xl border border-gray-100 bg-white p-4 shadow-sm sm:p-5">
-      <p className="text-xs font-semibold tracking-wide text-muted uppercase">
-        Text chain
-      </p>
-      <div className="mt-3 space-y-3">
-        {item.messages.map((message, index) => (
-          <div
-            key={`${item.id}-m-${index}`}
-            className="rounded-2xl bg-mist px-3 py-2.5"
-          >
-            <div className="flex items-baseline justify-between gap-3">
-              <p className="text-sm font-semibold text-ink">{message.sender}</p>
-              <p className="text-[11px] text-muted">{message.time}</p>
-            </div>
-            <p className="mt-1 text-sm leading-relaxed text-ink/90">
-              {message.text}
-            </p>
-          </div>
-        ))}
-      </div>
-    </article>
   )
 }

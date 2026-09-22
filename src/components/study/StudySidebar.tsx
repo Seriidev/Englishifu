@@ -103,14 +103,19 @@ function isItemActive(item: SidebarItem, pathname: string) {
   return item.match ? item.match(pathname) : pathname.startsWith(item.path)
 }
 
-function itemClass(active: boolean, collapsed: boolean) {
+function itemClass(active: boolean) {
   return [
-    'flex items-center rounded-[10px] text-sm font-medium transition-colors',
-    collapsed ? 'h-10 w-10 justify-center' : 'h-10 gap-4 px-3',
+    'flex h-10 w-full items-center overflow-hidden rounded-[10px] px-3 text-sm font-medium transition-colors',
     active
       ? 'bg-indigo-50 text-indigo-600 dark:bg-indigo-500/20 dark:text-indigo-400'
       : 'text-slate-500 hover:bg-slate-50',
   ].join(' ')
+}
+
+function labelClass(collapsed: boolean) {
+  return `overflow-hidden whitespace-nowrap transition-all duration-300 ease-in-out motion-reduce:transition-none ${
+    collapsed ? 'ml-0 max-w-0 opacity-0' : 'ml-4 max-w-[11rem] opacity-100'
+  }`
 }
 
 export default function StudySidebar({
@@ -167,22 +172,24 @@ export default function StudySidebar({
           state={item.state}
           title={item.label}
           onClick={onNavigate}
-          className={itemClass(active, collapsed)}
+          className={itemClass(active)}
         >
           <Icon className="h-[22px] w-[22px] shrink-0" aria-hidden />
-          <span className={collapsed ? 'sr-only' : 'truncate'}>{item.label}</span>
+          <span className={labelClass(collapsed)}>{item.label}</span>
         </NavLink>
       )
     })
 
   return (
     <aside
-      className={`study-sidebar flex h-full flex-col border-r border-slate-200 bg-white text-slate-900 ${
+      className={`study-sidebar flex h-full flex-col border-r border-slate-200 bg-white text-slate-900 transition-[width] duration-300 ease-in-out motion-reduce:transition-none ${
         collapsed ? 'w-[72px]' : 'w-[240px]'
       }`}
     >
       <div
-        className={`flex shrink-0 items-center py-3 ${collapsed ? 'justify-center px-2' : 'gap-4 px-4'}`}
+        className={`flex shrink-0 items-center px-4 py-3 transition-all duration-300 ease-in-out motion-reduce:transition-none ${
+          collapsed ? 'gap-0' : 'gap-4'
+        }`}
       >
         <button
           type="button"
@@ -192,79 +199,69 @@ export default function StudySidebar({
         >
           <HiOutlineBars3 className="h-6 w-6" aria-hidden />
         </button>
-        {collapsed ? null : <StudyPlaceLogo />}
+        <span className={labelClass(collapsed)}>
+          <StudyPlaceLogo />
+        </span>
       </div>
 
       <nav
-        className={`flex min-h-0 flex-1 flex-col overflow-y-auto ${collapsed ? 'items-center gap-1 px-2' : 'gap-0.5 px-3'}`}
+        className="flex min-h-0 flex-1 flex-col gap-0.5 overflow-y-auto px-3"
         aria-label="Study"
       >
         {renderGroup(PRIMARY)}
 
         <div
-          className={`my-3 h-px bg-slate-200 ${collapsed ? 'w-8' : 'mx-1'}`}
+          className={`my-3 h-px bg-slate-200 transition-[width] duration-300 ease-in-out motion-reduce:transition-none ${
+            collapsed ? 'mx-auto w-8' : 'mx-1 w-[calc(100%-8px)]'
+          }`}
         />
 
         {renderGroup(SECONDARY)}
       </nav>
 
       <div
-        className={`shrink-0 pb-3 ${collapsed ? 'flex flex-col items-center px-2' : 'px-4'}`}
+        className="shrink-0 px-4 pb-3"
       >
         <div className="relative" ref={menuRef}>
-          {collapsed ? (
+          <div className="flex items-center gap-1 py-1">
             <button
               type="button"
-              onClick={() => setMenuOpen((open) => !open)}
-              className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full"
-              aria-label="Account menu"
-              aria-expanded={menuOpen}
-              aria-haspopup="menu"
+              onClick={() =>
+                collapsed ? setMenuOpen((open) => !open) : go(profilePath)
+              }
+              className="flex min-w-0 items-center text-left"
+              aria-label={collapsed ? 'Account menu' : displayName}
             >
               {user?.avatarUrl ? (
                 <img
                   src={user.avatarUrl}
                   alt=""
-                  className="h-8 w-8 rounded-full object-cover"
+                  className="h-8 w-8 shrink-0 rounded-full object-cover"
                 />
               ) : (
-                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#f2f2f2] text-xs font-semibold">
+                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#f2f2f2] text-xs font-semibold">
                   {initial}
                 </span>
               )}
+              <span className={`${labelClass(collapsed)} text-sm font-medium`}>
+                {displayName}
+              </span>
             </button>
-          ) : (
-            <div className="flex items-center gap-3 py-1">
-              <button
-                type="button"
-                onClick={() => go(profilePath)}
-                className="flex min-w-0 flex-1 items-center gap-3 text-left"
-              >
-                {user?.avatarUrl ? (
-                  <img
-                    src={user.avatarUrl}
-                    alt=""
-                    className="h-8 w-8 shrink-0 rounded-full object-cover"
-                  />
-                ) : (
-                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#f2f2f2] text-xs font-semibold">
-                    {initial}
-                  </span>
-                )}
-                <span className="truncate text-sm font-medium">{displayName}</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => setMenuOpen((open) => !open)}
-                className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full transition hover:bg-slate-50"
-                aria-label="Account menu"
-                aria-expanded={menuOpen}
-                aria-haspopup="menu"
-              >
-                <HiOutlineEllipsisHorizontal className="h-5 w-5" aria-hidden />
-              </button>
-            </div>
-          )}
+            <button
+              type="button"
+              onClick={() => setMenuOpen((open) => !open)}
+              className={`inline-flex h-8 shrink-0 items-center justify-center overflow-hidden rounded-full transition-all duration-300 ease-in-out hover:bg-slate-50 motion-reduce:transition-none ${
+                collapsed ? 'w-0 opacity-0' : 'w-8 opacity-100'
+              }`}
+              aria-label="Account menu"
+              aria-expanded={menuOpen}
+              aria-hidden={collapsed}
+              tabIndex={collapsed ? -1 : 0}
+              aria-haspopup="menu"
+            >
+              <HiOutlineEllipsisHorizontal className="h-5 w-5" aria-hidden />
+            </button>
+          </div>
 
           {menuOpen ? (
             <div

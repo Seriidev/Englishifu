@@ -80,7 +80,7 @@ export default function SendResumeButton({
         }}
         className={
           className ||
-          'inline-flex items-center gap-1.5 rounded-full bg-brand px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-dark disabled:opacity-60'
+          'inline-flex items-center gap-1.5 rounded-xl bg-indigo-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-600 disabled:opacity-60'
         }
       >
         <FileText className="h-4 w-4" aria-hidden />

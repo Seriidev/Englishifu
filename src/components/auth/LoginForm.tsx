@@ -3,13 +3,14 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { Eye, EyeOff } from 'lucide-react'
 import { useAuth } from '../../auth/AuthContext'
 import { dashboardPathForRole, forgotPasswordPath } from '../../utils/authStorage'
+import { claimPendingPlacement } from '../../utils/pendingPlacement'
 import AuthShell from './AuthShell'
 import { errorClass, fieldClass, labelClass, primaryBtnClass } from './formStyles'
 
 export default function LoginForm() {
   const navigate = useNavigate()
   const [search] = useSearchParams()
-  const { login } = useAuth()
+  const { login, refreshUser } = useAuth()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
@@ -36,6 +37,11 @@ export default function LoginForm() {
             : result.error,
         )
         return
+      }
+
+      if (result.user.role === 'student') {
+        await claimPendingPlacement(result.user.id)
+        await refreshUser()
       }
 
       navigate(dashboardPathForRole(result.user.role, result.user), {

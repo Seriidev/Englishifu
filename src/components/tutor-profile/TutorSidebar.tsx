@@ -36,14 +36,14 @@ export default function TutorSidebar({
         {isOwner ? (
           <Link
             to="/tutor/complete-profile"
-            className="mt-4 inline-flex w-full items-center justify-center rounded-full border border-gray-200 bg-white px-4 py-2.5 text-sm font-semibold text-ink shadow-sm transition hover:bg-gray-50 sm:w-auto"
+            className="mt-4 inline-flex w-full items-center justify-center rounded-xl bg-slate-100 px-4 py-2.5 text-sm font-semibold text-slate-600 transition hover:bg-slate-200 sm:w-auto"
           >
             Edit Profile
           </Link>
         ) : (
           <button
             type="button"
-            className="mt-4 inline-flex w-full items-center justify-center rounded-full bg-brand px-4 py-2.5 text-sm font-semibold text-white shadow-md shadow-brand/20 transition hover:bg-brand-dark sm:w-auto"
+            className="mt-4 inline-flex w-full items-center justify-center rounded-xl bg-indigo-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-600 sm:w-auto"
           >
             Book a Lesson
           </button>

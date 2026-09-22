@@ -37,7 +37,15 @@ const en: Dict = {
   'placement.bullet2': 'About 5–7 minutes — work at your own pace',
   'placement.bullet3': 'Instant CEFR result (A1–C2) with a personalized next step',
   'placement.back': 'Back',
-  'placement.start': 'Start Placement Test',
+  'placement.start': 'Start test',
+  'placement.awardTitle': 'Congratulations',
+  'placement.awardStudent': 'You earned the {level} checkmark.',
+  'placement.awardGuest':
+    'Your level is {level}. Register to get this checkmark on your profile.',
+  'placement.awardRegister': 'Register',
+  'placement.awardLogin': 'I already have an account',
+  'placement.awardContinue': 'Continue',
+  'placement.awardLater': 'Not now',
   'placement.exit': 'Exit',
   'placement.questionOf': 'Question {current} of {total}',
   'placement.answered': '{count} answered · no time limit',
@@ -126,10 +134,10 @@ const en: Dict = {
   'hero.reviews': '500+ reviews',
   'hero.scoreLabel': 'TOEFL Score: 112',
 
-  'features.titleBefore': 'Why Choose',
-  'features.titleBrand': 'EnglishUp',
+  'features.titleBefore': 'Why you choose',
+  'features.titleBrand': 'EnglishCore',
   'features.body':
-    'EnglishUp helps you prepare for TOEFL, match with personal tutors, and practice fluency in speaking clubs. We combine mentorship, structured courses, and real conversation practice so you can progress with confidence.',
+    'EnglishCore helps you prepare for TOEFL, find a tutor, and practice in speaking clubs.',
   'features.subtitle': 'What Makes Us Different',
   'features.s1.title': 'Students Enrolled',
   'features.s1.desc': 'Trusted by thousands of learners worldwide',
@@ -219,8 +227,6 @@ const en: Dict = {
 
   'fullTest.eyebrow': 'Full exam',
   'fullTest.title': 'Full Test Simulation',
-  'fullTest.body':
-    'All 4 sections back-to-back — Reading, Listening, Speaking, Writing — with transitions like the real exam. About 2 hours. Downloadable PDF results at the end.',
   'fullTest.start': 'Start Full Test',
 }
 
@@ -251,6 +257,14 @@ const ru: Dict = {
   'placement.bullet3': 'Мгновенный результат CEFR (A1–C2) и следующий шаг',
   'placement.back': 'Назад',
   'placement.start': 'Начать тест',
+  'placement.awardTitle': 'Поздравляем',
+  'placement.awardStudent': 'Ты получил галочку уровня {level}.',
+  'placement.awardGuest':
+    'Твой уровень — {level}. Зарегистрируйся, чтобы получить эту галочку в профиле.',
+  'placement.awardRegister': 'Зарегистрироваться',
+  'placement.awardLogin': 'У меня уже есть аккаунт',
+  'placement.awardContinue': 'Продолжить',
+  'placement.awardLater': 'Не сейчас',
   'placement.exit': 'Выйти',
   'placement.questionOf': 'Вопрос {current} из {total}',
   'placement.answered': 'Отвечено: {count} · без таймера',
@@ -340,9 +354,9 @@ const ru: Dict = {
   'hero.scoreLabel': 'Балл TOEFL: 112',
 
   'features.titleBefore': 'Почему выбирают',
-  'features.titleBrand': 'EnglishUp',
+  'features.titleBrand': 'EnglishCore',
   'features.body':
-    'EnglishUp помогает готовиться к TOEFL, находить личного преподавателя и практиковать речь в speaking clubs. Менторство, курсы и живое общение — чтобы расти уверенно.',
+    'EnglishCore помогает готовиться к TOEFL, найти преподавателя и практиковать речь.',
   'features.subtitle': 'Чем мы отличаемся',
   'features.s1.title': 'Студентов с нами',
   'features.s1.desc': 'Нам доверяют тысячи учеников по всему миру',
@@ -432,8 +446,6 @@ const ru: Dict = {
 
   'fullTest.eyebrow': 'Полный экзамен',
   'fullTest.title': 'Полная симуляция теста',
-  'fullTest.body':
-    'Все 4 секции подряд — Reading, Listening, Speaking, Writing — как на реальном экзамене. Около 2 часов. PDF с результатами в конце.',
   'fullTest.start': 'Начать полный тест',
 }
 
@@ -464,6 +476,14 @@ const tm: Dict = {
   'placement.bullet3': 'Derrew CEFR netijesi (A1–C2) we indiki ädim',
   'placement.back': 'Yza',
   'placement.start': 'Teste başla',
+  'placement.awardTitle': 'Gutlaýarys',
+  'placement.awardStudent': '{level} derejesiniň bellijegini aldyň.',
+  'placement.awardGuest':
+    'Seniň derejäň {level}. Bu bellijegi profilde almak üçin hasaba dur.',
+  'placement.awardRegister': 'Hasaba dur',
+  'placement.awardLogin': 'Hasabym bar',
+  'placement.awardContinue': 'Dowam et',
+  'placement.awardLater': 'Soňrak',
   'placement.exit': 'Çyk',
   'placement.questionOf': 'Sorag {current} / {total}',
   'placement.answered': 'Jogap berilen: {count} · wagt çägi ýok',
@@ -553,9 +573,9 @@ const tm: Dict = {
   'hero.scoreLabel': 'TOEFL baly: 112',
 
   'features.titleBefore': 'Näme üçin',
-  'features.titleBrand': 'EnglishUp',
+  'features.titleBrand': 'EnglishCore',
   'features.body':
-    'EnglishUp TOEFL taýýarlygynda, şahsy mugallym saýlamakda we Speaking Club-larda gepleşik endiklerinde kömek edýär.',
+    'EnglishCore TOEFL taýýarlygynda, mugallym tapmakda we Speaking Club-da kömek edýär.',
   'features.subtitle': 'Biziň tapawudymyz',
   'features.s1.title': 'Hasaba alnan talyplar',
   'features.s1.desc': 'Dünýä boýunça müňlerçe okuwçy ynanýar',
@@ -645,8 +665,6 @@ const tm: Dict = {
 
   'fullTest.eyebrow': 'Doly synag',
   'fullTest.title': 'Doly test simulýasiýasy',
-  'fullTest.body':
-    '4 bölüm yzly-yzyna — Reading, Listening, Speaking, Writing — hakyky synag ýaly. Takmynan 2 sagat. Ahyrynda PDF netije.',
   'fullTest.start': 'Doly teste başla',
 }
 

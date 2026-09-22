@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Users } from 'lucide-react'
+import { FaUserPlus } from 'react-icons/fa6'
 import { fetchToeflTryCount } from '../utils/toeflTryCounter'
 import { useLanguage } from '../i18n/LanguageContext'
 
@@ -29,7 +29,7 @@ export default function ToeflTryBadge() {
   if (count == null) {
     return (
       <div
-        className="pointer-events-none absolute right-4 bottom-4 rounded-full border border-white/80 bg-white/90 px-3 py-1.5 text-xs text-muted shadow-sm backdrop-blur-sm sm:right-6 sm:bottom-5"
+        className="inline-flex items-center gap-2 rounded-xl bg-white px-4 py-2.5 text-base font-semibold text-muted shadow-sm"
         aria-hidden
       >
         {t('common.loading')}
@@ -38,8 +38,8 @@ export default function ToeflTryBadge() {
   }
 
   return (
-    <div className="pointer-events-none absolute right-4 bottom-4 inline-flex items-center gap-1.5 rounded-full border border-white/80 bg-white/95 px-3 py-1.5 text-xs font-medium text-ink shadow-sm backdrop-blur-sm sm:right-6 sm:bottom-5">
-      <Users className="h-3.5 w-3.5 text-brand" aria-hidden />
+    <div className="inline-flex items-center gap-2 rounded-xl bg-white px-4 py-2.5 text-base font-semibold text-ink shadow-sm">
+      <FaUserPlus className="text-brand" size={22} aria-hidden />
       <span>
         <span className="font-bold tabular-nums text-brand">{formatCount(count)}</span>
         {label}

@@ -101,8 +101,8 @@ export default function Navbar() {
         onClick={goPrimary}
         className={
           mobile
-            ? 'rounded-full bg-brand px-4 py-2.5 text-sm font-semibold whitespace-nowrap text-white'
-            : 'rounded-full bg-brand px-5 py-2.5 text-sm font-semibold text-white transition duration-300 hover:bg-brand-dark'
+            ? 'rounded-xl bg-indigo-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-600'
+            : 'rounded-xl bg-indigo-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-600'
         }
       >
         {t('nav.signUp')}
@@ -123,7 +123,7 @@ export default function Navbar() {
             key={code}
             type="button"
             onClick={() => setLang(code as LangCode)}
-            className={`${compact ? 'flex-1' : ''} rounded-full px-2.5 py-1.5 text-xs font-semibold transition-all duration-300 ${
+            className={`${compact ? 'flex-1' : ''} rounded-xl px-2.5 py-1.5 text-xs font-semibold transition-all duration-300 ${
               isActive
                 ? 'bg-white text-ink shadow-sm'
                 : 'text-gray-400 hover:text-ink'

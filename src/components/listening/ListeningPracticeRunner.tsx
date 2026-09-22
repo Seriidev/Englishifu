@@ -110,7 +110,7 @@ export default function ListeningPracticeRunner() {
           <button
             type="button"
             onClick={() => navigate('/listening/library')}
-            className="mt-8 rounded-full bg-brand px-6 py-3 text-sm font-semibold text-white"
+            className="mt-8 rounded-xl bg-indigo-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-600"
           >
             {t('listening.backLibrary')}
           </button>

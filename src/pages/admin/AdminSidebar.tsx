@@ -67,8 +67,8 @@ export default function AdminSidebar({
             <HiOutlineBars3 className="h-6 w-6" aria-hidden />
           </button>
         ) : null}
-        <p className="min-w-0 font-serif text-xl font-semibold tracking-tight text-zinc-900">
-          <BrandMark className="font-serif font-semibold" />
+        <p className="min-w-0 text-xl font-bold tracking-tight text-zinc-950">
+          <BrandMark />
         </p>
       </div>
       <nav className="flex-1 space-y-0.5 overflow-y-auto px-3 pb-4">
@@ -81,10 +81,10 @@ export default function AdminSidebar({
               end
               onClick={onNavigate}
               className={({ isActive }) =>
-                `flex items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm font-medium transition ${
+                `flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-medium transition ${
                   isActive
-                    ? 'bg-indigo-50 text-indigo-600'
-                    : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'
+                    ? 'bg-zinc-950 text-white'
+                    : 'text-zinc-500 hover:bg-zinc-100 hover:text-zinc-950'
                 }`
               }
             >

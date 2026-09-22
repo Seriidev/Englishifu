@@ -176,6 +176,88 @@ input[type='number'] {
   color: #a5b4fc;
 }
 
+.task-bar-todo {
+  background-color: #ede9fe;
+  color: #5b21b6;
+}
+
+.task-bar-progress {
+  background-color: #e0e7ff;
+  color: #3730a3;
+}
+
+.task-bar-done {
+  background-color: #ccfbf1;
+  color: #115e59;
+}
+
+.task-bar-count {
+  color: inherit;
+  opacity: 0.75;
+}
+
+.study-place.dark .task-bar-todo {
+  background-color: rgb(139 92 246 / 0.22);
+  color: #ddd6fe;
+}
+
+.study-place.dark .task-bar-progress {
+  background-color: rgb(99 102 241 / 0.28);
+  color: #c7d2fe;
+}
+
+.study-place.dark .task-bar-done {
+  background-color: rgb(20 184 166 / 0.22);
+  color: #99f6e4;
+}
+
+.admin-shell .text-brand,
+.admin-shell .text-indigo-500,
+.admin-shell .text-indigo-600,
+.admin-shell .text-indigo-700 {
+  color: #18181b;
+}
+
+.admin-shell .bg-indigo-500,
+.admin-shell .bg-indigo-600,
+.admin-shell .hover\:bg-indigo-500:hover,
+.admin-shell .hover\:bg-indigo-600:hover {
+  background-color: #18181b;
+}
+
+.admin-shell .bg-indigo-50,
+.admin-shell .bg-indigo-50\/80 {
+  background-color: #f4f4f5;
+}
+
+.admin-shell .ring-indigo-200 {
+  --tw-ring-color: #e4e4e7;
+}
+
+.admin-shell .border-indigo-500 {
+  border-color: #18181b;
+}
+
+.admin-shell .font-serif {
+  font-family: inherit;
+}
+
+.admin-shell .task-bar-todo {
+  background-color: #ede9fe;
+  color: #5b21b6;
+}
+
+.admin-shell .task-bar-progress {
+  background-color: #e0e7ff;
+  color: #3730a3;
+}
+
+.admin-shell .task-bar-done {
+  background-color: #ccfbf1;
+  color: #115e59;
+  box-shadow: none;
+}
+
 #root {
   min-height: 100svh;
 }

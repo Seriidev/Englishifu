@@ -156,7 +156,7 @@ function Chip({
     <button
       type="button"
       onClick={onClick}
-      className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold transition ${
+      className={`inline-flex items-center gap-1.5 rounded-xl px-3 py-1 text-xs font-semibold transition ${
         active ? 'text-white' : 'bg-white text-zinc-600 ring-1 ring-zinc-200'
       }`}
       style={active ? { backgroundColor: color } : undefined}

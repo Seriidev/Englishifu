@@ -134,7 +134,7 @@ export default function BuildSentence({ item, onContinue }: Props) {
               }}
               onClick={() => returnToPool(chip.id)}
               disabled={checked}
-              className="rounded-full bg-brand px-3 py-1.5 text-sm font-semibold text-white disabled:opacity-90"
+              className="rounded-xl bg-brand px-3 py-1.5 text-sm font-semibold text-white disabled:opacity-90"
             >
               {chip.text}
             </button>
@@ -162,7 +162,7 @@ export default function BuildSentence({ item, onContinue }: Props) {
             onDragEnd={() => setDraggingId(null)}
             onClick={() => addFromPool(chip.id)}
             disabled={checked}
-            className="rounded-full border border-gray-200 bg-white px-3 py-1.5 text-sm font-medium text-ink hover:border-brand disabled:opacity-60"
+            className="rounded-xl border border-gray-200 bg-white px-3 py-1.5 text-sm font-medium text-ink hover:border-brand disabled:opacity-60"
           >
             {chip.text}
           </button>
@@ -184,7 +184,7 @@ export default function BuildSentence({ item, onContinue }: Props) {
           <button
             type="button"
             onClick={() => onContinue(correct)}
-            className="w-full rounded-full bg-brand py-3 text-sm font-semibold text-white"
+            className="w-full rounded-xl bg-indigo-500 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-600"
           >
             Continue
           </button>
@@ -195,7 +195,7 @@ export default function BuildSentence({ item, onContinue }: Props) {
             type="button"
             disabled={built.length === 0}
             onClick={() => setChecked(true)}
-            className="w-full rounded-full bg-brand py-3 text-sm font-semibold text-white disabled:opacity-50"
+            className="w-full rounded-xl bg-indigo-500 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-600 disabled:opacity-50"
           >
             {t('toefl.submitContinue')}
           </button>

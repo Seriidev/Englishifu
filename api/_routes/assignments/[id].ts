@@ -1,7 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import { applyCors, getAuthenticatedUser } from '../../../_lib/auth.js'
-import { dbUnavailableResponse, isDbConfigured, sql } from '../../../_lib/db.js'
-import { ensureAssignmentsTable } from '../../../_lib/assignments.js'
+import { applyCors, getAuthenticatedUser } from '../../_lib/auth.js'
+import { dbUnavailableResponse, isDbConfigured, sql } from '../../_lib/db.js'
+import { ensureAssignmentsTable } from '../../_lib/assignments.js'
 
 const STATUSES = new Set(['todo', 'in_progress', 'completed'])
 

@@ -10,7 +10,7 @@ export default function LangSwitcher({
 
   return (
     <div
-      className={`inline-flex items-center rounded-full bg-gray-100 p-0.5 ${className}`}
+      className={`inline-flex items-center rounded-xl bg-slate-100 p-1 ${className}`}
       role="group"
       aria-label="Language"
     >
@@ -21,7 +21,7 @@ export default function LangSwitcher({
             key={code}
             type="button"
             onClick={() => setLang(code as LangCode)}
-            className={`rounded-full px-2.5 py-1 text-xs font-semibold transition ${
+            className={`rounded-xl px-2.5 py-1 text-xs font-semibold transition ${
               active ? 'bg-white text-ink shadow-sm' : 'text-gray-400 hover:text-ink'
             }`}
           >

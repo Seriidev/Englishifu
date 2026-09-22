@@ -97,9 +97,9 @@ export default function RequestSpeakingClubForm() {
                 key={tag}
                 type="button"
                 onClick={() => setTopic(tag)}
-                className={`rounded-full px-2 py-0.5 text-[11px] font-semibold ${
+                className={`rounded-xl px-4 py-2.5 text-sm font-semibold transition ${
                   topic === tag
-                    ? 'bg-indigo-600 text-white'
+                    ? 'bg-indigo-500 text-white hover:bg-indigo-600'
                     : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                 }`}
               >
@@ -165,7 +165,7 @@ export default function RequestSpeakingClubForm() {
               {row.preferred_time ? (
                 <span className="text-slate-400"> · {row.preferred_time}</span>
               ) : null}
-              <span className="ml-1 rounded-full bg-slate-100 px-1.5 py-0.5 text-[10px] font-semibold tracking-wide text-slate-500 uppercase">
+              <span className="ml-1 rounded-xl bg-slate-100 px-1.5 py-0.5 text-[10px] font-semibold tracking-wide text-slate-500 uppercase">
                 {row.status}
               </span>
             </li>

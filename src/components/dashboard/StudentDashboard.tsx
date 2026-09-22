@@ -37,7 +37,7 @@ export default function StudentDashboard() {
             {user?.role === 'student' && user.handle ? (
               <Link
                 to={studentPublicProfilePath(user.handle)}
-                className="inline-flex items-center gap-1.5 rounded-full border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-ink transition hover:bg-gray-50"
+                className="inline-flex items-center gap-1.5 rounded-xl bg-slate-100 px-4 py-2.5 text-sm font-semibold text-slate-600 transition hover:bg-slate-200"
               >
                 <UserRound className="h-4 w-4" aria-hidden />
                 Profile
@@ -45,14 +45,14 @@ export default function StudentDashboard() {
             ) : null}
             <Link
               to="/placement"
-              className="hidden rounded-full border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-ink transition hover:bg-gray-50 sm:inline-flex"
+              className="hidden rounded-xl bg-slate-100 px-4 py-2.5 text-sm font-semibold text-slate-600 transition hover:bg-slate-200 sm:inline-flex"
             >
               Placement Test
             </Link>
             <button
               type="button"
               onClick={() => void logout()}
-              className="inline-flex items-center gap-1.5 rounded-full border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-muted transition hover:bg-gray-50"
+              className="inline-flex items-center gap-1.5 rounded-xl bg-slate-100 px-4 py-2.5 text-sm font-semibold text-slate-600 transition hover:bg-slate-200"
             >
               <LogOut className="h-4 w-4" aria-hidden />
               Log out
@@ -85,14 +85,14 @@ export default function StudentDashboard() {
             <div className="flex flex-wrap gap-3 pt-1">
               <Link
                 to="/toefl"
-                className="inline-flex rounded-full border border-gray-200 bg-white px-5 py-2.5 text-sm font-semibold text-ink transition hover:bg-gray-50"
+                className="inline-flex rounded-xl bg-slate-100 px-4 py-2.5 text-sm font-semibold text-slate-600 transition hover:bg-slate-200"
               >
                 See Full Course
               </Link>
               <button
                 type="button"
                 onClick={() => navigate(continueHref)}
-                className="inline-flex rounded-full bg-brand px-5 py-2.5 text-sm font-semibold text-white shadow-md shadow-brand/20 transition hover:bg-brand-dark"
+                className="inline-flex rounded-xl bg-indigo-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-600"
               >
                 Continue Learning →
               </button>

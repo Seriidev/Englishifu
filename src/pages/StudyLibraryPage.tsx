@@ -108,10 +108,10 @@ export default function StudyLibraryPage() {
         <button
           type="button"
           onClick={() => setMyBooksOnly((value) => !value)}
-          className={`rounded-full border px-4 py-1.5 text-sm font-medium transition ${
+          className={`rounded-xl px-4 py-2.5 text-sm font-semibold transition ${
             myBooksOnly
-              ? 'border-indigo-500 bg-indigo-600 text-white'
-              : 'border-slate-300 bg-white text-slate-800 hover:border-indigo-400 dark:border-white/20 dark:bg-slate-800 dark:text-white'
+              ? 'bg-indigo-500 text-white hover:bg-indigo-600'
+              : 'bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-white/10 dark:text-slate-200 dark:hover:bg-white/15'
           }`}
           aria-pressed={myBooksOnly}
         >
@@ -126,10 +126,10 @@ export default function StudyLibraryPage() {
             setLevel('all')
             setCategory('all')
           }}
-          className={`w-fit rounded-full px-3 py-1.5 text-xs font-semibold transition ${
+          className={`w-fit rounded-xl px-4 py-2.5 text-sm font-semibold transition ${
             level === 'all' && category === 'all'
-              ? 'bg-indigo-600 text-white'
-              : 'border border-slate-300 bg-white text-slate-800 hover:border-indigo-400 dark:border-white/20 dark:bg-slate-800 dark:text-white'
+              ? 'bg-indigo-500 text-white hover:bg-indigo-600'
+              : 'bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-white/10 dark:text-slate-200 dark:hover:bg-white/15'
           }`}
         >
           All

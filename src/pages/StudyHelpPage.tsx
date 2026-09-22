@@ -114,7 +114,7 @@ export default function StudyHelpPage() {
         <button
           type="submit"
           disabled={submitState === 'sending'}
-          className="mt-4 w-full rounded-full bg-indigo-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-indigo-600 disabled:opacity-60"
+          className="mt-4 w-full rounded-xl bg-indigo-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-indigo-600 disabled:opacity-60"
         >
           {submitState === 'sending'
             ? 'Sending…'

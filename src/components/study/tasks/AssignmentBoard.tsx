@@ -9,21 +9,10 @@ const GROUPS: {
   id: AssignmentStatus
   label: string
   bar: string
-  count: string
 }[] = [
-  { id: 'todo', label: 'To Do', bar: 'bg-amber-200', count: 'text-amber-800' },
-  {
-    id: 'in_progress',
-    label: 'In Progress',
-    bar: 'bg-sky-200',
-    count: 'text-sky-800',
-  },
-  {
-    id: 'completed',
-    label: 'Completed',
-    bar: 'bg-emerald-200',
-    count: 'text-emerald-800',
-  },
+  { id: 'todo', label: 'To Do', bar: 'task-bar task-bar-todo' },
+  { id: 'in_progress', label: 'In Progress', bar: 'task-bar task-bar-progress' },
+  { id: 'completed', label: 'Completed', bar: 'task-bar task-bar-done' },
 ]
 
 function formatDue(iso: string | null) {
@@ -126,11 +115,11 @@ export default function AssignmentBoard({
               onClick={() =>
                 setOpen((prev) => ({ ...prev, [group.id]: !prev[group.id] }))
               }
-              className={`flex w-full items-center gap-2 px-4 py-2.5 text-left text-sm font-semibold text-slate-800 ${group.bar}`}
+              className={`flex w-full items-center gap-2 px-4 py-2.5 text-left text-sm font-semibold ${group.bar}`}
             >
               <span className="inline-block text-xs">{expanded ? '▾' : '▸'}</span>
               {group.label}
-              <span className={`text-xs font-bold ${group.count}`}>
+              <span className="task-bar-count text-xs font-bold">
                 {items.length}
               </span>
             </button>

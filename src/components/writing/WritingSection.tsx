@@ -187,7 +187,7 @@ export default function WritingSection({ onExit, onComplete }: Props) {
           </p>
           <button
             type="button"
-            className="mt-8 rounded-full bg-brand px-8 py-3 text-sm font-semibold text-white"
+            className="mt-8 rounded-xl bg-indigo-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-600"
             onClick={begin}
           >
             Begin Writing
@@ -295,14 +295,14 @@ export default function WritingSection({ onExit, onComplete }: Props) {
             <button
               type="button"
               onClick={onExit}
-              className="rounded-full border px-5 py-2.5 text-sm font-semibold"
+              className="rounded-xl bg-slate-100 px-4 py-2.5 text-sm font-semibold text-slate-600 transition hover:bg-slate-200"
             >
               Exit
             </button>
             <button
               type="button"
               onClick={begin}
-              className="rounded-full bg-brand px-5 py-2.5 text-sm font-semibold text-white"
+              className="rounded-xl bg-indigo-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-600"
             >
               Retry
             </button>

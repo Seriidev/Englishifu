@@ -34,12 +34,13 @@ export default function Features() {
   return (
     <section id="features" className="bg-transparent py-16 sm:py-20 lg:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col items-start justify-between gap-6 lg:flex-row lg:gap-12">
-          <h2 className="max-w-md text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl lg:text-[2.75rem] lg:leading-tight">
-            {t('features.titleBefore')}{' '}
+        <div className="max-w-xl">
+          <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl lg:text-[2.75rem] lg:leading-tight">
+            {t('features.titleBefore')}
+            <br />
             <span className="text-brand">{t('features.titleBrand')}</span>
           </h2>
-          <p className="max-w-md text-base leading-relaxed text-gray-500 lg:pt-1 lg:text-right">
+          <p className="mt-4 max-w-md text-base leading-relaxed text-gray-500">
             {t('features.body')}
           </p>
         </div>

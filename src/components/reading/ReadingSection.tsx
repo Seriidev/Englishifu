@@ -1,6 +1,7 @@
 import { useCallback, useMemo, useRef, useState } from 'react'
 import toeflReadingJson from '../../data/toefl-reading.json'
-import type { ReadingSession, ToeflReadingBank } from './types'
+import academicPassages from '../../data/reading-academic.json'
+import type { AcademicPassage, ReadingSession, ToeflReadingBank } from './types'
 import {
   countSessionAnswers,
   getRandomSession,
@@ -8,10 +9,14 @@ import {
 import type { SectionScore } from '../../scoring/overallScoring'
 import TestShell from '../toefl/TestShell'
 import SectionTimer from '../toefl/SectionTimer'
+import AcademicPassageView from './AcademicPassageView'
 import CompleteTheWordsView from './CompleteTheWordsView'
 import ReadInDailyLifeView from './ReadInDailyLifeView'
 
-const readingBank = toeflReadingJson as ToeflReadingBank
+const readingBank: ToeflReadingBank = {
+  ...(toeflReadingJson as Omit<ToeflReadingBank, 'academic_passages'>),
+  academic_passages: academicPassages as AcademicPassage[],
+}
 const SECTION_TIME_SECONDS = 27 * 60
 
 type Stage = 'intro' | 'running' | 'results'
@@ -19,6 +24,7 @@ type Stage = 'intro' | 'running' | 'results'
 type SessionStep =
   | { kind: 'complete_the_words'; id: string }
   | { kind: 'read_in_daily_life'; id: string }
+  | { kind: 'academic_passage'; id: string }
 
 interface ReadingSectionProps {
   onExit: () => void
@@ -48,6 +54,10 @@ export default function ReadingSection({
       })),
       ...session.read_in_daily_life.map((item) => ({
         kind: 'read_in_daily_life' as const,
+        id: item.id,
+      })),
+      ...session.academic_passages.map((item) => ({
+        kind: 'academic_passage' as const,
         id: item.id,
       })),
     ]
@@ -121,13 +131,14 @@ export default function ReadingSection({
         <div className="mx-auto max-w-xl rounded-3xl border border-gray-100 bg-white p-8 text-center shadow-sm">
           <h2 className="text-2xl font-bold text-ink">Reading Section</h2>
           <p className="mt-3 text-sm leading-relaxed text-muted">
-            Each attempt draws a new set of passages: complete the missing
-            letters, then read everyday emails, announcements, and text chains.
-            You cannot go back after submitting. Section time: 27 minutes.
+            Each attempt is a new mix: Complete the Words two or three times,
+            Read in Daily Life two to four times, then one or two short academic
+            passages with about five questions each. You cannot go back after
+            submitting. Section time: 27 minutes.
           </p>
           <button
             type="button"
-            className="mt-8 rounded-full bg-brand px-8 py-3 text-sm font-semibold text-white"
+            className="mt-8 rounded-xl bg-indigo-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-600"
             onClick={begin}
           >
             Begin Reading
@@ -160,7 +171,9 @@ export default function ReadingSection({
   const partLabel =
     current.kind === 'complete_the_words'
       ? 'Complete the words'
-      : 'Read in daily life'
+      : current.kind === 'read_in_daily_life'
+        ? 'Read in daily life'
+        : 'Read an academic passage'
   const partNumber = stepIndex + 1
 
   return (
@@ -178,17 +191,27 @@ export default function ReadingSection({
       }
       onExit={onExit}
     >
-      <div className="mx-auto w-full max-w-3xl rounded-3xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6">
+      <div
+        className={`mx-auto w-full rounded-3xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6 ${
+          current.kind === 'complete_the_words' ? 'max-w-3xl' : 'max-w-6xl'
+        }`}
+      >
         {current.kind === 'complete_the_words' ? (
           <CompleteTheWordsView
             key={current.id}
             passage={session.complete_the_words.find((p) => p.id === current.id)!}
             onContinue={handleStepContinue}
           />
-        ) : (
+        ) : current.kind === 'read_in_daily_life' ? (
           <ReadInDailyLifeView
             key={current.id}
             item={session.read_in_daily_life.find((p) => p.id === current.id)!}
+            onContinue={handleStepContinue}
+          />
+        ) : (
+          <AcademicPassageView
+            key={current.id}
+            passage={session.academic_passages.find((p) => p.id === current.id)!}
             onContinue={handleStepContinue}
           />
         )}
@@ -228,14 +251,14 @@ function ResultsCard({
         <button
           type="button"
           onClick={onExit}
-          className="rounded-full border px-5 py-2.5 text-sm font-semibold"
+          className="rounded-xl bg-slate-100 px-4 py-2.5 text-sm font-semibold text-slate-600 transition hover:bg-slate-200"
         >
           Exit
         </button>
         <button
           type="button"
           onClick={onRetry}
-          className="rounded-full bg-brand px-5 py-2.5 text-sm font-semibold text-white"
+          className="rounded-xl bg-indigo-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-600"
         >
           Retry
         </button>

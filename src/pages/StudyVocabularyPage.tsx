@@ -82,10 +82,10 @@ export default function StudyVocabularyPage() {
         <button
           type="button"
           onClick={() => setMyWordsOnly((value) => !value)}
-          className={`rounded-full border px-4 py-1.5 text-sm font-medium transition ${
+          className={`rounded-xl px-4 py-2.5 text-sm font-semibold transition ${
             myWordsOnly
-              ? 'border-indigo-500 bg-indigo-600 text-white'
-              : 'border-slate-300 bg-white text-slate-800 hover:border-indigo-500'
+              ? 'bg-indigo-500 text-white hover:bg-indigo-600'
+              : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
           }`}
           aria-pressed={myWordsOnly}
         >
@@ -102,10 +102,10 @@ export default function StudyVocabularyPage() {
                 key={item.id}
                 type="button"
                 onClick={() => setTopic(item.id)}
-                className={`rounded-full px-3 py-1.5 text-xs font-semibold transition ${
+                className={`rounded-xl px-4 py-2.5 text-sm font-semibold transition ${
                   active
-                    ? 'bg-indigo-600 text-white'
-                    : 'bg-white text-slate-700 ring-1 ring-slate-200 hover:bg-slate-50'
+                    ? 'bg-indigo-500 text-white hover:bg-indigo-600'
+                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                 }`}
               >
                 {item.label}

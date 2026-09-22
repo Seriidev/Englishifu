@@ -16,9 +16,9 @@ export default function PlacementTestIntro({ onStart, onExit }: Props) {
         <button
           type="button"
           onClick={onExit}
-          className="rounded-full border border-gray-200 px-4 py-2 text-sm font-semibold text-ink hover:bg-gray-50"
+          className="rounded-xl bg-slate-100 px-4 py-2.5 text-sm font-semibold text-slate-600 transition hover:bg-slate-200"
         >
-          {t('placement.exit')}
+          {t('placement.back')}
         </button>
         <LangSwitcher />
       </div>
@@ -28,15 +28,6 @@ export default function PlacementTestIntro({ onStart, onExit }: Props) {
       <h1 className="mt-6 text-3xl font-bold tracking-tight text-ink sm:text-4xl">
         {t('placement.introTitle')}
       </h1>
-      <p className="mt-2 text-sm font-semibold text-brand">
-        {t('placement.introSubtitle')}
-      </p>
-      <p className="mt-4 text-base leading-relaxed text-muted">
-        {t('placement.introBody')}
-      </p>
-      <p className="mt-2 text-xs font-medium text-brand">
-        {t('placement.introNote')}
-      </p>
 
       <ul className="mt-6 w-full space-y-2 rounded-2xl bg-brand-light/50 p-5 text-left text-sm text-ink">
         <li>• {t('placement.bullet1')}</li>
@@ -44,22 +35,13 @@ export default function PlacementTestIntro({ onStart, onExit }: Props) {
         <li>• {t('placement.bullet3')}</li>
       </ul>
 
-      <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-        <button
-          type="button"
-          onClick={onExit}
-          className="rounded-full border border-gray-200 px-6 py-3 text-sm font-semibold text-ink hover:bg-gray-50"
-        >
-          {t('placement.back')}
-        </button>
-        <button
-          type="button"
-          onClick={onStart}
-          className="rounded-full bg-brand px-8 py-3 text-sm font-semibold text-white shadow-md shadow-brand/25 hover:bg-brand-dark"
-        >
-          {t('placement.start')}
-        </button>
-      </div>
+      <button
+        type="button"
+        onClick={onStart}
+        className="mt-8 rounded-xl bg-indigo-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-600"
+      >
+        {t('placement.start')}
+      </button>
     </div>
   )
 }

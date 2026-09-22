@@ -27,6 +27,8 @@ export default function StudyPlaceLayout() {
   const { theme } = useTheme()
   const location = useLocation()
   const [mobileOpen, setMobileOpen] = useState(false)
+  const [mobileRendered, setMobileRendered] = useState(false)
+  const [mobileShown, setMobileShown] = useState(false)
   const [collapsed, setCollapsed] = useState(readCollapsed)
 
   const student = user?.role === 'student' ? user : null
@@ -38,6 +40,7 @@ export default function StudyPlaceLayout() {
   const closeMobile = () => setMobileOpen(false)
   const sidebarWidth = collapsed ? 'lg:w-[72px]' : 'lg:w-[240px]'
   const contentPad = collapsed ? 'lg:pl-[72px]' : 'lg:pl-[240px]'
+  const slide = 'transition-[width,padding,transform,opacity] duration-300 ease-in-out motion-reduce:transition-none'
 
   useEffect(() => {
     try {
@@ -46,6 +49,23 @@ export default function StudyPlaceLayout() {
       /* ignore */
     }
   }, [collapsed])
+
+  useEffect(() => {
+    setMobileOpen(false)
+  }, [location.pathname])
+
+  useEffect(() => {
+    if (mobileOpen) {
+      setMobileRendered(true)
+      const frame = window.requestAnimationFrame(() => {
+        window.requestAnimationFrame(() => setMobileShown(true))
+      })
+      return () => window.cancelAnimationFrame(frame)
+    }
+    setMobileShown(false)
+    const timer = window.setTimeout(() => setMobileRendered(false), 300)
+    return () => window.clearTimeout(timer)
+  }, [mobileOpen])
 
   useEffect(() => {
     if (!studentId) {
@@ -98,7 +118,7 @@ export default function StudyPlaceLayout() {
   return (
     <div className={`study-place flex min-h-svh min-w-0 bg-slate-50 ${theme === 'dark' ? 'dark' : ''}`}>
       <div
-        className={`hidden lg:fixed lg:inset-y-0 lg:flex lg:flex-col ${sidebarWidth}`}
+        className={`hidden lg:fixed lg:inset-y-0 lg:flex lg:flex-col ${slide} ${sidebarWidth}`}
       >
         <StudySidebar
           activePath={location.pathname}
@@ -107,15 +127,19 @@ export default function StudyPlaceLayout() {
         />
       </div>
 
-      {mobileOpen ? (
+      {mobileRendered ? (
         <div className="fixed inset-0 z-50 lg:hidden">
           <button
             type="button"
-            className="absolute inset-0 bg-slate-900/40"
+            className={`absolute inset-0 bg-slate-900/40 ${slide} ${mobileShown ? 'opacity-100' : 'opacity-0'}`}
             aria-label="Close sidebar"
             onClick={closeMobile}
           />
-          <div className="absolute inset-y-0 left-0 flex shadow-xl">
+          <div
+            className={`absolute inset-y-0 left-0 flex w-[240px] shadow-xl ${slide} ${
+              mobileShown ? 'translate-x-0' : '-translate-x-full'
+            }`}
+          >
             <StudySidebar
               activePath={location.pathname}
               onMenuClick={closeMobile}
@@ -125,7 +149,7 @@ export default function StudyPlaceLayout() {
         </div>
       ) : null}
 
-      <div className={`flex min-w-0 flex-1 flex-col ${contentPad}`}>
+      <div className={`flex min-w-0 flex-1 flex-col ${slide} ${contentPad}`}>
         <header className="study-header sticky top-0 z-30 border-b border-slate-100 bg-slate-50/95 backdrop-blur">
           <div className="mx-auto flex w-full min-w-0 max-w-7xl items-center gap-2 px-3 py-3 sm:gap-3 sm:px-6">
             <button

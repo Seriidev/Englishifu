@@ -19,7 +19,7 @@ export default function TaskTransition({
       <button
         type="button"
         onClick={onContinue}
-        className="mt-10 rounded-full bg-brand px-8 py-3 text-sm font-semibold text-white transition hover:bg-brand-dark"
+        className="mt-10 rounded-xl bg-indigo-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-600"
       >
         Continue
       </button>

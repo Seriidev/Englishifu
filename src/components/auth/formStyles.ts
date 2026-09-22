@@ -6,4 +6,4 @@ export const labelClass = 'mb-1.5 block text-sm font-semibold text-ink'
 export const errorClass = 'mt-1 text-xs font-medium text-red-600'
 
 export const primaryBtnClass =
-  'inline-flex w-full items-center justify-center rounded-full bg-brand px-6 py-3.5 text-sm font-semibold text-white shadow-md shadow-brand/20 transition hover:bg-brand-dark disabled:cursor-not-allowed disabled:opacity-60'
+  'inline-flex w-full items-center justify-center rounded-xl bg-indigo-500 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-600 disabled:cursor-not-allowed disabled:opacity-60'

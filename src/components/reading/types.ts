@@ -98,13 +98,24 @@ export type ReadInDailyLifeItem =
   | AnnouncementDailyLifeItem
   | TextChainDailyLifeItem
 
+export interface AcademicPassage {
+  id: string
+  number: number
+  title: string
+  instructions: string
+  paragraphs: string[]
+  questions: DailyLifeQuestion[]
+}
+
 export interface ToeflReadingBank {
   meta: ToeflReadingMeta
   complete_the_words: CompleteTheWordsPassage[]
   read_in_daily_life: ReadInDailyLifeItem[]
+  academic_passages: AcademicPassage[]
 }
 
 export interface ReadingSession {
   complete_the_words: CompleteTheWordsPassage[]
   read_in_daily_life: ReadInDailyLifeItem[]
+  academic_passages: AcademicPassage[]
 }

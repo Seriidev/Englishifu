@@ -49,10 +49,10 @@ export default function LibraryFilterMenu<T extends string>({
         aria-expanded={open}
         aria-controls={menuId}
         onClick={() => setOpen((v) => !v)}
-        className={`inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-xs font-semibold transition ${
+        className={`inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition ${
           isDefault
-            ? 'border border-slate-300 bg-white text-slate-800 hover:border-indigo-400 dark:border-white/20 dark:bg-slate-800 dark:text-white'
-            : 'border border-indigo-500 bg-indigo-600 text-white'
+            ? 'bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-white/10 dark:text-slate-200 dark:hover:bg-white/15'
+            : 'bg-indigo-500 text-white hover:bg-indigo-600'
         }`}
       >
         {current}

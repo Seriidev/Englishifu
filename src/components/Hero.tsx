@@ -135,7 +135,7 @@ export default function Hero() {
         <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
           <a
             href="/toefl"
-            className="group inline-flex items-center gap-3 rounded-full bg-brand px-7 py-3.5 text-base font-semibold text-white shadow-lg shadow-brand/25 transition hover:bg-brand-dark"
+            className="group inline-flex items-center gap-3 rounded-xl bg-indigo-500 px-5 py-2.5 text-base font-semibold text-white transition hover:bg-indigo-600"
           >
             {t('hero.ctaDemo')}
             <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white text-brand transition group-hover:translate-x-0.5">

@@ -27,7 +27,7 @@ export default function PlacementTestCTA() {
           <button
             type="button"
             onClick={() => navigate('/placement', { state: { returnTo: '/' } })}
-            className="inline-flex w-full shrink-0 items-center justify-center rounded-full bg-white/25 px-7 py-3 text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-white/35 sm:w-auto"
+            className="inline-flex w-full shrink-0 items-center justify-center rounded-xl bg-white/25 px-7 py-3 text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-white/35 sm:w-auto"
           >
             {t('placement.ctaButton')}
           </button>

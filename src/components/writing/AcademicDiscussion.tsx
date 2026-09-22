@@ -86,7 +86,7 @@ export default function AcademicDiscussion({ item, onSubmit }: Props) {
       <button
         type="button"
         onClick={() => submit(text)}
-        className="mt-3 rounded-full bg-brand py-3 text-sm font-semibold text-white"
+        className="mt-3 rounded-xl bg-indigo-500 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-600"
       >
         {t('toefl.submitContinue')}
       </button>

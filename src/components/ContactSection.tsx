@@ -1,13 +1,18 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react'
+import type { IconType } from 'react-icons'
 import {
-  Camera,
-  Clock,
+  FaClock,
+  FaEnvelope,
+  FaGlobe,
+  FaInstagram,
+  FaTelegram,
+  FaTiktok,
+  FaWhatsapp,
+} from 'react-icons/fa6'
+import {
   Globe2,
   GraduationCap,
-  Mail,
   MessageCircle,
-  Music2,
-  Send,
   Sparkles,
   Star,
   Zap,
@@ -33,44 +38,53 @@ const goals: Exclude<Goal, ''>[] = [
   'General English',
 ]
 
-const contactItems = [
+const contactItems: {
+  icon: IconType
+  label: string
+  value: string
+  href?: string
+}[] = [
   {
-    icon: Mail,
+    icon: FaEnvelope,
     label: 'Email',
     value: 'support@englishcore.com',
     href: 'mailto:support@englishcore.com',
   },
   {
-    icon: Send,
+    icon: FaTelegram,
     label: 'Telegram',
     value: '@englishcore',
     href: 'https://t.me/englishcore',
   },
   {
-    icon: Camera,
+    icon: FaInstagram,
     label: 'Instagram',
     value: '@englishcore',
     href: 'https://instagram.com/englishcore',
   },
   {
-    icon: Music2,
+    icon: FaTiktok,
     label: 'TikTok',
     value: '@englishcore',
     href: 'https://tiktok.com/@englishcore',
   },
   {
-    icon: Globe2,
+    icon: FaGlobe,
     label: 'Worldwide',
     value: 'Available in every country',
-    href: undefined,
   },
   {
-    icon: Clock,
+    icon: FaClock,
     label: 'Response Time',
     value: 'Usually within 30 minutes',
-    href: undefined,
   },
-] as const
+]
+
+const helpLinks = [
+  { label: 'Telegram', href: 'https://t.me/englishcore', icon: FaTelegram },
+  { label: 'WhatsApp', href: 'https://wa.me/', icon: FaWhatsapp },
+  { label: 'Email', href: 'mailto:support@englishcore.com', icon: FaEnvelope },
+]
 
 const inputClass =
   'w-full rounded-2xl border border-gray-200/80 bg-gray-50/80 px-4 py-3.5 text-[15px] text-ink outline-none transition placeholder:text-gray-400 focus:border-brand focus:bg-white focus:ring-4 focus:ring-brand/15'
@@ -184,7 +198,7 @@ export default function ContactSection() {
             }`}
             style={{ animationDelay: '0.2s' }}
           >
-            <span className="inline-flex items-center gap-2 rounded-full border border-white/80 bg-white px-4 py-2 text-sm font-semibold text-ink shadow-lg shadow-brand/10">
+            <span className="inline-flex items-center gap-2 rounded-full border border-white/80 bg-white px-5 py-3 text-sm font-semibold text-ink shadow-lg shadow-brand/10">
               <GraduationCap className="h-4 w-4 text-brand" aria-hidden />
               {t('contact.badgeExperts')}
             </span>
@@ -195,7 +209,7 @@ export default function ContactSection() {
             }`}
             style={{ animationDelay: '1.1s' }}
           >
-            <span className="inline-flex items-center gap-2 rounded-full border border-white/80 bg-white px-4 py-2 text-sm font-semibold text-ink shadow-lg shadow-brand/10">
+            <span className="inline-flex items-center gap-2 rounded-full border border-white/80 bg-white px-5 py-3 text-sm font-semibold text-ink shadow-lg shadow-brand/10">
               <Zap className="h-4 w-4 text-brand" aria-hidden />
               {t('contact.badgeResponse')}
             </span>
@@ -206,7 +220,7 @@ export default function ContactSection() {
             }`}
             style={{ animationDelay: '0.6s' }}
           >
-            <span className="inline-flex items-center gap-2 rounded-full border border-white/80 bg-white px-4 py-2 text-sm font-semibold text-ink shadow-lg shadow-brand/10">
+            <span className="inline-flex items-center gap-2 rounded-full border border-white/80 bg-white px-5 py-3 text-sm font-semibold text-ink shadow-lg shadow-brand/10">
               <Star className="h-4 w-4 fill-brand text-brand" aria-hidden />
               {t('contact.badgeRating')}
             </span>
@@ -217,7 +231,7 @@ export default function ContactSection() {
             }`}
             style={{ animationDelay: '1.6s' }}
           >
-            <span className="inline-flex items-center gap-2 rounded-full border border-white/80 bg-white px-4 py-2 text-sm font-semibold text-ink shadow-lg shadow-brand/10">
+            <span className="inline-flex items-center gap-2 rounded-full border border-white/80 bg-white px-5 py-3 text-sm font-semibold text-ink shadow-lg shadow-brand/10">
               <Globe2 className="h-4 w-4 text-brand" aria-hidden />
               {t('contact.labelWorldwide')}
             </span>
@@ -228,7 +242,7 @@ export default function ContactSection() {
             }`}
             style={{ animationDelay: '0.9s' }}
           >
-            <span className="inline-flex items-center gap-2 rounded-full border border-white/80 bg-white px-4 py-2 text-sm font-semibold text-ink shadow-lg shadow-brand/10">
+            <span className="inline-flex items-center gap-2 rounded-full border border-white/80 bg-white px-5 py-3 text-sm font-semibold text-ink shadow-lg shadow-brand/10">
               <Sparkles className="h-4 w-4 text-brand" aria-hidden />
               {t('contact.badgeTutors')}
             </span>
@@ -442,8 +456,8 @@ export default function ContactSection() {
                         : item.value
                   const content = (
                     <>
-                      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/15">
-                        <Icon className="h-4 w-4" aria-hidden />
+                      <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white/15">
+                        <Icon size={20} aria-hidden />
                       </span>
                       <span className="min-w-0 text-left">
                         <span className="block text-xs font-medium text-white/65">
@@ -480,14 +494,21 @@ export default function ContactSection() {
               <div className="relative mt-6 border-t border-white/15 pt-5">
                 <p className="text-sm font-semibold">Need immediate help?</p>
                 <div className="mt-3 flex flex-wrap gap-2">
-                  <a
-                    href="https://t.me/englishcore"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center gap-1.5 rounded-full border border-white/35 px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/10"
-                  >
-                    Telegram →
-                  </a>
+                  {helpLinks.map((link) => {
+                    const Icon = link.icon
+                    return (
+                      <a
+                        key={link.label}
+                        href={link.href}
+                        target={link.href.startsWith('mailto:') ? undefined : '_blank'}
+                        rel="noreferrer"
+                        className="inline-flex items-center gap-2 rounded-xl border border-white/35 px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/10"
+                      >
+                        <Icon size={16} aria-hidden />
+                        {link.label}
+                      </a>
+                    )
+                  })}
                 </div>
               </div>
             </div>

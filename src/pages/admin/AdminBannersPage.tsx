@@ -153,7 +153,7 @@ export default function AdminBannersPage() {
             <button
               type="button"
               onClick={() => void toggleActive(banner)}
-              className={`rounded-full px-2.5 py-1 text-[11px] font-medium ${
+              className={`rounded-xl px-2.5 py-1 text-[11px] font-medium ${
                 banner.is_active
                   ? 'bg-zinc-900 text-white'
                   : 'border border-zinc-200 bg-white text-zinc-500'

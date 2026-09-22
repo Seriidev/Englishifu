@@ -9,6 +9,7 @@ import {
   type SignupValidationErrors,
 } from '../../utils/validation'
 import AuthShell from './AuthShell'
+import { claimPendingPlacement } from '../../utils/pendingPlacement'
 import { errorClass, fieldClass, labelClass, primaryBtnClass } from './formStyles'
 
 interface SignupFormProps {
@@ -19,7 +20,7 @@ export default function SignupForm({ role }: SignupFormProps) {
   const navigate = useNavigate()
   const [search] = useSearchParams()
   const referralCode = (search.get('ref') || '').trim()
-  const { registerAsStudent, registerAsTutor } = useAuth()
+  const { registerAsStudent, registerAsTutor, refreshUser } = useAuth()
   const [fullName, setFullName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -55,6 +56,11 @@ export default function SignupForm({ role }: SignupFormProps) {
     if (!result.ok) {
       setSubmitError(result.error)
       return
+    }
+
+    if (isStudent) {
+      await claimPendingPlacement(result.user.id)
+      await refreshUser()
     }
 
     navigate(isStudent ? '/profile/edit' : '/tutor/complete-profile', {

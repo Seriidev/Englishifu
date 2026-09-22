@@ -1,0 +1,318 @@
+[
+  {
+    "id": "acad-01",
+    "number": 1,
+    "title": "Trees and the Urban Heat Island",
+    "instructions": "Read the passage and answer the questions.",
+    "paragraphs": [
+      "Cities are usually warmer than the countryside around them. Pavement and rooftops absorb sunlight and then release that heat slowly, so streets can stay hot long after sunset. Researchers call this the urban heat island. One of the simplest ways to weaken it is to plant trees along sidewalks and in small parks.",
+      "A tree cools the air in two ways. Its leaves block sunlight before it reaches the ground, and water evaporating from those leaves carries heat away. Studies in several large cities have found that a shaded street can be several degrees cooler than a bare street a short walk away. The difference is largest on still summer afternoons, when there is little wind to mix the air.",
+      "The benefit is not automatic. Young trees with thin canopies cast little shade, and trees planted in tiny pits of soil often grow poorly. Species also matter. A tree that needs constant watering may die during a drought, leaving the street exposed again. City planners who treat trees as infrastructure, rather than decoration, tend to choose hardy local species and give them enough soil to reach a wide crown.",
+      "Even a successful planting program cannot replace other measures. Trees do nothing for heat from cars and air conditioners, and they cannot cool a neighborhood with no space left to plant. Blocks with a continuous canopy are still more comfortable for people walking outdoors than blocks paved from wall to wall."
+    ],
+    "questions": [
+      {
+        "id": "aq-01-1",
+        "number": 1,
+        "prompt": "What is the passage mainly about?",
+        "options": [
+          { "id": "a", "text": "How city trees can reduce street heat, and where that effect fails." },
+          { "id": "b", "text": "Why rural areas are becoming warmer than cities." },
+          { "id": "c", "text": "How to design air conditioners that use less electricity." },
+          { "id": "d", "text": "The history of parks in large European cities." }
+        ],
+        "correct_option_id": "a",
+        "explanation": "The passage explains the urban heat island and how trees cool streets, then limits that claim. B reverses the temperature pattern. C and D are not the subject."
+      },
+      {
+        "id": "aq-01-2",
+        "number": 2,
+        "prompt": "According to the passage, how do leaves cool the air besides blocking sunlight?",
+        "options": [
+          { "id": "a", "text": "They reflect heat back into the upper atmosphere at night." },
+          { "id": "b", "text": "Water evaporating from them carries heat away." },
+          { "id": "c", "text": "They absorb heat from car engines." },
+          { "id": "d", "text": "They release cool air stored in the trunk." }
+        ],
+        "correct_option_id": "b",
+        "explanation": "The second paragraph names evaporation as the second cooling process. The other options are not described."
+      },
+      {
+        "id": "aq-01-3",
+        "number": 3,
+        "prompt": "When is the temperature difference between a shaded street and a bare street largest?",
+        "options": [
+          { "id": "a", "text": "On windy winter mornings." },
+          { "id": "b", "text": "During heavy rain." },
+          { "id": "c", "text": "On still summer afternoons." },
+          { "id": "d", "text": "Just before sunrise in spring." }
+        ],
+        "correct_option_id": "c",
+        "explanation": "The passage states the difference is largest on still summer afternoons, when little wind mixes the air."
+      },
+      {
+        "id": "aq-01-4",
+        "number": 4,
+        "prompt": "Why might a newly planted tree fail to cool a street?",
+        "options": [
+          { "id": "a", "text": "Its thin canopy casts little shade, or it dies if it cannot get enough water." },
+          { "id": "b", "text": "Local species always make streets hotter." },
+          { "id": "c", "text": "Pavement reflects all sunlight onto the leaves." },
+          { "id": "d", "text": "City rules forbid trees wider than a sidewalk." }
+        ],
+        "correct_option_id": "a",
+        "explanation": "The third paragraph says young thin canopies cast little shade and thirsty trees may die in a drought. B, C, and D are not claimed."
+      },
+      {
+        "id": "aq-01-5",
+        "number": 5,
+        "prompt": "What does the author imply about planting programs?",
+        "options": [
+          { "id": "a", "text": "They can replace every other way of cooling a city." },
+          { "id": "b", "text": "They help pedestrians on planted blocks, but they do not remove heat from machines." },
+          { "id": "c", "text": "They work only in neighborhoods that are already cool." },
+          { "id": "d", "text": "They should use exotic species that need daily watering." }
+        ],
+        "correct_option_id": "b",
+        "explanation": "The last paragraph says trees do not deal with heat from cars and air conditioners, but canopy blocks are more comfortable for people outdoors. A overstates the benefit. D contradicts the preference for hardy local species."
+      }
+    ]
+  },
+  {
+    "id": "acad-02",
+    "number": 2,
+    "title": "Sleep and the Replay of Memory",
+    "instructions": "Read the passage and answer the questions.",
+    "paragraphs": [
+      "For a long time, sleep was described as a pause, a stretch of hours when the brain simply rested. Research on memory has made that picture harder to defend. During certain stages of sleep, especially the deep slow-wave sleep that comes early in the night, groups of neurons that were active during the day fire again in a shorter pattern. Scientists call this replay.",
+      "Replay seems to help the brain decide what to keep. A student who studies a list of facts and then sleeps often remembers more of that list the next morning than a student who stays awake for the same number of hours. The advantage is clearest for material that was only partly learned. Facts that were already solid, and facts that were barely noticed, both gain less.",
+      "Not every kind of learning uses the same stage of sleep. Remembering a route or a set of vocabulary words depends heavily on early-night slow-wave sleep. Improving a physical skill, such as a short sequence on a keyboard, depends more on later stages that are rich in rapid eye movement. Cutting the night short can therefore hurt one kind of learning while leaving another almost untouched.",
+      "None of this means that sleep can replace practice. Replay strengthens traces formed while the person was awake. If those traces were never made, there is nothing useful to replay. After a session of study, an uninterrupted night is part of learning, not a break from it."
+    ],
+    "questions": [
+      {
+        "id": "aq-02-1",
+        "number": 1,
+        "prompt": "What is replay, according to the passage?",
+        "options": [
+          { "id": "a", "text": "A shorter pattern of firing by neurons that were active during the day." },
+          { "id": "b", "text": "A period of total silence in the brain." },
+          { "id": "c", "text": "A method teachers use to review a lesson in class." },
+          { "id": "d", "text": "The dreams a person can describe the next morning." }
+        ],
+        "correct_option_id": "a",
+        "explanation": "The first paragraph defines replay as daytime neural activity firing again in a shorter pattern during sleep."
+      },
+      {
+        "id": "aq-02-2",
+        "number": 2,
+        "prompt": "Which material benefits most from sleep after study?",
+        "options": [
+          { "id": "a", "text": "Facts the student has already mastered." },
+          { "id": "b", "text": "Facts the student barely noticed." },
+          { "id": "c", "text": "Material that was only partly learned." },
+          { "id": "d", "text": "Any list, whether or not the student looked at it." }
+        ],
+        "correct_option_id": "c",
+        "explanation": "The second paragraph says the advantage is clearest for partly learned material, and smaller for both solid facts and barely noticed ones."
+      },
+      {
+        "id": "aq-02-3",
+        "number": 3,
+        "prompt": "What does early-night slow-wave sleep mainly support?",
+        "options": [
+          { "id": "a", "text": "Remembering routes and vocabulary." },
+          { "id": "b", "text": "Improving a keyboard sequence." },
+          { "id": "c", "text": "Replacing practice entirely." },
+          { "id": "d", "text": "Preventing all later stages of sleep." }
+        ],
+        "correct_option_id": "a",
+        "explanation": "Routes and vocabulary are tied to early slow-wave sleep. A keyboard sequence is tied to later rapid-eye-movement stages."
+      },
+      {
+        "id": "aq-02-4",
+        "number": 4,
+        "prompt": "Why can a short night hurt one kind of learning more than another?",
+        "options": [
+          { "id": "a", "text": "Different skills depend on different stages, and a short night may cut only some of them." },
+          { "id": "b", "text": "The brain stops forming any memory after midnight." },
+          { "id": "c", "text": "Physical skills can be learned only while awake at dawn." },
+          { "id": "d", "text": "Vocabulary is stored in the muscles, not the brain." }
+        ],
+        "correct_option_id": "a",
+        "explanation": "The third paragraph says cutting the night short can harm one kind of learning and leave another almost untouched because they use different stages."
+      },
+      {
+        "id": "aq-02-5",
+        "number": 5,
+        "prompt": "What does the author conclude about sleep and study?",
+        "options": [
+          { "id": "a", "text": "Sleep creates knowledge that was never practiced." },
+          { "id": "b", "text": "An uninterrupted night strengthens learning that already happened, but it does not replace practice." },
+          { "id": "c", "text": "Students should sleep instead of studying." },
+          { "id": "d", "text": "Broken sleep is just as useful as a full night." }
+        ],
+        "correct_option_id": "b",
+        "explanation": "The last paragraph says replay only strengthens traces formed while awake, so sleep is part of learning rather than a substitute for practice."
+      }
+    ]
+  },
+  {
+    "id": "acad-03",
+    "number": 3,
+    "title": "Corals, Algae, and Bleaching",
+    "instructions": "Read the passage and answer the questions.",
+    "paragraphs": [
+      "A coral reef can look like a garden of colored stone, but the living tissue of a coral animal is thin. Most of the color, and much of the food, comes from algae that live inside the coral's cells. In daylight the algae photosynthesize and pass a large share of the sugars they make to their host. In return they receive shelter and a steady supply of nutrients from the animal's waste.",
+      "The partnership is stable only within a narrow range of conditions. When seawater stays unusually warm, the coral expels the algae and turns pale. Biologists call this bleaching. A bleached coral is not necessarily dead. If the water cools within a few weeks, new algae can move in and the colony may recover its color and its food supply.",
+      "If the heat lasts, recovery becomes unlikely. Without its partners, the coral must capture tiny animals from the water, and that food is rarely enough to support a large colony. The skeleton remains, but the tissue starves.",
+      "Heat is the most widely measured trigger, but it is not the only one. Pollution, muddy runoff, and unusually strong sunlight can push a stressed colony to expel its algae as well. What a long warm spell does is make those other pressures more dangerous. A reef that tolerated a river mouth in a cooler decade may bleach when the same runoff arrives during a marine heat wave."
+    ],
+    "questions": [
+      {
+        "id": "aq-03-1",
+        "number": 1,
+        "prompt": "What do the algae provide to the coral?",
+        "options": [
+          { "id": "a", "text": "A hard outer skeleton." },
+          { "id": "b", "text": "A large share of the sugars they produce in daylight." },
+          { "id": "c", "text": "Protection from all warm water." },
+          { "id": "d", "text": "The fish that live on the reef." }
+        ],
+        "correct_option_id": "b",
+        "explanation": "The first paragraph says the algae pass sugars to the host. Shelter and nutrients go the other way, from coral to algae."
+      },
+      {
+        "id": "aq-03-2",
+        "number": 2,
+        "prompt": "What is bleaching?",
+        "options": [
+          { "id": "a", "text": "The coral expels its algae and turns pale." },
+          { "id": "b", "text": "Fish leave a reef for deeper water." },
+          { "id": "c", "text": "A colony builds a thicker skeleton." },
+          { "id": "d", "text": "Algae cover the reef and block all sunlight." }
+        ],
+        "correct_option_id": "a",
+        "explanation": "Bleaching is defined as the coral expelling algae and turning pale when the water stays unusually warm."
+      },
+      {
+        "id": "aq-03-3",
+        "number": 3,
+        "prompt": "When can a bleached coral recover?",
+        "options": [
+          { "id": "a", "text": "Only if the skeleton is removed." },
+          { "id": "b", "text": "If the water cools within a few weeks and algae return." },
+          { "id": "c", "text": "Whenever fish return to the reef." },
+          { "id": "d", "text": "If the heat continues for the rest of the year." }
+        ],
+        "correct_option_id": "b",
+        "explanation": "Recovery is possible when the water cools within a few weeks so new algae can move in. Lasting heat makes recovery unlikely."
+      },
+      {
+        "id": "aq-03-4",
+        "number": 4,
+        "prompt": "Why is capturing plankton often not enough after bleaching?",
+        "options": [
+          { "id": "a", "text": "It rarely supplies enough food for a large colony." },
+          { "id": "b", "text": "Plankton live only in cold rivers." },
+          { "id": "c", "text": "The skeleton blocks the coral's mouth." },
+          { "id": "d", "text": "Algae eat the plankton before the coral can." }
+        ],
+        "correct_option_id": "a",
+        "explanation": "Without algae, the coral must capture tiny animals, and that food is rarely enough to support a large colony."
+      },
+      {
+        "id": "aq-03-5",
+        "number": 5,
+        "prompt": "What point does the last paragraph make about heat?",
+        "options": [
+          { "id": "a", "text": "Heat is the only cause of bleaching." },
+          { "id": "b", "text": "A long warm spell makes pollution and runoff more dangerous than they were in cooler years." },
+          { "id": "c", "text": "River mouths always protect reefs from bleaching." },
+          { "id": "d", "text": "Sunlight prevents algae from being expelled." }
+        ],
+        "correct_option_id": "b",
+        "explanation": "Heat is the main measured trigger but not the only one. A warm spell makes other pressures, such as runoff, more dangerous."
+      }
+    ]
+  },
+  {
+    "id": "acad-04",
+    "number": 4,
+    "title": "From Weighed Coins to Paper Notes",
+    "instructions": "Read the passage and answer the questions.",
+    "paragraphs": [
+      "For most of recorded history, large payments were made with metal. A coin could be weighed, and the metal itself was widely treated as valuable. Paper entered this system not as a replacement for coins but as a claim on them. In medieval China, merchants who found strings of copper coins too heavy to carry began leaving the coins with trusted agents and exchanging the paper receipts instead.",
+      "Those early receipts worked only as far as trust in a particular agent extended. A receipt from an unknown shop was just paper. Over later centuries, governments took over the idea and printed notes that sellers were required to accept. The note no longer pointed to a pile of coins in one warehouse. It pointed to the issuer's promise, backed by law.",
+      "The change made long-distance trade easier. Paper was light, could be printed in large amounts, and did not have to be checked at every market. It also created a risk that weighed metal did not. A ruler who printed notes faster than the economy grew could make every existing note buy less than it had the year before.",
+      "A coin can be tested on a scale. A banknote cannot. Its value depends on the belief that the issuer will limit the press, and on the rule that tells a seller to accept the paper. When that belief fails, people look for something they can store, so a currency crisis often looks like a shortage of trustworthy notes."
+    ],
+    "questions": [
+      {
+        "id": "aq-04-1",
+        "number": 1,
+        "prompt": "Why did medieval Chinese merchants start using paper receipts?",
+        "options": [
+          { "id": "a", "text": "Copper coins were too heavy to carry, so they left the coins with agents and traded the receipts." },
+          { "id": "b", "text": "The government had already banned metal coins." },
+          { "id": "c", "text": "Paper was more valuable than copper as a material." },
+          { "id": "d", "text": "Scales for weighing coins had disappeared." }
+        ],
+        "correct_option_id": "a",
+        "explanation": "The first paragraph says merchants left heavy copper coins with trusted agents and exchanged the receipts."
+      },
+      {
+        "id": "aq-04-2",
+        "number": 2,
+        "prompt": "What limited the usefulness of the earliest receipts?",
+        "options": [
+          { "id": "a", "text": "They worked only where people trusted that particular agent." },
+          { "id": "b", "text": "They were too heavy for long journeys." },
+          { "id": "c", "text": "Every seller was already required by law to take them." },
+          { "id": "d", "text": "They could be weighed like coins." }
+        ],
+        "correct_option_id": "a",
+        "explanation": "Early receipts depended on trust in a particular agent. A receipt from an unknown shop was just paper."
+      },
+      {
+        "id": "aq-04-3",
+        "number": 3,
+        "prompt": "How were later government notes different from those private receipts?",
+        "options": [
+          { "id": "a", "text": "They pointed to one warehouse of coins." },
+          { "id": "b", "text": "Sellers had to accept them, and they represented the issuer's promise." },
+          { "id": "c", "text": "They could be checked on a scale." },
+          { "id": "d", "text": "They were used only inside a single shop." }
+        ],
+        "correct_option_id": "b",
+        "explanation": "Governments printed notes that sellers were required to accept. The note stood for the issuer's promise, not a pile of coins in one warehouse."
+      },
+      {
+        "id": "aq-04-4",
+        "number": 4,
+        "prompt": "What risk did paper notes create that weighed coins did not?",
+        "options": [
+          { "id": "a", "text": "A ruler could print notes faster than the economy grew and make each note buy less." },
+          { "id": "b", "text": "Notes were always heavier than the coins they replaced." },
+          { "id": "c", "text": "Markets refused to accept large denominations." },
+          { "id": "d", "text": "Metal became impossible to store." }
+        ],
+        "correct_option_id": "a",
+        "explanation": "Printing notes faster than goods and services grew reduced what each note could buy. People then spent them quickly or traded them for metal, foreign currency, or food."
+      },
+      {
+        "id": "aq-04-5",
+        "number": 5,
+        "prompt": "What does a currency crisis look like, according to the last paragraph?",
+        "options": [
+          { "id": "a", "text": "A shortage of notes that people still trust, because they move into things they can store." },
+          { "id": "b", "text": "A sudden surplus of coins that no one wants to weigh." },
+          { "id": "c", "text": "A law that forces every seller to refuse paper." },
+          { "id": "d", "text": "A return to receipts that any unknown shop will honor." }
+        ],
+        "correct_option_id": "a",
+        "explanation": "When belief in the issuer fails, people look for something they can store, so the crisis looks like a shortage of trustworthy notes."
+      }
+    ]
+  }
+]

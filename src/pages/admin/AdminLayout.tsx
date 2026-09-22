@@ -81,13 +81,13 @@ export default function AdminLayout() {
 
   if (!authed) {
     return (
-      <div className="flex min-h-svh items-center justify-center bg-[#F9FAFB] px-4">
+      <div className="admin-shell flex min-h-svh items-center justify-center bg-[#f6f6f7] px-4">
         <form
           onSubmit={(e) => void onLogin(e)}
           className="w-full max-w-sm rounded-xl border border-zinc-200 bg-white p-7"
         >
-          <p className="font-serif text-2xl font-semibold text-zinc-900">
-            <BrandMark className="font-serif font-semibold" />
+          <p className="text-2xl font-bold text-zinc-950">
+            <BrandMark />
           </p>
           <h1 className="mt-4 text-lg font-semibold text-zinc-900">
             Admin login
@@ -114,7 +114,7 @@ export default function AdminLayout() {
   }
 
   return (
-    <div className="flex min-h-svh min-w-0 bg-[#F9FAFB] text-zinc-900">
+    <div className="admin-shell flex min-h-svh min-w-0 bg-[#f6f6f7] text-zinc-950">
       <div className="hidden lg:fixed lg:inset-y-0 lg:flex lg:w-[240px] lg:flex-col">
         <AdminSidebar onLogout={onLogout} />
       </div>
@@ -153,14 +153,14 @@ export default function AdminLayout() {
               )}
             </button>
             <div className="min-w-0 flex-1 lg:hidden">
-              <BrandMark className="font-serif text-lg font-semibold" />
+              <BrandMark className="text-lg" />
             </div>
             <div className="ml-auto flex items-center gap-2 sm:gap-3">
               <span className="inline-flex h-9 w-9 items-center justify-center rounded-full text-zinc-500">
                 <Bell className="h-4 w-4" strokeWidth={1.75} aria-hidden />
               </span>
               <div className="flex items-center gap-2.5">
-                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-zinc-900 text-[11px] font-semibold text-white">
+                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-zinc-100 text-[11px] font-semibold text-zinc-800">
                   AD
                 </span>
                 <span className="hidden leading-tight sm:block">

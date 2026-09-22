@@ -31,7 +31,7 @@ export default function SpeakingIntro({
         <button
           type="button"
           onClick={onBack}
-          className="rounded-full border border-gray-200 px-4 py-2 text-sm font-semibold text-ink hover:bg-gray-50"
+          className="rounded-xl bg-slate-100 px-4 py-2.5 text-sm font-semibold text-slate-600 transition hover:bg-slate-200"
         >
           {t('toefl.exit')}
         </button>
@@ -68,7 +68,7 @@ export default function SpeakingIntro({
         type="button"
         disabled={preparing || micBlocked}
         onClick={onStart}
-        className="mt-8 rounded-full bg-brand px-8 py-3 text-sm font-semibold text-white shadow-md shadow-brand/25 transition hover:bg-brand-dark disabled:opacity-60"
+        className="mt-8 rounded-xl bg-indigo-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-600 disabled:opacity-60"
       >
         {preparing ? 'Requesting microphone…' : 'Begin Speaking Section'}
       </button>

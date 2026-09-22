@@ -120,7 +120,7 @@ export default function ListeningTaskView({
           <button
             type="button"
             onClick={startFromClick}
-            className="rounded-full bg-brand px-8 py-3 text-sm font-semibold text-white hover:bg-brand-dark"
+            className="rounded-xl bg-indigo-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-600"
           >
             Play audio
           </button>
@@ -135,7 +135,7 @@ export default function ListeningTaskView({
         <button
           type="button"
           onClick={() => onContinue(correctCount, questions.length)}
-          className="w-full rounded-full bg-brand py-3 text-sm font-semibold text-white"
+          className="w-full rounded-xl bg-indigo-500 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-600"
         >
           Continue
         </button>
@@ -229,7 +229,7 @@ export default function ListeningTaskView({
           <button
             type="button"
             onClick={nextQuestion}
-            className="w-full rounded-full bg-brand py-3 text-sm font-semibold text-white hover:bg-brand-dark"
+            className="w-full rounded-xl bg-indigo-500 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-600"
           >
             Next question
           </button>
@@ -238,7 +238,7 @@ export default function ListeningTaskView({
             type="button"
             disabled={!allDone}
             onClick={() => onContinue(correctCount, questions.length)}
-            className="w-full rounded-full bg-brand py-3 text-sm font-semibold text-white transition hover:bg-brand-dark disabled:cursor-not-allowed disabled:opacity-50"
+            className="w-full rounded-xl bg-indigo-500 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-600 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {allDone ? 'Continue' : t('toefl.submitContinue')}
           </button>

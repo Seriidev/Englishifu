@@ -166,10 +166,10 @@ export default function CreateSpeakingClubSessionForm({
                   key={tag}
                   type="button"
                   onClick={() => toggleTopic(tag)}
-                  className={`rounded-full px-2.5 py-1 text-xs font-semibold ${
+                  className={`rounded-xl px-4 py-2.5 text-sm font-semibold transition ${
                     topicTags.includes(tag)
-                      ? 'bg-indigo-600 text-white'
-                      : 'bg-white text-slate-600 ring-1 ring-slate-200'
+                      ? 'bg-indigo-500 text-white hover:bg-indigo-600'
+                      : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                   }`}
                 >
                   {tag}

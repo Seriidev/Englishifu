@@ -94,16 +94,15 @@ export default function ToeflSimulation() {
           <div className="mt-8 flex flex-wrap items-center gap-4">
             <a
               href="/toefl"
-              className="rounded-full bg-brand px-8 py-4 text-base font-semibold text-white shadow-md shadow-brand/25 transition hover:bg-brand-dark"
+              className="rounded-xl bg-indigo-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-600"
             >
               {t('toeflSim.start')}
             </a>
+            <ToeflTryBadge />
             <span className="text-base text-muted">{t('toeflSim.noReg')}</span>
           </div>
         </div>
       </div>
-
-      <ToeflTryBadge />
     </section>
   )
 }

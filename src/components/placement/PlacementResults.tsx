@@ -89,14 +89,14 @@ export default function PlacementResults({ result, onRetake, onExit }: Props) {
           <button
             type="button"
             onClick={goToRecommendation}
-            className="mt-5 w-full rounded-full bg-brand py-3.5 text-sm font-semibold text-white hover:bg-brand-dark"
+            className="mt-5 w-full rounded-xl bg-indigo-500 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-600"
           >
             {t(`placement.cta.${result.cefrLevel}`)}
           </button>
           <button
             type="button"
             onClick={onExit}
-            className="mt-3 w-full rounded-full border border-gray-200 py-3.5 text-sm font-semibold text-ink hover:bg-gray-50"
+            className="mt-3 w-full rounded-xl bg-slate-100 px-4 py-2.5 text-sm font-semibold text-slate-600 transition hover:bg-slate-200"
           >
             {t('placement.backToProfile')}
           </button>
@@ -106,7 +106,7 @@ export default function PlacementResults({ result, onRetake, onExit }: Props) {
           <button
             type="button"
             onClick={onRetake}
-            className="inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white px-6 py-3 text-sm font-semibold text-ink hover:bg-gray-50"
+            className="inline-flex items-center gap-2 rounded-xl bg-slate-100 px-4 py-2.5 text-sm font-semibold text-slate-600 transition hover:bg-slate-200"
           >
             <RotateCcw className="h-4 w-4" aria-hidden />
             {t('placement.retake')}

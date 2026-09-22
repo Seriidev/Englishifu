@@ -79,7 +79,7 @@ export default function StudentProfilePage() {
         </p>
         <Link
           to={user ? dashboardPathForRole(user.role, user) : '/'}
-          className="mt-6 rounded-full bg-brand px-5 py-2.5 text-sm font-semibold text-white"
+          className="mt-6 rounded-xl bg-indigo-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-600"
         >
           Back home
         </Link>
@@ -100,7 +100,7 @@ export default function StudentProfilePage() {
         </p>
         <Link
           to={user ? dashboardPathForRole(user.role, user) : '/'}
-          className="mt-6 rounded-full bg-brand px-5 py-2.5 text-sm font-semibold text-white"
+          className="mt-6 rounded-xl bg-indigo-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-600"
         >
           Back home
         </Link>
@@ -146,7 +146,7 @@ export default function StudentProfilePage() {
           <div className="flex items-center gap-2">
             <Link
               to={homePath}
-              className="rounded-full border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-ink transition hover:bg-gray-50"
+              className="rounded-xl bg-slate-100 px-4 py-2.5 text-sm font-semibold text-slate-600 transition hover:bg-slate-200"
             >
               Back home
             </Link>
@@ -156,7 +156,7 @@ export default function StudentProfilePage() {
                 onClick={() => {
                   void logout().then(() => navigate('/', { replace: true }))
                 }}
-                className="inline-flex items-center gap-1.5 rounded-full border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-muted transition hover:bg-gray-50"
+                className="inline-flex items-center gap-1.5 rounded-xl bg-slate-100 px-4 py-2.5 text-sm font-semibold text-slate-600 transition hover:bg-slate-200"
               >
                 <LogOut className="h-4 w-4" aria-hidden />
                 Log out
@@ -192,7 +192,7 @@ export default function StudentProfilePage() {
                     },
                   })
                 }
-                className="shrink-0 rounded-full bg-brand px-6 py-3 text-sm font-semibold text-white hover:bg-brand-dark"
+                className="shrink-0 rounded-xl bg-indigo-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-600"
               >
                 Start Placement Test
               </button>
@@ -239,7 +239,7 @@ export default function StudentProfilePage() {
                           },
                         })
                       }
-                      className="inline-flex items-center gap-1.5 rounded-full border border-dashed border-brand/40 bg-brand-light/50 px-3 py-1.5 text-xs font-semibold text-brand transition hover:bg-brand-light"
+                      className="inline-flex items-center gap-1.5 rounded-xl border border-dashed border-brand/40 bg-brand-light/50 px-3 py-1.5 text-xs font-semibold text-brand transition hover:bg-brand-light"
                     >
                       No rank yet — take Placement
                     </button>
@@ -280,7 +280,7 @@ export default function StudentProfilePage() {
                 <button
                   type="button"
                   onClick={() => navigate('/profile/edit')}
-                  className="inline-flex items-center gap-1.5 rounded-full border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-ink transition hover:bg-gray-50"
+                  className="inline-flex items-center gap-1.5 rounded-xl bg-slate-100 px-4 py-2.5 text-sm font-semibold text-slate-600 transition hover:bg-slate-200"
                 >
                   <Pencil className="h-3.5 w-3.5" aria-hidden />
                   Edit Profile

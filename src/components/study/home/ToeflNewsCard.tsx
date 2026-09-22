@@ -18,11 +18,17 @@ export default function ToeflNewsCard({ news }: ToeflNewsCardProps) {
       if (e.key === 'Escape') setOpenId(null)
     }
     window.addEventListener('keydown', onKey)
-    const prev = document.body.style.overflow
+    const scrollbar = window.innerWidth - document.documentElement.clientWidth
+    const prevOverflow = document.body.style.overflow
+    const prevPadding = document.body.style.paddingRight
     document.body.style.overflow = 'hidden'
+    if (scrollbar > 0) {
+      document.body.style.paddingRight = `${scrollbar}px`
+    }
     return () => {
       window.removeEventListener('keydown', onKey)
-      document.body.style.overflow = prev
+      document.body.style.overflow = prevOverflow
+      document.body.style.paddingRight = prevPadding
     }
   }, [openItem])
 
@@ -46,7 +52,7 @@ export default function ToeflNewsCard({ news }: ToeflNewsCardProps) {
             <button
               type="button"
               onClick={() => setOpenId(item.id)}
-              className="mt-3 inline-block text-sm font-semibold text-[#0B1B3D] hover:underline"
+              className="mt-3 inline-block text-sm font-semibold text-indigo-600 hover:underline dark:text-indigo-300"
             >
               See more
             </button>

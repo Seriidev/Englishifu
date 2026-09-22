@@ -123,7 +123,7 @@ export default function WelcomeBanner({ firstName, slides }: WelcomeBannerProps)
                     {slide.ctaLabel && slide.ctaLink ? (
                       <a
                         href={slide.ctaLink}
-                        className="mt-4 inline-flex rounded-full bg-indigo-500 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-600"
+                        className="mt-4 inline-flex rounded-xl bg-indigo-500 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-600"
                       >
                         {slide.ctaLabel}
                       </a>

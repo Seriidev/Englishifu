@@ -252,7 +252,7 @@ export default function AccountPanel({ user }: { user: PublicUser }) {
         <button
           type="submit"
           disabled={saving}
-          className="inline-flex rounded-lg bg-brand px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-dark disabled:cursor-not-allowed disabled:opacity-60"
+          className="inline-flex rounded-xl bg-indigo-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-600 disabled:cursor-not-allowed disabled:opacity-60"
         >
           {saving ? 'Saving…' : 'Update password'}
         </button>

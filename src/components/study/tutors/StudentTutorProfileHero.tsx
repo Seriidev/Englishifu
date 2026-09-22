@@ -99,7 +99,7 @@ export default function StudentTutorProfileHero({
           {shownTags.map((tag) => (
             <span
               key={tag}
-              className="rounded-full border border-slate-800 bg-white px-3 py-1 text-xs font-medium text-slate-900"
+              className="rounded-xl border border-slate-800 bg-white px-3 py-1 text-xs font-medium text-slate-900"
             >
               {tag}
             </span>

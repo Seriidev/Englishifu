@@ -1,4 +1,4 @@
-import { Calendar, Clock, Users, Sparkles } from 'lucide-react'
+import { Calendar, Clock, Sparkles } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { speakingClubMeetings } from '../data/speakingClub'
 import { useLanguage } from '../i18n/LanguageContext'
@@ -30,7 +30,7 @@ export default function SpeakingClub() {
           <button
             type="button"
             onClick={goSignup}
-            className="inline-flex w-full shrink-0 items-center justify-center rounded-full bg-white/25 px-7 py-3 text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-white/35 sm:w-auto"
+            className="inline-flex w-full shrink-0 items-center justify-center rounded-xl bg-white/25 px-7 py-3 text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-white/35 sm:w-auto"
           >
             {t('club.button')}
           </button>
@@ -68,22 +68,6 @@ export default function SpeakingClub() {
                 </div>
 
                 <h3 className="mt-3 text-lg font-bold text-ink">{meeting.title}</h3>
-
-                <div className="mt-auto border-t border-gray-100 pt-4">
-                  <div className="flex items-center justify-between gap-3">
-                    <span className="inline-flex items-center gap-1.5 text-sm text-muted">
-                      <Users className="h-4 w-4" aria-hidden />
-                      {t('club.spots', { count: meeting.spotsLeft })}
-                    </span>
-                    <button
-                      type="button"
-                      onClick={goSignup}
-                      className="rounded-full bg-brand px-5 py-2 text-sm font-semibold text-white transition hover:bg-brand-dark"
-                    >
-                      {t('club.book')}
-                    </button>
-                  </div>
-                </div>
               </div>
             </article>
           ))}

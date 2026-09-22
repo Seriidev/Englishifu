@@ -142,7 +142,7 @@ export default function SpeakingSection({
             <button
               type="button"
               onClick={handleExit}
-              className="rounded-full border border-gray-200 px-4 py-2 text-sm font-semibold text-ink hover:bg-gray-50"
+              className="rounded-xl bg-slate-100 px-4 py-2.5 text-sm font-semibold text-slate-600 transition hover:bg-slate-200"
             >
               {t('toefl.exit')}
             </button>
