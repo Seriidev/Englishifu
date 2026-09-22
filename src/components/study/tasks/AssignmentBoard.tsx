@@ -3,7 +3,7 @@ import type {
   AssignmentPriority,
   AssignmentRow,
   AssignmentStatus,
-} from '../../types/assignment'
+} from '../../../types/assignment'
 
 const GROUPS: {
   id: AssignmentStatus
