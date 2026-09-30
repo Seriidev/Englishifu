@@ -9,6 +9,7 @@ import InterviewTask from './InterviewTask'
 import SpeakingIntro from './SpeakingIntro'
 import TaskTransition from './TaskTransition'
 import SpeakingResults from './SpeakingResults'
+import RecordingIndicator from './RecordingIndicator'
 
 type FlowStage =
   | 'intro'
@@ -139,13 +140,16 @@ export default function SpeakingSection({
                   : 'Instructions'}
               </p>
             </div>
-            <button
-              type="button"
-              onClick={handleExit}
-              className="rounded-xl bg-slate-100 px-4 py-2.5 text-sm font-semibold text-slate-600 transition hover:bg-slate-200"
-            >
-              {t('toefl.exit')}
-            </button>
+            <div className="flex items-center gap-2">
+              <RecordingIndicator active={recorder.isRecording} />
+              <button
+                type="button"
+                onClick={handleExit}
+                className="rounded-xl bg-slate-100 px-4 py-2.5 text-sm font-semibold text-slate-600 transition hover:bg-slate-200"
+              >
+                {t('toefl.exit')}
+              </button>
+            </div>
           </div>
         )}
 

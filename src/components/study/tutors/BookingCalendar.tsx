@@ -122,7 +122,7 @@ export default function BookingCalendar({
             onClick={() => {
               if (tutorId) onSlotSelected(slot, tutorId)
             }}
-            className="rounded-lg border border-slate-200 py-2 text-sm font-medium text-slate-800 transition hover:border-indigo-500 hover:bg-indigo-50"
+            className="rounded-lg border border-slate-200 py-2 text-sm font-medium text-slate-800 transition hover:border-indigo-400 hover:bg-indigo-500/20"
           >
             {formatTimeLabel(slot.startAt)}
           </button>

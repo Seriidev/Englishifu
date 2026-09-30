@@ -142,7 +142,7 @@ export default function StudyVocabularyPage() {
       {pageItems.length === 0 ? (
         <p className="rounded-2xl border border-dashed border-slate-200 bg-white px-4 py-10 text-center text-sm text-slate-500">
           {myWordsOnly
-            ? 'No saved words yet. Tap + on a card to add it here.'
+            ? 'No saved words yet. Tap the bookmark on a card to add it here.'
             : 'No words in this topic.'}
         </p>
       ) : (

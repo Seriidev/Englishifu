@@ -452,7 +452,7 @@ export default function TutorProfilePage() {
                 isOwnProfile ? (
                   <div className="space-y-3">
                     <p className="text-sm text-muted">
-                      Full inbox with filters and &quot;Mark as Completed&quot;:{' '}
+                      Full inbox with Accept and &quot;Mark as Completed&quot;:{' '}
                       <Link
                         to="/tutor/bookings"
                         className="font-semibold text-brand hover:underline"

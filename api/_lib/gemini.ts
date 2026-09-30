@@ -24,12 +24,41 @@ function geminiModels(): string[] {
   return [
     process.env.GEMINI_MODEL?.trim(),
     'gemini-3.6-flash',
+    'gemini-2.5-flash',
+    'gemini-2.5-flash-lite',
     'gemini-3-flash-preview',
-    'gemini-2.0-flash',
   ].filter(
     (name, index, all): name is string =>
       Boolean(name) && all.indexOf(name) === index,
   )
+}
+
+const modelCooldownUntil = new Map<string, number>()
+
+function isRetryableGeminiFailure(status: number, message: string): boolean {
+  return (
+    status === 429 ||
+    status === 503 ||
+    /quota|rate limit|resource_exhausted|high demand|unavailable|overloaded/i.test(
+      message,
+    )
+  )
+}
+
+function retryDelayMs(message: string): number {
+  const match = /retry in ([\d.]+)\s*s/i.exec(message)
+  const seconds = match ? Number(match[1]) : 8
+  if (!Number.isFinite(seconds)) return 8000
+  return Math.min(20_000, Math.max(1000, Math.ceil(seconds * 1000)))
+}
+
+function cooldownRemaining(model: string): number {
+  return Math.max(0, (modelCooldownUntil.get(model) ?? 0) - Date.now())
+}
+
+function markCooldown(model: string, status: number, message: string): void {
+  const wait = status === 429 ? retryDelayMs(message) : 15_000
+  modelCooldownUntil.set(model, Date.now() + wait)
 }
 
 export async function geminiGenerateJson(options: {
@@ -50,7 +79,14 @@ export async function geminiGenerateJson(options: {
 
   for (let keyIndex = 0; keyIndex < keys.length; keyIndex += 1) {
     const apiKey = keys[keyIndex]
+    let usedFallback = keyIndex > 0
+
     for (const model of models) {
+      if (cooldownRemaining(model) > 0) {
+        lastError = `Gemini ${model} is cooling down after a rate limit`
+        continue
+      }
+
       const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`
       const res = await fetch(url, {
         method: 'POST',
@@ -77,6 +113,9 @@ export async function geminiGenerateJson(options: {
             'Primary Gemini key was rejected; scored with the fallback key.',
           )
         }
+        if (usedFallback || model !== models[0]) {
+          console.warn(`Gemini scored with fallback model ${model}.`)
+        }
         return parseGeminiJson(raw)
       }
 
@@ -85,7 +124,18 @@ export async function geminiGenerateJson(options: {
       const modelGone =
         res.status === 404 || /no longer available|not found/i.test(lastError)
       if (invalidKey) break
-      if (modelGone) continue
+      if (modelGone) {
+        usedFallback = true
+        continue
+      }
+      if (isRetryableGeminiFailure(res.status, lastError)) {
+        markCooldown(model, res.status, lastError)
+        usedFallback = true
+        console.warn(
+          `Gemini ${model} unavailable (${res.status}); trying next model.`,
+        )
+        continue
+      }
       throw new Error(lastError)
     }
   }

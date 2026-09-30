@@ -11,6 +11,8 @@ interface LibraryFilterMenuProps<T extends string> {
   value: T
   options: Option<T>[]
   onChange: (value: T) => void
+  defaultValue?: T
+  fullWidth?: boolean
 }
 
 export default function LibraryFilterMenu<T extends string>({
@@ -18,12 +20,14 @@ export default function LibraryFilterMenu<T extends string>({
   value,
   options,
   onChange,
+  defaultValue = 'all' as T,
+  fullWidth = false,
 }: LibraryFilterMenuProps<T>) {
   const [open, setOpen] = useState(false)
   const rootRef = useRef<HTMLDivElement>(null)
   const menuId = useId()
   const current = options.find((item) => item.id === value)?.label ?? label
-  const isDefault = value === 'all'
+  const isDefault = value === defaultValue
 
   useEffect(() => {
     if (!open) return
@@ -42,14 +46,14 @@ export default function LibraryFilterMenu<T extends string>({
   }, [open])
 
   return (
-    <div ref={rootRef} className="relative">
+    <div ref={rootRef} className={`relative ${fullWidth ? 'w-full' : ''}`}>
       <button
         type="button"
         aria-haspopup="listbox"
         aria-expanded={open}
         aria-controls={menuId}
         onClick={() => setOpen((v) => !v)}
-        className={`inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition ${
+        className={`${fullWidth ? 'flex w-full justify-between' : 'inline-flex'} items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition ${
           isDefault
             ? 'bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-white/10 dark:text-slate-200 dark:hover:bg-white/15'
             : 'bg-indigo-500 text-white hover:bg-indigo-600'
@@ -62,12 +66,14 @@ export default function LibraryFilterMenu<T extends string>({
         <ul
           id={menuId}
           role="listbox"
-          className="absolute z-20 mt-1.5 min-w-[10rem] overflow-hidden rounded-xl border border-slate-200 bg-white py-1 shadow-lg dark:border-white/10 dark:bg-slate-800"
+          className={`absolute z-20 mt-1.5 overflow-hidden rounded-xl border border-slate-200 bg-white py-1 shadow-lg dark:border-white/10 dark:bg-slate-800 ${
+            fullWidth ? 'right-0 left-0' : 'min-w-[10rem]'
+          }`}
         >
           {options.map((item) => {
             const selected = item.id === value
             return (
-              <li key={item.id} role="option" aria-selected={selected}>
+              <li key={item.id || item.label} role="option" aria-selected={selected}>
                 <button
                   type="button"
                   className={`block w-full px-3 py-2 text-left text-sm transition ${

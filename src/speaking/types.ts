@@ -22,6 +22,7 @@ export interface InterviewItem {
   id: string
   audioUrl: string
   videoUrl?: string
+  imageUrl?: string
   /** For scoring/logs — NEVER shown during the test */
   questionText: string
   /** Fixed at 45 in real TOEFL */

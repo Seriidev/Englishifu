@@ -9,6 +9,7 @@ import {
 } from '../../utils/adminPanelApi'
 import { AdminAvatar, AdminMessageLink, AdminUserId } from './AdminUserId'
 import { adminPageTitle } from './adminUi'
+import SearchField from '../../components/shared/SearchField'
 
 export default function AdminStudentsPage() {
   const navigate = useNavigate()
@@ -67,8 +68,8 @@ export default function AdminStudentsPage() {
         </p>
       ) : null}
       <div className="mt-4 flex flex-wrap gap-2">
-        <input
-          className="w-full min-w-0 rounded-xl border border-slate-200 px-3 py-2 text-sm sm:w-72"
+        <SearchField
+          wrapperClassName="w-full min-w-0 sm:w-72"
           placeholder="Search name / email / username / user ID"
           value={q}
           onChange={(e) => setQ(e.target.value)}

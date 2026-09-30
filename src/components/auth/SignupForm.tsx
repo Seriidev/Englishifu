@@ -10,7 +10,14 @@ import {
 } from '../../utils/validation'
 import AuthShell from './AuthShell'
 import { claimPendingPlacement } from '../../utils/pendingPlacement'
-import { errorClass, fieldClass, labelClass, primaryBtnClass } from './formStyles'
+import {
+  errorClass,
+  fieldClass,
+  labelClass,
+  primaryBtnClass,
+  quietBtnClass,
+  secondaryBtnClass,
+} from './formStyles'
 
 interface SignupFormProps {
   role: UserRole
@@ -29,6 +36,7 @@ export default function SignupForm({ role }: SignupFormProps) {
   const [submitError, setSubmitError] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
   const [marketingOptIn, setMarketingOptIn] = useState(false)
+  const [consentError, setConsentError] = useState<string | null>(null)
 
   const isStudent = role === 'student'
 
@@ -38,7 +46,12 @@ export default function SignupForm({ role }: SignupFormProps) {
 
     const nextErrors = validateSignupForm({ fullName, email, password }, role)
     setErrors(nextErrors)
-    if (hasSignupErrors(nextErrors)) return
+    if (!marketingOptIn) {
+      setConsentError('Check the box to create an account.')
+    } else {
+      setConsentError(null)
+    }
+    if (hasSignupErrors(nextErrors) || !marketingOptIn) return
 
     setSubmitting(true)
     const payload = {
@@ -72,9 +85,7 @@ export default function SignupForm({ role }: SignupFormProps) {
     <AuthShell
       title={isStudent ? 'Create student account' : 'Create tutor account'}
       subtitle={
-        isStudent
-          ? 'Learn with tutors, speaking clubs, and TOEFL practice.'
-          : 'Teach students and grow your tutoring presence.'
+        isStudent ? undefined : 'Teach students and grow your tutoring presence.'
       }
     >
       <form className="space-y-4" onSubmit={(e) => void onSubmit(e)} noValidate>
@@ -155,7 +166,10 @@ export default function SignupForm({ role }: SignupFormProps) {
             type="checkbox"
             className="mt-1"
             checked={marketingOptIn}
-            onChange={(e) => setMarketingOptIn(e.target.checked)}
+            onChange={(e) => {
+              setMarketingOptIn(e.target.checked)
+              if (e.target.checked) setConsentError(null)
+            }}
           />
           <span>
             I agree to receive optional emails about courses, admissions help,
@@ -163,6 +177,7 @@ export default function SignupForm({ role }: SignupFormProps) {
             work without this.
           </span>
         </label>
+        {consentError ? <p className={errorClass}>{consentError}</p> : null}
 
         {submitError ? <p className={errorClass}>{submitError}</p> : null}
 
@@ -170,26 +185,20 @@ export default function SignupForm({ role }: SignupFormProps) {
           {submitting ? 'Creating…' : 'Create Account'}
         </button>
 
-        <p className="text-center text-sm text-muted">
-          {isStudent ? 'Want to teach instead? ' : 'Want to learn instead? '}
-          <Link
-            to={
-              isStudent
-                ? `/signup/tutor${referralCode ? `?ref=${encodeURIComponent(referralCode)}` : ''}`
-                : `/signup/student${referralCode ? `?ref=${encodeURIComponent(referralCode)}` : ''}`
-            }
-            className="font-semibold text-brand hover:underline"
-          >
-            {isStudent ? 'Sign up as Tutor' : 'Sign up as Student'}
-          </Link>
-        </p>
+        <Link
+          to={
+            isStudent
+              ? `/signup/tutor${referralCode ? `?ref=${encodeURIComponent(referralCode)}` : ''}`
+              : `/signup/student${referralCode ? `?ref=${encodeURIComponent(referralCode)}` : ''}`
+          }
+          className={secondaryBtnClass}
+        >
+          {isStudent ? 'Sign up as Tutor' : 'Sign up as Student'}
+        </Link>
 
-        <p className="text-center text-sm text-muted">
-          Already have an account?{' '}
-          <Link to="/login" className="font-semibold text-brand hover:underline">
-            Log in
-          </Link>
-        </p>
+        <Link to="/login" className={quietBtnClass}>
+          Log in
+        </Link>
       </form>
     </AuthShell>
   )

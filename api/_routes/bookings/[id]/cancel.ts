@@ -45,35 +45,42 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     if (!allowed) {
       return res.status(403).json({ error: 'Forbidden' })
     }
-    if (booking.status !== 'confirmed') {
+    if (booking.status !== 'confirmed' && booking.status !== 'pending') {
       return res.status(400).json({ error: 'Booking is not active' })
     }
 
+    const wasPending = booking.status === 'pending'
     const { rows } = await sql`
       UPDATE bookings
       SET status = 'cancelled'
-      WHERE id = ${id} AND status = 'confirmed'
+      WHERE id = ${id} AND status IN ('confirmed', 'pending')
       RETURNING *
     `
 
     const subjectLabel = booking.subject || 'Lesson'
     const otherId =
       user.id === booking.student_id ? booking.tutor_id : booking.student_id
+    const declined = wasPending && user.role === 'tutor'
+    const title = declined ? 'Request declined' : 'Booking cancelled'
 
     await createNotification({
       userId: otherId,
       type: 'booking_cancelled',
-      title: 'Booking cancelled',
-      message: `${user.fullName} cancelled ${subjectLabel}.`,
-      linkPath:
-        user.role === 'student' ? '/tutor/profile/edit' : '/study/bookings',
+      title,
+      message: declined
+        ? `${user.fullName} declined ${subjectLabel}.`
+        : `${user.fullName} cancelled ${subjectLabel}.`,
+      linkPath: user.role === 'student' ? '/tutor/bookings' : '/study/bookings',
+      actorId: user.id,
     })
     await createNotification({
       userId: user.id,
       type: 'booking_cancelled',
-      title: 'Booking cancelled',
-      message: `You cancelled ${subjectLabel}.`,
-      linkPath: user.role === 'student' ? '/study/bookings' : '/tutor/profile/edit',
+      title,
+      message: declined
+        ? `You declined ${subjectLabel}.`
+        : `You cancelled ${subjectLabel}.`,
+      linkPath: user.role === 'student' ? '/study/bookings' : '/tutor/bookings',
     })
 
     return res.status(200).json({ booking: rows[0] })

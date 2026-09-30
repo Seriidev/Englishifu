@@ -44,6 +44,7 @@ const ssl = /localhost|127\.0\.0\.1|::1/.test(url)
 
 const files = [
   'sql/bookings.sql',
+  'sql/booking_pending.sql',
   'sql/notifications_reviews_speaking.sql',
   'sql/admin_moderation.sql',
   'sql/auth_migration.sql',
@@ -53,6 +54,7 @@ const files = [
   'sql/teacher_messages.sql',
   'sql/speaking_club_requests.sql',
   'sql/tutor_follows.sql',
+  'sql/tutor_specializations.sql',
   'sql/assignments.sql',
   'sql/transfer_indexes.sql',
 ]

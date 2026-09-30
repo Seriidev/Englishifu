@@ -8,7 +8,7 @@ export default function StudyBookingsPage() {
           My bookings
         </h1>
         <p className="mt-1 text-sm text-slate-500">
-          Confirmed lessons with tutors. Times are shown in your local timezone.
+          Lesson requests and accepted lessons. Times are shown in your local timezone.
         </p>
       </div>
       <BookingsList

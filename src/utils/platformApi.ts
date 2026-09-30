@@ -7,6 +7,7 @@ import {
   getApiToken,
   setApiToken,
 } from './bookingApi'
+import { notifyStudentXpChanged } from './studentXp'
 
 async function parseError(res: Response): Promise<string> {
   try {
@@ -258,7 +259,9 @@ export async function joinSpeakingClubSession(
     headers: authHeaders(),
   })
   if (!res.ok) throw new Error(await parseError(res))
-  return res.json() as Promise<{ meetingLink: string; alreadyJoined?: boolean }>
+  const data = (await res.json()) as { meetingLink: string; alreadyJoined?: boolean }
+  if (!data.alreadyJoined) notifyStudentXpChanged()
+  return data
 }
 
 export interface SpeakingClubRequest {

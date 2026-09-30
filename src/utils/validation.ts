@@ -134,6 +134,7 @@ export interface TutorEditProfileFormData {
   fullName: string
   handle: string
   position: string
+  specializations: string[]
   yearsOfExperience: number | ''
   hourlyRateUsd: number | ''
   aboutMe?: string
@@ -156,7 +157,9 @@ export function validateTutorEditProfileForm(
     errors.handle =
       'Username must be 3-20 characters, lowercase letters, numbers, and underscores only'
   }
-  if (!data.position) errors.position = 'Please select a position'
+  if (!data.specializations?.length) {
+    errors.position = 'Add at least one specialization'
+  }
 
   const years = data.yearsOfExperience
   if (years === '' || years === undefined || Number.isNaN(Number(years))) {

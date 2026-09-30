@@ -1,5 +1,6 @@
 import { useEffect, useState, type FormEvent } from 'react'
 import { useAuth } from '../../../auth/AuthContext'
+import LibraryFilterMenu from '../library/LibraryFilterMenu'
 import {
   createSpeakingClubRequest,
   ensureApiSession,
@@ -16,7 +17,7 @@ const TOPICS = [
   'Debate',
 ]
 
-const LEVELS = ['All levels', 'A2', 'B1', 'B2', 'C1']
+const LEVELS = ['A2', 'B1', 'B2', 'C1']
 
 const fieldClass =
   'mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-800 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200'
@@ -72,10 +73,6 @@ export default function RequestSpeakingClubForm() {
       <h3 className="text-sm font-bold text-slate-900">
         Request a speaking club
       </h3>
-      <p className="mt-1 text-xs leading-relaxed text-slate-500">
-        There are no scheduled clubs yet. Tell us the topic and time you want —
-        we will set it up.
-      </p>
 
       <form onSubmit={(e) => void onSubmit(e)} className="mt-3 space-y-2.5">
         <div>
@@ -91,21 +88,18 @@ export default function RequestSpeakingClubForm() {
               onChange={(e) => setTopic(e.target.value)}
             />
           </label>
-          <div className="mt-1.5 flex flex-wrap gap-1">
-            {TOPICS.map((tag) => (
-              <button
-                key={tag}
-                type="button"
-                onClick={() => setTopic(tag)}
-                className={`rounded-xl px-4 py-2.5 text-sm font-semibold transition ${
-                  topic === tag
-                    ? 'bg-indigo-500 text-white hover:bg-indigo-600'
-                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                }`}
-              >
-                {tag}
-              </button>
-            ))}
+          <div className="mt-1.5 normal-case">
+            <LibraryFilterMenu
+              label="Topic"
+              value={TOPICS.includes(topic) ? topic : ''}
+              defaultValue=""
+              fullWidth
+              options={[
+                ...TOPICS.map((item) => ({ id: item, label: item })),
+                { id: '', label: 'Topic' },
+              ]}
+              onChange={setTopic}
+            />
           </div>
         </div>
 
@@ -120,20 +114,22 @@ export default function RequestSpeakingClubForm() {
           />
         </label>
 
-        <label className="block text-[11px] font-semibold tracking-wide text-slate-500 uppercase">
+        <div className="block text-[11px] font-semibold tracking-wide text-slate-500 uppercase">
           Level
-          <select
-            className={fieldClass}
-            value={levelTag}
-            onChange={(e) => setLevelTag(e.target.value)}
-          >
-            {LEVELS.map((level) => (
-              <option key={level} value={level}>
-                {level}
-              </option>
-            ))}
-          </select>
-        </label>
+          <div className="mt-1 normal-case">
+            <LibraryFilterMenu
+              label="All levels"
+              value={levelTag}
+              defaultValue="All levels"
+              fullWidth
+              options={[
+                ...LEVELS.map((level) => ({ id: level, label: level })),
+                { id: 'All levels', label: 'All levels' },
+              ]}
+              onChange={setLevelTag}
+            />
+          </div>
+        </div>
 
         <label className="block text-[11px] font-semibold tracking-wide text-slate-500 uppercase">
           Details

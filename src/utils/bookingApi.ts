@@ -142,6 +142,17 @@ export async function fetchBookings(
   return data.bookings
 }
 
+export async function acceptBooking(id: number): Promise<BookingRow> {
+  const res = await fetch(`/api/bookings/${id}/accept`, {
+    method: 'PATCH',
+    headers: authHeaders(),
+    credentials: cred,
+  })
+  if (!res.ok) throw new Error(await parseError(res))
+  const data = (await res.json()) as { booking: BookingRow }
+  return data.booking
+}
+
 export async function cancelBooking(id: number): Promise<BookingRow> {
   const res = await fetch(`/api/bookings/${id}/cancel`, {
     method: 'PATCH',

@@ -16,6 +16,7 @@ export interface TutorAvailabilityRow {
 }
 
 export type BookingStatus =
+  | 'pending'
   | 'confirmed'
   | 'cancelled'
   | 'completed'

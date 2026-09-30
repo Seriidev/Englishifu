@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import type { AvailableSlot } from '../../../types/booking'
 import { BOOKING_SUBJECTS } from '../../../types/booking'
+import LibraryFilterMenu from '../library/LibraryFilterMenu'
 import {
   createBooking,
   formatDateTimeRange,
@@ -69,7 +70,7 @@ export default function ConfirmBookingModal({
         onClick={onClose}
       />
       <div className="relative z-10 w-full max-w-md rounded-2xl bg-white p-5 shadow-xl sm:p-6">
-        <h3 className="text-lg font-bold text-slate-900">Confirm booking</h3>
+        <h3 className="text-lg font-bold text-slate-900">Request a lesson</h3>
         <p className="mt-1 text-sm text-slate-500">
           Lesson with <span className="font-semibold text-slate-800">{tutorName}</span>
         </p>
@@ -79,17 +80,19 @@ export default function ConfirmBookingModal({
 
         <label className="mt-4 block text-xs font-semibold tracking-wide text-slate-500 uppercase">
           Subject
-          <select
-            className="mt-1.5 w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm font-medium text-slate-900 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200"
-            value={subject}
-            onChange={(e) => setSubject(e.target.value)}
-          >
-            {BOOKING_SUBJECTS.map((s) => (
-              <option key={s} value={s}>
-                {s}
-              </option>
-            ))}
-          </select>
+          <div className="mt-1.5 normal-case">
+            <LibraryFilterMenu
+              label="Subject"
+              value={subject}
+              defaultValue=""
+              fullWidth
+              options={BOOKING_SUBJECTS.map((item) => ({
+                id: item,
+                label: item,
+              }))}
+              onChange={setSubject}
+            />
+          </div>
         </label>
 
         {error ? (
@@ -110,7 +113,7 @@ export default function ConfirmBookingModal({
             onClick={() => void onConfirm()}
             className="rounded-xl bg-indigo-500 px-4 py-2.5 text-sm font-semibold text-white hover:bg-indigo-600 disabled:opacity-60"
           >
-            {submitting ? 'Booking…' : 'Confirm booking'}
+            {submitting ? 'Sending…' : 'Send request'}
           </button>
         </div>
       </div>

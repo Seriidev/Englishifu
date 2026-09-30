@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { useAuth } from '../../auth/AuthContext'
 import type { BookingRow } from '../../types/booking'
 import {
+  acceptBooking,
   cancelBooking,
   fetchBookings,
   formatDateTimeRange,
@@ -48,9 +49,28 @@ export default function BookingsList({ role, emptyHint }: BookingsListProps) {
     void load()
   }, [load])
 
-  const onCancel = async (id: number) => {
+  const onAccept = async (id: number) => {
     if (!user) return
-    if (!window.confirm('Cancel this booking?')) return
+    setBusyId(id)
+    try {
+      await syncApiSession(user)
+      await acceptBooking(id)
+      await load()
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to accept')
+    } finally {
+      setBusyId(null)
+    }
+  }
+
+  const onCancel = async (id: number, pending = false) => {
+    if (!user) return
+    if (
+      !window.confirm(
+        pending ? 'Decline this request?' : 'Cancel this booking?',
+      )
+    )
+      return
     setBusyId(id)
     try {
       await syncApiSession(user)
@@ -124,17 +144,32 @@ export default function BookingsList({ role, emptyHint }: BookingsListProps) {
                 <div>
                   <div className="flex flex-wrap items-center gap-2">
                     <p className="text-base font-bold text-slate-900">
-                      {b.subject || 'Lesson'}
+                      {role === 'tutor'
+                        ? counterpart
+                        : b.subject || 'Lesson'}
                     </p>
-                    <StatusBadge status={b.status} />
+                    <StatusBadge
+                      status={b.status}
+                      label={
+                        b.status === 'pending'
+                          ? role === 'tutor'
+                            ? 'Needs approval'
+                            : 'Waiting'
+                          : b.status === 'confirmed'
+                            ? 'Accepted'
+                            : undefined
+                      }
+                    />
                   </div>
                   <p className="mt-1 text-sm text-slate-600">
-                    with {counterpart}
+                    {role === 'tutor'
+                      ? b.subject || 'Lesson'
+                      : `with ${counterpart}`}
                     {handle ? (
                       <span className="text-slate-400"> @{handle}</span>
                     ) : null}
                   </p>
-                    <p className="mt-2 text-sm font-medium text-indigo-700">
+                  <p className="mt-2 text-base font-bold text-indigo-700">
                     {formatDateTimeRange(b.start_at, b.end_at)}
                   </p>
                   {b.meeting_link ? (
@@ -158,14 +193,28 @@ export default function BookingsList({ role, emptyHint }: BookingsListProps) {
                       Leave review
                     </button>
                   ) : null}
-                  {b.status === 'confirmed' ? (
+                  {role === 'tutor' && b.status === 'pending' ? (
                     <button
                       type="button"
                       disabled={busyId === b.id}
-                      onClick={() => void onCancel(b.id)}
+                      onClick={() => void onAccept(b.id)}
+                      className="rounded-xl bg-emerald-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-emerald-700 disabled:opacity-50"
+                    >
+                      {busyId === b.id ? 'Saving…' : 'Accept'}
+                    </button>
+                  ) : null}
+                  {b.status === 'confirmed' || b.status === 'pending' ? (
+                    <button
+                      type="button"
+                      disabled={busyId === b.id}
+                      onClick={() => void onCancel(b.id, b.status === 'pending')}
                       className="rounded-xl border border-slate-200 px-3 py-2 text-sm font-semibold text-red-600 hover:bg-red-50 disabled:opacity-50"
                     >
-                      {busyId === b.id ? 'Cancelling…' : 'Cancel'}
+                      {busyId === b.id
+                        ? 'Saving…'
+                        : b.status === 'pending' && role === 'tutor'
+                          ? 'Decline'
+                          : 'Cancel'}
                     </button>
                   ) : null}
                 </div>

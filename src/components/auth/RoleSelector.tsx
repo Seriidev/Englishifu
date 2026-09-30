@@ -1,6 +1,7 @@
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { BookOpen, GraduationCap } from 'lucide-react'
 import AuthShell from './AuthShell'
+import { quietBtnClass } from './formStyles'
 
 export default function RoleSelector() {
   const navigate = useNavigate()
@@ -47,12 +48,9 @@ export default function RoleSelector() {
         </button>
       </div>
 
-      <p className="mt-6 text-center text-sm text-muted">
-        Already have an account?{' '}
-        <Link to="/login" className="font-semibold text-brand hover:underline">
-          Log in
-        </Link>
-      </p>
+      <Link to="/login" className={`${quietBtnClass} mt-6`}>
+        Log in
+      </Link>
     </AuthShell>
   )
 }

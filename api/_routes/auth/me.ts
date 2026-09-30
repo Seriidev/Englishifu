@@ -15,6 +15,7 @@ import { dbUnavailableResponse, isDbConfigured, sql } from '../../_lib/db.js'
 import { deleteAppUserAccount } from '../../_lib/deleteAppUser.js'
 import {
   isTutorProfileComplete,
+  parseSpecializations,
   rowToPublicUser,
   TUTOR_POSITIONS,
   type TutorCertification,
@@ -319,13 +320,25 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     if (taken && taken.id !== userId) {
       return res.status(409).json({ error: 'Username is already taken' })
     }
+    const specializations = Array.isArray(body.specializations)
+      ? parseSpecializations(body.specializations)
+      : parseSpecializations(existing.specializations)
     const positionRaw =
       typeof body.position === 'string' ? body.position.trim() : existing.position
-    const position = POSITIONS.includes(positionRaw as TutorPosition)
-      ? (positionRaw as TutorPosition)
-      : POSITIONS.includes(existing.position as TutorPosition)
-        ? (existing.position as TutorPosition)
-        : 'Teacher'
+    const positionFromList = specializations.find((item) =>
+      POSITIONS.includes(item as TutorPosition),
+    ) as TutorPosition | undefined
+    const position = positionFromList
+      ? positionFromList
+      : POSITIONS.includes(positionRaw as TutorPosition)
+        ? (positionRaw as TutorPosition)
+        : POSITIONS.includes(existing.position as TutorPosition)
+          ? (existing.position as TutorPosition)
+          : 'Teacher'
+    const savedSpecializations = specializations.includes(position)
+      ? specializations
+      : [position, ...specializations]
+    const specializationsJson = JSON.stringify(savedSpecializations)
     const aboutMe =
       typeof body.aboutMe === 'string'
         ? body.aboutMe.trim() || null
@@ -366,6 +379,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         full_name = ${fullName},
         handle = ${handleRaw},
         position = ${position},
+        specializations = ${specializationsJson}::jsonb,
         about_me = ${aboutMe},
         years_of_experience = ${yearsOfExperience},
         hourly_rate_usd = ${hourlyRateUsd},

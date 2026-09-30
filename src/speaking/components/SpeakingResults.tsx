@@ -52,22 +52,23 @@ export default function SpeakingResults({
   const [status, setStatus] = useState<ScoreStatus>('analyzing')
   const [itemResults, setItemResults] = useState<ItemAiResult[]>([])
   const [progress, setProgress] = useState({ done: 0, total: allItems.length })
+  const [audioUrls, setAudioUrls] = useState<Record<string, string>>({})
 
-  const audioUrls = useMemo(() => {
+  useEffect(() => {
     const map: Record<string, string> = {}
     for (const rec of recordings) {
-      if (rec.blob) map[rec.itemId] = URL.createObjectURL(rec.blob)
+      if (rec.blob && rec.blob.size > 0) {
+        map[rec.itemId] = URL.createObjectURL(rec.blob)
+      }
     }
-    return map
+    setAudioUrls(map)
+    return () => {
+      Object.values(map).forEach((url) => URL.revokeObjectURL(url))
+    }
   }, [recordings])
 
   useEffect(() => {
-    return () => {
-      Object.values(audioUrls).forEach((url) => URL.revokeObjectURL(url))
-    }
-  }, [audioUrls])
-
-  useEffect(() => {
+    const controller = new AbortController()
     let cancelled = false
 
     async function run() {
@@ -96,6 +97,7 @@ export default function SpeakingResults({
               rec.blob,
               item.prompt,
               item.taskType,
+              controller.signal,
             )
             next.push({
               itemId: item.id,
@@ -104,14 +106,25 @@ export default function SpeakingResults({
               score: itemScoreFromSpeakingRubric(ai),
               ai,
             })
-          } catch {
+          } catch (err) {
+            if (
+              cancelled ||
+              controller.signal.aborted ||
+              (err instanceof Error && err.name === 'AbortError')
+            ) {
+              return
+            }
             failures += 1
+            const detail = err instanceof Error ? err.message : ''
+            const rateLimited = /429|503|quota|rate limit|high demand/i.test(detail)
             next.push({
               itemId: item.id,
               label: item.label,
               prompt: item.prompt,
               score: 3,
-              error: 'AI scoring unavailable — provisional mid score used.',
+              error: rateLimited
+                ? 'AI is rate-limited right now — provisional mid score used. Wait a minute and try again.'
+                : 'AI scoring unavailable — provisional mid score used.',
             })
           }
         }
@@ -130,6 +143,7 @@ export default function SpeakingResults({
     void run()
     return () => {
       cancelled = true
+      controller.abort()
     }
   }, [allItems, recordings])
 

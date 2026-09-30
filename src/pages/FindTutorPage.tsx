@@ -1,13 +1,12 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { LayoutGrid, List } from 'lucide-react'
 import TutorFiltersBar from '../components/study/tutors/TutorFiltersBar'
 import TutorCard from '../components/study/tutors/TutorCard'
 import TutorGridPagination from '../components/study/tutors/TutorGridPagination'
 import {
   TUTOR_PRICE_PRESETS,
 } from '../mocks/tutorListingsMock'
-import type { TutorListingCard, TutorSortBy, TutorViewMode } from '../types/tutorListing'
+import type { TutorListingCard, TutorSortBy } from '../types/tutorListing'
 import { fetchApprovedTutors } from '../utils/platformApi'
 
 const PAGE_SIZE = 8
@@ -30,7 +29,6 @@ function saveFavorites(ids: Set<string>) {
 export default function FindTutorPage() {
   const [params, setParams] = useSearchParams()
   const [favorites, setFavorites] = useState(() => loadFavorites())
-  const [viewMode, setViewMode] = useState<TutorViewMode>('grid')
   const [tutors, setTutors] = useState<TutorListingCard[]>([])
   const [loading, setLoading] = useState(true)
 
@@ -144,9 +142,6 @@ export default function FindTutorPage() {
         <h2 className="text-xl font-bold text-slate-900 sm:text-2xl">
           Find a Tutor
         </h2>
-        <p className="mt-1 text-sm text-slate-500">
-          Find the perfect tutor and book 1-on-1 lessons that fit your goals.
-        </p>
       </div>
 
       <TutorFiltersBar />
@@ -155,33 +150,6 @@ export default function FindTutorPage() {
         <p className="text-sm font-medium text-slate-600">
           {filtered.length} tutor{filtered.length === 1 ? '' : 's'} found
         </p>
-        <div className="flex items-center gap-1 rounded-xl border border-slate-200 bg-white p-1">
-          <span className="px-2 text-xs text-slate-400">View as:</span>
-          <button
-            type="button"
-            onClick={() => setViewMode('grid')}
-            className={`inline-flex h-8 w-8 items-center justify-center rounded-lg transition ${
-              viewMode === 'grid'
-                ? 'bg-indigo-50 text-indigo-600'
-                : 'text-slate-400 hover:text-slate-600'
-            }`}
-            aria-label="Grid view"
-          >
-            <LayoutGrid className="h-4 w-4" />
-          </button>
-          <button
-            type="button"
-            onClick={() => setViewMode('list')}
-            className={`inline-flex h-8 w-8 items-center justify-center rounded-lg transition ${
-              viewMode === 'list'
-                ? 'bg-indigo-50 text-indigo-600'
-                : 'text-slate-400 hover:text-slate-600'
-            }`}
-            aria-label="List view"
-          >
-            <List className="h-4 w-4" />
-          </button>
-        </div>
       </div>
 
       {loading ? (
@@ -199,24 +167,12 @@ export default function FindTutorPage() {
               : 'Try resetting filters to see more results.'}
           </p>
         </div>
-      ) : viewMode === 'grid' ? (
+      ) : (
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
           {pageItems.map((tutor) => (
             <TutorCard
               key={tutor.id}
               tutor={tutor}
-              isFavorited={favorites.has(tutor.id)}
-              onFavorite={() => toggleFavorite(tutor.id)}
-            />
-          ))}
-        </div>
-      ) : (
-        <div className="space-y-3">
-          {pageItems.map((tutor) => (
-            <TutorCard
-              key={tutor.id}
-              tutor={tutor}
-              viewMode="list"
               isFavorited={favorites.has(tutor.id)}
               onFavorite={() => toggleFavorite(tutor.id)}
             />

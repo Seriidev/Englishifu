@@ -5,7 +5,13 @@ import { useAuth } from '../../auth/AuthContext'
 import { dashboardPathForRole, forgotPasswordPath } from '../../utils/authStorage'
 import { claimPendingPlacement } from '../../utils/pendingPlacement'
 import AuthShell from './AuthShell'
-import { errorClass, fieldClass, labelClass, primaryBtnClass } from './formStyles'
+import {
+  errorClass,
+  fieldClass,
+  labelClass,
+  primaryBtnClass,
+  secondaryBtnClass,
+} from './formStyles'
 
 export default function LoginForm() {
   const navigate = useNavigate()
@@ -122,12 +128,9 @@ export default function LoginForm() {
           {submitting ? 'Logging in…' : 'Log in'}
         </button>
 
-        <p className="text-center text-sm text-muted">
-          Don&apos;t have an account?{' '}
-          <Link to="/start" className="font-semibold text-brand hover:underline">
-            Sign up
-          </Link>
-        </p>
+        <Link to="/start" className={secondaryBtnClass}>
+          Sign up
+        </Link>
       </form>
     </AuthShell>
   )

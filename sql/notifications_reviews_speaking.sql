@@ -18,6 +18,9 @@ CREATE TABLE IF NOT EXISTS notifications (
 CREATE INDEX IF NOT EXISTS idx_notifications_user
   ON notifications (user_id, is_read, created_at DESC);
 
+ALTER TABLE notifications
+  ADD COLUMN IF NOT EXISTS actor_id TEXT;
+
 CREATE TABLE IF NOT EXISTS reviews (
   id SERIAL PRIMARY KEY,
   booking_id INTEGER NOT NULL REFERENCES bookings (id) ON DELETE CASCADE,

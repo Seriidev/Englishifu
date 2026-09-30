@@ -7,3 +7,9 @@ export const errorClass = 'mt-1 text-xs font-medium text-red-600'
 
 export const primaryBtnClass =
   'inline-flex w-full items-center justify-center rounded-xl bg-indigo-500 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-600 disabled:cursor-not-allowed disabled:opacity-60'
+
+export const secondaryBtnClass =
+  'inline-flex w-full items-center justify-center rounded-xl bg-indigo-100 py-2.5 text-sm font-semibold text-indigo-700 transition hover:bg-indigo-200'
+
+export const quietBtnClass =
+  'inline-flex w-full items-center justify-center rounded-xl border border-slate-200 bg-white py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50'

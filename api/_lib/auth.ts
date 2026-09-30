@@ -226,7 +226,7 @@ async function selectAppUser(
             id, email, password_hash, full_name, handle, role, avatar_url,
             is_public_profile, created_at, cefr_level, city, headline, summary,
             xp, daily_streak, last_activity_date, placement_completed_at,
-            status, position, years_of_experience, about_me, hourly_rate_usd,
+            status, position, specializations, years_of_experience, about_me, hourly_rate_usd,
             certifications, updated_at, referral_code, marketing_opt_in,
             is_suspended, email_unsubscribed
           FROM app_users
@@ -239,7 +239,7 @@ async function selectAppUser(
               id, email, password_hash, full_name, handle, role, avatar_url,
               is_public_profile, created_at, cefr_level, city, headline, summary,
               xp, daily_streak, last_activity_date, placement_completed_at,
-              status, position, years_of_experience, about_me, hourly_rate_usd,
+              status, position, specializations, years_of_experience, about_me, hourly_rate_usd,
               certifications, updated_at, referral_code, marketing_opt_in,
               is_suspended, email_unsubscribed
             FROM app_users
@@ -251,7 +251,7 @@ async function selectAppUser(
               id, email, password_hash, full_name, handle, role, avatar_url,
               is_public_profile, created_at, cefr_level, city, headline, summary,
               xp, daily_streak, last_activity_date, placement_completed_at,
-              status, position, years_of_experience, about_me, hourly_rate_usd,
+              status, position, specializations, years_of_experience, about_me, hourly_rate_usd,
               certifications, updated_at, referral_code, marketing_opt_in,
               is_suspended, email_unsubscribed
             FROM app_users

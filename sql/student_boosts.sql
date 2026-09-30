@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS student_boosts (
   id SERIAL PRIMARY KEY,
   tutor_id TEXT REFERENCES app_users (id) ON DELETE CASCADE,
   student_id TEXT NOT NULL REFERENCES app_users (id) ON DELETE CASCADE,
-  kind TEXT NOT NULL CHECK (kind IN ('daily', 'lesson', 'speaking_club', 'admin')),
+  kind TEXT NOT NULL CHECK (kind IN ('daily', 'lesson', 'speaking_club', 'admin', 'exchange')),
   booking_id INTEGER REFERENCES bookings (id) ON DELETE SET NULL,
   session_id INTEGER REFERENCES speaking_club_sessions (id) ON DELETE SET NULL,
   xp_awarded INTEGER NOT NULL DEFAULT 0,
@@ -24,7 +24,7 @@ ALTER TABLE student_boosts
 
 ALTER TABLE student_boosts
   ADD CONSTRAINT student_boosts_kind_check
-  CHECK (kind IN ('daily', 'lesson', 'speaking_club', 'admin'));
+  CHECK (kind IN ('daily', 'lesson', 'speaking_club', 'admin', 'exchange'));
 
 CREATE UNIQUE INDEX IF NOT EXISTS idx_student_boosts_daily_once
   ON student_boosts (tutor_id, student_id, boost_day)

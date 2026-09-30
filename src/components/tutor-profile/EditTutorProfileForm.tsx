@@ -2,7 +2,7 @@ import { useMemo, useState, type ChangeEvent, type FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../auth/AuthContext'
 import BrandMark from '../shared/BrandMark'
-import { TUTOR_POSITIONS, type TutorPosition } from '../../types/tutorProfile'
+import { type TutorPosition } from '../../types/tutorProfile'
 import { normalizeCertifications } from '../../utils/certifications'
 import {
   validateTutorEditProfileForm,
@@ -11,6 +11,11 @@ import {
 import { errorClass, fieldClass, labelClass } from '../auth/formStyles'
 import { dashboardPathForRole } from '../../utils/authStorage'
 import CertificationUploadInput from '../tutor/CertificationUploadInput'
+import {
+  SpecializationAdd,
+  SpecializationChips,
+  specializationsFromProfile,
+} from '../tutor/SpecializationAdd'
 import AvailabilitySettings from './AvailabilitySettings'
 import CreateSpeakingClubSessionForm from './CreateSpeakingClubSessionForm'
 
@@ -24,6 +29,7 @@ export default function EditTutorProfileForm() {
         fullName: '',
         handle: '',
         position: 'Teacher',
+        specializations: ['Teacher'],
         yearsOfExperience: '',
         hourlyRateUsd: '',
         certifications: [],
@@ -33,6 +39,7 @@ export default function EditTutorProfileForm() {
       fullName: user.fullName,
       handle: user.handle,
       position: user.position,
+      specializations: specializationsFromProfile(user),
       yearsOfExperience:
         user.yearsOfExperience !== undefined ? user.yearsOfExperience : '',
       hourlyRateUsd:
@@ -70,7 +77,8 @@ export default function EditTutorProfileForm() {
     const result = await updateTutor({
       fullName: form.fullName.trim(),
       handle: form.handle.replace(/^@/, '').trim().toLowerCase(),
-      position: form.position as TutorPosition,
+      position: (form.specializations[0] || form.position) as TutorPosition,
+      specializations: form.specializations,
       yearsOfExperience: Number(form.yearsOfExperience),
       hourlyRateUsd: Number(form.hourlyRateUsd),
       aboutMe: form.aboutMe?.trim(),
@@ -102,30 +110,9 @@ export default function EditTutorProfileForm() {
 
       <main className="mx-auto max-w-2xl px-4 py-8 sm:px-6 sm:py-10">
         <form onSubmit={(e) => void onSubmit(e)} noValidate>
-          <div className="mb-1 flex flex-wrap items-center justify-between gap-3">
-            <h1 className="text-3xl font-bold tracking-tight text-ink">
-              Edit Profile
-            </h1>
-            <div className="flex items-center gap-4 text-sm">
-              <button
-                type="button"
-                onClick={onCancel}
-                className="font-semibold text-muted transition hover:text-ink"
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                disabled={saving}
-                className="font-semibold text-ink transition hover:text-brand disabled:opacity-50"
-              >
-                {saving ? 'Saving…' : 'Save Changes'}
-              </button>
-            </div>
-          </div>
-          <p className="mb-8 text-sm text-muted">
-            Required fields are marked with an *
-          </p>
+          <h1 className="mb-8 text-3xl font-bold tracking-tight text-ink">
+            Edit Profile
+          </h1>
 
           <div className="space-y-5 rounded-3xl border border-[#c7d7f5]/70 bg-white/90 p-5 shadow-sm sm:p-8">
             <div>
@@ -188,21 +175,37 @@ export default function EditTutorProfileForm() {
             </div>
 
             <div>
-              <label className={labelClass} htmlFor="tutor-edit-position">
-                Specialization *
-              </label>
-              <select
-                id="tutor-edit-position"
-                className={fieldClass}
-                value={form.position}
-                onChange={(e) => setField('position', e.target.value)}
-              >
-                {TUTOR_POSITIONS.map((p) => (
-                  <option key={p} value={p}>
-                    {p}
-                  </option>
-                ))}
-              </select>
+              <p className={labelClass}>Specialization *</p>
+              <SpecializationAdd
+                selected={form.specializations}
+                onAdd={(value) => {
+                  const next = form.specializations.includes(value)
+                    ? form.specializations
+                    : [...form.specializations, value]
+                  setForm((prev) => ({
+                    ...prev,
+                    specializations: next,
+                    position: next[0] ?? '',
+                  }))
+                }}
+              />
+              {form.specializations.length > 0 ? (
+                <div className="mt-3">
+                  <SpecializationChips
+                    selected={form.specializations}
+                    onRemove={(value) => {
+                      const next = form.specializations.filter(
+                        (item) => item !== value,
+                      )
+                      setForm((prev) => ({
+                        ...prev,
+                        specializations: next,
+                        position: next[0] ?? '',
+                      }))
+                    }}
+                  />
+                </div>
+              ) : null}
               {errors.position ? (
                 <p className={errorClass}>{errors.position}</p>
               ) : null}
@@ -292,6 +295,23 @@ export default function EditTutorProfileForm() {
             </div>
 
             {submitError ? <p className={errorClass}>{submitError}</p> : null}
+
+            <div className="flex items-center justify-end gap-3 border-t border-slate-100 pt-5">
+              <button
+                type="button"
+                onClick={onCancel}
+                className="rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-600 transition hover:bg-slate-50"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                disabled={saving}
+                className="rounded-xl bg-indigo-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-600 disabled:opacity-50"
+              >
+                {saving ? 'Saving…' : 'Save Changes'}
+              </button>
+            </div>
           </div>
         </form>
 

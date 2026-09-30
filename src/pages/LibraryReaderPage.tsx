@@ -3,6 +3,7 @@ import { Link, useLocation, useParams } from 'react-router-dom'
 import { HiOutlineArrowLeft } from 'react-icons/hi2'
 import type { LibraryItem } from '../types/studyContent'
 import { fetchLibraryBooks } from '../utils/libraryApi'
+import { notifyStudentXpChanged } from '../utils/studentXp'
 
 export default function LibraryReaderPage() {
   const { bookId } = useParams()
@@ -46,6 +47,7 @@ export default function LibraryReaderPage() {
         // Hide Chrome/Edge PDF toolbar (download / print icons).
         setViewerUrl(`${objectUrl}#toolbar=0&navpanes=0`)
         setLoadError(false)
+        notifyStudentXpChanged()
       } catch {
         if (!cancelled) {
           setLoadError(true)

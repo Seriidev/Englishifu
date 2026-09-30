@@ -125,7 +125,6 @@ export default function ListeningSection({
     return (
       <TestShell
         title="TOEFL Listening"
-        subtitle={listeningBank.meta.title}
         progressLabel="Ready"
         progressPercent={0}
         onExit={onExit}

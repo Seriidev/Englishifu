@@ -60,7 +60,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       SELECT start_at, end_at
       FROM bookings
       WHERE tutor_id = ${tutor.id}
-        AND status = 'confirmed'
+        AND status IN ('pending', 'confirmed')
         AND start_at >= NOW()
         AND start_at <= ${rangeEnd.toISOString()}
     `

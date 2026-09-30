@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import LibraryFilterMenu from '../library/LibraryFilterMenu'
 import type {
   AssignmentPriority,
   AssignmentRow,
@@ -25,6 +26,12 @@ function formatDue(iso: string | null) {
     year: 'numeric',
   })
 }
+
+const STATUS_OPTIONS: { id: AssignmentStatus; label: string }[] = [
+  { id: 'todo', label: 'To Do' },
+  { id: 'in_progress', label: 'In Progress' },
+  { id: 'completed', label: 'Completed' },
+]
 
 function statusLabel(status: AssignmentStatus) {
   if (status === 'in_progress') return 'In Progress'
@@ -109,13 +116,15 @@ export default function AssignmentBoard({
         const items = grouped[group.id]
         const expanded = open[group.id]
         return (
-          <section key={group.id} className="overflow-hidden rounded-2xl">
+          <section key={group.id} className="rounded-2xl">
             <button
               type="button"
               onClick={() =>
                 setOpen((prev) => ({ ...prev, [group.id]: !prev[group.id] }))
               }
-              className={`flex w-full items-center gap-2 px-4 py-2.5 text-left text-sm font-semibold ${group.bar}`}
+              className={`flex w-full items-center gap-2 px-4 py-2.5 text-left text-sm font-semibold ${
+                expanded ? 'rounded-t-2xl' : 'rounded-2xl'
+              } ${group.bar}`}
             >
               <span className="inline-block text-xs">{expanded ? '▾' : '▸'}</span>
               {group.label}
@@ -129,7 +138,7 @@ export default function AssignmentBoard({
                   className={`hidden gap-3 px-4 py-2 text-[11px] font-semibold tracking-wide text-slate-400 uppercase sm:grid ${
                     readOnly
                       ? 'grid-cols-[minmax(8rem,1.2fr)_minmax(8rem,1.4fr)_7.5rem_5.5rem_minmax(7rem,1fr)]'
-                      : 'grid-cols-[minmax(8rem,1.2fr)_minmax(8rem,1.4fr)_7.5rem_5.5rem_minmax(7rem,1fr)_7rem]'
+                      : 'grid-cols-[minmax(8rem,1.2fr)_minmax(8rem,1.4fr)_7.5rem_5.5rem_minmax(7rem,1fr)_9.5rem]'
                   }`}
                 >
                   <span>Name</span>
@@ -148,7 +157,7 @@ export default function AssignmentBoard({
                       className={`grid gap-2 border-t border-slate-100 px-4 py-3 sm:items-center sm:gap-3 ${
                         readOnly
                           ? 'sm:grid-cols-[minmax(8rem,1.2fr)_minmax(8rem,1.4fr)_7.5rem_5.5rem_minmax(7rem,1fr)]'
-                          : 'sm:grid-cols-[minmax(8rem,1.2fr)_minmax(8rem,1.4fr)_7.5rem_5.5rem_minmax(7rem,1fr)_7rem]'
+                          : 'sm:grid-cols-[minmax(8rem,1.2fr)_minmax(8rem,1.4fr)_7.5rem_5.5rem_minmax(7rem,1fr)_9.5rem]'
                       }`}
                     >
                       <p className="truncate text-sm font-semibold text-slate-900">
@@ -169,20 +178,13 @@ export default function AssignmentBoard({
                       {readOnly ? (
                         <span className="sr-only">{statusLabel(row.status)}</span>
                       ) : (
-                        <select
+                        <LibraryFilterMenu
+                          label={statusLabel(row.status)}
                           value={row.status}
-                          onChange={(e) =>
-                            onStatusChange?.(
-                              row,
-                              e.target.value as AssignmentStatus,
-                            )
-                          }
-                          className="rounded-lg border border-slate-200 bg-white px-2 py-1.5 text-xs font-medium text-slate-700"
-                        >
-                          <option value="todo">To Do</option>
-                          <option value="in_progress">In Progress</option>
-                          <option value="completed">Completed</option>
-                        </select>
+                          defaultValue={row.status}
+                          options={STATUS_OPTIONS}
+                          onChange={(status) => onStatusChange?.(row, status)}
+                        />
                       )}
                     </div>
                   ))

@@ -2,7 +2,32 @@ import { sql } from './db.js'
 import { createNotification } from './createNotification.js'
 
 export const REFERRAL_CREDIT = 1
-export const REFERRAL_XP = 50
+export const REFERRAL_XP = 10
+export const BOOK_XP = 50
+export const SPEAKING_CLUB_XP = 20
+export const XP_FOR_ONE_BOOST = 500
+
+export async function grantXpOnce(params: {
+  userId: string
+  source: string
+  amount: number
+  description: string
+}): Promise<boolean> {
+  const existing = await sql`
+    SELECT 1 FROM reward_ledger
+    WHERE user_id = ${params.userId} AND source = ${params.source} AND unit = 'xp'
+    LIMIT 1
+  `
+  if (existing.rows.length > 0) return false
+  await grantReward({
+    userId: params.userId,
+    source: params.source,
+    amount: params.amount,
+    unit: 'xp',
+    description: params.description,
+  })
+  return true
+}
 
 export async function grantReward(params: {
   userId: string

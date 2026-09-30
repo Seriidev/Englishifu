@@ -173,7 +173,6 @@ export default function WritingSection({ onExit, onComplete }: Props) {
     return (
       <TestShell
         title="TOEFL Writing"
-        subtitle={writingBank.meta.title}
         progressLabel="Ready"
         progressPercent={0}
         onExit={onExit}

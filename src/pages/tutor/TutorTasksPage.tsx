@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useAuth } from '../../auth/AuthContext'
 import AssignmentBoard from '../../components/study/tasks/AssignmentBoard'
+import SearchField from '../../components/shared/SearchField'
 import type {
   AssignmentPriority,
   AssignmentRow,
@@ -135,11 +136,11 @@ export default function TutorTasksPage() {
           </button>
         </div>
         <div className="ml-auto flex min-w-0 flex-1 flex-wrap items-center justify-end gap-2">
-          <input
+          <SearchField
+            wrapperClassName="min-w-0 flex-1 sm:max-w-xs"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search tasks"
-            className="min-w-0 flex-1 rounded-full border border-slate-200 px-4 py-2 text-sm text-slate-900 outline-none focus:border-indigo-400 sm:max-w-xs"
           />
           <input
             type="month"

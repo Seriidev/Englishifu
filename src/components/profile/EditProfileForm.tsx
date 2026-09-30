@@ -101,30 +101,9 @@ export default function EditProfileForm() {
 
       <main className="mx-auto max-w-2xl px-4 py-8 sm:px-6 sm:py-10">
         <form onSubmit={(e) => void onSubmit(e)} noValidate>
-          <div className="mb-1 flex flex-wrap items-center justify-between gap-3">
-            <h1 className="text-3xl font-bold tracking-tight text-ink">
-              Edit Profile
-            </h1>
-            <div className="flex items-center gap-4 text-sm">
-              <button
-                type="button"
-                onClick={onCancel}
-                className="font-semibold text-muted transition hover:text-ink"
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                disabled={saving}
-                className="font-semibold text-ink transition hover:text-brand disabled:opacity-50"
-              >
-                {saving ? 'Saving…' : 'Save Changes'}
-              </button>
-            </div>
-          </div>
-          <p className="mb-8 text-sm text-muted">
-            Required fields are marked with an *
-          </p>
+          <h1 className="mb-8 text-3xl font-bold tracking-tight text-ink">
+            Edit Profile
+          </h1>
 
           <div className="space-y-5 rounded-3xl border border-[#c7d7f5]/70 bg-white/90 p-5 shadow-sm sm:p-8">
             <div>
@@ -226,6 +205,23 @@ export default function EditProfileForm() {
             </div>
 
             {submitError ? <p className={errorClass}>{submitError}</p> : null}
+
+            <div className="flex items-center justify-end gap-3 border-t border-slate-100 pt-5">
+              <button
+                type="button"
+                onClick={onCancel}
+                className="rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-600 transition hover:bg-slate-50"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                disabled={saving}
+                className="rounded-xl bg-indigo-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-600 disabled:opacity-50"
+              >
+                {saving ? 'Saving…' : 'Save Changes'}
+              </button>
+            </div>
           </div>
         </form>
       </main>

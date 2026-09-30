@@ -123,7 +123,6 @@ export default function ReadingSection({
     return (
       <TestShell
         title="TOEFL Reading"
-        subtitle={readingBank.meta.title}
         progressLabel="Ready"
         progressPercent={0}
         onExit={onExit}

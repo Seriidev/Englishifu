@@ -4,7 +4,7 @@ import LangSwitcher from '../shared/LangSwitcher'
 
 interface TestShellProps {
   title: string
-  subtitle: string
+  subtitle?: string
   progressLabel: string
   progressPercent: number
   timer?: ReactNode
@@ -31,7 +31,9 @@ export default function TestShell({
             <p className="text-xs font-bold tracking-wide text-brand uppercase">
               {title}
             </p>
-            <p className="text-sm font-medium text-ink">{subtitle}</p>
+            {subtitle ? (
+              <p className="text-sm font-medium text-ink">{subtitle}</p>
+            ) : null}
           </div>
           <div className="flex items-center gap-2 sm:gap-3">
             <LangSwitcher />

@@ -187,9 +187,6 @@ export default function SpeakingClubPage() {
         <h2 className="text-xl font-bold text-slate-900 sm:text-2xl">
           Find a Speaking Club
         </h2>
-        <p className="mt-1 text-sm text-slate-500">
-          Join live group sessions and practice English in real conversations.
-        </p>
       </div>
 
       <SessionFiltersBar />
@@ -205,11 +202,8 @@ export default function SpeakingClubPage() {
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <h3 className="text-base font-bold text-slate-900">
-                <span aria-hidden>📅 </span>Upcoming Sessions
+                Upcoming Sessions
               </h3>
-              <p className="mt-0.5 text-xs text-slate-400">
-                All times shown in your local timezone
-              </p>
             </div>
             <div className="flex flex-wrap gap-1.5">
               {DAY_CHIPS.map((chip) => (

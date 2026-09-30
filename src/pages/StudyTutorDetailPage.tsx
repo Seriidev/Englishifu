@@ -315,7 +315,7 @@ export default function StudyTutorDetailPage() {
           </div>
           {bookedFlash ? (
             <p className="mb-4 rounded-xl bg-emerald-50 px-3 py-2 text-sm font-medium text-emerald-800">
-              Booked! See it under{' '}
+              Request sent. The tutor needs to accept it. See it under{' '}
               <Link to="/study/bookings" className="underline">
                 My bookings
               </Link>

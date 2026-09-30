@@ -45,6 +45,7 @@ export interface AppUserRow {
   placement_completed_at?: string | Date | null
   status?: string | null
   position?: string | null
+  specializations?: unknown
   years_of_experience?: number | null
   about_me?: string | null
   hourly_rate_usd?: string | number | null
@@ -83,6 +84,7 @@ export type PublicUserDto =
       createdAt: string
       status: TutorStatus
       position: TutorPosition
+      specializations?: string[]
       avatarUrl?: string
       isPublicProfile: boolean
       dailyStreak: number
@@ -133,6 +135,27 @@ function parseCertifications(raw: unknown): TutorCertification[] {
 }
 
 const POSITIONS: readonly TutorPosition[] = TUTOR_POSITIONS
+
+export function parseSpecializations(raw: unknown): string[] {
+  let list: unknown = raw
+  if (typeof raw === 'string') {
+    try {
+      list = JSON.parse(raw)
+    } catch {
+      return []
+    }
+  }
+  if (!Array.isArray(list)) return []
+  const allowed = new Set<string>(POSITIONS)
+  const unique: string[] = []
+  for (const item of list) {
+    if (typeof item !== 'string' || !allowed.has(item) || unique.includes(item)) {
+      continue
+    }
+    unique.push(item)
+  }
+  return unique
+}
 const STATUSES: TutorStatus[] = ['incomplete', 'pending', 'approved']
 
 export function rowToPublicUser(row: AppUserRow): PublicUserDto {
@@ -163,6 +186,7 @@ export function rowToPublicUser(row: AppUserRow): PublicUserDto {
       role: 'tutor' as const,
       status,
       position,
+      specializations: parseSpecializations(row.specializations),
       dailyStreak: Number(row.daily_streak ?? 0) || 0,
       yearsOfExperience:
         row.years_of_experience != null

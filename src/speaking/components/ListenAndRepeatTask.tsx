@@ -9,7 +9,6 @@ import {
 } from '../hooks/useDeadlineTimer'
 import type { AudioRecorderControls } from '../hooks/useAudioRecorder'
 import CountdownRing from './CountdownRing'
-import RecordingIndicator from './RecordingIndicator'
 import ListeningIndicator from '../../components/shared/ListeningIndicator'
 import PromptImage from '../../components/shared/PromptImage'
 
@@ -86,18 +85,6 @@ export default function ListenAndRepeatTask({
 
   return (
     <div className="flex h-full flex-col">
-      <header className="flex items-center justify-between border-b border-gray-200 px-4 py-3 sm:px-6">
-        <div>
-          <p className="text-xs font-semibold tracking-wide text-brand uppercase">
-            Task 1 · Listen and Repeat
-          </p>
-          <p className="mt-0.5 text-sm font-medium text-ink">
-            Question {questionNumber} of {totalQuestions}
-          </p>
-        </div>
-        <RecordingIndicator active={phase === 'recording'} />
-      </header>
-
       <div className="flex flex-1 flex-col items-center justify-center gap-6 p-4 sm:p-8">
         {item.visualUrl && (
           <div className="w-full max-w-xl overflow-hidden rounded-2xl border border-gray-200 bg-gray-50 shadow-sm">

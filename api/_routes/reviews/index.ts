@@ -156,16 +156,22 @@ async function createProfileReview(
     RETURNING *
   `
 
-  await notifyTutor(tutorId, studentName, rating)
+  await notifyTutor(tutorId, studentId, studentName, rating)
   return res.status(201).json({ review: rows[0] })
 }
 
-async function notifyTutor(tutorId: string, studentName: string, rating: number) {
+async function notifyTutor(
+  tutorId: string,
+  studentId: string,
+  studentName: string,
+  rating: number,
+) {
   await createNotification({
     userId: tutorId,
     type: 'new_review',
     title: 'New review received',
     message: `You received a ${rating}-star review from ${studentName}.`,
     linkPath: '/tutor/profile',
+    actorId: studentId,
   })
 }

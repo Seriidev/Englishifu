@@ -1,6 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 import { applyCors, getAuthenticatedUser } from '../../../../_lib/auth.js'
 import { createNotification } from '../../../../_lib/createNotification.js'
+import { grantXpOnce, SPEAKING_CLUB_XP } from '../../../../_lib/rewards.js'
 import { dbUnavailableResponse, isDbConfigured, sql } from '../../../../_lib/db.js'
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -88,6 +89,17 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         })
       }
       throw err
+    }
+
+    try {
+      await grantXpOnce({
+        userId: user.id,
+        source: `speaking-club:${id}`,
+        amount: SPEAKING_CLUB_XP,
+        description: 'Joined a speaking club session',
+      })
+    } catch (err) {
+      console.error('speaking club xp:', err)
     }
 
     await createNotification({

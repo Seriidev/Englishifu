@@ -1,8 +1,75 @@
 import { createNotification } from './createNotification.js'
 import { sql } from './db.js'
+import { XP_FOR_ONE_BOOST } from './rewards.js'
 
-export const LESSON_XP = 10
+export const LESSON_XP = 30
 export const BOOST_XP = 0
+
+let exchangeKindReady = false
+
+async function ensureExchangeBoostKind() {
+  if (exchangeKindReady) return
+  await sql`
+    ALTER TABLE student_boosts
+    DROP CONSTRAINT IF EXISTS student_boosts_kind_check
+  `
+  await sql`
+    ALTER TABLE student_boosts
+    ADD CONSTRAINT student_boosts_kind_check
+    CHECK (kind IN ('daily', 'lesson', 'speaking_club', 'admin', 'exchange'))
+  `
+  exchangeKindReady = true
+}
+
+export async function exchangeXpForBoost(
+  studentId: string,
+): Promise<{ ok: true; xp: number } | { ok: false; error: string }> {
+  await ensureExchangeBoostKind()
+  const updated = await sql`
+    UPDATE app_users
+    SET xp = COALESCE(xp, 0) - ${XP_FOR_ONE_BOOST}, updated_at = NOW()
+    WHERE id = ${studentId}
+      AND role = 'student'
+      AND COALESCE(xp, 0) >= ${XP_FOR_ONE_BOOST}
+    RETURNING COALESCE(xp, 0)::int AS xp
+  `
+  const row = updated.rows[0] as { xp?: number } | undefined
+  if (!row) {
+    return { ok: false, error: `You need ${XP_FOR_ONE_BOOST} XP to exchange for a Boost` }
+  }
+  try {
+    await sql`
+      INSERT INTO student_boosts (
+        tutor_id, student_id, kind, xp_awarded, boost_day
+      )
+      VALUES (
+        ${null},
+        ${studentId},
+        ${'exchange'},
+        ${0},
+        (CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Ashgabat')::date
+      )
+    `
+    await sql`
+      INSERT INTO reward_ledger (user_id, source, amount, unit, description)
+      VALUES (
+        ${studentId},
+        ${'xp_exchange'},
+        ${-XP_FOR_ONE_BOOST},
+        ${'xp'},
+        ${`Exchanged ${XP_FOR_ONE_BOOST} XP for 1 Boost`}
+      )
+    `
+  } catch (err) {
+    await sql`
+      UPDATE app_users
+      SET xp = COALESCE(xp, 0) + ${XP_FOR_ONE_BOOST}, updated_at = NOW()
+      WHERE id = ${studentId}
+    `
+    throw err
+  }
+  return { ok: true, xp: Number(row.xp) || 0 }
+}
 
 function isUniqueViolation(err: unknown) {
   return Boolean(
@@ -79,6 +146,7 @@ export async function grantDailyBoost(input: {
     title: 'Teacher boost',
     message: `${tutorName} boosted you today. Keep going!`,
     linkPath: '/study',
+    actorId: input.tutorId,
   })
 
   return {

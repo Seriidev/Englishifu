@@ -61,6 +61,8 @@ export interface TutorProfile extends BaseUser {
   handle: string
   status: TutorStatus
   position: TutorPosition
+  /** Extra subjects shown on Find a Tutor. First item matches position. */
+  specializations?: string[]
   avatarUrl?: string
   isPublicProfile: boolean
   dailyStreak: number

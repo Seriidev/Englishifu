@@ -11,6 +11,7 @@ export async function scoreSpeakingWithAI(
   audio: Blob,
   prompt: string,
   taskType: SpeakingTaskType | string,
+  signal?: AbortSignal,
 ): Promise<SpeakingRubricScore> {
   const form = new FormData()
   form.append('audio', audio, 'recording.webm')
@@ -20,6 +21,7 @@ export async function scoreSpeakingWithAI(
   const response = await fetch('/api/score-speaking', {
     method: 'POST',
     body: form,
+    signal,
   })
   if (!response.ok) {
     const detail = await response.text().catch(() => '')

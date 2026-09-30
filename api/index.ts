@@ -48,6 +48,7 @@ import r_admin_users_id_suspend from './_routes/admin/users/[id]/suspend.js'
 import r_tutor_availability_id from './_routes/tutor-availability/[id].js'
 import r_bookings_id_complete from './_routes/bookings/[id]/complete.js'
 import r_bookings_id_cancel from './_routes/bookings/[id]/cancel.js'
+import r_bookings_id_accept from './_routes/bookings/[id]/accept.js'
 import r_tutors_id_students from './_routes/tutors/[id]/students.js'
 import r_tutors_id_reviews from './_routes/tutors/[id]/reviews.js'
 import r_tutors_id_stats from './_routes/tutors/[id]/stats.js'
@@ -120,6 +121,7 @@ const routes: { re: RegExp; keys: string[]; handler: ApiHandler }[] = [
   { re: new RegExp("^/api/tutor-availability/([^/]+)/?$"), keys: ["id"], handler: r_tutor_availability_id },
   { re: new RegExp("^/api/bookings/([^/]+)/complete/?$"), keys: ["id"], handler: r_bookings_id_complete },
   { re: new RegExp("^/api/bookings/([^/]+)/cancel/?$"), keys: ["id"], handler: r_bookings_id_cancel },
+  { re: new RegExp("^/api/bookings/([^/]+)/accept/?$"), keys: ["id"], handler: r_bookings_id_accept },
   { re: new RegExp("^/api/tutors/([^/]+)/students/?$"), keys: ["id"], handler: r_tutors_id_students },
   { re: new RegExp("^/api/tutors/([^/]+)/reviews/?$"), keys: ["id"], handler: r_tutors_id_reviews },
   { re: new RegExp("^/api/tutors/([^/]+)/stats/?$"), keys: ["id"], handler: r_tutors_id_stats },

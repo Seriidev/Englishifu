@@ -8,6 +8,7 @@ import LibraryBookCard, {
   libraryLevelLabel,
 } from '../components/study/library/LibraryBookCard'
 import LibraryFilterMenu from '../components/study/library/LibraryFilterMenu'
+import SearchField from '../components/shared/SearchField'
 import {
   LIBRARY_LEVEL_OPTIONS,
   LIBRARY_TOPIC_OPTIONS,
@@ -149,12 +150,11 @@ export default function StudyLibraryPage() {
           onChange={setCategory}
         />
 
-        <input
-          type="search"
+        <SearchField
+          wrapperClassName="min-w-0 flex-1"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search"
-          className="w-full min-w-0 flex-1 rounded-full border border-slate-300 bg-white px-4 py-1.5 text-sm text-slate-900 outline-none placeholder:text-slate-400 focus:border-indigo-500 dark:border-white/15 dark:bg-slate-800 dark:text-white dark:placeholder:text-white/50"
         />
 
         <div className="flex shrink-0 items-center gap-2 self-end lg:border-l lg:border-slate-200 lg:pl-3 dark:lg:border-white/15">

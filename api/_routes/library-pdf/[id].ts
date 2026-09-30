@@ -1,6 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 import { applyCors, getAuthenticatedUser } from '../../_lib/auth.js'
 import { dbUnavailableResponse, isDbConfigured, sql } from '../../_lib/db.js'
+import { BOOK_XP, grantXpOnce } from '../../_lib/rewards.js'
 import { loadLibraryPdf, persistLibraryPdfUrl } from '../../_lib/saveLibraryPdf.js'
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -49,6 +50,19 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const loaded = await loadLibraryPdf(pdfUrl)
     if ('redirect' in loaded) {
       return res.status(403).json({ error: 'This book cannot be opened here' })
+    }
+
+    if (user.role === 'student') {
+      try {
+        await grantXpOnce({
+          userId: user.id,
+          source: `book:${id}`,
+          amount: BOOK_XP,
+          description: 'Read a library book',
+        })
+      } catch (err) {
+        console.error('library book xp:', err)
+      }
     }
 
     res.setHeader('Content-Type', 'application/pdf')

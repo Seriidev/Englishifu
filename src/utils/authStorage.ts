@@ -155,6 +155,7 @@ export interface UpdateTutorProfileInput {
   fullName: string
   handle?: string
   position: TutorPosition
+  specializations?: string[]
   aboutMe?: string
   yearsOfExperience?: number
   hourlyRateUsd?: number

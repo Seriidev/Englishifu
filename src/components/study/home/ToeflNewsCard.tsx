@@ -39,9 +39,9 @@ export default function ToeflNewsCard({ news }: ToeflNewsCardProps) {
       </h2>
       <div className="mt-3 space-y-3">
         {items.map((item) => (
+          <div key={item.id} className="news-glow-border shadow-sm">
           <article
-            key={item.id}
-            className="rounded-2xl border border-slate-100 bg-white p-4 shadow-sm"
+            className="news-glow-inner bg-white p-4"
           >
             <h3 className="text-sm font-semibold text-slate-900">
               {item.title}
@@ -57,6 +57,7 @@ export default function ToeflNewsCard({ news }: ToeflNewsCardProps) {
               See more
             </button>
           </article>
+          </div>
         ))}
       </div>
 

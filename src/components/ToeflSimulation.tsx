@@ -29,7 +29,7 @@ export default function ToeflSimulation() {
       <div className="mx-auto grid max-w-7xl items-center gap-10 px-4 pb-10 sm:px-6 lg:grid-cols-2 lg:gap-14 lg:px-8">
         <div className="rounded-3xl border border-blue-100 bg-white p-5 shadow-lg shadow-brand/5 sm:p-6">
           <div className="flex items-center justify-between">
-            <span className="rounded-full bg-brand-light px-3 py-1 text-xs font-semibold text-brand">
+            <span className="rounded-full bg-brand-light px-4 py-2 text-xs font-semibold text-brand">
               Reading · Question 3/10
             </span>
             <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-ink">
@@ -99,8 +99,8 @@ export default function ToeflSimulation() {
               {t('toeflSim.start')}
             </a>
             <ToeflTryBadge />
-            <span className="text-base text-muted">{t('toeflSim.noReg')}</span>
           </div>
+          <p className="mt-3 text-base text-muted">{t('toeflSim.noReg')}</p>
         </div>
       </div>
     </section>

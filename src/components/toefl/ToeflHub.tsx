@@ -56,12 +56,8 @@ export default function ToeflHub() {
           <LangSwitcher />
         </div>
         <h1 className="mt-6 text-3xl font-bold tracking-tight text-ink sm:text-4xl">
-          {t('toefl.hubTitle')}
+          TOEFL SIMULATION
         </h1>
-        <p className="mt-3 max-w-2xl text-muted">{t('toefl.hubBody')}</p>
-        <p className="mt-2 text-xs font-medium text-brand">
-          {t('toefl.questionsInEnglish')}
-        </p>
 
         <div className="mt-10 grid gap-4 sm:grid-cols-2">
           {sections.map((s) => {

@@ -8,9 +8,14 @@ import { StatusBadge } from '../../components/shared/StatusBadge'
 import AvailabilitySettings from '../../components/tutor-profile/AvailabilitySettings'
 import SendResumeButton from '../../components/tutor/SendResumeButton'
 import CertificationUploadInput from '../../components/tutor/CertificationUploadInput'
+import {
+  SpecializationAdd,
+  SpecializationChips,
+  specializationsFromProfile,
+} from '../../components/tutor/SpecializationAdd'
 import ReferralWidget from '../../components/study/ReferralWidget'
 import { useOwnTutorProfile } from '../../hooks/useOwnTutorProfile'
-import { TUTOR_POSITIONS, type TutorPosition } from '../../types/tutorProfile'
+import { type TutorPosition } from '../../types/tutorProfile'
 import { fileToAvatarDataUrl } from '../../utils/avatarUpload'
 import { normalizeCertifications } from '../../utils/certifications'
 import { fetchTutorReviews } from '../../utils/platformApi'
@@ -43,6 +48,7 @@ export default function TutorWorkspaceProfilePage() {
         fullName: '',
         handle: '',
         position: 'Teacher',
+        specializations: ['Teacher'],
         yearsOfExperience: '',
         hourlyRateUsd: '',
         certifications: [],
@@ -52,6 +58,7 @@ export default function TutorWorkspaceProfilePage() {
       fullName: user.fullName,
       handle: user.handle,
       position: user.position,
+      specializations: specializationsFromProfile(user),
       yearsOfExperience:
         user.yearsOfExperience !== undefined ? user.yearsOfExperience : '',
       hourlyRateUsd:
@@ -132,29 +139,36 @@ export default function TutorWorkspaceProfilePage() {
     const validation = validateTutorEditProfileForm(form)
     if (Object.keys(validation).length > 0) {
       setErrors(validation as Record<string, string>)
+      setSubmitError('Fill in the required fields, then save again.')
       return false
     }
 
     setErrors({})
     setSaving(true)
-    const result = await updateTutor({
-      fullName: form.fullName.trim(),
-      handle: form.handle.replace(/^@/, '').trim().toLowerCase(),
-      position: form.position as TutorPosition,
-      yearsOfExperience: Number(form.yearsOfExperience),
-      hourlyRateUsd: Number(form.hourlyRateUsd),
-      aboutMe: form.aboutMe?.trim(),
-      isPublicProfile: tutor.isPublicProfile,
-      certifications: form.certifications,
-    })
-    setSaving(false)
-
-    if (!result.ok) {
-      setSubmitError(result.error)
+    try {
+      const result = await updateTutor({
+        fullName: form.fullName.trim(),
+        handle: form.handle.replace(/^@/, '').trim().toLowerCase(),
+        position: (form.specializations[0] || form.position) as TutorPosition,
+        specializations: form.specializations,
+        yearsOfExperience: Number(form.yearsOfExperience),
+        hourlyRateUsd: Number(form.hourlyRateUsd),
+        aboutMe: form.aboutMe?.trim(),
+        isPublicProfile: tutor.isPublicProfile,
+        certifications: form.certifications,
+      })
+      if (!result.ok) {
+        setSubmitError(result.error)
+        return false
+      }
+      setSavedOk(true)
+      return true
+    } catch (err) {
+      setSubmitError(err instanceof Error ? err.message : 'Could not save profile')
       return false
+    } finally {
+      setSaving(false)
     }
-    setSavedOk(true)
-    return true
   }
 
   const resumeReady = canSendTutorResume(form)
@@ -250,13 +264,7 @@ export default function TutorWorkspaceProfilePage() {
 
       <section className="rounded-2xl border border-slate-200 bg-white p-5 sm:p-6">
         <div className="grid gap-8 lg:grid-cols-2">
-          <form
-            id="tutor-profile-form"
-            method="post"
-            action="/tutor/profile"
-            onSubmit={onSubmit}
-            noValidate
-          >
+          <form id="tutor-profile-form" onSubmit={onSubmit} noValidate>
             <div className="space-y-4">
               <div>
                 <label className={labelClass} htmlFor="tutor-edit-name">
@@ -314,21 +322,39 @@ export default function TutorWorkspaceProfilePage() {
               </div>
 
               <div>
-                <label className={labelClass} htmlFor="tutor-edit-position">
+                <p className={labelClass}>
                   Specialization <RequiredMark />
-                </label>
-                <select
-                  id="tutor-edit-position"
-                  className={inputClass}
-                  value={form.position}
-                  onChange={(e) => setField('position', e.target.value)}
-                >
-                  {TUTOR_POSITIONS.map((p) => (
-                    <option key={p} value={p}>
-                      {p}
-                    </option>
-                  ))}
-                </select>
+                </p>
+                <SpecializationAdd
+                  selected={form.specializations}
+                  onAdd={(value) => {
+                    const next = form.specializations.includes(value)
+                      ? form.specializations
+                      : [...form.specializations, value]
+                    setForm((prev) => ({
+                      ...prev,
+                      specializations: next,
+                      position: next[0] ?? '',
+                    }))
+                  }}
+                />
+                {form.specializations.length > 0 ? (
+                  <div className="mt-3">
+                    <SpecializationChips
+                      selected={form.specializations}
+                      onRemove={(value) => {
+                        const next = form.specializations.filter(
+                          (item) => item !== value,
+                        )
+                        setForm((prev) => ({
+                          ...prev,
+                          specializations: next,
+                          position: next[0] ?? '',
+                        }))
+                      }}
+                    />
+                  </div>
+                ) : null}
                 {errors.position ? (
                   <p className="mt-1 text-xs text-red-600">{errors.position}</p>
                 ) : null}
@@ -421,6 +447,12 @@ export default function TutorWorkspaceProfilePage() {
                 onChange={(certs) => setField('certifications', certs)}
               />
 
+            </div>
+          </form>
+
+          <div className="flex flex-col">
+            <AvailabilitySettings embedded />
+            <div className="mt-6 flex flex-col items-end gap-2">
               {submitError ? (
                 <p className="text-sm text-red-600">{submitError}</p>
               ) : savedOk ? (
@@ -428,16 +460,10 @@ export default function TutorWorkspaceProfilePage() {
                   Profile saved.
                 </p>
               ) : null}
-            </div>
-          </form>
-
-          <div className="flex flex-col">
-            <AvailabilitySettings embedded />
-            <div className="mt-6 flex justify-end">
               <button
-                type="button"
+                type="submit"
+                form="tutor-profile-form"
                 disabled={saving}
-                onClick={() => void saveProfile()}
                 className="rounded-xl bg-indigo-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-600 disabled:opacity-60"
               >
                 {saving ? 'Saving…' : 'Save changes'}

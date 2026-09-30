@@ -18,6 +18,9 @@ export interface AppNotification {
   link_path: string | null
   is_read: boolean
   created_at: string
+  actor_id?: string | null
+  actor_name?: string | null
+  actor_avatar?: string | null
 }
 
 export interface TutorReview {

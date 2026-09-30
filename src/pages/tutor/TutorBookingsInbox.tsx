@@ -3,14 +3,39 @@ import { useAuth } from '../../auth/AuthContext'
 import { StatusBadge } from '../../components/shared/StatusBadge'
 import type { BookingRow } from '../../types/booking'
 import {
+  acceptBooking,
   cancelBooking,
   completeBooking,
   fetchBookings,
-  formatDateTimeRange,
+  formatTimeLabel,
   syncApiSession,
 } from '../../utils/bookingApi'
 
 type Filter = 'upcoming' | 'past' | 'cancelled'
+
+function initials(name: string): string {
+  const parts = name.trim().split(/\s+/).filter(Boolean).slice(0, 2)
+  const letters = parts.map((part) => part[0]?.toUpperCase() ?? '').join('')
+  return letters || '?'
+}
+
+function whenParts(startIso: string, endIso: string) {
+  const date = new Intl.DateTimeFormat(undefined, {
+    weekday: 'long',
+    month: 'short',
+    day: 'numeric',
+  }).format(new Date(startIso))
+  return {
+    date,
+    time: `${formatTimeLabel(startIso)} – ${formatTimeLabel(endIso)}`,
+  }
+}
+
+function statusLabel(status: BookingRow['status']): string | undefined {
+  if (status === 'pending') return 'Needs approval'
+  if (status === 'confirmed') return 'Accepted'
+  return undefined
+}
 
 export default function TutorBookingsInbox() {
   const { user } = useAuth()
@@ -41,23 +66,50 @@ export default function TutorBookingsInbox() {
     void load()
   }, [load])
 
+  const pendingCount = useMemo(
+    () => bookings.filter((b) => b.status === 'pending').length,
+    [bookings],
+  )
+
   const filtered = useMemo(() => {
     const now = Date.now()
-    return bookings.filter((b) => {
-      if (filter === 'cancelled') return b.status === 'cancelled'
-      if (filter === 'past') {
+    return bookings
+      .filter((b) => {
+        if (filter === 'cancelled') return b.status === 'cancelled'
+        if (filter === 'past') {
+          return (
+            b.status === 'completed' ||
+            (b.status === 'confirmed' && new Date(b.end_at).getTime() < now)
+          )
+        }
+        if (b.status === 'pending') return true
+        return b.status === 'confirmed' && new Date(b.end_at).getTime() >= now
+      })
+      .sort((a, b) => {
+        const rank = (row: BookingRow) => (row.status === 'pending' ? 0 : 1)
         return (
-          b.status === 'completed' ||
-          (b.status === 'confirmed' && new Date(b.end_at).getTime() < now)
+          rank(a) - rank(b) ||
+          new Date(a.start_at).getTime() - new Date(b.start_at).getTime()
         )
-      }
-      return (
-        b.status === 'confirmed' && new Date(b.end_at).getTime() >= now
-      )
-    })
+      })
   }, [bookings, filter])
 
   if (!user || user.role !== 'tutor') return null
+
+  const onAccept = async (id: number) => {
+    setBusyId(id)
+    setError(null)
+    try {
+      await syncApiSession(user)
+      await acceptBooking(id)
+      setFlash('Request accepted. The student can see the lesson now.')
+      await load()
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to accept')
+    } finally {
+      setBusyId(null)
+    }
+  }
 
   const onComplete = async (id: number) => {
     setBusyId(id)
@@ -73,8 +125,8 @@ export default function TutorBookingsInbox() {
     }
   }
 
-  const onCancel = async (id: number) => {
-    if (!window.confirm('Cancel this booking?')) return
+  const onCancel = async (id: number, pending: boolean) => {
+    if (!window.confirm(pending ? 'Decline this request?' : 'Cancel this booking?')) return
     setBusyId(id)
     try {
       await syncApiSession(user)
@@ -94,9 +146,8 @@ export default function TutorBookingsInbox() {
           Bookings
         </h2>
         <p className="mt-1 text-sm text-slate-500">
-          Manage upcoming lessons. Completing a lesson gives the student +10
-          XP automatically. Boost lives on the Students page — once a day, no
-          XP.
+          New student requests stay here until you accept them. Completing an
+          accepted lesson gives the student +10 XP.
         </p>
       </div>
 
@@ -112,13 +163,24 @@ export default function TutorBookingsInbox() {
               key={id}
               type="button"
               onClick={() => setFilter(id)}
-              className={`rounded-xl px-4 py-2.5 text-sm font-semibold transition ${
+              className={`inline-flex items-center rounded-xl px-4 py-2.5 text-sm font-semibold transition ${
                 filter === id
                   ? 'bg-indigo-500 text-white hover:bg-indigo-600'
                   : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
               }`}
             >
               {label}
+              {id === 'upcoming' && pendingCount > 0 ? (
+                <span
+                  className={`ml-2 inline-flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-xs ${
+                    filter === id
+                      ? 'bg-white/25 text-white'
+                      : 'bg-amber-200 text-amber-900'
+                  }`}
+                >
+                  {pendingCount}
+                </span>
+              ) : null}
             </button>
           ))}
         </div>
@@ -144,62 +206,106 @@ export default function TutorBookingsInbox() {
           </p>
         ) : (
           <ul className="space-y-3">
-            {filtered.map((b) => (
-              <li
-                key={b.id}
-                className="rounded-2xl border border-slate-100 bg-white p-4 shadow-sm sm:p-5"
-              >
-                <div className="flex flex-wrap items-start justify-between gap-3">
-                  <div>
-                    <p className="text-base font-bold text-slate-900">
-                      {b.subject || 'Lesson'}
-                    </p>
-                    <p className="mt-1 text-sm text-slate-600">
-                      with {b.student_name ?? 'Student'}
-                      {b.student_handle ? (
-                        <span className="text-slate-400">
-                          {' '}
-                          @{b.student_handle}
-                        </span>
-                      ) : null}
-                    </p>
-                    <p className="mt-2 text-sm font-medium text-indigo-700">
-                      {formatDateTimeRange(b.start_at, b.end_at)}
-                    </p>
-                    <div className="mt-2">
-                      <StatusBadge status={b.status} />
+            {filtered.map((b) => {
+              const studentName = b.student_name ?? 'Student'
+              const when = whenParts(b.start_at, b.end_at)
+              const waiting = b.status === 'pending'
+              return (
+                <li
+                  key={b.id}
+                  className={`rounded-2xl border bg-white p-4 shadow-sm sm:p-5 ${
+                    waiting
+                      ? 'border-amber-300 ring-1 ring-amber-100'
+                      : 'border-slate-100'
+                  }`}
+                >
+                  <div className="flex flex-col gap-4 lg:flex-row lg:items-center">
+                    <div className="flex min-w-0 flex-1 items-center gap-3">
+                      <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-indigo-100 text-sm font-bold text-indigo-700">
+                        {initials(studentName)}
+                      </span>
+                      <div className="min-w-0">
+                        <p className="truncate text-lg font-bold text-slate-900">
+                          {studentName}
+                        </p>
+                        {b.student_handle ? (
+                          <p className="text-sm text-slate-500">
+                            @{b.student_handle}
+                          </p>
+                        ) : null}
+                        <div className="mt-2 flex flex-wrap items-center gap-2">
+                          <span className="rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-600">
+                            {b.subject || 'Lesson'}
+                          </span>
+                          <StatusBadge
+                            status={b.status}
+                            label={statusLabel(b.status)}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="rounded-xl bg-indigo-50 px-4 py-3 lg:min-w-[220px] lg:text-right">
+                      <p className="text-xs font-semibold tracking-wide text-indigo-400 uppercase">
+                        Lesson time
+                      </p>
+                      <p className="mt-0.5 text-sm font-semibold text-slate-900">
+                        {when.date}
+                      </p>
+                      <p className="text-lg font-bold text-indigo-700">
+                        {when.time}
+                      </p>
                     </div>
                   </div>
-                  <div className="flex flex-wrap gap-2">
+                  <div className="mt-4 flex flex-wrap gap-2 border-t border-slate-100 pt-4">
+                    {waiting ? (
+                      <>
+                        <button
+                          type="button"
+                          disabled={busyId === b.id}
+                          onClick={() => void onAccept(b.id)}
+                          className="rounded-xl bg-emerald-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-emerald-700 disabled:opacity-50"
+                        >
+                          {busyId === b.id ? 'Saving…' : 'Accept'}
+                        </button>
+                        <button
+                          type="button"
+                          disabled={busyId === b.id}
+                          onClick={() => void onCancel(b.id, true)}
+                          className="rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-semibold text-red-600 hover:bg-red-50 disabled:opacity-50"
+                        >
+                          Decline
+                        </button>
+                      </>
+                    ) : null}
                     {b.status === 'confirmed' ? (
                       <>
                         <button
                           type="button"
                           disabled={busyId === b.id}
                           onClick={() => void onComplete(b.id)}
-                          className="rounded-xl bg-emerald-600 px-3 py-2 text-sm font-semibold text-white hover:bg-emerald-700 disabled:opacity-50"
+                          className="rounded-xl bg-emerald-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-emerald-700 disabled:opacity-50"
                         >
                           {busyId === b.id ? 'Saving…' : 'Mark as Completed'}
                         </button>
                         <button
                           type="button"
                           disabled={busyId === b.id}
-                          onClick={() => void onCancel(b.id)}
-                          className="rounded-xl border border-slate-200 px-3 py-2 text-sm font-semibold text-red-600 hover:bg-red-50 disabled:opacity-50"
+                          onClick={() => void onCancel(b.id, false)}
+                          className="rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-semibold text-red-600 hover:bg-red-50 disabled:opacity-50"
                         >
                           Cancel
                         </button>
                       </>
                     ) : null}
                     {b.status === 'completed' ? (
-                      <span className="rounded-xl bg-slate-100 px-3 py-2 text-sm font-semibold text-slate-500">
+                      <span className="rounded-xl bg-slate-100 px-4 py-2.5 text-sm font-semibold text-slate-500">
                         +10 XP
                       </span>
                     ) : null}
                   </div>
-                </div>
-              </li>
-            ))}
+                </li>
+              )
+            })}
           </ul>
         )}
     </div>

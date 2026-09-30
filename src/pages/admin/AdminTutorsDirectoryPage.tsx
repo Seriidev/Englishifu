@@ -9,6 +9,7 @@ import {
 import { AdminAvatar, AdminMessageLink, AdminUserId } from './AdminUserId'
 import { StatusBadge } from '../../components/shared/StatusBadge'
 import { adminPageTitle } from './adminUi'
+import SearchField from '../../components/shared/SearchField'
 
 export default function AdminTutorsDirectoryPage() {
   const [q, setQ] = useState('')
@@ -58,8 +59,8 @@ export default function AdminTutorsDirectoryPage() {
         </p>
       ) : null}
       <div className="mt-4 grid gap-2 sm:grid-cols-2 xl:grid-cols-6">
-        <input
-          className="min-w-0 rounded-xl border border-slate-200 px-3 py-2 text-sm xl:col-span-2"
+        <SearchField
+          wrapperClassName="min-w-0 xl:col-span-2"
           placeholder="Search name / email / username / user ID"
           value={q}
           onChange={(e) => setQ(e.target.value)}

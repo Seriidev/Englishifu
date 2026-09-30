@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useAuth } from '../auth/AuthContext'
 import AssignmentBoard from '../components/study/tasks/AssignmentBoard'
+import SearchField from '../components/shared/SearchField'
 import type { AssignmentRow, AssignmentStatus } from '../types/assignment'
 import {
   fetchAssignments,
@@ -66,11 +67,11 @@ export default function StudyHomeworkPage() {
           Work your teacher assigned to you.
         </p>
       </div>
-      <input
+      <SearchField
+        wrapperClassName="w-full max-w-xs"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         placeholder="Search homework"
-        className="w-full max-w-xs rounded-full border border-slate-200 px-4 py-2 text-sm text-slate-900 outline-none focus:border-indigo-400"
       />
       {error ? (
         <p className="rounded-xl bg-amber-50 px-3 py-2 text-sm text-amber-800">

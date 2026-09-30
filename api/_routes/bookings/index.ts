@@ -84,7 +84,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           ${start.toISOString()},
           ${end.toISOString()},
           ${subject},
-          'confirmed'
+          'pending'
         )
         RETURNING *
       `
@@ -99,16 +99,18 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       await createNotification({
         userId: user.id,
         type: 'booking_confirmed',
-        title: 'Booking confirmed',
-        message: `Your ${subjectLabel} with ${tutorName} is booked for ${when} (UTC).`,
+        title: 'Request sent',
+        message: `Waiting for ${tutorName} to accept your ${subjectLabel} on ${when} (UTC).`,
         linkPath: '/study/bookings',
+        actorId: tutorId,
       })
       await createNotification({
         userId: tutorId,
         type: 'booking_confirmed',
-        title: 'New booking',
-        message: `${user.fullName} booked ${subjectLabel} for ${when} (UTC).`,
-        linkPath: '/tutor/profile/edit',
+        title: 'New lesson request',
+        message: `${user.fullName} asked for ${subjectLabel} on ${when} (UTC). Accept it in Bookings.`,
+        linkPath: '/tutor/bookings',
+        actorId: user.id,
       })
 
       return res.status(201).json({ booking })
@@ -159,7 +161,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           JOIN app_users s ON s.id = b.student_id
           JOIN app_users t ON t.id = b.tutor_id
           WHERE b.tutor_id = ${user.id}
-            AND b.status IN ('confirmed', 'completed', 'cancelled')
+            AND b.status IN ('pending', 'confirmed', 'completed', 'cancelled')
           ORDER BY b.start_at DESC
           LIMIT 50
         `
@@ -181,7 +183,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         JOIN app_users s ON s.id = b.student_id
         JOIN app_users t ON t.id = b.tutor_id
         WHERE b.student_id = ${user.id}
-          AND b.status IN ('confirmed', 'completed')
+          AND b.status IN ('pending', 'confirmed', 'completed')
         ORDER BY b.start_at ASC
         LIMIT 50
       `

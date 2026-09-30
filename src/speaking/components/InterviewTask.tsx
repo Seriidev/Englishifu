@@ -8,7 +8,6 @@ import {
 } from '../hooks/useDeadlineTimer'
 import type { AudioRecorderControls } from '../hooks/useAudioRecorder'
 import CountdownRing from './CountdownRing'
-import RecordingIndicator from './RecordingIndicator'
 
 interface InterviewTaskProps {
   item: InterviewItem
@@ -82,18 +81,6 @@ export default function InterviewTask({
 
   return (
     <div className="flex h-full flex-col">
-      <header className="flex items-center justify-between border-b border-gray-200 px-4 py-3 sm:px-6">
-        <div>
-          <p className="text-xs font-semibold tracking-wide text-brand uppercase">
-            Task 2 · Take an Interview
-          </p>
-          <p className="mt-0.5 text-sm font-medium text-ink">
-            Question {questionNumber} of {totalQuestions}
-          </p>
-        </div>
-        <RecordingIndicator active={phase === 'recording'} />
-      </header>
-
       <div className="flex flex-1 flex-col items-center justify-center gap-6 p-4 sm:p-8">
         <div className="flex h-28 w-28 items-center justify-center overflow-hidden rounded-full bg-brand-light ring-4 ring-brand/20 sm:h-36 sm:w-36">
           {item.videoUrl ? (
@@ -103,6 +90,12 @@ export default function InterviewTask({
               muted
               playsInline
               autoPlay
+            />
+          ) : item.imageUrl ? (
+            <img
+              src={item.imageUrl}
+              alt=""
+              className="h-full w-full object-cover object-[center_22%]"
             />
           ) : (
             <div className="flex flex-col items-center text-brand">

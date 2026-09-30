@@ -47,8 +47,8 @@ CREATE TABLE IF NOT EXISTS bookings (
   student_id TEXT NOT NULL REFERENCES app_users (id) ON DELETE CASCADE,
   start_at TIMESTAMPTZ NOT NULL,
   end_at TIMESTAMPTZ NOT NULL,
-  status TEXT NOT NULL DEFAULT 'confirmed'
-    CHECK (status IN ('confirmed', 'cancelled', 'completed', 'pending_payment')),
+  status TEXT NOT NULL DEFAULT 'pending'
+    CHECK (status IN ('pending', 'confirmed', 'cancelled', 'completed', 'pending_payment')),
   subject TEXT,
   meeting_link TEXT,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
@@ -57,7 +57,7 @@ CREATE TABLE IF NOT EXISTS bookings (
   CONSTRAINT no_overlapping_bookings EXCLUDE USING gist (
     tutor_id WITH =,
     tstzrange(start_at, end_at, '[)') WITH &&
-  ) WHERE (status = 'confirmed')
+  ) WHERE (status IN ('pending', 'confirmed'))
 );
 
 CREATE INDEX IF NOT EXISTS bookings_tutor_start_idx

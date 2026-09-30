@@ -3,6 +3,7 @@ import { applyCors } from '../../_lib/auth.js'
 import { dbUnavailableResponse, isDbConfigured, sql } from '../../_lib/db.js'
 import { parsePage } from '../../_lib/paging.js'
 import { persistAvatarOnRows } from '../../_lib/persistMedia.js'
+import { parseSpecializations } from '../../_lib/userMapper.js'
 import { publicMediaUrl } from '../../_lib/saveMedia.js'
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -33,6 +34,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         u.full_name,
         u.avatar_url,
         u.position,
+        u.specializations,
         u.hourly_rate_usd,
         COALESCE(ratings.average_rating, 0)::numeric(3,2) AS average_rating,
         COALESCE(ratings.reviews_count, 0)::int AS reviews_count,
@@ -62,6 +64,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     const tutors = rows.map((row) => {
       const position = String(row.position || 'Teacher')
+      const tags = parseSpecializations(row.specializations)
       const rate = Number(row.hourly_rate_usd)
       return {
         id: String(row.id),
@@ -72,7 +75,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         availabilityStatus:
           Number(row.availability_count) > 0 ? 'online' : 'away',
         positionLabel: position,
-        specialtyTags: [position],
+        specialtyTags: tags.length > 0 ? tags : [position],
         languages: ['English'],
         rating: Number(row.average_rating) || 0,
         reviewsCount: Number(row.reviews_count) || 0,

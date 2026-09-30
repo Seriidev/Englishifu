@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import {
+  HiBookmark,
+  HiOutlineBookmark,
   HiOutlineChevronDown,
-  HiOutlineMinus,
-  HiOutlinePlus,
   HiOutlineSpeakerWave,
 } from 'react-icons/hi2'
 import type { VocabWord } from '../../../types/studyContent'
@@ -37,7 +37,7 @@ export default function VocabWordCard({
   const [open, setOpen] = useState(false)
 
   return (
-    <article className="rounded-2xl border border-slate-200 bg-white px-4 py-4 shadow-sm">
+    <article className="relative rounded-2xl border border-slate-200 bg-white px-4 py-4 pr-11 shadow-sm">
       <div className="flex items-start gap-2">
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-1.5">
@@ -75,23 +75,25 @@ export default function VocabWordCard({
           />
         </button>
 
-        <button
-          type="button"
-          onClick={() => onToggleSave(item.id)}
-          className={`inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full transition ${
-            saved
-              ? 'bg-indigo-600 text-white'
-              : 'text-slate-400 hover:bg-slate-100 hover:text-indigo-600'
-          }`}
-          aria-label={saved ? `Remove ${item.word} from My words` : `Save ${item.word}`}
-        >
-          {saved ? (
-            <HiOutlineMinus className="h-4 w-4" aria-hidden />
-          ) : (
-            <HiOutlinePlus className="h-4 w-4" aria-hidden />
-          )}
-        </button>
       </div>
+
+      <button
+        type="button"
+        onClick={() => onToggleSave(item.id)}
+        className={`absolute top-3 right-3 inline-flex h-7 w-7 items-center justify-center rounded-lg transition ${
+          saved
+            ? 'text-indigo-500 hover:bg-indigo-500/10'
+            : 'text-slate-400 hover:bg-slate-100 hover:text-indigo-500'
+        }`}
+        aria-label={saved ? `Remove ${item.word} from My words` : `Save ${item.word}`}
+        aria-pressed={saved}
+      >
+        {saved ? (
+          <HiBookmark className="h-5 w-5" aria-hidden />
+        ) : (
+          <HiOutlineBookmark className="h-5 w-5" aria-hidden />
+        )}
+      </button>
 
       <p className="mt-2 text-sm leading-relaxed text-slate-500">
         {item.definition}

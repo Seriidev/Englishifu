@@ -7,6 +7,7 @@ import {
   HiOutlineBookOpen,
   HiOutlineChartBarSquare,
   HiOutlineCheckBadge,
+  HiOutlineCheckCircle,
   HiOutlineClipboardDocumentCheck,
   HiOutlineClipboardDocumentList,
   HiOutlineEllipsisHorizontal,
@@ -96,6 +97,12 @@ const SECONDARY: SidebarItem[] = [
     label: 'Certificates',
     path: '/study/certificates',
     match: (p) => p.startsWith('/study/certificates'),
+  },
+  {
+    icon: HiOutlineCheckCircle,
+    label: 'My bookings',
+    path: '/study/bookings',
+    match: (p) => p.startsWith('/study/bookings'),
   },
 ]
 

@@ -119,6 +119,24 @@ export async function fetchStudentXpStats(opts?: {
   }
 }
 
+export async function exchangeXpForBoost(): Promise<{
+  xp: number
+  boostCount: number
+}> {
+  const res = await fetch('/api/students/xp', {
+    method: 'POST',
+    headers: authHeaders(),
+    credentials: 'include',
+  })
+  if (!res.ok) throw new Error(await parseError(res))
+  const data = (await res.json()) as { xp?: number; boostCount?: number }
+  notifyStudentXpChanged()
+  return {
+    xp: Number(data.xp) || 0,
+    boostCount: Number(data.boostCount) || 0,
+  }
+}
+
 export async function sendStudentBoost(input: {
   studentId: string
 }): Promise<{ xp: number; awarded: number }> {

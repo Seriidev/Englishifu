@@ -1,5 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 import { applyCors, getAuthenticatedUser } from '../../_lib/auth.js'
+import { ensureNotificationActorColumn } from '../../_lib/createNotification.js'
 import { dbUnavailableResponse, isDbConfigured, sql } from '../../_lib/db.js'
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -15,12 +16,24 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (!user) return res.status(401).json({ error: 'Unauthorized' })
 
   try {
+    await ensureNotificationActorColumn()
     const { rows } = await sql`
-      SELECT id, type, title, message, link_path, is_read, created_at
-      FROM notifications
-      WHERE user_id = ${user.id}
-      ORDER BY created_at DESC
-      LIMIT 20
+      SELECT
+        n.id,
+        n.type,
+        n.title,
+        n.message,
+        n.link_path,
+        n.is_read,
+        n.created_at,
+        n.actor_id,
+        u.full_name AS actor_name,
+        u.avatar_url AS actor_avatar
+      FROM notifications n
+      LEFT JOIN app_users u ON u.id = n.actor_id
+      WHERE n.user_id = ${user.id}
+      ORDER BY n.created_at DESC
+      LIMIT 40
     `
     const unreadCount = rows.filter((n) => !n.is_read).length
     return res.status(200).json({ notifications: rows, unreadCount })

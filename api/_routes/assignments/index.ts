@@ -151,6 +151,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           title: 'New homework',
           message: `${user.fullName} assigned “${title}”.`,
           linkPath: '/study/homework',
+          actorId: user.id,
         })
       }
       return res.status(201).json({ ok: true, id: assignmentId })

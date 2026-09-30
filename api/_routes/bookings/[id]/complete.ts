@@ -58,6 +58,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       title: 'Lesson completed — leave a review!',
       message: `How was your ${booking.subject || 'lesson'}? Rate your experience.`,
       linkPath: '/study/bookings',
+      actorId: user.id,
     })
 
     await maybeCompleteReferralReward(booking.student_id)
