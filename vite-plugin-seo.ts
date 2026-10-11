@@ -1,4 +1,5 @@
 import fs from 'node:fs'
+import type { ServerResponse } from 'node:http'
 import path from 'node:path'
 import type { Connect, Plugin } from 'vite'
 import {
@@ -16,7 +17,7 @@ function seoFile(pagePath: string): string {
 }
 
 function serveText(
-  res: Connect.ServerResponse,
+  res: ServerResponse,
   body: string,
   contentType: string,
 ) {
