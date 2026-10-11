@@ -15,6 +15,8 @@ export default function TutorCreateMeetingPage() {
   const [selectedIds, setSelectedIds] = useState<string[]>([])
   const [step, setStep] = useState<'create' | 'confirm'>('create')
   const [sent, setSent] = useState(false)
+  const [sending, setSending] = useState(false)
+  const [sendError, setSendError] = useState<string | null>(null)
   const [clubCreated, setClubCreated] = useState(false)
 
   useEffect(() => {
@@ -65,12 +67,22 @@ export default function TutorCreateMeetingPage() {
     )
   }
 
-  const onSend = () => {
-    if (!tutor) return
-    sendMeetInviteToMany(tutor.id, tutor.fullName, selectedIds, meetLink.trim())
-    setSent(true)
-    setStep('create')
-    setMeetLink('')
+  const onSend = async () => {
+    if (!tutor || sending) return
+    setSending(true)
+    setSendError(null)
+    try {
+      await sendMeetInviteToMany(selectedIds, meetLink.trim())
+      setSent(true)
+      setStep('create')
+      setMeetLink('')
+    } catch (err) {
+      setSendError(
+        err instanceof Error ? err.message : 'Could not send the meeting invite',
+      )
+    } finally {
+      setSending(false)
+    }
   }
 
   return (
@@ -95,7 +107,12 @@ export default function TutorCreateMeetingPage() {
 
         {sent ? (
           <p className="mt-4 rounded-xl bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-700">
-            Meeting link sent.
+            Meeting link sent. Students will see it in their notifications.
+          </p>
+        ) : null}
+        {sendError ? (
+          <p className="mt-4 rounded-xl bg-red-50 px-4 py-3 text-sm font-medium text-red-700">
+            {sendError}
           </p>
         ) : null}
 
@@ -190,10 +207,11 @@ export default function TutorCreateMeetingPage() {
               </button>
               <button
                 type="button"
-                onClick={onSend}
-                className="flex-1 rounded-xl bg-indigo-500 py-2.5 text-sm font-medium text-white hover:bg-indigo-600"
+                disabled={sending}
+                onClick={() => void onSend()}
+                className="flex-1 rounded-xl bg-indigo-500 py-2.5 text-sm font-medium text-white hover:bg-indigo-600 disabled:opacity-40"
               >
-                Send link
+                {sending ? 'Sending…' : 'Send link'}
               </button>
             </div>
           </>

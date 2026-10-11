@@ -12,11 +12,14 @@ import ListeningItemView, {
 } from './ListeningItemView'
 import TestShell from '../toefl/TestShell'
 import { useLanguage } from '../../i18n/LanguageContext'
+import { useAuth } from '../../auth/AuthContext'
+import { recordAccuracyAttempt } from '../../utils/studyProgressStats'
 
 export default function ListeningPracticeRunner() {
   const { practiceId } = useParams<{ practiceId: string }>()
   const navigate = useNavigate()
   const { t } = useLanguage()
+  const { user } = useAuth()
   const practice = practiceId ? getListeningPractice(practiceId) : undefined
 
   const items = useMemo(
@@ -70,6 +73,11 @@ export default function ListeningPracticeRunner() {
     }
 
     incrementPracticeSolved(practice.id)
+    recordAccuracyAttempt(
+      user?.id ?? null,
+      nextFlags.filter(Boolean).length,
+      nextFlags.length,
+    )
     setDone(true)
   }
 
@@ -128,6 +136,7 @@ export default function ListeningPracticeRunner() {
       progressLabel={`Question ${qIndex + 1} of ${items.length}`}
       progressPercent={(qIndex / Math.max(items.length, 1)) * 100}
       onExit={() => navigate('/listening/library')}
+      confirmExit
     >
       <ListeningItemView
         key={current.id}

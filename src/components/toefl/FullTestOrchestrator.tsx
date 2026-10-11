@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import ReadingSection from '../reading/ReadingSection'
 import ListeningSection from '../listening/ListeningSection'
 import WritingSection from '../writing/WritingSection'
@@ -13,6 +13,9 @@ import {
 } from '../../scoring/overallScoring'
 import { registerToeflTryOnce } from '../../utils/toeflTryCounter'
 import { saveTestResult } from '../../utils/adminPanelApi'
+import { returnToFromState } from '../../utils/sectionReturn'
+import LeaveSectionModal from '../shared/LeaveSectionModal'
+import { useLanguage } from '../../i18n/LanguageContext'
 
 type Phase = 'section' | 'transition' | 'break'
 
@@ -28,6 +31,8 @@ const BREAK_SECONDS = 10
 
 export default function FullTestOrchestrator() {
   const navigate = useNavigate()
+  const returnTo = returnToFromState(useLocation().state)
+  const { t } = useLanguage()
   const [startedAt] = useState(() => Date.now())
   const [sectionIndex, setSectionIndex] = useState(0)
   const [phase, setPhase] = useState<Phase>('section')
@@ -35,6 +40,7 @@ export default function FullTestOrchestrator() {
   const [sectionResults, setSectionResults] = useState<
     Partial<Record<FullTestSection, SectionScore>>
   >({})
+  const [leaveOpen, setLeaveOpen] = useState(false)
   const resultsRef = useRef(sectionResults)
   resultsRef.current = sectionResults
 
@@ -60,9 +66,9 @@ export default function FullTestOrchestrator() {
         },
         completedAt: full.completedAt,
       })
-      navigate('/results', { state: { result: full }, replace: true })
+      navigate('/results', { state: { result: full, returnTo }, replace: true })
     },
-    [navigate, startedAt],
+    [navigate, returnTo, startedAt],
   )
 
   const handleSectionComplete = useCallback(
@@ -105,11 +111,16 @@ export default function FullTestOrchestrator() {
     return () => clearTimeout(id)
   }, [phase, countdown, advanceFromInterstitial])
 
-  const exitToHub = () => {
-    if (window.confirm('Leave the full test? Progress will be lost.')) {
-      navigate('/toefl')
-    }
-  }
+  const exitToHub = () => setLeaveOpen(true)
+
+  const leaveModal = leaveOpen ? (
+    <LeaveSectionModal
+      title={t('toefl.leaveTitle')}
+      message={t('toefl.leaveBody')}
+      onStay={() => setLeaveOpen(false)}
+      onLeave={() => navigate(returnTo)}
+    />
+  ) : null
 
   const doneCount = Object.keys(sectionResults).length
   const progressLabel = `Section ${Math.min(sectionIndex + 1, 4)} of 4 · ${doneCount}/4 complete`
@@ -123,6 +134,7 @@ export default function FullTestOrchestrator() {
         : `${SECTION_LABEL[currentSection]} complete. Starting ${SECTION_LABEL[nextSection!]} in ${countdown} seconds…`
 
     return (
+      <>
       <div className="flex min-h-svh items-center justify-center bg-[#f7f9fc] px-6">
         <div className="w-full max-w-md rounded-3xl border border-gray-100 bg-white p-8 text-center shadow-sm">
           <p className="text-xs font-bold tracking-[0.2em] text-brand uppercase">
@@ -143,45 +155,59 @@ export default function FullTestOrchestrator() {
           <p className="mt-4 text-xs text-muted">{progressLabel}</p>
         </div>
       </div>
+      {leaveModal}
+      </>
     )
   }
 
   if (currentSection === 'reading') {
     return (
-      <ReadingSection
-        key="full-reading"
-        onExit={exitToHub}
-        onComplete={handleSectionComplete}
-      />
+      <>
+        <ReadingSection
+          key="full-reading"
+          onExit={exitToHub}
+          onComplete={handleSectionComplete}
+        />
+        {leaveModal}
+      </>
     )
   }
 
   if (currentSection === 'listening') {
     return (
-      <ListeningSection
-        key="full-listening"
-        onExit={exitToHub}
-        onComplete={handleSectionComplete}
-      />
+      <>
+        <ListeningSection
+          key="full-listening"
+          onExit={exitToHub}
+          onComplete={handleSectionComplete}
+        />
+        {leaveModal}
+      </>
     )
   }
 
   if (currentSection === 'speaking') {
     return (
-      <SpeakingSection
-        key="full-speaking"
-        config={mockSpeakingConfig}
-        onExit={exitToHub}
-        onComplete={handleSectionComplete}
-      />
+      <>
+        <SpeakingSection
+          key="full-speaking"
+          config={mockSpeakingConfig}
+          onExit={exitToHub}
+          onComplete={handleSectionComplete}
+        />
+        {leaveModal}
+      </>
     )
   }
 
   return (
-    <WritingSection
-      key="full-writing"
-      onExit={exitToHub}
-      onComplete={handleSectionComplete}
-    />
+    <>
+      <WritingSection
+        key="full-writing"
+        onExit={exitToHub}
+        onComplete={handleSectionComplete}
+      />
+      {leaveModal}
+    </>
   )
 }

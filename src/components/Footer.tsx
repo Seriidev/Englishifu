@@ -29,7 +29,7 @@ export default function Footer() {
     },
     {
       title: t('footer.faq'),
-      links: ['Getting Started', 'TOEFL Prep', 'Tutor Matching', 'Payments'],
+      links: ['Getting Started', 'TOEFL Preparation', 'Tutor Matching', 'Payments'],
     },
   ]
 
@@ -84,8 +84,11 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-12 border-t border-white/10 pt-6 text-center text-sm text-white/50">
-          © 2026 EnglishCore. All rights reserved.
+        <div className="mt-12 flex flex-col items-center justify-between gap-3 border-t border-white/10 pt-6 text-sm text-white/50 sm:flex-row">
+          <p>© 2026 EnglishCore. All rights reserved.</p>
+          <Link to="/privacy" className="transition hover:text-white">
+            {t('footer.privacy')}
+          </Link>
         </div>
       </div>
     </footer>

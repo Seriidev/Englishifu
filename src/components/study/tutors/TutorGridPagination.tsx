@@ -12,13 +12,9 @@ export default function TutorGridPagination({
   page,
   totalPages,
   totalItems,
-  pageSize,
   onPageChange,
 }: TutorGridPaginationProps) {
-  if (totalItems === 0) return null
-
-  const from = (page - 1) * pageSize + 1
-  const to = Math.min(page * pageSize, totalItems)
+  if (totalItems === 0 || totalPages <= 1) return null
 
   const pages = Array.from({ length: totalPages }, (_, i) => i + 1).filter(
     (p) => p === 1 || p === totalPages || Math.abs(p - page) <= 1,
@@ -72,9 +68,6 @@ export default function TutorGridPagination({
           <ChevronRight className="h-4 w-4" />
         </button>
       </div>
-      <p className="text-sm text-slate-500">
-        Showing {from}–{to} of {totalItems} tutors
-      </p>
     </div>
   )
 }

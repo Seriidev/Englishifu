@@ -121,11 +121,11 @@ export default function Hero() {
         </div>
 
         <h1 className="min-h-[3.5rem] max-w-2xl text-4xl font-bold leading-[1.15] tracking-tight text-ink sm:min-h-[4.5rem] sm:text-5xl lg:text-[3.4rem]">
-          {renderTypedText(current.text, displayed, current.highlight)}
-          <span
-            className="ml-0.5 inline-block h-[0.9em] w-[3px] translate-y-[0.1em] animate-cursor-blink bg-brand align-baseline"
-            aria-hidden
-          />
+          <span className="sr-only">TOEFL preparation and essay practice</span>
+          <span aria-hidden="true">
+            {renderTypedText(current.text, displayed, current.highlight)}
+            <span className="ml-0.5 inline-block h-[0.9em] w-[3px] translate-y-[0.1em] animate-cursor-blink bg-brand align-baseline" />
+          </span>
         </h1>
 
         <p className="mt-5 max-w-xl text-base leading-relaxed text-muted sm:text-lg">

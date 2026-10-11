@@ -10,6 +10,7 @@ import SpeakingIntro from './SpeakingIntro'
 import TaskTransition from './TaskTransition'
 import SpeakingResults from './SpeakingResults'
 import RecordingIndicator from './RecordingIndicator'
+import LeaveSectionModal from '../../components/shared/LeaveSectionModal'
 
 type FlowStage =
   | 'intro'
@@ -38,6 +39,7 @@ export default function SpeakingSection({
   const [ivIndex, setIvIndex] = useState(0)
   const [recordings, setRecordings] = useState<ItemRecording[]>([])
   const [preparing, setPreparing] = useState(false)
+  const [leaveOpen, setLeaveOpen] = useState(false)
 
   const totalQuestions =
     config.listenRepeatItems.length + config.interviewItems.length
@@ -111,14 +113,16 @@ export default function SpeakingSection({
   }
 
   const handleExit = () => {
-    const midTest =
-      stage !== 'intro' && stage !== 'results'
-    if (
-      midTest &&
-      !window.confirm('Leave the speaking section? Progress will be lost.')
-    ) {
+    if (stage !== 'results' && !onComplete) {
+      setLeaveOpen(true)
       return
     }
+    recorder.release()
+    onExit()
+  }
+
+  const confirmLeave = () => {
+    setLeaveOpen(false)
     recorder.release()
     onExit()
   }
@@ -132,7 +136,7 @@ export default function SpeakingSection({
           <div className="flex items-center justify-between gap-3 border-b border-gray-100 px-4 py-3 sm:px-6">
             <div>
               <p className="text-xs font-bold tracking-wide text-brand uppercase">
-                TOEFL Speaking
+                TOEFL Preparation Speaking
               </p>
               <p className="text-sm font-medium text-ink">
                 {stage === 'listen-repeat' || stage === 'interview'
@@ -158,7 +162,7 @@ export default function SpeakingSection({
             micError={recorder.error}
             preparing={preparing}
             onStart={() => void handleStart()}
-            onBack={onExit}
+            onBack={handleExit}
           />
         )}
 
@@ -212,6 +216,14 @@ export default function SpeakingSection({
           />
         )}
       </div>
+      {leaveOpen ? (
+        <LeaveSectionModal
+          title={t('toefl.leaveTitle')}
+          message={t('toefl.leaveBody')}
+          onStay={() => setLeaveOpen(false)}
+          onLeave={confirmLeave}
+        />
+      ) : null}
     </div>
   )
 }

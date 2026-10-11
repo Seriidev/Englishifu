@@ -167,7 +167,7 @@ export default function SpeakingResults({
         />
         <h2 className="mt-6 text-2xl font-bold text-ink">Analyzing your responses…</h2>
         <p className="mt-2 text-sm text-muted">
-          Transcribing speech and applying TOEFL-style speaking rubrics. This can
+          Transcribing speech and applying TOEFL Preparation-style speaking rubrics. This can
           take under a minute.
         </p>
         <p className="mt-4 text-xs text-muted">

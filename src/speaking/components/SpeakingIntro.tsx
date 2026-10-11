@@ -44,11 +44,11 @@ export default function SpeakingIntro({
         {t('toefl.questionsInEnglish')}
       </p>
       <h1 className="mt-6 text-3xl font-bold tracking-tight text-ink sm:text-4xl">
-        TOEFL Speaking Simulator
+        TOEFL Preparation Speaking Practice
       </h1>
       <p className="mt-2 text-sm font-semibold text-brand">New 2026 Format</p>
       <p className="mt-4 text-base leading-relaxed text-muted">
-        This practice follows the current TOEFL iBT Speaking section: Task 1
+        This practice follows the current TOEFL Preparation Speaking section: Task 1
         Listen and Repeat (7 prompts) and Task 2 Take an Interview (4
         questions). About 8 minutes total. No pause, replay, or skip.
       </p>

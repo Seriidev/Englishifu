@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import type { TestAnalysis } from '../../../scoring/testAnalysis'
+import { STUDY_RETURN_STATE } from '../../../utils/sectionReturn'
 
 interface TestWeaknessCardProps {
   analysis: TestAnalysis
@@ -11,9 +12,6 @@ export default function TestWeaknessCard({ analysis }: TestWeaknessCardProps) {
       <h2 className="text-base font-bold text-slate-900">
         Where you are weak
       </h2>
-      <p className="mt-1 text-sm text-slate-500">
-        After a full test, this list names the parts that need work.
-      </p>
 
       <div className="mt-3">
         {!analysis.hasResult ? (
@@ -43,6 +41,7 @@ export default function TestWeaknessCard({ analysis }: TestWeaknessCardProps) {
                 </ul>
                 <Link
                   to={spot.practicePath}
+                  state={STUDY_RETURN_STATE}
                   className="mt-3 inline-block text-sm font-semibold text-indigo-600 hover:underline"
                 >
                   Practice this section

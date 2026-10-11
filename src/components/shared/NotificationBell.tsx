@@ -51,6 +51,19 @@ function initials(name: string): string {
   return letters || 'E'
 }
 
+function isExternalLink(path: string): boolean {
+  return /^https?:\/\//i.test(path)
+}
+
+function noticeActionLabel(path: string): string {
+  try {
+    if (new URL(path).hostname.includes('meet.google.com')) return 'Join'
+  } catch {
+    /* ignore */
+  }
+  return 'Open'
+}
+
 function noticeTime(iso: string): string {
   const date = new Date(iso)
   if (Number.isNaN(date.getTime())) return ''
@@ -202,13 +215,24 @@ export default function NotificationBell({
                 {opened.message}
               </p>
               {opened.link_path && opened.link_path !== '#' ? (
-                <Link
-                  to={opened.link_path}
-                  onClick={() => setIsOpen(false)}
-                  className="mt-4 inline-flex rounded-xl bg-indigo-500 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-600"
-                >
-                  Open
-                </Link>
+                isExternalLink(opened.link_path) ? (
+                  <a
+                    href={opened.link_path}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-4 inline-flex rounded-xl bg-indigo-500 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-600"
+                  >
+                    {noticeActionLabel(opened.link_path)}
+                  </a>
+                ) : (
+                  <Link
+                    to={opened.link_path}
+                    onClick={() => setIsOpen(false)}
+                    className="mt-4 inline-flex rounded-xl bg-indigo-500 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-600"
+                  >
+                    Open
+                  </Link>
+                )
               ) : null}
             </div>
           ) : (

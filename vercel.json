@@ -4,9 +4,18 @@
       "source": "/api/((?!index$).*)",
       "destination": "/api/index?__route=$1"
     },
+    { "source": "/", "destination": "/index.html" },
+    { "source": "/toefl", "destination": "/seo/toefl.html" },
+    { "source": "/writing", "destination": "/seo/writing.html" },
+    { "source": "/reading", "destination": "/seo/reading.html" },
+    { "source": "/listening/library", "destination": "/seo/listening/library.html" },
+    { "source": "/listening", "destination": "/seo/listening.html" },
+    { "source": "/speaking", "destination": "/seo/speaking.html" },
+    { "source": "/placement", "destination": "/seo/placement.html" },
+    { "source": "/full-test", "destination": "/seo/full-test.html" },
     {
-      "source": "/((?!api/).*)",
-      "destination": "/index.html"
+      "source": "/((?!api/|seo/|assets/|uploads/|.*\\..*).*)",
+      "destination": "/seo/shell.html"
     }
   ]
 }

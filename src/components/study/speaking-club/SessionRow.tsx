@@ -1,5 +1,6 @@
 import { Bookmark, Clock, User, Video } from 'lucide-react'
 import type { SpeakingClubSession } from '../../../types/speakingClubSession'
+import { toeflPreparationLabel } from '../../../utils/toeflLabel'
 
 export interface SessionRowProps {
   session: SpeakingClubSession
@@ -61,7 +62,9 @@ export default function SessionRow({
       )}
 
       <div className="min-w-0 flex-1">
-        <h3 className="font-semibold text-slate-900">{session.title}</h3>
+        <h3 className="font-semibold text-slate-900">
+          {toeflPreparationLabel(session.title)}
+        </h3>
         <p className="line-clamp-1 text-sm text-slate-500">
           {session.description}
         </p>
@@ -71,7 +74,7 @@ export default function SessionRow({
               key={tag}
               className="pill-accent rounded-full px-2 py-0.5 text-xs"
             >
-              {tag}
+              {toeflPreparationLabel(tag)}
             </span>
           ))}
           <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-xs text-emerald-600">

@@ -20,7 +20,7 @@ import {
 import { submitConsultation } from '../utils/adminPanelApi'
 import { useLanguage } from '../i18n/LanguageContext'
 
-type Goal = '' | 'TOEFL' | 'Speaking' | 'IELTS' | 'General English'
+type Goal = '' | 'TOEFL Preparation' | 'Speaking' | 'IELTS' | 'General English'
 
 interface ConsultationForm {
   name: string
@@ -32,7 +32,7 @@ interface ConsultationForm {
 }
 
 const goals: Exclude<Goal, ''>[] = [
-  'TOEFL',
+  'TOEFL Preparation',
   'Speaking',
   'IELTS',
   'General English',
@@ -259,7 +259,7 @@ export default function ContactSection() {
               {/* Corner badge */}
               <span className="absolute -top-3 right-6 inline-flex items-center gap-1.5 rounded-full bg-brand px-3.5 py-1.5 text-xs font-semibold text-white shadow-md shadow-brand/35 sm:right-8">
                 <GraduationCap className="h-3.5 w-3.5" aria-hidden />
-                TOEFL Experts
+                TOEFL Preparation Experts
               </span>
 
               <form className="space-y-4" onSubmit={handleSubmit}>

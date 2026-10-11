@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, useLocation, useParams } from 'react-router-dom'
 import { HiOutlineArrowLeft } from 'react-icons/hi2'
+import GutenbergReader from '../components/study/library/GutenbergReader'
 import type { LibraryItem } from '../types/studyContent'
 import { fetchLibraryBooks } from '../utils/libraryApi'
 import { notifyStudentXpChanged } from '../utils/studentXp'
@@ -11,6 +12,21 @@ export default function LibraryReaderPage() {
   const backTo = location.pathname.startsWith('/tutor')
     ? '/tutor/library'
     : '/study/library'
+
+  if (bookId?.startsWith('gutenberg-')) {
+    return <GutenbergReader bookId={bookId} backTo={backTo} />
+  }
+
+  return <PdfLibraryReader bookId={bookId} backTo={backTo} />
+}
+
+function PdfLibraryReader({
+  bookId,
+  backTo,
+}: {
+  bookId: string | undefined
+  backTo: string
+}) {
   const [book, setBook] = useState<LibraryItem | null>(null)
   const [missing, setMissing] = useState(false)
   const [viewerUrl, setViewerUrl] = useState('')

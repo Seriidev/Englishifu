@@ -59,7 +59,7 @@ export default function AdminStudentsPage() {
     <div>
       <h1 className={adminPageTitle}>Students</h1>
       <p className="mt-1 text-sm text-slate-500">
-        XP and best saved TOEFL score. Boost once a day per student — no extra
+        XP and best saved TOEFL Preparation score. Boost once a day per student — no extra
         XP.
       </p>
       {error ? (

@@ -1,6 +1,7 @@
 import { useMemo, useState, type FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../auth/AuthContext'
+import { useTheme } from '../../theme/ThemeContext'
 import { dashboardPathForRole, studentPublicProfilePath } from '../../utils/authStorage'
 import BrandMark from '../shared/BrandMark'
 import { listCountryNames, matchStoredCountry } from '../../utils/countries'
@@ -16,6 +17,7 @@ import {
 } from '../auth/formStyles'
 export default function EditProfileForm() {
   const { user, updateStudent } = useAuth()
+  const { theme } = useTheme()
   const navigate = useNavigate()
 
   const countries = useMemo(() => listCountryNames(), [])
@@ -87,7 +89,7 @@ export default function EditProfileForm() {
   }
 
   return (
-    <div className="landing-shell min-h-svh">
+    <div className={`landing-shell study-place min-h-svh ${theme === 'dark' ? 'dark' : ''}`}>
       <header className="border-b border-[#c7d7f5]/60 bg-white/70 backdrop-blur-xl">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 sm:px-6">
           <Link

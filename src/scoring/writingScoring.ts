@@ -9,7 +9,7 @@ export type { WritingRubricScore }
 
 /** Placeholder LLM rubric prompt (kept for docs / offline reference) */
 export const WRITING_LLM_RUBRIC_PROMPT = `
-Score the TOEFL Writing response on four dimensions (0-5 each):
+Score the TOEFL Preparation Writing response on four dimensions (0-5 each):
 1) Grammar — accuracy of sentence structure and morphology
 2) Vocabulary — range and appropriateness
 3) Organization — paragraphing, logical flow, task fulfillment

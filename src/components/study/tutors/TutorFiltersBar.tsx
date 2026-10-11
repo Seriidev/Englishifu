@@ -8,6 +8,7 @@ import {
   TUTOR_SPECIALIZATIONS,
 } from '../../../mocks/tutorListingsMock'
 import LibraryFilterMenu from '../library/LibraryFilterMenu'
+import { toeflPreparationLabel } from '../../../utils/toeflLabel'
 
 const SORT_OPTIONS: { id: TutorSortBy; label: string }[] = [
   { id: 'recommended', label: 'Recommended' },
@@ -55,7 +56,10 @@ export default function TutorFiltersBar() {
           value={values.specialization}
           defaultValue=""
           options={[
-            ...TUTOR_SPECIALIZATIONS.map((item) => ({ id: item, label: item })),
+            ...TUTOR_SPECIALIZATIONS.map((item) => ({
+              id: item,
+              label: toeflPreparationLabel(item),
+            })),
             { id: '', label: 'All specializations' },
           ]}
           onChange={(value) => setKey('specialization', value)}

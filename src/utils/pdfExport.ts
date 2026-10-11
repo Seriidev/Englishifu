@@ -5,7 +5,7 @@ export function downloadResultsPDF(result: FullTestResult): void {
   const doc = new jsPDF()
 
   doc.setFontSize(20)
-  doc.text('TOEFL Practice Test Results', 20, 24)
+  doc.text('TOEFL Preparation Practice Test Results', 20, 24)
 
   doc.setFontSize(11)
   doc.setTextColor(80)

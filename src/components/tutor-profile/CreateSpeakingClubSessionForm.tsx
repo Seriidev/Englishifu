@@ -4,6 +4,7 @@ import {
   createSpeakingClubSession,
   ensureApiSession,
 } from '../../utils/platformApi'
+import { toeflPreparationLabel } from '../../utils/toeflLabel'
 
 const LEVELS = ['A2', 'B1', 'B2', 'C1', 'All levels']
 const TOPICS = [
@@ -172,7 +173,7 @@ export default function CreateSpeakingClubSessionForm({
                       : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                   }`}
                 >
-                  {tag}
+                  {toeflPreparationLabel(tag)}
                 </button>
               ))}
             </div>

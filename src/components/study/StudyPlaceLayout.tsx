@@ -40,7 +40,8 @@ export default function StudyPlaceLayout() {
   const closeMobile = () => setMobileOpen(false)
   const sidebarWidth = collapsed ? 'lg:w-[72px]' : 'lg:w-[240px]'
   const contentPad = collapsed ? 'lg:pl-[72px]' : 'lg:pl-[240px]'
-  const slide = 'transition-[width,padding,transform,opacity] duration-300 ease-in-out motion-reduce:transition-none'
+  const ease = 'duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none'
+  const slide = `transition-[width,padding] ${ease}`
 
   useEffect(() => {
     try {
@@ -63,7 +64,7 @@ export default function StudyPlaceLayout() {
       return () => window.cancelAnimationFrame(frame)
     }
     setMobileShown(false)
-    const timer = window.setTimeout(() => setMobileRendered(false), 300)
+    const timer = window.setTimeout(() => setMobileRendered(false), 500)
     return () => window.clearTimeout(timer)
   }, [mobileOpen])
 
@@ -131,12 +132,12 @@ export default function StudyPlaceLayout() {
         <div className="fixed inset-0 z-50 lg:hidden">
           <button
             type="button"
-            className={`absolute inset-0 bg-slate-900/40 ${slide} ${mobileShown ? 'opacity-100' : 'opacity-0'}`}
+            className={`absolute inset-0 bg-slate-900/40 transition-opacity ${ease} ${mobileShown ? 'opacity-100' : 'opacity-0'}`}
             aria-label="Close sidebar"
             onClick={closeMobile}
           />
           <div
-            className={`absolute inset-y-0 left-0 flex w-[240px] shadow-xl ${slide} ${
+            className={`absolute inset-y-0 left-0 flex w-[240px] shadow-xl transition-transform ${ease} ${
               mobileShown ? 'translate-x-0' : '-translate-x-full'
             }`}
           >

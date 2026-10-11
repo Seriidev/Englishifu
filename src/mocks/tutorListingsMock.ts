@@ -17,7 +17,7 @@ const specialties = [
 ]
 
 const positions = [
-  'TOEFL Specialist',
+  'TOEFL Preparation Specialist',
   'Business English Coach',
   'IELTS Expert',
   'Speaking Coach',

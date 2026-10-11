@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useAuth } from '../auth/AuthContext'
 import { firstNameFromFullName } from '../utils/name'
-import MeetInvitesBanner from '../components/study/MeetInvitesBanner'
 import WelcomeBanner from '../components/study/home/WelcomeBanner'
 import FullTestSimulationCard from '../components/study/home/FullTestSimulationCard'
 import TestWeaknessCard from '../components/study/home/TestWeaknessCard'
@@ -15,7 +14,6 @@ import SkillRadarChart from '../components/study/home/SkillRadarChart'
 import {
   mockPracticeExercises,
   mockSkillResults,
-  mockStudyStats,
   mockToeflNews,
   mockWelcomeSlides,
 } from '../mocks/studyPlaceMock'
@@ -26,13 +24,18 @@ import {
   fetchPublicNews,
 } from '../utils/adminPanelApi'
 import { fetchApprovedTutors } from '../utils/platformApi'
+import { fetchBookings, syncApiSession } from '../utils/bookingApi'
+import { buildStudyStats } from '../utils/studyProgressStats'
+import type { StudyStatData } from '../types/studyPlace'
 import type { TutorListingCard } from '../types/tutorListing'
 
 export default function StudyPlaceHome() {
   const { user } = useAuth()
-  const studentId = user?.role === 'student' ? user.id : null
   const firstName = firstNameFromFullName(user?.fullName ?? 'Student')
   const [tutors, setTutors] = useState<TutorListingCard[]>([])
+  const [stats, setStats] = useState<StudyStatData[]>(() =>
+    buildStudyStats({ userId: user?.id ?? null, bookings: [] }),
+  )
   const fullResult = useMemo(() => loadFullTestResult(), [])
   const analysis = useMemo(() => buildTestAnalysis(fullResult), [fullResult])
   const skillResults = fullResult
@@ -64,6 +67,25 @@ export default function StudyPlaceHome() {
   const [newsItems, setNewsItems] = useState(
     mockToeflNews ? [mockToeflNews] : [],
   )
+
+  useEffect(() => {
+    const userId = user?.id ?? null
+    setStats(buildStudyStats({ userId, bookings: [] }))
+    if (!user || user.role !== 'student') return
+    let cancelled = false
+    void (async () => {
+      try {
+        await syncApiSession(user)
+        const bookings = await fetchBookings('student')
+        if (!cancelled) setStats(buildStudyStats({ userId, bookings }))
+      } catch {
+        if (!cancelled) setStats(buildStudyStats({ userId, bookings: [] }))
+      }
+    })()
+    return () => {
+      cancelled = true
+    }
+  }, [user])
 
   useEffect(() => {
     void fetchApprovedTutors({ limit: 8 })
@@ -99,8 +121,6 @@ export default function StudyPlaceHome() {
 
   return (
     <div className="min-w-0 space-y-6">
-      {studentId ? <MeetInvitesBanner studentId={studentId} /> : null}
-
       <div className="grid min-w-0 gap-6 lg:grid-cols-[minmax(0,1fr)_18.5rem] xl:grid-cols-[minmax(0,1fr)_20rem]">
         <div className="min-w-0 space-y-5">
           <WelcomeBanner firstName={firstName} slides={bannerSlides} />
@@ -114,7 +134,7 @@ export default function StudyPlaceHome() {
           <DashboardTutors tutors={tutors} />
           <ToeflNewsCard news={newsItems} />
           <DashboardSpeakingClubs />
-          <DashboardProgressCard stats={mockStudyStats} />
+          <DashboardProgressCard stats={stats} />
           <SkillRadarChart axes={analysis.axes} />
         </div>
       </div>

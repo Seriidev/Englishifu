@@ -56,8 +56,12 @@ export default function ToeflHub() {
           <LangSwitcher />
         </div>
         <h1 className="mt-6 text-3xl font-bold tracking-tight text-ink sm:text-4xl">
-          TOEFL SIMULATION
+          TOEFL Preparation
         </h1>
+        <p className="mt-3 max-w-2xl text-base leading-relaxed text-muted">
+          Practice reading, listening, speaking, and essay writing in the current
+          TOEFL Preparation format. Open one section or start a full practice test.
+        </p>
 
         <div className="mt-10 grid gap-4 sm:grid-cols-2">
           {sections.map((s) => {

@@ -73,6 +73,34 @@ input[type='number'] {
   overflow-x: clip;
 }
 
+.study-place.dark.landing-shell {
+  background-color: var(--sp-bg);
+  background-image: none;
+}
+
+.study-place.dark .bg-white\/70,
+.study-place.dark .bg-white\/80,
+.study-place.dark .bg-white\/90 {
+  background-color: rgb(30 41 59 / 0.92);
+}
+
+.study-place.dark .border-\[\#c7d7f5\]\/60,
+.study-place.dark .border-\[\#c7d7f5\]\/70 {
+  border-color: var(--sp-border);
+}
+
+.study-place.dark .bg-indigo-100 {
+  background-color: rgb(99 102 241 / 0.25);
+}
+
+.study-place.dark .bg-gray-100 {
+  background-color: #0f172a;
+}
+
+.study-place.dark .to-white {
+  --tw-gradient-to: var(--sp-card);
+}
+
 .study-place.dark {
   --sp-bg: #0f172a;
   --sp-card: #1e293b;

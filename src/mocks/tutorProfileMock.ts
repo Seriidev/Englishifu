@@ -12,7 +12,7 @@ import { generateTutorKpiChart } from './tutorKpiChartMock'
 const demoSpecializations: TutorPublicProfile['specializations'] = [
   {
     id: 'spec-1',
-    title: 'TOEFL Speaking Prep',
+    title: 'TOEFL Preparation Speaking',
     description:
       'Interview & Listen-and-Repeat drills with scoring feedback for the 2026 format.',
     skillTag: 'speaking',
@@ -32,14 +32,14 @@ const demoSpecializations: TutorPublicProfile['specializations'] = [
     id: 'spec-3',
     title: 'Academic Writing',
     description:
-      'Structure essays, discussions, and email tasks with TOEFL-style scoring rubrics.',
+      'Structure essays, discussions, and email tasks with TOEFL Preparation-style scoring rubrics.',
     skillTag: 'writing',
     studentsEnrolled: 21,
     rating: 4.8,
   },
   {
     id: 'spec-4',
-    title: 'Full TOEFL Simulation',
+    title: 'Full TOEFL Preparation Simulation',
     description:
       'End-to-end practice across Reading, Listening, Speaking, and Writing.',
     skillTag: 'toefl-full',
@@ -84,7 +84,7 @@ export const mockTutorProfile: TutorPublicProfile = {
   position: 'Teacher',
   avatarUrl: 'https://i.pravatar.cc/240?img=5',
   aboutMe:
-    "I've been teaching English for over 5 years, specializing in TOEFL Speaking and Business English. My approach is practice-first: short drills, clear feedback, and real conversation. Students often say lessons feel like coaching, not lectures — and that's exactly the goal.",
+    "I've been teaching English for over 5 years, specializing in TOEFL Preparation Speaking and Business English. My approach is practice-first: short drills, clear feedback, and real conversation. Students often say lessons feel like coaching, not lectures — and that's exactly the goal.",
   yearsOfExperience: 5,
   hourlyRateUsd: 45,
   certifications: [

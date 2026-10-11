@@ -174,7 +174,7 @@ export default function CertificationUploadInput({
         >
           {CERT_OPTIONS.map((opt) => (
             <option key={opt} value={opt}>
-              {opt === 'TOEFL' ? 'Toefl' : opt}
+              {opt === 'TOEFL' ? 'TOEFL Preparation' : opt}
             </option>
           ))}
         </select>

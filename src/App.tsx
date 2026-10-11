@@ -1,4 +1,4 @@
-import { BrowserRouter, Navigate, Route, Routes, useNavigate, useParams, useSearchParams } from 'react-router-dom'
+import { BrowserRouter, Navigate, Route, Routes, useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import ScrollToTopButton from './components/ScrollToTopButton'
 import Hero from './components/Hero'
@@ -47,6 +47,7 @@ import StudyLevelTestPage from './pages/StudyLevelTestPage'
 import StudyLeaderboardPage from './pages/StudyLeaderboardPage'
 import StudyVocabularyPage from './pages/StudyVocabularyPage'
 import StudyLibraryPage from './pages/StudyLibraryPage'
+import { returnToFromState } from './utils/sectionReturn'
 import LibraryReaderPage from './pages/LibraryReaderPage'
 import AdminLayout from './pages/admin/AdminLayout'
 import AdminAnalyticsPage from './pages/admin/AdminAnalyticsPage'
@@ -72,6 +73,8 @@ import TutorCreateMeetingPage from './pages/tutor/TutorCreateMeetingPage'
 import TutorTasksPage from './pages/tutor/TutorTasksPage'
 import StudyHomeworkPage from './pages/StudyHomeworkPage'
 import AdminTasksPage from './pages/admin/AdminTasksPage'
+import Seo from './seo/Seo'
+import PrivacyPolicyPage from './pages/PrivacyPolicyPage'
 
 function LandingPage() {
   return (
@@ -111,30 +114,34 @@ function LandingPage() {
 
 function SpeakingPage() {
   const navigate = useNavigate()
+  const exitTo = returnToFromState(useLocation().state)
   return (
     <SpeakingSection
       config={mockSpeakingConfig}
-      onExit={() => navigate('/toefl')}
+      onExit={() => navigate(exitTo)}
     />
   )
 }
 
 function ReadingPage() {
   const navigate = useNavigate()
+  const exitTo = returnToFromState(useLocation().state)
   return (
-    <ReadingSection onExit={() => navigate('/toefl')} />
+    <ReadingSection onExit={() => navigate(exitTo)} />
   )
 }
 
 function ListeningPage() {
   const navigate = useNavigate()
-  return <ListeningSection onExit={() => navigate('/toefl')} />
+  const exitTo = returnToFromState(useLocation().state)
+  return <ListeningSection onExit={() => navigate(exitTo)} />
 }
 
 function WritingPage() {
   const navigate = useNavigate()
+  const exitTo = returnToFromState(useLocation().state)
   return (
-    <WritingSection onExit={() => navigate('/toefl')} />
+    <WritingSection onExit={() => navigate(exitTo)} />
   )
 }
 
@@ -163,8 +170,10 @@ function LegacyTutorProfileRedirect() {
 export default function App() {
   return (
     <BrowserRouter>
+      <Seo />
       <Routes>
         <Route path="/" element={<LandingPage />} />
+        <Route path="/privacy" element={<PrivacyPolicyPage />} />
         <Route path="/placement" element={<PlacementPage />} />
         <Route path="/toefl" element={<ToeflHub />} />
         <Route path="/full-test" element={<FullTestOrchestrator />} />

@@ -13,7 +13,7 @@ export const listeningPractices: ListeningPractice[] = [
   {
     id: 'lp-cbr-0450',
     numberLabel: '#0450',
-    title: 'TOEFL iBT Listening: Everyday Replies — Keys',
+    title: 'TOEFL Preparation Listening: Everyday Replies — Keys',
     taskType: 'listen-and-choose-response',
     dateAdded: '2026-06-12',
     solvedCount: 2463,
@@ -39,7 +39,7 @@ export const listeningPractices: ListeningPractice[] = [
   {
     id: 'lp-cbr-0451',
     numberLabel: '#0451',
-    title: 'TOEFL iBT Listening: Everyday Replies — Meeting Time',
+    title: 'TOEFL Preparation Listening: Everyday Replies — Meeting Time',
     taskType: 'listen-and-choose-response',
     dateAdded: '2026-06-12',
     solvedCount: 2188,
@@ -64,7 +64,7 @@ export const listeningPractices: ListeningPractice[] = [
   {
     id: 'lp-cbr-0452',
     numberLabel: '#0452',
-    title: 'TOEFL iBT Listening: Everyday Replies — Plants',
+    title: 'TOEFL Preparation Listening: Everyday Replies — Plants',
     taskType: 'listen-and-choose-response',
     dateAdded: '2026-06-13',
     solvedCount: 1902,
@@ -89,7 +89,7 @@ export const listeningPractices: ListeningPractice[] = [
   {
     id: 'lp-cbr-0453',
     numberLabel: '#0453',
-    title: 'TOEFL iBT Listening: Everyday Replies — Store Hours',
+    title: 'TOEFL Preparation Listening: Everyday Replies — Store Hours',
     taskType: 'listen-and-choose-response',
     dateAdded: '2026-06-13',
     solvedCount: 1755,
@@ -114,7 +114,7 @@ export const listeningPractices: ListeningPractice[] = [
   {
     id: 'lp-cbr-0454',
     numberLabel: '#0454',
-    title: 'TOEFL iBT Listening: Everyday Replies — Coffee',
+    title: 'TOEFL Preparation Listening: Everyday Replies — Coffee',
     taskType: 'listen-and-choose-response',
     dateAdded: '2026-06-14',
     solvedCount: 1630,
@@ -140,7 +140,7 @@ export const listeningPractices: ListeningPractice[] = [
   {
     id: 'lp-cbr-0455',
     numberLabel: '#0455',
-    title: 'TOEFL iBT Listening: Everyday Replies — Report',
+    title: 'TOEFL Preparation Listening: Everyday Replies — Report',
     taskType: 'listen-and-choose-response',
     dateAdded: '2026-06-14',
     solvedCount: 1488,
@@ -165,7 +165,7 @@ export const listeningPractices: ListeningPractice[] = [
   {
     id: 'lp-cbr-0456',
     numberLabel: '#0456',
-    title: 'TOEFL iBT Listening: Everyday Replies — Hallway',
+    title: 'TOEFL Preparation Listening: Everyday Replies — Hallway',
     taskType: 'listen-and-choose-response',
     dateAdded: '2026-06-15',
     solvedCount: 1321,
@@ -191,7 +191,7 @@ export const listeningPractices: ListeningPractice[] = [
   {
     id: 'lp-cbr-0457',
     numberLabel: '#0457',
-    title: 'TOEFL iBT Listening: Everyday Replies — Lunch Plans',
+    title: 'TOEFL Preparation Listening: Everyday Replies — Lunch Plans',
     taskType: 'listen-and-choose-response',
     dateAdded: '2026-06-15',
     solvedCount: 1204,
@@ -218,7 +218,7 @@ export const listeningPractices: ListeningPractice[] = [
   {
     id: 'lp-conv-0460',
     numberLabel: '#0460',
-    title: 'TOEFL iBT Listening: Lost Lecture Notes',
+    title: 'TOEFL Preparation Listening: Lost Lecture Notes',
     taskType: 'listen-to-conversation',
     dateAdded: '2026-06-18',
     solvedCount: 984,
@@ -258,7 +258,7 @@ export const listeningPractices: ListeningPractice[] = [
   {
     id: 'lp-conv-0461',
     numberLabel: '#0461',
-    title: 'TOEFL iBT Listening: Changing Majors',
+    title: 'TOEFL Preparation Listening: Changing Majors',
     taskType: 'listen-to-conversation',
     dateAdded: '2026-06-19',
     solvedCount: 876,
@@ -300,7 +300,7 @@ export const listeningPractices: ListeningPractice[] = [
   {
     id: 'lp-ann-0470',
     numberLabel: '#0470',
-    title: 'TOEFL iBT Listening: Library Exam Hours',
+    title: 'TOEFL Preparation Listening: Library Exam Hours',
     taskType: 'listen-to-announcement',
     dateAdded: '2026-06-20',
     solvedCount: 1120,
@@ -342,7 +342,7 @@ export const listeningPractices: ListeningPractice[] = [
   {
     id: 'lp-talk-0480',
     numberLabel: '#0480',
-    title: 'TOEFL iBT Listening: Coral Reefs and Bleaching',
+    title: 'TOEFL Preparation Listening: Coral Reefs and Bleaching',
     taskType: 'listen-to-academic-talk',
     dateAdded: '2026-06-22',
     solvedCount: 742,

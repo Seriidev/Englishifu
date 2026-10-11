@@ -1,6 +1,7 @@
+import { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { HiBookmark, HiOutlineBookmark, HiStar } from 'react-icons/hi2'
-import type { LibraryItem } from '../../../types/studyContent'
+import type { LibraryCategory, LibraryItem, LibraryLevel } from '../../../types/studyContent'
 import { libraryLevelLabel, libraryTopicLabel } from '../../../data/libraryMeta'
 
 export { libraryLevelLabel }
@@ -9,6 +10,8 @@ interface LibraryBookCardProps {
   item: LibraryItem
   saved: boolean
   onToggleSave: (id: string) => void
+  onSelectCategory?: (category: LibraryCategory) => void
+  onSelectLevel?: (level: LibraryLevel) => void
 }
 
 function readerPath(pathname: string, id: string) {
@@ -34,16 +37,20 @@ export default function LibraryBookCard({
   item,
   saved,
   onToggleSave,
+  onSelectCategory,
+  onSelectLevel,
 }: LibraryBookCardProps) {
   const location = useLocation()
+  const [coverBroken, setCoverBroken] = useState(false)
   const rating = Number(item.rating || 0)
-  const readers = displayReaders(item.id, rating)
+  const readers = item.readerCount ?? displayReaders(item.id, rating)
+  const readersLabel = `${readers.toLocaleString('en-US')} readers`
   const category = libraryTopicLabel(item.category)
   const href =
-    item.hasPdf || item.pdfUrl
+    item.hasPdf || item.pdfUrl || item.readUrl || item.id.startsWith('gutenberg-')
       ? readerPath(location.pathname, item.id)
       : undefined
-  const cover = item.coverImageUrl || ''
+  const cover = !coverBroken && item.coverImageUrl ? item.coverImageUrl : ''
   const coverHeadline = item.coverHeadline || item.title
 
   const body = (
@@ -54,24 +61,20 @@ export default function LibraryBookCard({
             src={cover}
             alt=""
             className="absolute inset-0 h-full w-full object-cover"
+            onError={() => setCoverBroken(true)}
           />
         ) : (
-          <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-slate-300 to-slate-400 px-4 text-center text-sm font-medium text-white dark:from-slate-600 dark:to-slate-800">
-            {item.title}
+          <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-slate-300 to-slate-400 px-4 text-center dark:from-slate-600 dark:to-slate-800">
+            <p className="line-clamp-4 text-sm font-medium text-white">{item.title}</p>
           </div>
         )}
 
         <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/55 via-black/20 to-transparent px-3 pb-4 pt-12">
-          <p className="text-center font-serif text-[15px] leading-snug text-white drop-shadow-sm sm:text-base">
+          <p className="line-clamp-3 text-center font-serif text-[15px] leading-snug text-white drop-shadow-sm sm:text-base">
             {coverHeadline}
           </p>
         </div>
 
-        {rating >= 4.5 ? (
-          <span className="absolute left-0 top-3 rounded-r-full bg-[#F97316] px-2.5 py-1 text-[10px] font-semibold tracking-wide text-white shadow-sm">
-            Best Seller
-          </span>
-        ) : null}
       </div>
 
       <div className="mt-3 space-y-1 px-0.5">
@@ -85,18 +88,26 @@ export default function LibraryBookCard({
               •
             </span>
             <span className="text-slate-500 dark:text-slate-400">
-              {readers} readers
+              {readersLabel}
             </span>
           </p>
         ) : (
           <p className="text-[12px] text-slate-500 dark:text-slate-400">
-            {readers} readers
+            {readersLabel}
           </p>
         )}
 
-        <p className="text-[13px] font-bold text-[#7C3AED] dark:text-[#A78BFA]">
+        <button
+          type="button"
+          onClick={(event) => {
+            event.preventDefault()
+            event.stopPropagation()
+            onSelectCategory?.(item.category)
+          }}
+          className="text-left text-[13px] font-bold text-[#7C3AED] dark:text-[#A78BFA]"
+        >
           {category}
-        </p>
+        </button>
 
         <h3
           className="line-clamp-2 text-[17px] font-bold leading-snug text-slate-900 dark:text-white"
@@ -123,9 +134,13 @@ export default function LibraryBookCard({
       )}
 
       <div className="mt-2 flex items-center justify-between gap-2 px-0.5">
-        <span className="rounded-full bg-slate-100 px-2.5 py-0.5 text-[11px] font-medium text-slate-600 dark:bg-white/10 dark:text-slate-300">
+        <button
+          type="button"
+          onClick={() => onSelectLevel?.(item.level)}
+          className="rounded-full bg-slate-100 px-2.5 py-0.5 text-[11px] font-medium text-slate-600 transition hover:bg-indigo-50 hover:text-indigo-700 dark:bg-white/10 dark:text-slate-300 dark:hover:bg-indigo-500/20 dark:hover:text-indigo-200"
+        >
           {libraryLevelLabel(item.level)}
-        </span>
+        </button>
         <button
           type="button"
           onClick={() => onToggleSave(item.id)}

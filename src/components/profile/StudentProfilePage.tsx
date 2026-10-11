@@ -9,6 +9,7 @@ import {
   Pencil,
 } from 'lucide-react'
 import { useAuth } from '../../auth/AuthContext'
+import { useTheme } from '../../theme/ThemeContext'
 import BrandMark from '../shared/BrandMark'
 import {
   mockStudentLearningStats,
@@ -30,7 +31,9 @@ import StatCard from './StatCard'
 export default function StudentProfilePage() {
   const { handle = '' } = useParams()
   const { user, logout, updateStudent, isLoading: authLoading } = useAuth()
+  const { theme } = useTheme()
   const navigate = useNavigate()
+  const shell = `landing-shell study-place min-h-svh ${theme === 'dark' ? 'dark' : ''}`
   const [tab, setTab] = useState<ProfileTabId>('learning')
   const [avatarError, setAvatarError] = useState<string | null>(null)
   const [stored, setStored] = useState<PublicStudent | null>(null)
@@ -64,7 +67,7 @@ export default function StudentProfilePage() {
 
   if (authLoading || profileLoading) {
     return (
-      <div className="landing-shell flex min-h-svh items-center justify-center text-sm text-muted">
+      <div className={`${shell} flex items-center justify-center text-sm text-muted`}>
         Loading…
       </div>
     )
@@ -72,7 +75,7 @@ export default function StudentProfilePage() {
 
   if (!profile) {
     return (
-      <div className="landing-shell flex min-h-svh flex-col items-center justify-center px-6 text-center">
+      <div className={`${shell} flex flex-col items-center justify-center px-6 text-center`}>
         <h1 className="text-2xl font-bold text-ink">Profile not found</h1>
         <p className="mt-2 text-muted">
           We couldn&apos;t find a student for @{handle.replace(/^@/, '')}.
@@ -93,7 +96,7 @@ export default function StudentProfilePage() {
 
   if (!profile.isPublicProfile && !isOwner) {
     return (
-      <div className="landing-shell flex min-h-svh flex-col items-center justify-center px-6 text-center">
+      <div className={`${shell} flex flex-col items-center justify-center px-6 text-center`}>
         <h1 className="text-2xl font-bold text-ink">This profile is private</h1>
         <p className="mt-2 text-muted">
           The owner has turned off public visibility.
@@ -137,7 +140,7 @@ export default function StudentProfilePage() {
   const homePath = user ? dashboardPathForRole(user.role, user) : '/'
 
   return (
-    <div className="landing-shell min-h-svh">
+    <div className={shell}>
       <header className="border-b border-[#c7d7f5]/60 bg-white/70 backdrop-blur-xl">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 sm:px-6">
           <Link to={homePath} className="text-ink">
@@ -277,23 +280,20 @@ export default function StudentProfilePage() {
 
             <div className="flex shrink-0 flex-wrap items-center gap-2 sm:justify-end">
               {isOwner ? (
-                <button
-                  type="button"
-                  onClick={() => navigate('/profile/edit')}
-                  className="inline-flex items-center gap-1.5 rounded-xl bg-slate-100 px-4 py-2.5 text-sm font-semibold text-slate-600 transition hover:bg-slate-200"
-                >
-                  <Pencil className="h-3.5 w-3.5" aria-hidden />
-                  Edit Profile
-                </button>
+                <>
+                  <ReferralWidget variant="button" />
+                  <button
+                    type="button"
+                    onClick={() => navigate('/profile/edit')}
+                    className="inline-flex items-center gap-1.5 rounded-xl bg-slate-100 px-4 py-2.5 text-sm font-semibold text-slate-600 transition hover:bg-slate-200"
+                  >
+                    <Pencil className="h-3.5 w-3.5" aria-hidden />
+                    Edit Profile
+                  </button>
+                </>
               ) : null}
             </div>
           </div>
-
-          {isOwner ? (
-            <div className="mt-6">
-              <ReferralWidget />
-            </div>
-          ) : null}
 
           <div className="mt-8">
             <ProfileTabs

@@ -8,6 +8,8 @@ import {
 } from './getRandomSession'
 import type { SectionScore } from '../../scoring/overallScoring'
 import TestShell from '../toefl/TestShell'
+import { useAuth } from '../../auth/AuthContext'
+import { recordAccuracyAttempt } from '../../utils/studyProgressStats'
 import SectionTimer from '../toefl/SectionTimer'
 import AcademicPassageView from './AcademicPassageView'
 import CompleteTheWordsView from './CompleteTheWordsView'
@@ -36,6 +38,7 @@ export default function ReadingSection({
   onExit,
   onComplete,
 }: ReadingSectionProps) {
+  const { user } = useAuth()
   const [stage, setStage] = useState<Stage>('intro')
   const [session, setSession] = useState<ReadingSession | null>(null)
   const [stepIndex, setStepIndex] = useState(0)
@@ -92,6 +95,7 @@ export default function ReadingSection({
   const finish = useCallback(
     (correct: number, total: number) => {
       setTimerRunning(false)
+      recordAccuracyAttempt(user?.id ?? null, correct, total)
       const score = toScore(correct, total)
       if (onComplete) {
         onComplete(score)
@@ -99,7 +103,7 @@ export default function ReadingSection({
       }
       setStage('results')
     },
-    [onComplete, toScore],
+    [onComplete, toScore, user?.id],
   )
 
   const handleExpire = useCallback(() => {
@@ -122,15 +126,16 @@ export default function ReadingSection({
   if (stage === 'intro') {
     return (
       <TestShell
-        title="TOEFL Reading"
+        title="TOEFL Preparation Reading"
         progressLabel="Ready"
         progressPercent={0}
         onExit={onExit}
+        confirmExit={!onComplete}
       >
         <div className="mx-auto max-w-xl rounded-3xl border border-gray-100 bg-white p-8 text-center shadow-sm">
-          <h2 className="text-2xl font-bold text-ink">Reading Section</h2>
+          <h1 className="text-2xl font-bold text-ink">TOEFL Preparation Reading Practice</h1>
           <p className="mt-3 text-sm leading-relaxed text-muted">
-            Each attempt is a new mix: Complete the Words two or three times,
+            TOEFL Preparation reading preparation. Each attempt is a new mix: Complete the Words two or three times,
             Read in Daily Life two to four times, then one or two short academic
             passages with about five questions each. You cannot go back after
             submitting. Section time: 27 minutes.
@@ -150,7 +155,7 @@ export default function ReadingSection({
   if (stage === 'results' || !session || !current) {
     return (
       <TestShell
-        title="TOEFL Reading"
+        title="TOEFL Preparation Reading"
         subtitle="Results"
         progressLabel="Complete"
         progressPercent={100}
@@ -167,18 +172,11 @@ export default function ReadingSection({
     )
   }
 
-  const partLabel =
-    current.kind === 'complete_the_words'
-      ? 'Complete the words'
-      : current.kind === 'read_in_daily_life'
-        ? 'Read in daily life'
-        : 'Read an academic passage'
   const partNumber = stepIndex + 1
 
   return (
     <TestShell
-      title="TOEFL Reading"
-      subtitle={partLabel}
+      title="TOEFL Preparation Reading"
       progressLabel={`Part ${partNumber} of ${steps.length} · ${answeredCount}/${totalAnswers} answers`}
       progressPercent={progressPercent}
       timer={
@@ -189,6 +187,7 @@ export default function ReadingSection({
         />
       }
       onExit={onExit}
+      confirmExit={!onComplete}
     >
       <div
         className={`mx-auto w-full rounded-3xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6 ${

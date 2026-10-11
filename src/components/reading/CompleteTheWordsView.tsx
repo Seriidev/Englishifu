@@ -117,7 +117,7 @@ export default function CompleteTheWordsView({
 
   return (
     <div className="flex h-full flex-col gap-6">
-      <div>
+      <div className="text-center">
         <p className="text-xs font-semibold tracking-wide text-brand uppercase">
           Complete the words
         </p>

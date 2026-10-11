@@ -38,6 +38,7 @@ import r_bookings_index from './_routes/bookings/index.js'
 import r_auth_me from './_routes/auth/me.js'
 import r_banners from './_routes/banners.js'
 import r_library from './_routes/library.js'
+import r_gutenberg_text from './_routes/gutenberg-text.js'
 import r_reviews_index from './_routes/reviews/index.js'
 import r_tutors_index from './_routes/tutors/index.js'
 import r_news from './_routes/news.js'
@@ -60,6 +61,7 @@ import r_admin_users_id from './_routes/admin/users/[id].js'
 import r_library_pdf_id from './_routes/library-pdf/[id].js'
 import r_admin_news_id from './_routes/admin/news/[id].js'
 import r_tutors_id_kpi from './_routes/tutors/[id]/kpi.js'
+import r_meet_invites_index from './_routes/meet-invites/index.js'
 import r_assignments_index from './_routes/assignments/index.js'
 import r_assignments_id from './_routes/assignments/[id].js'
 import r_admin_assignments from './_routes/admin/assignments.js'
@@ -111,6 +113,7 @@ const routes: { re: RegExp; keys: string[]; handler: ApiHandler }[] = [
   { re: new RegExp("^/api/auth/me/?$"), keys: [], handler: r_auth_me },
   { re: new RegExp("^/api/banners/?$"), keys: [], handler: r_banners },
   { re: new RegExp("^/api/library/?$"), keys: [], handler: r_library },
+  { re: new RegExp("^/api/gutenberg-text/?$"), keys: [], handler: r_gutenberg_text },
   { re: new RegExp("^/api/reviews/?$"), keys: [], handler: r_reviews_index },
   { re: new RegExp("^/api/tutors/?$"), keys: [], handler: r_tutors_index },
   { re: new RegExp("^/api/news/?$"), keys: [], handler: r_news },
@@ -126,6 +129,7 @@ const routes: { re: RegExp; keys: string[]; handler: ApiHandler }[] = [
   { re: new RegExp("^/api/tutors/([^/]+)/reviews/?$"), keys: ["id"], handler: r_tutors_id_reviews },
   { re: new RegExp("^/api/tutors/([^/]+)/stats/?$"), keys: ["id"], handler: r_tutors_id_stats },
   { re: new RegExp("^/api/tutors/([^/]+)/follow/?$"), keys: ["id"], handler: r_tutors_id_follow },
+  { re: new RegExp("^/api/meet-invites/?$"), keys: [], handler: r_meet_invites_index },
   { re: new RegExp("^/api/assignments/?$"), keys: [], handler: r_assignments_index },
   { re: new RegExp("^/api/admin/assignments/?$"), keys: [], handler: r_admin_assignments },
   { re: new RegExp("^/api/assignments/([^/]+)/?$"), keys: ["id"], handler: r_assignments_id },

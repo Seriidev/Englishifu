@@ -11,6 +11,7 @@ import {
 } from '../../utils/bookingApi'
 import LeaveReviewModal from './bookings/LeaveReviewModal'
 import { StatusBadge } from '../shared/StatusBadge'
+import { toeflPreparationLabel } from '../../utils/toeflLabel'
 
 interface BookingsListProps {
   role: 'student' | 'tutor'
@@ -146,7 +147,7 @@ export default function BookingsList({ role, emptyHint }: BookingsListProps) {
                     <p className="text-base font-bold text-slate-900">
                       {role === 'tutor'
                         ? counterpart
-                        : b.subject || 'Lesson'}
+                        : toeflPreparationLabel(b.subject || 'Lesson')}
                     </p>
                     <StatusBadge
                       status={b.status}
@@ -163,7 +164,7 @@ export default function BookingsList({ role, emptyHint }: BookingsListProps) {
                   </div>
                   <p className="mt-1 text-sm text-slate-600">
                     {role === 'tutor'
-                      ? b.subject || 'Lesson'
+                      ? toeflPreparationLabel(b.subject || 'Lesson')
                       : `with ${counterpart}`}
                     {handle ? (
                       <span className="text-slate-400"> @{handle}</span>

@@ -1,4 +1,4 @@
-import { Calendar, Clock, Sparkles } from 'lucide-react'
+import { Calendar, Clock, Mic } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { speakingClubMeetings } from '../data/speakingClub'
 import { useLanguage } from '../i18n/LanguageContext'
@@ -15,7 +15,7 @@ export default function SpeakingClub() {
         <div className="flex flex-col items-start justify-between gap-5 rounded-[1.75rem] bg-brand px-5 py-5 shadow-lg shadow-brand/25 sm:flex-row sm:items-center sm:gap-8 sm:px-7 sm:py-6">
           <div className="flex min-w-0 items-start gap-4 sm:items-center">
             <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-white/20 text-white backdrop-blur-sm">
-              <Sparkles className="h-5 w-5" aria-hidden />
+              <Mic className="h-5 w-5" aria-hidden />
             </span>
             <div className="min-w-0">
               <p className="text-xl font-bold tracking-tight text-white sm:text-2xl">

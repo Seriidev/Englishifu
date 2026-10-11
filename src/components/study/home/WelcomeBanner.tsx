@@ -18,7 +18,9 @@ export default function WelcomeBanner({ firstName, slides }: WelcomeBannerProps)
   const count = slides.length
   const [index, setIndex] = useState(1)
   const [animate, setAnimate] = useState(true)
+  const [slideWidth, setSlideWidth] = useState(0)
   const hovering = useRef(false)
+  const frameRef = useRef<HTMLDivElement>(null)
 
   const dateLabel = new Intl.DateTimeFormat('en-US', {
     month: 'long',
@@ -66,6 +68,19 @@ export default function WelcomeBanner({ firstName, slides }: WelcomeBannerProps)
     return () => cancelAnimationFrame(frame)
   }, [animate, index])
 
+  useEffect(() => {
+    const frame = frameRef.current
+    if (!frame) return
+    const measure = () => {
+      const next = frame.clientWidth
+      setSlideWidth((prev) => (prev === next ? prev : next))
+    }
+    measure()
+    const observer = new ResizeObserver(measure)
+    observer.observe(frame)
+    return () => observer.disconnect()
+  }, [count])
+
   if (count === 0) return null
 
   return (
@@ -89,10 +104,14 @@ export default function WelcomeBanner({ firstName, slides }: WelcomeBannerProps)
         hovering.current = false
       }}
     >
-      <div className="min-w-0 overflow-hidden">
+      <div ref={frameRef} className="min-w-0 overflow-hidden">
         <div
-          className={`flex w-full ${animate ? 'transition-transform duration-500 ease-out' : ''}`}
-          style={{ transform: `translateX(-${index * 100}%)` }}
+          className={`flex ${animate && slideWidth > 0 ? 'transition-transform duration-500 ease-out' : ''}`}
+          style={{
+            width: slideWidth > 0 ? slideWidth * extended.length : '100%',
+            transform:
+              slideWidth > 0 ? `translateX(-${index * slideWidth}px)` : undefined,
+          }}
           onTransitionEnd={onTransitionEnd}
         >
           {extended.map((slide, i) => {
@@ -101,13 +120,14 @@ export default function WelcomeBanner({ firstName, slides }: WelcomeBannerProps)
             return (
               <div
                 key={`${slide.id}-${i}`}
-                className="relative w-full min-w-full max-w-full shrink-0 basis-full"
+                className="relative shrink-0"
+                style={{ width: slideWidth > 0 ? slideWidth : '100%' }}
               >
                 {isPoster ? (
                   <img
                     src={slide.imageUrl}
                     alt=""
-                    className="aspect-[16/9] w-full object-cover sm:aspect-[3/1]"
+                    className="block h-auto max-h-72 w-full object-contain sm:max-h-80"
                   />
                 ) : (
                   <div className="px-4 py-5 pb-14 sm:min-h-[200px] sm:px-7 sm:py-7 sm:pb-16">

@@ -28,6 +28,7 @@ export type VocabTopic =
   | 'campus'
   | 'science'
   | 'conversation'
+  | 'toefl'
 
 export type LibraryCategory =
   | 'literature'
@@ -46,8 +47,12 @@ export interface LibraryItem {
   title: string
   author: string
   category: LibraryCategory
+  /** Shown on the card when the catalog topic is not one of the built-in labels. */
+  topicLabel?: string
   level: LibraryLevel
   rating?: number
+  /** Public download count, shown as readers when the catalog provides one. */
+  readerCount?: number
   minutes: number
   description: string
   coverHeadline?: string
@@ -55,6 +60,8 @@ export interface LibraryItem {
   coverBrand?: string
   coverSeries?: string
   coverByline?: string
+  /** Public-domain text or HTML copy that the reader can open. */
+  readUrl?: string
   /** True when a PDF exists; never a direct downloadable URL. */
   hasPdf?: boolean
   pdfUrl?: string

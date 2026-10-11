@@ -12,7 +12,7 @@ const navKeys = [
   { key: 'nav.home', href: '#home', label: 'Home' },
   { key: 'nav.teachers', href: '#tutors', label: 'Teachers' },
   { key: 'nav.speakingClub', href: '#speaking-club', label: 'Speaking Club' },
-  { key: 'nav.toefl', href: '#toefl', label: 'TOEFL' },
+  { key: 'nav.toefl', href: '#toefl', label: 'TOEFL Preparation' },
   { key: 'nav.contacts', href: '#contact', label: 'Contacts' },
 ] as const
 

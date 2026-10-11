@@ -6,10 +6,11 @@ import {
   SPEAKING_LEVELS,
   SPEAKING_TOPICS,
 } from '../../../mocks/speakingClubMock'
+import { toeflPreparationLabel } from '../../../utils/toeflLabel'
 
 function withAll(items: string[], allLabel: string) {
   return [
-    ...items.map((item) => ({ id: item, label: item })),
+    ...items.map((item) => ({ id: item, label: toeflPreparationLabel(item) })),
     { id: '', label: allLabel },
   ]
 }

@@ -9,6 +9,7 @@ import {
 } from 'lucide-react'
 import { useAuth } from '../../auth/AuthContext'
 import { isTutorProfileComplete } from '../../types/user'
+import { toeflPreparationLabel } from '../../utils/toeflLabel'
 import { getTutorProfileByHandle } from '../../mocks/tutorProfileMock'
 import type {
   TutorStudent,
@@ -300,7 +301,7 @@ export default function TutorProfilePage() {
                   ) : null}
                 </div>
                 <p className="mt-1.5 text-base font-semibold text-brand">
-                  {position}
+                  {toeflPreparationLabel(position)}
                 </p>
                 {isOwnProfile && liveOwner ? (
                   <p className="mt-1 text-sm text-muted">
@@ -495,8 +496,8 @@ export default function TutorProfilePage() {
           studentId={meetModal.student?.id}
           studentName={meetModal.student?.fullName}
           onClose={() => setMeetModal({ open: false })}
-          onSend={(meetLink, studentIds) => {
-            sendMeetInviteToMany(tutorId, fullName, studentIds, meetLink)
+          onSend={async (meetLink, studentIds) => {
+            await sendMeetInviteToMany(studentIds, meetLink)
             setMeetModal({ open: false })
             setMeetSentOpen(true)
           }}
@@ -535,8 +536,8 @@ export default function TutorProfilePage() {
               Link sent
             </h2>
             <p className="mt-2 text-sm leading-relaxed text-muted">
-              The Google Meet link was saved and will appear for the selected
-              students in Study Place.
+              The Google Meet link was sent. Students will see it in their
+              notifications.
             </p>
             <button
               type="button"

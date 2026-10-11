@@ -94,5 +94,5 @@ export const SKILL_LABELS: Record<SkillTag, string> = {
   reading: 'Reading',
   listening: 'Listening',
   grammar: 'Grammar',
-  'toefl-full': 'TOEFL Full',
+  'toefl-full': 'TOEFL Preparation Full',
 }

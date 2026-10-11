@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import { Pin } from 'lucide-react'
 import {
   HiOutlineChevronLeft,
   HiOutlineChevronRight,
@@ -18,6 +19,7 @@ const TOPICS: { id: 'all' | VocabTopic; label: string }[] = [
   { id: 'science', label: 'Science' },
   { id: 'conversation', label: 'Conversation' },
   { id: 'environment', label: 'Environment' },
+  { id: 'toefl', label: 'TOEFL Preparation' },
 ]
 
 export default function StudyVocabularyPage() {
@@ -82,13 +84,14 @@ export default function StudyVocabularyPage() {
         <button
           type="button"
           onClick={() => setMyWordsOnly((value) => !value)}
-          className={`rounded-xl px-4 py-2.5 text-sm font-semibold transition ${
+          className={`inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition ${
             myWordsOnly
               ? 'bg-indigo-500 text-white hover:bg-indigo-600'
               : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
           }`}
           aria-pressed={myWordsOnly}
         >
+          <Pin className="h-4 w-4" aria-hidden />
           My words
         </button>
       </div>
@@ -119,19 +122,19 @@ export default function StudyVocabularyPage() {
             type="button"
             disabled={safePage <= 1}
             onClick={() => setPage((p) => Math.max(1, p - 1))}
-            className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 transition hover:bg-slate-50 disabled:opacity-40"
+            className="inline-flex h-8 w-8 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 transition hover:bg-slate-50 disabled:opacity-40"
             aria-label="Previous page"
           >
             <HiOutlineChevronLeft className="h-4 w-4" aria-hidden />
           </button>
-          <span className="min-w-6 text-center text-sm font-semibold text-slate-800">
+          <span className="inline-flex h-8 min-w-8 items-center justify-center rounded-xl border border-slate-200 bg-white px-2 text-sm font-semibold text-slate-800">
             {safePage}
           </span>
           <button
             type="button"
             disabled={safePage >= totalPages || filtered.length === 0}
             onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-            className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 transition hover:bg-slate-50 disabled:opacity-40"
+            className="inline-flex h-8 w-8 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 transition hover:bg-slate-50 disabled:opacity-40"
             aria-label="Next page"
           >
             <HiOutlineChevronRight className="h-4 w-4" aria-hidden />
@@ -142,7 +145,7 @@ export default function StudyVocabularyPage() {
       {pageItems.length === 0 ? (
         <p className="rounded-2xl border border-dashed border-slate-200 bg-white px-4 py-10 text-center text-sm text-slate-500">
           {myWordsOnly
-            ? 'No saved words yet. Tap the bookmark on a card to add it here.'
+            ? 'No saved words yet. Tap the pin on a card to add it here.'
             : 'No words in this topic.'}
         </p>
       ) : (

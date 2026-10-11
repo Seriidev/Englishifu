@@ -6,12 +6,16 @@ import {
   type FullTestResult,
 } from '../../scoring/overallScoring'
 import { downloadResultsPDF } from '../../utils/pdfExport'
+import { returnToFromState } from '../../utils/sectionReturn'
 
 const SECTION_KEYS = ['reading', 'listening', 'speaking', 'writing'] as const
 
 export default function ResultsScreen() {
   const navigate = useNavigate()
   const location = useLocation()
+
+  const returnTo = returnToFromState(location.state)
+  const backLabel = returnTo === '/study' ? 'Back to dashboard' : 'Back to Hub'
 
   const result = useMemo(() => {
     const fromState = (location.state as { result?: FullTestResult } | null)?.result
@@ -28,10 +32,10 @@ export default function ResultsScreen() {
           </p>
           <button
             type="button"
-            onClick={() => navigate('/toefl')}
+            onClick={() => navigate(returnTo)}
             className="mt-6 rounded-xl bg-indigo-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-600"
           >
-            Back to Hub
+            {backLabel}
           </button>
         </div>
       </div>
@@ -45,10 +49,10 @@ export default function ResultsScreen() {
       <div className="mx-auto max-w-3xl px-6 py-12 sm:py-16">
         <button
           type="button"
-          onClick={() => navigate('/toefl')}
+          onClick={() => navigate(returnTo)}
           className="text-sm font-semibold text-brand hover:underline"
         >
-          ← Back to Hub
+          ← {backLabel}
         </button>
 
         <div className="mt-6 text-center">
@@ -112,7 +116,7 @@ export default function ResultsScreen() {
           </button>
           <button
             type="button"
-            onClick={() => navigate('/full-test')}
+            onClick={() => navigate('/full-test', { state: { returnTo } })}
             className="inline-flex items-center gap-2 rounded-xl bg-slate-100 px-4 py-2.5 text-sm font-semibold text-slate-600 transition hover:bg-slate-200"
           >
             <RotateCcw className="h-4 w-4" aria-hidden />

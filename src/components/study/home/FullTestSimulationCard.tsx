@@ -1,13 +1,15 @@
 import { Link } from 'react-router-dom'
+import { STUDY_RETURN_STATE } from '../../../utils/sectionReturn'
 
 export default function FullTestSimulationCard() {
   return (
     <section className="flex min-w-0 flex-col gap-3 rounded-[22px] bg-indigo-500 px-4 py-4 text-white shadow-sm sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:px-6 sm:py-5 dark:bg-indigo-600">
       <div className="min-w-0">
-        <h2 className="text-lg font-bold text-white sm:text-xl">TOEFL FULL TEST</h2>
+        <h2 className="text-lg font-bold text-white sm:text-xl">TOEFL Preparation FULL TEST</h2>
       </div>
       <Link
         to="/full-test"
+        state={STUDY_RETURN_STATE}
         className="keep-white inline-flex w-full shrink-0 items-center justify-center rounded-xl bg-white px-5 py-2.5 text-sm font-semibold text-indigo-600 shadow-sm transition hover:bg-indigo-50 sm:w-auto"
       >
         Start test

@@ -15,7 +15,7 @@ export const featureStats: FeatureStat[] = [
   {
     value: '50',
     suffix: '+',
-    title: 'TOEFL Courses',
+    title: 'TOEFL Preparation Courses',
     description: 'Structured programs across all skill levels',
   },
   {

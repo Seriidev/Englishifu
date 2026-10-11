@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { STUDY_RETURN_STATE } from '../utils/sectionReturn'
 
 export default function StudyCertificatesPage() {
   return (
@@ -7,10 +8,11 @@ export default function StudyCertificatesPage() {
         Certificates
       </h2>
       <p className="mx-auto mt-2 max-w-md text-sm text-slate-500">
-        Finish a TOEFL Full Test to earn a certificate of completion.
+        Finish a TOEFL Preparation Full Test to earn a certificate of completion.
       </p>
       <Link
         to="/full-test"
+        state={STUDY_RETURN_STATE}
         className="mt-6 inline-flex rounded-xl bg-indigo-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-600"
       >
         Start Full Test

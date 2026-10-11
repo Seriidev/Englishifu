@@ -29,7 +29,7 @@ export const mockSpeakingClubSessions: SpeakingClubSession[] = [
     dateLabel: 'TODAY',
     dateSubtext: 'Aug 6, Wed',
     time: '8:30 PM',
-    title: 'TOEFL Speaking Warm-up',
+    title: 'TOEFL Preparation Speaking Warm-up',
     description: 'Timed responses for independent and integrated tasks.',
     hostName: 'Sarah Chen',
     hostAvatarUrl: 'https://i.pravatar.cc/96?img=5',

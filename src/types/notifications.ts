@@ -7,6 +7,7 @@ export type NotificationType =
   | 'booking_reminder'
   | 'xp_boost'
   | 'homework'
+  | 'meet_invite'
   | 'admin_task'
 
 export interface AppNotification {

@@ -78,9 +78,10 @@ export default function StudyPlaceHeader({
         {cefrLevel ? <CefrLevelBadge level={cefrLevel} size="sm" /> : null}
       </div>
 
+      <div className="flex shrink-0 items-center gap-2">
       <div
         ref={clusterRef}
-        className="relative inline-flex shrink-0 items-center rounded-full border border-slate-200/80 bg-white/70 px-1 py-0.5 shadow-sm dark:border-white/10 dark:bg-white/5"
+        className="relative inline-flex items-center rounded-full border border-slate-200/80 bg-white/70 px-1 py-0.5 shadow-sm dark:border-white/10 dark:bg-white/5"
       >
         <button
           type="button"
@@ -110,7 +111,6 @@ export default function StudyPlaceHeader({
           />
           {boostCount}
         </button>
-        <NotificationBell />
 
       {guide === 'boost' ? (
         <ProgressGuide
@@ -227,6 +227,10 @@ export default function StudyPlaceHeader({
           }
         />
       ) : null}
+      </div>
+        <div className="inline-flex items-center rounded-full border border-slate-200/80 bg-white/70 shadow-sm dark:border-white/10 dark:bg-white/5">
+          <NotificationBell buttonClassName="h-9 w-9" />
+        </div>
       </div>
     </div>
   )

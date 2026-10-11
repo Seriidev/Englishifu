@@ -1,6 +1,7 @@
 import { useEffect, useState, type FormEvent } from 'react'
 import { useAuth } from '../../../auth/AuthContext'
 import LibraryFilterMenu from '../library/LibraryFilterMenu'
+import { toeflPreparationLabel } from '../../../utils/toeflLabel'
 import {
   createSpeakingClubRequest,
   ensureApiSession,
@@ -95,7 +96,10 @@ export default function RequestSpeakingClubForm() {
               defaultValue=""
               fullWidth
               options={[
-                ...TOPICS.map((item) => ({ id: item, label: item })),
+                ...TOPICS.map((item) => ({
+                  id: item,
+                  label: toeflPreparationLabel(item),
+                })),
                 { id: '', label: 'Topic' },
               ]}
               onChange={setTopic}
@@ -157,7 +161,9 @@ export default function RequestSpeakingClubForm() {
         <ul className="mt-3 space-y-2 border-t border-slate-100 pt-3">
           {mine.slice(0, 5).map((row) => (
             <li key={row.id} className="text-xs text-slate-600">
-              <span className="font-semibold text-slate-800">{row.topic}</span>
+              <span className="font-semibold text-slate-800">
+                {toeflPreparationLabel(row.topic)}
+              </span>
               {row.preferred_time ? (
                 <span className="text-slate-400"> · {row.preferred_time}</span>
               ) : null}

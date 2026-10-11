@@ -1,6 +1,7 @@
 import { Star, User } from 'lucide-react'
 import { MdVerified } from 'react-icons/md'
 import type { TutorAvailabilityStatus } from '../../../types/tutorListing'
+import { toeflPreparationLabel } from '../../../utils/toeflLabel'
 import { StatusBadge } from '../../shared/StatusBadge'
 
 export interface StudentTutorProfileHeroProps {
@@ -101,7 +102,7 @@ export default function StudentTutorProfileHero({
               key={tag}
               className="rounded-xl border border-slate-800 bg-white px-3 py-1 text-xs font-medium text-slate-900"
             >
-              {tag}
+              {toeflPreparationLabel(tag)}
             </span>
           ))}
         </div>

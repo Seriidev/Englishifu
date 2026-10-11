@@ -1,6 +1,7 @@
 import { X } from 'lucide-react'
 import LibraryFilterMenu from '../study/library/LibraryFilterMenu'
 import { TUTOR_POSITIONS } from '../../types/user'
+import { toeflPreparationLabel } from '../../utils/toeflLabel'
 
 export function specializationsFromProfile(profile: {
   position?: string
@@ -34,7 +35,10 @@ export function SpecializationAdd({
       value=""
       defaultValue=""
       options={[
-        ...remaining.map((item) => ({ id: item, label: item })),
+        ...remaining.map((item) => ({
+          id: item,
+          label: toeflPreparationLabel(item),
+        })),
         { id: '', label: 'Add specialization' },
       ]}
       onChange={(value) => {
@@ -58,7 +62,7 @@ export function SpecializationChips({
       {selected.map((item) => (
         <li key={item}>
           <span className="inline-flex items-center gap-1.5 rounded-xl bg-slate-100 px-3 py-2 text-sm font-semibold text-slate-600">
-            {item}
+            {toeflPreparationLabel(item)}
             <button
               type="button"
               onClick={() => onRemove(item)}

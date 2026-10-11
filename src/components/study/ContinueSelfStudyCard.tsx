@@ -53,7 +53,7 @@ export default function ContinueSelfStudyCard({
               Get started with your first course
             </h2>
             <p className="mt-1.5 text-sm text-slate-500">
-              Build skills at your own pace with structured TOEFL and CEFR
+              Build skills at your own pace with structured TOEFL Preparation and CEFR
               pathways.
             </p>
             <button

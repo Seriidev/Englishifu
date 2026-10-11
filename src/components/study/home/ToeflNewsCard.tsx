@@ -35,7 +35,7 @@ export default function ToeflNewsCard({ news }: ToeflNewsCardProps) {
   return (
     <section>
       <h2 className="text-base font-bold text-slate-900">
-        News about TOEFL
+        News about TOEFL Preparation
       </h2>
       <div className="mt-3 space-y-3">
         {items.map((item) => (

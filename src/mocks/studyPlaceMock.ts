@@ -10,7 +10,7 @@ import type {
 } from '../types/studyPlace'
 
 export const mockContinueSelfStudy: ContinueSelfStudyData = {
-  courseName: 'TOEFL Foundations',
+  courseName: 'TOEFL Preparation Foundations',
   unitLabel: 'Unit 8: Reading for Academic Success',
   progressPercent: 56,
   estimatedMinutes: 18,
@@ -41,7 +41,7 @@ export const mockUpcomingBookings: BookingItem[] = [
     time: '4:00 PM',
     type: 'tutor-lesson',
     title: '1:1 Lesson with Sarah Chen',
-    subtitle: 'TOEFL Speaking',
+    subtitle: 'TOEFL Preparation Speaking',
     avatarUrl: 'https://i.pravatar.cc/64?img=5',
     meetingStatus: 'link-available',
     canJoin: true,
@@ -144,7 +144,7 @@ export const mockWelcomeSlides: WelcomeSlide[] = [
   {
     id: 'club',
     title: 'Speaking Club is live this week',
-    body: 'Book a seat, meet other students, and practice real TOEFL prompts.',
+    body: 'Book a seat, meet other students, and practice real TOEFL Preparation prompts.',
   },
 ]
 
@@ -191,6 +191,6 @@ export const mockToeflNews: ToeflNewsItem = {
   title: 'What to expect on test day',
   excerpt:
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-  body: 'Arrive early and bring a valid photo ID that matches the name on your registration. You will store bags, phones, and notes in a locker before entering the testing room.\n\nThe TOEFL iBT has four sections — Reading, Listening, Speaking, and Writing — with short breaks between them. Headphones and a microphone are provided for Speaking.\n\nStay focused on one task at a time. If you finish a section early, use the remaining minutes to check answers rather than rushing ahead. Scores are usually posted in your ETS account within a few days.',
-  imageAlt: 'TOEFL test day',
+  body: 'Arrive early and bring a valid photo ID that matches the name on your registration. You will store bags, phones, and notes in a locker before entering the testing room.\n\nThe TOEFL Preparation has four sections — Reading, Listening, Speaking, and Writing — with short breaks between them. Headphones and a microphone are provided for Speaking.\n\nStay focused on one task at a time. If you finish a section early, use the remaining minutes to check answers rather than rushing ahead. Scores are usually posted in your ETS account within a few days.',
+  imageAlt: 'TOEFL Preparation test day',
 }

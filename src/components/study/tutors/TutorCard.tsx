@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { Star, User } from 'lucide-react'
 import { MdVerified } from 'react-icons/md'
 import type { TutorListingCard } from '../../../types/tutorListing'
+import { toeflPreparationLabel } from '../../../utils/toeflLabel'
 import { StatusBadge } from '../../shared/StatusBadge'
 
 export interface TutorCardProps {
@@ -57,7 +58,9 @@ function TutorCardBody({ tutor }: { tutor: TutorListingCard }) {
               />
             ) : null}
           </div>
-          <p className="mt-0.5 text-sm text-slate-500">{tutor.positionLabel}</p>
+          <p className="mt-0.5 text-sm text-slate-500">
+            {toeflPreparationLabel(tutor.positionLabel)}
+          </p>
         </div>
         <StatusBadge status={tutor.availabilityStatus} />
       </div>
@@ -68,7 +71,7 @@ function TutorCardBody({ tutor }: { tutor: TutorListingCard }) {
             key={tag}
             className="rounded-full border border-slate-800/80 bg-white px-2.5 py-0.5 text-[11px] font-medium text-slate-900"
           >
-            {tag}
+            {toeflPreparationLabel(tag)}
           </span>
         ))}
       </div>

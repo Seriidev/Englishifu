@@ -8,6 +8,7 @@ import {
 import { useAuth } from '../../auth/AuthContext'
 import { useLanguage } from '../../i18n/LanguageContext'
 import LangSwitcher from '../shared/LangSwitcher'
+import LeaveSectionModal from '../shared/LeaveSectionModal'
 import { stashPendingPlacement } from '../../utils/pendingPlacement'
 import PlacementTestIntro from './PlacementTestIntro'
 import PlacementAwardModal from './PlacementAwardModal'
@@ -50,6 +51,7 @@ export default function PlacementTestFlow({ onExit }: Props) {
   const [index, setIndex] = useState(0)
   const [answers, setAnswers] = useState<Record<number, number>>({})
   const [result, setResult] = useState<PlacementResult | null>(null)
+  const [leaveOpen, setLeaveOpen] = useState(false)
 
   const current = questions[index]
   const selected = current ? answers[current.id] : undefined
@@ -90,6 +92,15 @@ export default function PlacementTestFlow({ onExit }: Props) {
     if (index > 0) setIndex((i) => i - 1)
   }
 
+  const leaveModal = leaveOpen ? (
+    <LeaveSectionModal
+      title={t('toefl.leaveTitle')}
+      message={t('toefl.leaveBody')}
+      onStay={() => setLeaveOpen(false)}
+      onLeave={handleExit}
+    />
+  ) : null
+
   if (stage === 'intro') {
     return (
       <div className="min-h-svh bg-[#f7f9fc]">
@@ -101,9 +112,10 @@ export default function PlacementTestFlow({ onExit }: Props) {
               setResult(null)
               setStage('questions')
             }}
-            onExit={handleExit}
+            onExit={() => setLeaveOpen(true)}
           />
         </div>
+        {leaveModal}
       </div>
     )
   }
@@ -144,7 +156,7 @@ export default function PlacementTestFlow({ onExit }: Props) {
               <LangSwitcher />
               <button
                 type="button"
-                onClick={handleExit}
+                onClick={() => setLeaveOpen(true)}
                 className="rounded-xl bg-slate-100 px-4 py-2.5 text-sm font-semibold text-slate-600 transition hover:bg-slate-200"
               >
                 {t('placement.exit')}
@@ -227,6 +239,7 @@ export default function PlacementTestFlow({ onExit }: Props) {
           </div>
         </div>
       </div>
+      {leaveModal}
     </div>
   )
 }

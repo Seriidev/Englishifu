@@ -35,21 +35,21 @@ export const RECOMMENDATIONS: Record<CefrLevel, LevelRecommendation> = {
     ctaLabel: 'Join Speaking Club',
   },
   B2: {
-    message: "You're well-positioned to start TOEFL preparation.",
+    message: "You're well-positioned to start TOEFL Preparation.",
     suggestedPath: '/toefl',
-    ctaLabel: 'Start TOEFL practice',
+    ctaLabel: 'Start TOEFL Preparation practice',
   },
   C1: {
     message:
-      "You're at an advanced level — focus on TOEFL strategy and fine-tuning.",
+      "You're at an advanced level — focus on TOEFL Preparation strategy and fine-tuning.",
     suggestedPath: '/toefl',
-    ctaLabel: 'Go to TOEFL Hub',
+    ctaLabel: 'Go to TOEFL Preparation Hub',
   },
   C2: {
     message:
-      'Near-native proficiency — challenge yourself with full TOEFL simulations.',
+      'Near-native proficiency — challenge yourself with full TOEFL Preparation simulations.',
     suggestedPath: '/toefl',
-    ctaLabel: 'Take Full TOEFL Test',
+    ctaLabel: 'Take Full TOEFL Preparation Test',
   },
 }
 

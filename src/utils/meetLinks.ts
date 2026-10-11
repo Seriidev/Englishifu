@@ -1,77 +1,34 @@
-export interface MeetInvite {
-  id: string
-  tutorId: string
-  tutorName: string
-  studentId: string
-  meetLink: string
-  createdAt: string
-  status: 'sent' | 'viewed'
-}
-
-const MEET_INVITES_KEY = 'englishcore_meet_invites_v1'
-
-function getMeetInvites(): MeetInvite[] {
-  try {
-    const raw = localStorage.getItem(MEET_INVITES_KEY)
-    return raw ? (JSON.parse(raw) as MeetInvite[]) : []
-  } catch {
-    return []
-  }
-}
-
-function saveMeetInvites(invites: MeetInvite[]): void {
-  localStorage.setItem(MEET_INVITES_KEY, JSON.stringify(invites))
-}
+import { getApiToken } from './bookingApi'
 
 export function isValidMeetLink(url: string): boolean {
   return /^https:\/\/meet\.google\.com\/[a-z0-9-]+$/i.test(url.trim())
 }
 
-export function sendMeetInvite(
-  tutorId: string,
-  tutorName: string,
-  studentId: string,
-  meetLink: string,
-): MeetInvite {
-  const invite: MeetInvite = {
-    id: crypto.randomUUID(),
-    tutorId,
-    tutorName,
-    studentId,
-    meetLink: meetLink.trim(),
-    createdAt: new Date().toISOString(),
-    status: 'sent',
+async function parseError(res: Response): Promise<string> {
+  try {
+    const data = (await res.json()) as { error?: string }
+    if (data?.error) return data.error
+  } catch {
+    /* ignore */
   }
-  const invites = getMeetInvites()
-  invites.push(invite)
-  saveMeetInvites(invites)
-  return invite
+  return `Request failed (${res.status})`
 }
 
-export function sendMeetInviteToMany(
-  tutorId: string,
-  tutorName: string,
+export async function sendMeetInviteToMany(
   studentIds: string[],
   meetLink: string,
-): void {
-  for (const studentId of studentIds) {
-    sendMeetInvite(tutorId, tutorName, studentId, meetLink)
-  }
-}
-
-export function getMeetInvitesForStudent(studentId: string): MeetInvite[] {
-  return getMeetInvites()
-    .filter((i) => i.studentId === studentId)
-    .sort(
-      (a, b) =>
-        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-    )
-}
-
-export function markMeetInviteViewed(inviteId: string): void {
-  const invites = getMeetInvites()
-  const next = invites.map((i) =>
-    i.id === inviteId ? { ...i, status: 'viewed' as const } : i,
-  )
-  saveMeetInvites(next)
+): Promise<void> {
+  const token = getApiToken()
+  const res = await fetch('/api/meet-invites', {
+    method: 'POST',
+    credentials: 'include',
+    headers: token
+      ? { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }
+      : { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      studentIds,
+      meetLink: meetLink.trim(),
+    }),
+  })
+  if (!res.ok) throw new Error(await parseError(res))
 }

@@ -13,6 +13,8 @@ import {
 } from './getRandomListeningSession'
 import type { SectionScore } from '../../scoring/overallScoring'
 import TestShell from '../toefl/TestShell'
+import { useAuth } from '../../auth/AuthContext'
+import { recordAccuracyAttempt } from '../../utils/studyProgressStats'
 import SectionTimer from '../toefl/SectionTimer'
 import ListeningTaskView from './ListeningTaskView'
 
@@ -37,6 +39,7 @@ export default function ListeningSection({
   onExit,
   onComplete,
 }: ListeningSectionProps) {
+  const { user } = useAuth()
   const [stage, setStage] = useState<Stage>('intro')
   const [session, setSession] = useState<ListeningSession | null>(null)
   const [stepIndex, setStepIndex] = useState(0)
@@ -94,6 +97,7 @@ export default function ListeningSection({
   const finish = useCallback(
     (correct: number, total: number) => {
       setTimerRunning(false)
+      recordAccuracyAttempt(user?.id ?? null, correct, total)
       const score = toScore(correct, total)
       if (onComplete) {
         onComplete(score)
@@ -101,7 +105,7 @@ export default function ListeningSection({
       }
       setStage('results')
     },
-    [onComplete, toScore],
+    [onComplete, toScore, user?.id],
   )
 
   const handleExpire = useCallback(() => {
@@ -124,15 +128,16 @@ export default function ListeningSection({
   if (stage === 'intro') {
     return (
       <TestShell
-        title="TOEFL Listening"
+        title="TOEFL Preparation Listening"
         progressLabel="Ready"
         progressPercent={0}
         onExit={onExit}
+        confirmExit={!onComplete}
       >
         <div className="mx-auto max-w-xl rounded-3xl border border-gray-100 bg-white p-8 text-center shadow-sm">
-          <h2 className="text-2xl font-bold text-ink">Listening Section</h2>
+          <h1 className="text-2xl font-bold text-ink">TOEFL Preparation Listening Practice</h1>
           <p className="mt-3 text-sm leading-relaxed text-muted">
-            Each attempt draws a new set: five short replies, two conversations,
+            TOEFL Preparation listening preparation. Each attempt draws a new set: five short replies, two conversations,
             two announcements, and one academic talk. Audio plays once. Speakers
             are never announced — listen for the voices. You cannot go back after
             submitting. Section time: 36 minutes.
@@ -152,7 +157,7 @@ export default function ListeningSection({
   if (stage === 'results' || !session || !current) {
     return (
       <TestShell
-        title="TOEFL Listening"
+        title="TOEFL Preparation Listening"
         subtitle="Results"
         progressLabel="Complete"
         progressPercent={100}
@@ -174,7 +179,7 @@ export default function ListeningSection({
 
   return (
     <TestShell
-      title="TOEFL Listening"
+      title="TOEFL Preparation Listening"
       subtitle={listeningStepLabel(current.kind)}
       progressLabel={`Part ${stepIndex + 1} of ${steps.length} · ${answeredCount}/${totalAnswers} answers`}
       progressPercent={progressPercent}
@@ -186,6 +191,7 @@ export default function ListeningSection({
         />
       }
       onExit={onExit}
+      confirmExit={!onComplete}
     >
       <div className="mx-auto w-full max-w-3xl rounded-3xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6">
         {playable ? (

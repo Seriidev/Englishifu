@@ -2,7 +2,11 @@ import { useEffect, useState } from 'react'
 import { Copy, Gift } from 'lucide-react'
 import { fetchMyReferral } from '../../utils/adminPanelApi'
 
-export default function ReferralWidget() {
+interface ReferralWidgetProps {
+  variant?: 'card' | 'button'
+}
+
+export default function ReferralWidget({ variant = 'card' }: ReferralWidgetProps) {
   const [code, setCode] = useState('')
   const [invited, setInvited] = useState(0)
   const [converted, setConverted] = useState(0)
@@ -48,6 +52,20 @@ export default function ReferralWidget() {
     } catch {
       setError('Could not copy — select the link manually')
     }
+  }
+
+  if (variant === 'button') {
+    return (
+      <button
+        type="button"
+        disabled={!link || loading}
+        onClick={() => void copy()}
+        className="inline-flex items-center gap-1.5 rounded-xl bg-slate-100 px-4 py-2.5 text-sm font-semibold text-slate-600 transition hover:bg-slate-200 disabled:opacity-50"
+      >
+        <Gift className="h-3.5 w-3.5" aria-hidden />
+        {copied ? 'Copied' : 'Referral link'}
+      </button>
+    )
   }
 
   return (

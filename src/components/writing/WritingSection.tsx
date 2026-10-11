@@ -172,17 +172,19 @@ export default function WritingSection({ onExit, onComplete }: Props) {
   if (stage === 'intro') {
     return (
       <TestShell
-        title="TOEFL Writing"
+        title="Essay Preparation"
         progressLabel="Ready"
         progressPercent={0}
         onExit={onExit}
+        confirmExit={!onComplete}
       >
         <div className="mx-auto max-w-xl rounded-3xl border border-gray-100 bg-white p-8 text-center shadow-sm">
-          <h2 className="text-2xl font-bold text-ink">Writing Section</h2>
+          <h1 className="text-2xl font-bold text-ink">TOEFL Preparation Essay</h1>
           <p className="mt-3 text-sm leading-relaxed text-muted">
-            Each attempt draws a new set from the practice bank: eight Build a
-            Sentence items, one email, and one academic discussion. Free-response
-            tasks use AI rubrics when available.
+            Essay preparation for the TOEFL Preparation writing section. Each attempt draws
+            a new set from the practice bank: eight Build a Sentence items, one
+            email, and one academic discussion. Free-response tasks use AI
+            rubrics when available.
           </p>
           <button
             type="button"
@@ -199,11 +201,12 @@ export default function WritingSection({ onExit, onComplete }: Props) {
   if (stage === 'analyzing') {
     return (
       <TestShell
-        title="TOEFL Writing"
+        title="TOEFL Preparation Writing"
         subtitle="Scoring"
         progressLabel={`Task ${stepIndex + 1} of ${steps.length}`}
         progressPercent={((stepIndex + 0.5) / Math.max(steps.length, 1)) * 100}
         onExit={onExit}
+        confirmExit={!onComplete}
       >
         <div className="mx-auto flex max-w-md flex-col items-center rounded-3xl border bg-white p-10 text-center shadow-sm">
           <div
@@ -232,7 +235,7 @@ export default function WritingSection({ onExit, onComplete }: Props) {
 
     return (
       <TestShell
-        title="TOEFL Writing"
+        title="TOEFL Preparation Writing"
         subtitle="Results"
         progressLabel="Complete"
         progressPercent={100}
@@ -319,11 +322,12 @@ export default function WritingSection({ onExit, onComplete }: Props) {
 
   return (
     <TestShell
-      title="TOEFL Writing"
+      title="TOEFL Preparation Writing"
       subtitle={writingStepLabel(current.kind)}
       progressLabel={`Task ${stepIndex + 1} of ${steps.length}`}
       progressPercent={(stepIndex / Math.max(steps.length, 1)) * 100}
       onExit={onExit}
+      confirmExit={!onComplete}
     >
       <div className="mx-auto flex w-full max-w-3xl flex-1 flex-col rounded-3xl border border-gray-100 bg-white p-5 shadow-sm sm:p-6">
         {current.kind === 'build_a_sentence' && sentenceItem && (

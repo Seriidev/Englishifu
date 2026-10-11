@@ -100,6 +100,23 @@ export default function ToeflSimulation() {
             </a>
             <ToeflTryBadge />
           </div>
+          <nav
+            aria-label="TOEFL Preparation practice"
+            className="mt-4 flex flex-wrap gap-x-4 gap-y-2 text-sm font-semibold"
+          >
+            <a href="/reading" className="text-brand hover:underline">
+              Reading
+            </a>
+            <a href="/listening" className="text-brand hover:underline">
+              Listening
+            </a>
+            <a href="/speaking" className="text-brand hover:underline">
+              Speaking
+            </a>
+            <a href="/writing" className="text-brand hover:underline">
+              Essay preparation
+            </a>
+          </nav>
           <p className="mt-3 text-base text-muted">{t('toeflSim.noReg')}</p>
         </div>
       </div>

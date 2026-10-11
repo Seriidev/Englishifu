@@ -21,7 +21,7 @@ export const mockStudentGamification = (
 
 export const mockCurrentCourse: CurrentCourseProgress = {
   courseId: 'toefl-foundations',
-  courseTitle: 'TOEFL Foundations',
+  courseTitle: 'TOEFL Preparation Foundations',
   status: 'in-progress',
   difficultyTag: 'Fundamental',
   estimatedMinutes: 30,
@@ -56,7 +56,7 @@ export const mockCurrentCourse: CurrentCourseProgress = {
     {
       id: 'sec-theory',
       type: 'theory',
-      title: 'TOEFL Tips',
+      title: 'TOEFL Preparation Tips',
       status: 'locked',
     },
   ],

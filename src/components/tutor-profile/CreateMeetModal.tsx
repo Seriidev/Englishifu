@@ -7,7 +7,7 @@ interface CreateMeetModalProps {
   students: TutorStudent[]
   studentId?: string
   studentName?: string
-  onSend: (meetLink: string, studentIds: string[]) => void
+  onSend: (meetLink: string, studentIds: string[]) => void | Promise<void>
   onClose: () => void
 }
 
@@ -20,6 +20,8 @@ export default function CreateMeetModal({
 }: CreateMeetModalProps) {
   const [meetLink, setMeetLink] = useState('')
   const [step, setStep] = useState<'create' | 'confirm'>('create')
+  const [sending, setSending] = useState(false)
+  const [sendError, setSendError] = useState<string | null>(null)
   const [selectedIds, setSelectedIds] = useState<string[]>(() =>
     studentId ? [studentId] : students.filter((s) => s.status === 'active').map((s) => s.id),
   )
@@ -145,6 +147,9 @@ export default function CreateMeetModal({
             <div className="mt-4 break-all rounded-lg bg-slate-50 p-3 font-mono text-sm text-ink">
               {meetLink.trim()}
             </div>
+            {sendError ? (
+              <p className="mt-3 text-sm font-medium text-red-600">{sendError}</p>
+            ) : null}
             <div className="mt-4 flex gap-2">
               <button
                 type="button"
@@ -155,15 +160,28 @@ export default function CreateMeetModal({
               </button>
               <button
                 type="button"
-                onClick={() =>
-                  onSend(
-                    meetLink.trim(),
-                    lockedToOne && studentId ? [studentId] : selectedIds,
+                disabled={sending}
+                onClick={() => {
+                  setSending(true)
+                  setSendError(null)
+                  void Promise.resolve(
+                    onSend(
+                      meetLink.trim(),
+                      lockedToOne && studentId ? [studentId] : selectedIds,
+                    ),
                   )
-                }
-                className="flex-1 rounded-xl bg-indigo-500 py-2.5 text-sm font-medium text-white transition hover:bg-indigo-600"
+                    .catch((err: unknown) => {
+                      setSendError(
+                        err instanceof Error
+                          ? err.message
+                          : 'Could not send the meeting invite',
+                      )
+                    })
+                    .finally(() => setSending(false))
+                }}
+                className="flex-1 rounded-xl bg-indigo-500 py-2.5 text-sm font-medium text-white transition hover:bg-indigo-600 disabled:opacity-40"
               >
-                Send Link
+                {sending ? 'Sending…' : 'Send Link'}
               </button>
             </div>
           </>

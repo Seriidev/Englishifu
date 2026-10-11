@@ -1,11 +1,5 @@
-import { useState } from 'react'
-import {
-  HiBookmark,
-  HiOutlineBookmark,
-  HiOutlineChevronDown,
-  HiOutlineSpeakerWave,
-} from 'react-icons/hi2'
-import type { VocabWord } from '../../../types/studyContent'
+import { Check, Pin, Volume2 } from 'lucide-react'
+import type { VocabTopic, VocabWord } from '../../../types/studyContent'
 
 interface VocabWordCardProps {
   item: VocabWord
@@ -14,18 +8,28 @@ interface VocabWordCardProps {
   onSpeak: (word: string) => void
 }
 
+const TOPIC_LABEL: Record<VocabTopic, string> = {
+  academic: 'Academic',
+  campus: 'Campus',
+  science: 'Science',
+  conversation: 'Conversation',
+  environment: 'Environment',
+  history: 'History',
+  toefl: 'TOEFL Preparation',
+}
+
 function posLabel(partOfSpeech: string) {
   const key = partOfSpeech.replace('.', '').toLowerCase()
   const map: Record<string, string> = {
-    v: 'VERB',
-    verb: 'VERB',
-    adj: 'ADJECTIVE',
-    n: 'NOUN',
-    noun: 'NOUN',
-    conj: 'CONJUNCTION',
-    adv: 'ADVERB',
+    v: 'verb',
+    verb: 'verb',
+    adj: 'adjective',
+    n: 'noun',
+    noun: 'noun',
+    conj: 'conjunction',
+    adv: 'adverb',
   }
-  return map[key] ?? partOfSpeech.replace('.', '').toUpperCase()
+  return map[key] ?? key
 }
 
 export default function VocabWordCard({
@@ -34,76 +38,63 @@ export default function VocabWordCard({
   onToggleSave,
   onSpeak,
 }: VocabWordCardProps) {
-  const [open, setOpen] = useState(false)
-
   return (
-    <article className="relative rounded-2xl border border-slate-200 bg-white px-4 py-4 pr-11 shadow-sm">
-      <div className="flex items-start gap-2">
-        <div className="min-w-0 flex-1">
-          <div className="flex flex-wrap items-center gap-1.5">
-            <h3 className="text-base font-bold text-slate-900">
-              {item.word}
-            </h3>
-            <button
-              type="button"
-              onClick={() => onSpeak(item.word)}
-              className="inline-flex h-7 w-7 items-center justify-center rounded-full text-slate-400 transition hover:bg-slate-100 hover:text-indigo-600"
-              aria-label={`Pronounce ${item.word}`}
-            >
-              <HiOutlineSpeakerWave className="h-4 w-4" aria-hidden />
-            </button>
-          </div>
-          <p className="mt-1 text-[11px] font-semibold tracking-wide text-slate-400 uppercase">
-            {posLabel(item.partOfSpeech)}
-          </p>
-        </div>
-
-        <span className="shrink-0 rounded-full bg-slate-100 px-2.5 py-1 text-[11px] font-medium text-slate-500">
-          {saved ? 'Saved' : 'Not memorized'}
+    <article className="relative rounded-2xl border border-slate-200 bg-white px-4 py-4 shadow-sm">
+      <div className="flex items-start justify-between gap-3">
+        <span className="rounded-full bg-indigo-50 px-3 py-1 text-xs font-semibold text-indigo-600">
+          {TOPIC_LABEL[item.topic]}
         </span>
-
         <button
           type="button"
-          onClick={() => setOpen((value) => !value)}
-          className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-slate-400 transition hover:bg-slate-100 hover:text-slate-700"
-          aria-expanded={open}
-          aria-label={open ? 'Hide example' : 'Show example'}
+          onClick={() => onToggleSave(item.id)}
+          className={`inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl transition ${
+            saved
+              ? 'bg-indigo-500 text-white hover:bg-indigo-600'
+              : 'bg-indigo-50 text-indigo-500 hover:bg-indigo-100'
+          }`}
+          aria-label={
+            saved ? `Remove ${item.word} from My words` : `Save ${item.word} to My words`
+          }
+          aria-pressed={saved}
         >
-          <HiOutlineChevronDown
-            className={`h-4 w-4 transition ${open ? 'rotate-180' : ''}`}
-            aria-hidden
-          />
+          <Pin className="h-4 w-4" aria-hidden />
         </button>
-
       </div>
 
-      <button
-        type="button"
-        onClick={() => onToggleSave(item.id)}
-        className={`absolute top-3 right-3 inline-flex h-7 w-7 items-center justify-center rounded-lg transition ${
-          saved
-            ? 'text-indigo-500 hover:bg-indigo-500/10'
-            : 'text-slate-400 hover:bg-slate-100 hover:text-indigo-500'
-        }`}
-        aria-label={saved ? `Remove ${item.word} from My words` : `Save ${item.word}`}
-        aria-pressed={saved}
-      >
+      <div className="mt-3 flex flex-wrap items-center gap-2">
+        <h3 className="text-xl font-bold text-slate-900">{item.word}</h3>
+        <button
+          type="button"
+          onClick={() => onSpeak(item.word)}
+          className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-500 transition hover:bg-indigo-100"
+          aria-label={`Pronounce ${item.word}`}
+        >
+          <Volume2 className="h-4 w-4" aria-hidden />
+        </button>
+        <span className="rounded-lg bg-indigo-50 px-2.5 py-1 text-xs font-medium text-indigo-500">
+          {posLabel(item.partOfSpeech)}
+        </span>
+      </div>
+
+      <p className="mt-2 text-sm text-slate-400">{item.phonetic}</p>
+
+      <p className="mt-3 text-sm font-semibold text-indigo-500">Example</p>
+      <p className="mt-1 text-sm leading-relaxed text-slate-700">{item.example}</p>
+
+      <div className="mt-4">
         {saved ? (
-          <HiBookmark className="h-5 w-5" aria-hidden />
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-100 px-3 py-1.5 text-sm font-semibold text-emerald-600">
+            <span className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-emerald-500 text-white">
+              <Check className="h-3 w-3" strokeWidth={3} aria-hidden />
+            </span>
+            Learned
+          </span>
         ) : (
-          <HiOutlineBookmark className="h-5 w-5" aria-hidden />
+          <span className="inline-flex items-center rounded-full bg-slate-100 px-3 py-1.5 text-sm font-semibold text-slate-500">
+            Learn
+          </span>
         )}
-      </button>
-
-      <p className="mt-2 text-sm leading-relaxed text-slate-500">
-        {item.definition}
-      </p>
-
-      {open ? (
-        <p className="mt-2 text-sm text-slate-500 italic">
-          “{item.example}”
-        </p>
-      ) : null}
+      </div>
     </article>
   )
 }

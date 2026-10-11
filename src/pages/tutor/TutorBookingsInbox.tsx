@@ -10,6 +10,7 @@ import {
   formatTimeLabel,
   syncApiSession,
 } from '../../utils/bookingApi'
+import { toeflPreparationLabel } from '../../utils/toeflLabel'
 
 type Filter = 'upcoming' | 'past' | 'cancelled'
 
@@ -235,7 +236,7 @@ export default function TutorBookingsInbox() {
                         ) : null}
                         <div className="mt-2 flex flex-wrap items-center gap-2">
                           <span className="rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-600">
-                            {b.subject || 'Lesson'}
+                            {toeflPreparationLabel(b.subject || 'Lesson')}
                           </span>
                           <StatusBadge
                             status={b.status}

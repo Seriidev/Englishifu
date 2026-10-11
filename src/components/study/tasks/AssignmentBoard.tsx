@@ -42,10 +42,7 @@ function statusLabel(status: AssignmentStatus) {
 function PriorityBadge({ value }: { value: AssignmentPriority }) {
   if (value === 'urgent') {
     return (
-      <span className="inline-flex items-center gap-1 text-xs font-semibold text-red-500">
-        <span aria-hidden>🚩</span>
-        Urgent
-      </span>
+      <span className="text-xs font-semibold text-red-500">Urgent</span>
     )
   }
   if (value === 'low') {

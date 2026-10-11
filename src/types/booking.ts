@@ -41,10 +41,10 @@ export interface BookingRow {
 }
 
 export const BOOKING_SUBJECTS = [
-  'TOEFL Speaking',
-  'TOEFL Writing',
-  'TOEFL Reading',
-  'TOEFL Listening',
+  'TOEFL Preparation Speaking',
+  'TOEFL Preparation Writing',
+  'TOEFL Preparation Reading',
+  'TOEFL Preparation Listening',
   'Business English',
   'General conversation',
   'Other',

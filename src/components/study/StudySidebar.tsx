@@ -120,7 +120,7 @@ function itemClass(active: boolean) {
 }
 
 function labelClass(collapsed: boolean) {
-  return `overflow-hidden whitespace-nowrap transition-all duration-300 ease-in-out motion-reduce:transition-none ${
+  return `overflow-hidden whitespace-nowrap transition-[max-width,margin,opacity] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none ${
     collapsed ? 'ml-0 max-w-0 opacity-0' : 'ml-4 max-w-[11rem] opacity-100'
   }`
 }
@@ -189,12 +189,12 @@ export default function StudySidebar({
 
   return (
     <aside
-      className={`study-sidebar flex h-full flex-col border-r border-slate-200 bg-white text-slate-900 transition-[width] duration-300 ease-in-out motion-reduce:transition-none ${
+      className={`study-sidebar flex h-full flex-col overflow-hidden border-r border-slate-200 bg-white text-slate-900 transition-[width] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none ${
         collapsed ? 'w-[72px]' : 'w-[240px]'
       }`}
     >
       <div
-        className={`flex shrink-0 items-center px-4 py-3 transition-all duration-300 ease-in-out motion-reduce:transition-none ${
+        className={`flex shrink-0 items-center px-4 py-3 transition-[gap] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none ${
           collapsed ? 'gap-0' : 'gap-4'
         }`}
       >
@@ -218,7 +218,7 @@ export default function StudySidebar({
         {renderGroup(PRIMARY)}
 
         <div
-          className={`my-3 h-px bg-slate-200 transition-[width] duration-300 ease-in-out motion-reduce:transition-none ${
+          className={`my-3 h-px bg-slate-200 transition-[width] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none ${
             collapsed ? 'mx-auto w-8' : 'mx-1 w-[calc(100%-8px)]'
           }`}
         />
@@ -257,7 +257,7 @@ export default function StudySidebar({
             <button
               type="button"
               onClick={() => setMenuOpen((open) => !open)}
-              className={`inline-flex h-8 shrink-0 items-center justify-center overflow-hidden rounded-full transition-all duration-300 ease-in-out hover:bg-slate-50 motion-reduce:transition-none ${
+              className={`inline-flex h-8 shrink-0 items-center justify-center overflow-hidden rounded-full transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-slate-50 motion-reduce:transition-none ${
                 collapsed ? 'w-0 opacity-0' : 'w-8 opacity-100'
               }`}
               aria-label="Account menu"
