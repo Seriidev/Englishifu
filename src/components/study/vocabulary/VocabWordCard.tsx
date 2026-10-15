@@ -15,7 +15,7 @@ const TOPIC_LABEL: Record<VocabTopic, string> = {
   conversation: 'Conversation',
   environment: 'Environment',
   history: 'History',
-  toefl: 'TOEFL Preparation',
+  toefl: 'TOEFL',
 }
 
 function posLabel(partOfSpeech: string) {
@@ -39,58 +39,56 @@ export default function VocabWordCard({
   onSpeak,
 }: VocabWordCardProps) {
   return (
-    <article className="relative rounded-2xl border border-slate-200 bg-white px-4 py-4 shadow-sm">
+    <article className="vocab-word-card relative rounded-[20px] px-4 py-4 sm:px-5 sm:py-5">
       <div className="flex items-start justify-between gap-3">
-        <span className="rounded-full bg-indigo-50 px-3 py-1 text-xs font-semibold text-indigo-600">
+        <span className="vocab-chip rounded-lg px-3 py-1 text-xs font-semibold">
           {TOPIC_LABEL[item.topic]}
         </span>
         <button
           type="button"
           onClick={() => onToggleSave(item.id)}
-          className={`inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl transition ${
-            saved
-              ? 'bg-indigo-500 text-white hover:bg-indigo-600'
-              : 'bg-indigo-50 text-indigo-500 hover:bg-indigo-100'
+          className={`vocab-chip inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl transition ${
+            saved ? 'vocab-chip-active' : ''
           }`}
           aria-label={
             saved ? `Remove ${item.word} from My words` : `Save ${item.word} to My words`
           }
           aria-pressed={saved}
         >
-          <Pin className="h-4 w-4" aria-hidden />
+          <Pin className="h-4 w-4" fill={saved ? 'currentColor' : 'none'} aria-hidden />
         </button>
       </div>
 
-      <div className="mt-3 flex flex-wrap items-center gap-2">
-        <h3 className="text-xl font-bold text-slate-900">{item.word}</h3>
+      <div className="mt-4 flex flex-wrap items-center gap-2">
+        <h3 className="text-2xl font-bold tracking-tight">{item.word}</h3>
         <button
           type="button"
           onClick={() => onSpeak(item.word)}
-          className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-500 transition hover:bg-indigo-100"
+          className="vocab-chip inline-flex h-8 w-8 items-center justify-center rounded-lg transition"
           aria-label={`Pronounce ${item.word}`}
         >
           <Volume2 className="h-4 w-4" aria-hidden />
         </button>
-        <span className="rounded-lg bg-indigo-50 px-2.5 py-1 text-xs font-medium text-indigo-500">
+        <span className="vocab-chip rounded-lg px-2.5 py-1 text-xs font-medium">
           {posLabel(item.partOfSpeech)}
         </span>
       </div>
 
-      <p className="mt-2 text-sm text-slate-400">{item.phonetic}</p>
+      <p className="vocab-phonetic mt-2 text-sm">{item.phonetic}</p>
 
-      <p className="mt-3 text-sm font-semibold text-indigo-500">Example</p>
-      <p className="mt-1 text-sm leading-relaxed text-slate-700">{item.example}</p>
+      <p className="vocab-example-label mt-4 text-sm font-semibold">Example</p>
+      <p className="vocab-example mt-1 text-sm leading-relaxed">{item.example}</p>
 
       <div className="mt-4">
         {saved ? (
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-100 px-3 py-1.5 text-sm font-semibold text-emerald-600">
-            <span className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-emerald-500 text-white">
+          <span className="vocab-learned inline-flex items-center gap-2 rounded-full py-1 pr-3 pl-1 text-sm font-semibold">
+            <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-emerald-500 text-white">
               <Check className="h-3 w-3" strokeWidth={3} aria-hidden />
             </span>
             Learned
           </span>
         ) : (
-          <span className="inline-flex items-center rounded-full bg-slate-100 px-3 py-1.5 text-sm font-semibold text-slate-500">
+          <span className="vocab-learn inline-flex items-center rounded-full px-3 py-1.5 text-sm font-semibold">
             Learn
           </span>
         )}

@@ -84,6 +84,153 @@ input[type='number'] {
   background-color: rgb(30 41 59 / 0.92);
 }
 
+.vocab-word-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  color: #0f172a;
+  box-shadow: 0 1px 2px rgb(15 23 42 / 0.05);
+}
+
+.vocab-chip {
+  background: #eef2ff;
+  color: #4f46e5;
+}
+
+button.vocab-chip:hover {
+  background: #e0e7ff;
+}
+
+.vocab-chip-active {
+  background: #e0e7ff;
+  color: #4338ca;
+}
+
+.vocab-phonetic {
+  color: #94a3b8;
+}
+
+.vocab-example-label {
+  color: #6366f1;
+}
+
+.vocab-example {
+  color: #334155;
+}
+
+.vocab-learned {
+  background: #d1fae5;
+  color: #059669;
+}
+
+.vocab-learn {
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+.study-place.dark .vocab-word-card {
+  background: #1e293b;
+  border-color: transparent;
+  color: #f8fafc;
+  box-shadow: none;
+}
+
+.study-place.dark .vocab-chip,
+.study-place.dark .vocab-chip-active {
+  background: #2a3358;
+  color: #818cf8;
+}
+
+.study-place.dark button.vocab-chip:hover,
+.study-place.dark .vocab-chip-active {
+  background: #343e68;
+}
+
+.study-place.dark .vocab-phonetic {
+  color: #94a3b8;
+}
+
+.study-place.dark .vocab-example-label {
+  color: #818cf8;
+}
+
+.study-place.dark .vocab-example {
+  color: #e2e8f0;
+}
+
+.study-place.dark .vocab-learned {
+  background: rgb(16 185 129 / 0.16);
+  color: #34d399;
+}
+
+.study-place.dark .vocab-learn {
+  background: rgb(255 255 255 / 0.06);
+  color: #94a3b8;
+}
+
+.essay-label,
+.essay-kind-active {
+  color: #4f46e5;
+}
+
+.essay-kind-active {
+  background: #e7edff;
+}
+
+.essay-tips {
+  background: #ecfdf5;
+  color: #334155;
+}
+
+.essay-rule {
+  border-bottom: 1px dashed #c5cdd8;
+}
+
+input.essay-line,
+textarea.essay-line {
+  background-color: transparent;
+  border: 0;
+  box-shadow: none;
+  padding: 0 2px 0 0;
+  border-radius: 0;
+  color: #1e293b;
+  font: inherit;
+}
+
+.study-place.dark .essay-label,
+.study-place.dark .essay-kind-active {
+  color: #c7d2fe;
+}
+
+.study-place.dark .essay-kind-active {
+  background: rgb(99 102 241 / 0.28);
+}
+
+.study-place.dark .essay-rule {
+  border-bottom-color: #64748b;
+}
+
+.study-place.dark input.essay-line,
+.study-place.dark textarea.essay-line {
+  background-color: transparent;
+  border-color: transparent;
+  color: #f8fafc;
+  box-shadow: none;
+}
+
+.study-place.dark .essay-tips {
+  background: rgb(16 185 129 / 0.12);
+  color: #d1fae5;
+}
+
+.study-place.dark button.welcome-slide-control {
+  background-color: #ffffff;
+  color: #18181b;
+}
+
+.study-place.dark button.welcome-slide-control:hover {
+  background-color: #e2e8f0;
+}
+
 .study-place.dark .border-\[\#c7d7f5\]\/60,
 .study-place.dark .border-\[\#c7d7f5\]\/70 {
   border-color: var(--sp-border);

@@ -1,4 +1,4 @@
-import { useState, type MouseEvent } from 'react'
+import { useEffect, useRef, useState, type MouseEvent } from 'react'
 import { Menu, User, X } from 'lucide-react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../auth/AuthContext'
@@ -25,6 +25,76 @@ export default function Navbar() {
   const { lang, setLang, t } = useLanguage()
   const [activeNav, setActiveNav] = useState<NavLabel>('Home')
   const [mobileOpen, setMobileOpen] = useState(false)
+  const headerRef = useRef<HTMLElement>(null)
+  const shellRef = useRef<HTMLDivElement>(null)
+  const barRef = useRef<HTMLDivElement>(null)
+  const brandRef = useRef<HTMLSpanElement>(null)
+  const menuBtnRef = useRef<HTMLButtonElement>(null)
+
+  useEffect(() => {
+    const header = headerRef.current
+    const shell = shellRef.current
+    const bar = barRef.current
+    const brand = brandRef.current
+    const menuBtn = menuBtnRef.current
+    if (!header || !shell || !bar || !brand || !menuBtn) return
+
+    const motion = window.matchMedia('(prefers-reduced-motion: reduce)')
+    let frame = 0
+
+    const apply = () => {
+      frame = 0
+      const y = window.scrollY
+      const raw = Math.min(1, Math.max(0, y / 92))
+      const p = motion.matches ? (raw > 0.5 ? 1 : 0) : raw
+      const wide = window.innerWidth >= 1024
+      const sm = window.innerWidth >= 640
+      const lerp = (from: number, to: number) => from + (to - from) * p
+
+      header.style.paddingTop = `${lerp(sm ? 20 : 16, wide ? 10 : 6)}px`
+      bar.style.boxShadow = `0 ${lerp(8, 4)}px ${lerp(30, 16)}px rgba(79, 124, 255, ${lerp(0.1, 0.16)})`
+
+      if (wide) {
+        shell.style.width = '100%'
+        bar.style.padding = `${lerp(12, 8)}px 20px`
+        bar.style.backgroundColor = ''
+        brand.style.fontSize = ''
+        menuBtn.style.width = ''
+        menuBtn.style.height = ''
+        return
+      }
+
+      const cut = lerp(0, sm ? 18 : 30)
+      shell.style.width = `${100 - cut}%`
+      bar.style.padding = `${lerp(sm ? 12 : 10, 3)}px ${lerp(sm ? 16 : 12, 10)}px`
+      bar.style.backgroundColor = `rgba(255,255,255,${0.8 + 0.16 * p})`
+      brand.style.fontSize = `${lerp(sm ? 18 : 16, 14)}px`
+      const btn = lerp(40, 32)
+      menuBtn.style.width = `${btn}px`
+      menuBtn.style.height = `${btn}px`
+      const icon = menuBtn.querySelector('svg')
+      if (icon instanceof SVGElement) {
+        const size = lerp(20, 16)
+        icon.style.width = `${size}px`
+        icon.style.height = `${size}px`
+      }
+    }
+
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(apply)
+    }
+
+    apply()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', onScroll)
+    motion.addEventListener('change', onScroll)
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onScroll)
+      motion.removeEventListener('change', onScroll)
+      if (frame) cancelAnimationFrame(frame)
+    }
+  }, [])
 
   const handleNavClick = (
     e: MouseEvent<HTMLAnchorElement>,
@@ -63,7 +133,7 @@ export default function Navbar() {
           onClick={goPrimary}
           className={
             mobile
-              ? 'inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white py-1.5 pr-3 pl-1.5 text-sm font-semibold text-ink transition hover:bg-gray-50'
+              ? 'flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-left text-sm font-semibold text-ink transition hover:bg-gray-50'
               : 'inline-flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full ring-2 ring-brand/25 transition hover:ring-brand/50'
           }
           aria-label={t('nav.profile')}
@@ -75,7 +145,7 @@ export default function Navbar() {
               alt=""
               className={
                 mobile
-                  ? 'h-8 w-8 rounded-full object-cover'
+                  ? 'h-8 w-8 shrink-0 rounded-full object-cover'
                   : 'h-full w-full object-cover'
               }
             />
@@ -83,14 +153,14 @@ export default function Navbar() {
             <span
               className={
                 mobile
-                  ? 'flex h-8 w-8 items-center justify-center rounded-full bg-brand text-white'
+                  ? 'flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-brand text-white'
                   : 'flex h-full w-full items-center justify-center bg-brand text-white'
               }
             >
               <User className="h-4 w-4" aria-hidden />
             </span>
           )}
-          {mobile ? <span>{t('nav.profile')}</span> : null}
+          {mobile ? <span className="min-w-0 truncate">{displayName}</span> : null}
         </button>
       )
     }
@@ -101,7 +171,7 @@ export default function Navbar() {
         onClick={goPrimary}
         className={
           mobile
-            ? 'rounded-xl bg-indigo-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-600'
+            ? 'w-full rounded-xl bg-indigo-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-600'
             : 'rounded-xl bg-indigo-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-600'
         }
       >
@@ -137,15 +207,21 @@ export default function Navbar() {
   )
 
   return (
-    <header className="fixed top-0 right-0 left-0 z-50 px-4 pt-4 sm:px-6 sm:pt-5">
-      <div className="relative mx-auto max-w-6xl">
-        <div className="grid grid-cols-[auto_1fr_auto] items-center gap-3 rounded-full border border-[#d7e3f8]/80 bg-white/80 px-3 py-2.5 shadow-[0_8px_30px_rgba(79,124,255,0.1)] backdrop-blur-xl sm:gap-4 sm:px-4 sm:py-3 lg:px-5">
+    <header
+      ref={headerRef}
+      className="fixed top-0 right-0 left-0 z-50 px-4 pt-4 sm:px-6 sm:pt-5"
+    >
+      <div ref={shellRef} className="relative mx-auto max-w-6xl">
+        <div
+          ref={barRef}
+          className="grid grid-cols-[auto_1fr_auto] items-center gap-3 rounded-full border border-[#d7e3f8]/80 bg-white/80 px-3 py-2.5 shadow-[0_8px_30px_rgba(79,124,255,0.1)] backdrop-blur-xl sm:gap-4 sm:px-4 sm:py-3 lg:px-5"
+        >
           <a
             href="#home"
             onClick={(e) => handleNavClick(e, 'Home', '#home')}
             className="flex shrink-0 items-center pl-1"
           >
-            <span className="text-base tracking-tight sm:text-lg">
+            <span ref={brandRef} className="text-base tracking-tight sm:text-lg">
               <BrandMark />
             </span>
           </a>
@@ -176,17 +252,12 @@ export default function Navbar() {
               <LangSwitcher />
             </div>
 
-            <div className="hidden sm:block">
+            <div className="hidden lg:block">
               <AuthButtons />
             </div>
 
-            {isLoggedIn ? (
-              <div className="sm:hidden">
-                <AuthButtons />
-              </div>
-            ) : null}
-
             <button
+              ref={menuBtnRef}
               type="button"
               className="inline-flex h-10 w-10 items-center justify-center rounded-full text-ink transition hover:bg-gray-50 lg:hidden"
               aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
@@ -205,7 +276,7 @@ export default function Navbar() {
         <div
           className={`origin-top overflow-hidden transition-all duration-300 ease-out lg:hidden ${
             mobileOpen
-              ? 'mt-2 max-h-[420px] scale-100 opacity-100'
+              ? 'mt-2 max-h-[480px] scale-100 opacity-100'
               : 'pointer-events-none max-h-0 scale-95 opacity-0'
           }`}
         >
@@ -230,7 +301,7 @@ export default function Navbar() {
               })}
             </nav>
 
-            <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-gray-100 pt-3">
+            <div className="mt-3 flex flex-col gap-2 border-t border-gray-100 pt-3">
               <div className="w-full sm:hidden">
                 <LangSwitcher compact />
               </div>

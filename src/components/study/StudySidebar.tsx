@@ -189,7 +189,7 @@ export default function StudySidebar({
 
   return (
     <aside
-      className={`study-sidebar flex h-full flex-col overflow-hidden border-r border-slate-200 bg-white text-slate-900 transition-[width] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none ${
+      className={`study-sidebar flex h-full flex-col overflow-visible border-r border-slate-200 bg-white text-slate-900 transition-[width] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none ${
         collapsed ? 'w-[72px]' : 'w-[240px]'
       }`}
     >

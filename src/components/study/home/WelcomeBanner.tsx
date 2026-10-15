@@ -171,7 +171,7 @@ export default function WelcomeBanner({ firstName, slides }: WelcomeBannerProps)
         <button
           type="button"
           onClick={() => go(-1)}
-          className={`inline-flex h-8 w-8 items-center justify-center rounded-full transition hover:opacity-90 ${
+          className={`welcome-slide-control inline-flex h-8 w-8 items-center justify-center rounded-full shadow-sm transition hover:opacity-90 ${
             slides[realIndex]?.imageUrl
               ? 'bg-white/90 text-zinc-900'
               : 'bg-indigo-500 text-white'
@@ -183,7 +183,7 @@ export default function WelcomeBanner({ firstName, slides }: WelcomeBannerProps)
         <button
           type="button"
           onClick={() => go(1)}
-          className={`inline-flex h-8 w-8 items-center justify-center rounded-full transition hover:opacity-90 ${
+          className={`welcome-slide-control inline-flex h-8 w-8 items-center justify-center rounded-full shadow-sm transition hover:opacity-90 ${
             slides[realIndex]?.imageUrl
               ? 'bg-white/90 text-zinc-900'
               : 'bg-indigo-500 text-white'

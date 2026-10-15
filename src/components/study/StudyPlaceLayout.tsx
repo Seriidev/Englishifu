@@ -119,7 +119,7 @@ export default function StudyPlaceLayout() {
   return (
     <div className={`study-place flex min-h-svh min-w-0 bg-slate-50 ${theme === 'dark' ? 'dark' : ''}`}>
       <div
-        className={`hidden lg:fixed lg:inset-y-0 lg:flex lg:flex-col ${slide} ${sidebarWidth}`}
+        className={`z-40 hidden overflow-visible lg:fixed lg:inset-y-0 lg:flex lg:flex-col ${slide} ${sidebarWidth}`}
       >
         <StudySidebar
           activePath={location.pathname}
